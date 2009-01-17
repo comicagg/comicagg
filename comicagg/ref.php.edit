@@ -1,0 +1,50 @@
+<?php
+// echo '<pre>';
+// print_r($_REQUEST);
+// echo '</pre>';
+
+// $url = "http://www.giantitp.com/comics/images/ufH1EdlHp5EF7yM91bP.gif";
+// $ref = "http://www.giantitp.com/comics/oots.html";
+
+define('DIR','/tmp/');
+$save = False;
+$agent = "Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.8.1.12) Gecko/20060601 Firefox/2.0.0.12 (Ubuntu-edgy)";
+$type = IMAGETYPE_JPEG;
+
+
+$url = $_REQUEST['url'];
+$ref = $_REQUEST['ref'];
+
+$pos = strrpos($url, '.');
+$ext = substr($url, $pos+1);
+switch($ext) {
+  case 'gif': $type = IMAGETYPE_GIF; break;
+  case 'png': $type = IMAGETYPE_PNG; break;
+}
+
+$md5 = md5($url);
+$cached = sprintf('%s%s.%s', DIR, $md5, $ext);
+if(file_exists($cached)) {
+  $url = $cached;
+} else {
+  $save = True;
+}
+
+$opt = array(
+  'http'=>array(
+    'method'=>'GET',
+    'header'=>"Referer: $ref\r\n",
+    'user_agent'=>$agent,
+  )
+);
+$context = stream_context_create($opt);
+$file = file_get_contents($url, TRUE, $context);
+
+if ($save) {
+  file_put_contents($cached, $file);
+}
+
+header("Content-type: " . image_type_to_mime_type($type));
+header("Content-length: " . strlen($file));
+echo $file;
+?>

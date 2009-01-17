@@ -1,0 +1,52 @@
+<?php
+// echo '<pre>';
+// print_r($_REQUEST);
+// echo '</pre>';
+
+// $url = "http://www.giantitp.com/comics/images/ufH1EdlHp5EF7yM91bP.gif";
+// $ref = "http://www.giantitp.com/comics/oots.html";
+
+/*
+nueva ver
+1 contruir ruta física de la cache
+2 construir url de la cache
+3 comprobar si existe la fisica
+3 si no existe bajar el archivo a cache
+4 redirigir a cached
+*/
+
+// inicializacion
+define('DIR','/home/esu/public_html/tmp/');
+define('BASE','https://localhost/~esu/tmp/');
+$agent = "Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.9.0.4) Gecko/2008112309 Firefox/3.0.4 (Debian-3.0.4-1)";
+// datos que se pasan por la url
+$url = $_REQUEST['url'];
+$ref = $_REQUEST['ref'];
+$md5 = md5($url);
+
+//cached es un enlace simbólico al archivo real
+$cached = sprintf('%s%s', DIR, $md5);
+if(!file_exists($cached) or isset($_REQUEST['f'])) {
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_REFERER, $ref);
+  curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+  $file = curl_exec($ch);
+  $mime = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+  curl_close($ch);
+  // determinar extension
+  $ext = str_replace('image/', '', $mime);
+  // guardar la imagen real
+  $image_path = sprintf('%s%s.%s', DIR, $md5, $ext);
+  $ret = file_put_contents($image_path, $file);
+  if ($ret===FALSE) {echo "error1";}
+  // crea enlace simbolico
+  exec("ln -s $image_path $cached");
+}
+//construir url de la redireccion
+$next = sprintf('%s%s', BASE, basename(readlink($cached)));
+
+// redireccion
+header('Location: ' . $next);
+?>

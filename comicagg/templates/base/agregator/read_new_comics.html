@@ -1,0 +1,8 @@
+{% extends 'rounded_box.html' %}
+{% load i18n %}
+{% block id %}new_comics_notice{% endblock %}
+{% block content %}
+{% trans 'New comics have been added since your last visit!<br/>Go check them in the lists =)' %}
+<br />
+<a onclick="hide_new_comics();">{% trans 'Hide' %}</a>
+{% endblock %}

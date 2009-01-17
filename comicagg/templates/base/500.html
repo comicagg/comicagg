@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}500{% endblock %}
+{% block content %}
+<code>500 - Server error</code>
+<p>{% trans "It seems that server is having problems. Try again in a few minutes."%}</p>
+{% endblock %}

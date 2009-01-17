@@ -1,0 +1,13 @@
+User-Agent: *
+Disallow: {% url save_profile %}
+Disallow: {% url saved_profile %}
+Disallow: {% url logout %}
+Disallow: {% url save_color %}
+Disallow: {% url forget_new_comics %}
+Disallow: {% url mark_read %}
+Disallow: {% url rate %}
+Disallow: {% url hide_new_comics %}
+Disallow: {% url hide_new_blogs %}
+Disallow: /ref.php
+Disallow: /ws
+Disallow: /media

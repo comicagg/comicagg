@@ -1,0 +1,10 @@
+{% load i18n %}
+              <p>{% trans "This is a random strip of a comic you haven't added =)"%}</p>
+              <h3><a href="{{ random_comic.comic.website }}">{{ random_comic.comic.name }}</a></h3>
+              <img src="{{ settings.MEDIA_URL }}images/loading.gif" alt="[img {{ random_comic.comic.name }}]" id="img_random"/>
+              <script type="text/javascript">
+                url_random = '{% if random_comic.comic.referer %}/ref.php?url={{ random_comic.url|urlencode }}&amp;ref={{ random_comic.comic.referer|urlencode }}{% else %}{{ random_comic.url }}{% endif %}';
+                tmp_random = new Image();
+                loadimg('img_random', tmp_random, url_random);
+              </script>
+              <p>{% trans "Did you like it?"%} <a href="{% url add_comic_random random_comic.comic.id %}">{% trans "Add it to my list!" %} <img src="{{ settings.MEDIA_URL }}images/vote_up.png" alt="+" /></a></p>

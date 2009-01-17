@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Blog' %}{% endblock %}
+{% block content %}
+{% include "blog/side.html" %}
+<div id="blog">
+{% block blog_content %}
+{% endblock %}
+</div>
+{% endblock %}

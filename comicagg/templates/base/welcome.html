@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}
+{% trans "Welcome" %}
+{% endblock %}
+{% block content %}
+<div>
+  <div id="login">
+    <div id="error"></div>
+    <form method="post" action="{% url login %}" enctype="application/x-www-form-urlencoded">
+      <div class="form_div">
+        <label class="small_text">{% trans 'User: '%}</label><br/>
+        {{ form.username }}
+      </div>
+      <div class="form_div">
+        <label class="small_text">{% trans 'Password: '%}</label><br/>
+        {{ form.password }}
+      </div>
+      <div class="form_div">
+          <input type="submit" value="{% trans 'Log in'%}" />
+          <input type="hidden" name="next" value="{% url index %}" />
+      </div>
+      <div class="form_div">
+        <span id="password_lost"><a href="{% url reset_password %}" class="small_text">{% trans 'Lost password?'%}</a></span>
+      </div>
+    </form>
+  </div>
+  <div id="welcome">
+    <h3>{% trans "Welcome to Comic Aggregator"%}</h3>
+    <p>{% trans 'Comic Aggregator is just what its name says, a website to put all your favorite webcomics in the same page!'%}</p>
+    <p>{% trans 'Log in to read your new comics or create a new account and start choosing your own list.'%}</p>
+    <p><a href="{% url comic_list %}">{% trans "Here</a> is the list of comics we currently have in the database. If you can't find a webcomic you like just ask for it!"%}</p>
+    <p>{% trans 'These are the last added comics:'%}</p>
+    <ul id="last_list">
+    {% for comic in last %}
+      <li><a href="{{ comic.website }}">{{ comic.name }}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,128 @@
+<!DOCTYPE webproject>
+<webproject>
+  <project type="Local" name="comic_ak" encoding="utf8" >
+    <upload/>
+    <author>esú</author>
+    <email>esu en proyectoanonimo punto com</email>
+    <defaultDTD>-//W3C//DTD XHTML 1.1//EN</defaultDTD>
+    <item url="__init__.py" uploadstatus="1" />
+    <item url="manage.py" uploadstatus="1" />
+    <item url="urls.py" uploadstatus="1" />
+    <item url="" uploadstatus="1" />
+    <templates>templates/</templates>
+    <toolbars>toolbars/</toolbars>
+    <item url="templates/" uploadstatus="1" />
+    <annotations/>
+    <item url="agregator/" uploadstatus="1" />
+    <item url="agregator/__init__.py" uploadstatus="1" />
+    <item url="agregator/models.py" uploadstatus="1" />
+    <item url="agregator/views.py" uploadstatus="1" />
+    <item url="media/" uploadstatus="1" />
+    <item url="media/js/" uploadstatus="1" />
+    <item url="media/js/functions.js" uploadstatus="1" />
+    <item url="accounts/" uploadstatus="1" />
+    <item url="accounts/__init__.py" uploadstatus="1" />
+    <item url="accounts/models.py" uploadstatus="1" />
+    <item url="accounts/views.py" uploadstatus="1" />
+    <item url="agregator/templatetags/" uploadstatus="1" />
+    <item url="agregator/templatetags/agregator_tags.py" uploadstatus="1" />
+    <item url="agregator/templatetags/__init__.py" uploadstatus="1" />
+    <item url="help/" uploadstatus="1" />
+    <item url="help/__init__.py" uploadstatus="1" />
+    <item url="help/models.py" uploadstatus="1" />
+    <item url="help/views.py" uploadstatus="1" />
+    <item url="accounts/urls.py" uploadstatus="1" />
+    <item url="help/urls.py" uploadstatus="1" />
+    <item url="locale/" uploadstatus="1" />
+    <item url="locale/es/" uploadstatus="1" />
+    <item url="locale/es/LC_MESSAGES/" uploadstatus="1" />
+    <item url="locale/es/LC_MESSAGES/django.po" uploadstatus="1" />
+    <item url="settings.py.edit" uploadstatus="1" />
+    <item url="blog/" uploadstatus="1" />
+    <item url="blog/__init__.py" uploadstatus="1" />
+    <item url="blog/models.py" uploadstatus="1" />
+    <item url="blog/views.py" uploadstatus="1" />
+    <item url="blog/urls.py" uploadstatus="1" />
+    <item url="agregator/admin.py" uploadstatus="1" />
+    <item url="accounts/admin.py" uploadstatus="1" />
+    <item url="blog/admin.py" uploadstatus="1" />
+    <item url="help/admin.py" uploadstatus="1" />
+    <item url="templates/admin/" uploadstatus="1" />
+    <item url="templates/admin/index.html" uploadstatus="1" />
+    <item url="templates/admin/check.html" uploadstatus="1" />
+    <item url="templates/admin/base.html" uploadstatus="1" />
+    <item url="cronjob.py.edit" uploadstatus="1" />
+    <item url="ref.php.edit" uploadstatus="1" />
+    <item url="settings.py" uploadstatus="1" />
+    <item url="ws/" uploadstatus="1" />
+    <item url="ws/urls.py" uploadstatus="1" />
+    <item url="ws/__init__.py" uploadstatus="1" />
+    <item url="ws/views.py" uploadstatus="1" />
+    <item url="templates/ws/" uploadstatus="1" />
+    <item url="templates/ws/unread_user.html" uploadstatus="1" />
+    <item url="templates/ws/base_xml.html" uploadstatus="1" />
+    <item url="agregator/check.py" uploadstatus="1" />
+    <item url="agregator/urls.py" uploadstatus="1" />
+    <item url="media/js/lib/" uploadstatus="1" />
+    <item url="media/js/lib/dragdrop.js" uploadstatus="1" />
+    <item url="media/js/configure.js" uploadstatus="1" />
+    <item url="media/js/read.js" uploadstatus="1" />
+    <item url="blog/templatetags/" uploadstatus="1" />
+    <item url="blog/templatetags/__init__.py" uploadstatus="1" />
+    <item url="blog/templatetags/blogtags.py" uploadstatus="1" />
+    <item url="media/css/" uploadstatus="1" />
+    <item url="media/css/blue_white.css" uploadstatus="1" />
+    <item url="media/css/base.css" uploadstatus="1" />
+    <item url="media/css/green_white.css" uploadstatus="1" />
+    <item url="templates/base/" uploadstatus="1" />
+    <item url="templates/base/404.html" uploadstatus="1" />
+    <item url="templates/base/500.html" uploadstatus="1" />
+    <item url="templates/base/agregator/" uploadstatus="1" />
+    <item url="templates/base/base.html" uploadstatus="1" />
+    <item url="templates/base/blog/" uploadstatus="1" />
+    <item url="templates/base/disclaimer.html" uploadstatus="1" />
+    <item url="templates/base/help/" uploadstatus="1" />
+    <item url="templates/base/registration/" uploadstatus="1" />
+    <item url="templates/base/rounded_box.html" uploadstatus="1" />
+    <item url="templates/base/welcome.html" uploadstatus="1" />
+    <item url="templates/base/agregator/comic_list.html" uploadstatus="1" />
+    <item url="templates/base/agregator/configure.html" uploadstatus="1" />
+    <item url="templates/base/agregator/navigation_float.html" uploadstatus="1" />
+    <item url="templates/base/agregator/read.html" uploadstatus="1" />
+    <item url="templates/base/agregator/read_new_blogs.html" uploadstatus="1" />
+    <item url="templates/base/agregator/read_new_comics.html" uploadstatus="1" />
+    <item url="templates/base/agregator/read_random.html" uploadstatus="1" />
+    <item url="templates/base/agregator/request_comic.html" uploadstatus="1" />
+    <item url="templates/base/agregator/request_comic_done.html" uploadstatus="1" />
+    <item url="templates/base/agregator/tag_cloud.html" uploadstatus="1" />
+    <item url="templates/base/agregator/tagging_form.html" uploadstatus="1" />
+    <item url="templates/base/blog/base.html" uploadstatus="1" />
+    <item url="templates/base/blog/index.html" uploadstatus="1" />
+    <item url="templates/base/blog/side.html" uploadstatus="1" />
+    <item url="templates/base/help/edit_ticket.html" uploadstatus="1" />
+    <item url="templates/base/help/faq.html" uploadstatus="1" />
+    <item url="templates/base/help/index.html" uploadstatus="1" />
+    <item url="templates/base/help/new_ticket.html" uploadstatus="1" />
+    <item url="templates/base/registration/account.html" uploadstatus="1" />
+    <item url="templates/base/registration/email_change_done.html" uploadstatus="1" />
+    <item url="templates/base/registration/email_change_form.html" uploadstatus="1" />
+    <item url="templates/base/registration/login_form.html" uploadstatus="1" />
+    <item url="templates/base/registration/password_change_done.html" uploadstatus="1" />
+    <item url="templates/base/registration/password_change_form.html" uploadstatus="1" />
+    <item url="templates/base/registration/password_reset_done.html" uploadstatus="1" />
+    <item url="templates/base/registration/password_reset_email.html" uploadstatus="1" />
+    <item url="templates/base/registration/password_reset_form.html" uploadstatus="1" />
+    <item url="templates/base/registration/register.html" uploadstatus="1" />
+    <item url="templates/base/registration/register_done.html" uploadstatus="1" />
+    <item url="media/js/profile.js" uploadstatus="1" />
+    <item url="media/css/gray_white.css" uploadstatus="1" />
+    <item url="media/css/red_white.css" uploadstatus="1" />
+    <item url="templates/robots.txt" uploadstatus="1" />
+    <item url="todo/" />
+    <item url="todo/__init__.py" />
+    <item url="todo/models.py" />
+    <item url="todo/views.py" />
+    <item url="todo/admin.py" />
+    <item url="settings_local.py" />
+  </project>
+</webproject>
