@@ -1,5 +1,5 @@
-from comic_ak import render
-from comic_ak.agregator.models import *
+from comicagg import render
+from comicagg.agregator.models import *
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.db import connection

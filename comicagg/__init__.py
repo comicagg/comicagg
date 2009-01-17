@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.utils.version import get_svn_revision
-from comic_ak import __path__ as comic_ak_path
+from comicagg import __path__ as comicagg_path
 import os, re
 
 def render(request, template, context, menu=None, xml=False, responseClass=HttpResponse, mime='text/html; charset="utf-8"'):
@@ -64,7 +64,7 @@ def robots_txt(request):
   return render(request, 'robots.txt', {}, mime='text/plain; charset="utf-8"')
 
 def get_svn():
-  return get_svn_revision(comic_ak_path[0])
+  return get_svn_revision(comicagg_path[0])
 
 from django.views.debug import technical_500_response
 import sys

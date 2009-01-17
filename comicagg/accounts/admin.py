@@ -1,5 +1,5 @@
 from django.contrib import admin
-from comic_ak.accounts.models import *
+from comicagg.accounts.models import *
 
 class UserProfileAdmin(admin.ModelAdmin):
   list_display = ('user', 'last_read_access',)

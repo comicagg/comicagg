@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from comic_ak.agregator.models import *
+from comicagg.agregator.models import *
 
 class TagInline(admin.TabularInline):
   model = Tag

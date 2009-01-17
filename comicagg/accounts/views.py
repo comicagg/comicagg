@@ -1,7 +1,7 @@
 # Create your views here.
-from comic_ak.accounts.models import *
-from comic_ak.agregator.models import Comic
-from comic_ak import render
+from comicagg.accounts.models import *
+from comicagg.agregator.models import Comic
+from comicagg import render
 from django.db import IntegrityError
 from django.conf import settings
 from django.contrib.auth.models import User

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('comic_ak.help.views',
+urlpatterns = patterns('comicagg.help.views',
   url(r'^$', 'index', name='help_index'),
   #url(r'^faq/$', 'view_faq', name='faq'),
   #url(r'^tickets/new$', 'new_ticket', name='new_ticket'),

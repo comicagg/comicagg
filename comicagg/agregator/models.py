@@ -1,5 +1,5 @@
 #coding: utf-8
-from comic_ak.accounts.models import *
+from comicagg.accounts.models import *
 from django.db import models
 from django.contrib.auth.models import User
 from django import forms

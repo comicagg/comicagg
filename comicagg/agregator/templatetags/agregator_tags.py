@@ -1,8 +1,8 @@
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import stringfilter
-from comic_ak.agregator.models import *
-from comic_ak.agregator.views import *
+from comicagg.agregator.models import *
+from comicagg.agregator.views import *
 from django.utils.translation import ugettext as _
 import math
 

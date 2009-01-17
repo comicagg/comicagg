@@ -1,10 +1,11 @@
-# Django settings for comic_ak project.
+# -*- coding: utf-8 -*-
+# Django settings for comicagg project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('esu', 'admin@comicagg.com'),
+    ('esú', 'admin@comicagg.com'),
 )
 
 MANAGERS = ADMINS
@@ -35,20 +36,20 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/esu/dev/django/comic_ak/media'
+#MEDIA_ROOT = '/home/esu/dev/django/comicagg/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'https://localhost/media_comic_ak/'
+#MEDIA_URL = 'https://localhost/media_comicagg/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/admin-media/'
+#ADMIN_MEDIA_PREFIX = '/admin-media/'
 
-#used for password reset email
-DOMAIN = 'http://192.168.0.3:8000'
+# Used for password reset email, without trailing slash
+#DOMAIN = 'http://192.168.0.3:8000'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '0zqsc45e!e*%zy(&gus5p4bj6^mdrt%7^y*fl*(o6rt1yp=)&#'
@@ -67,32 +68,32 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'comic_ak.UserBasedExceptionMiddleware',
+    'comicagg.UserBasedExceptionMiddleware',
 )
 
-ROOT_URLCONF = 'comic_ak.urls'
+ROOT_URLCONF = 'comicagg.urls'
 
 THEME = 'blue_white'
 
-TEMPLATE_DIRS = (
+#TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/esu/dev/django/comic_ak/templates',
-    '/home/esu/dev/django/comic_ak/templates/base',
-    '/home/esu/dev/django/comic_ak/templates/%s' % THEME,
-)
+    #'/home/esu/dev/django/comicagg/templates',
+    #'/home/esu/dev/django/comicagg/templates/base',
+    #'/home/esu/dev/django/comicagg/templates/%s' % THEME,
+#)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.admin',
-    'comic_ak.agregator',
-    'comic_ak.accounts',
-    'comic_ak.blog',
-    'comic_ak.help',
-    'comic_ak.todo',
+    'comicagg.agregator',
+    'comicagg.accounts',
+    'comicagg.blog',
+    'comicagg.help',
+    'comicagg.todo',
 )
 
 SITE_NAME = 'Comic Aggregator'

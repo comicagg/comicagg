@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from comic_ak.todo.models import *
+from comicagg.todo.models import *
 
 class TaskAdmin(admin.ModelAdmin):
   list_display = ('title', 'state', 'date', )

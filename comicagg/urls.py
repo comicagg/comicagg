@@ -4,17 +4,17 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-handler404 = 'comic_ak.error404'
-handler500 = 'comic_ak.error500'
+handler404 = 'comicagg.error404'
+handler500 = 'comicagg.error500'
 
 urlpatterns = patterns('',
-    url(r'^$', 'comic_ak.accounts.views.index', name='index'),
-    url(r'^robots.txt$', 'comic_ak.robots_txt', name='robots'),
-    (r'^comics/', include('comic_ak.agregator.urls')),
-    (r'^accounts/', include('comic_ak.accounts.urls')),
-    (r'^blog/', include('comic_ak.blog.urls')),
-    (r'^help/', include('comic_ak.help.urls')),
-    (r'^ws/', include('comic_ak.ws.urls')),
+    url(r'^$', 'comicagg.accounts.views.index', name='index'),
+    url(r'^robots.txt$', 'comicagg.robots_txt', name='robots'),
+    (r'^comics/', include('comicagg.agregator.urls')),
+    (r'^accounts/', include('comicagg.accounts.urls')),
+    (r'^blog/', include('comicagg.blog.urls')),
+    (r'^help/', include('comicagg.help.urls')),
+    (r'^ws/', include('comicagg.ws.urls')),
     (r'^admin/(.*)', admin.site.root),
     #comment this for production
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes':True}),

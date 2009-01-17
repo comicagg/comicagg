@@ -1,5 +1,5 @@
 from django.contrib import admin
-from comic_ak.blog.models import *
+from comicagg.blog.models import *
 
 class PostAdmin(admin.ModelAdmin):
   list_display = ('title', 'date', 'user',)

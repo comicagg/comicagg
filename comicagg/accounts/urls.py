@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('comic_ak.accounts.views',
+urlpatterns = patterns('comicagg.accounts.views',
     url(r'^profile/$', 'edit_profile', name='edit_profile'),
     url(r'^profile/saved/$', 'edit_profile', name='saved_profile', kwargs={'saved':True}),
     url(r'^profile/save/$', 'save_profile', name='save_profile'),

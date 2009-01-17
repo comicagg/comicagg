@@ -1,4 +1,4 @@
-from comic_ak.agregator.models import *
+from comicagg.agregator.models import *
 import re, sys, urllib2
 
 def match_url(url=None, regexp=None, fake_user_agent=False, backwards=False):

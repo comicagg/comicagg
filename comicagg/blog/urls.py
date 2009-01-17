@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('comic_ak.blog.views',
+urlpatterns = patterns('comicagg.blog.views',
   url(r'^$', 'index', name='blog_index'),
   url(r'^all/$', 'index', name='blog_archive', kwargs={'archive':True}),
   url(r'^hide_new_blogs/$', 'hide_new_blogs', name='hide_new_blogs'),

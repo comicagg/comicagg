@@ -1,5 +1,5 @@
-from comic_ak import *
-from comic_ak.help.models import *
+from comicagg import *
+from comicagg.help.models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
@@ -27,14 +27,14 @@ def new_ticket(request):
       ticket.save()
       details = {'to':'esu@proyectoanonimo.com', 'from':'Comic Aggregator', 'subject':'[CA] Nuevo ticket', 'message':ticket.title}
       send_email(details)
-      return HttpResponseRedirect(reverse('comic_ak.help.views.index'))
+      return HttpResponseRedirect(reverse('comicagg.help.views.index'))
   return render(request, 'help/new_ticket.html', {'form':form}, 'help')
 
 @login_required
 def view_ticket(request, ticket_id):
   ticket = get_object_or_404(Ticket, pk=ticket_id)
   if request.user != ticket.owner and not request.user.is_staff:
-    return HttpResponseRedirect(reverse('comic_ak.help.views.index'))
+    return HttpResponseRedirect(reverse('comicagg.help.views.index'))
   form = ReplyTicketForm()
   return render(request, 'help/edit_ticket.html', {'form':form, 'ticket':ticket}, 'help')
 
@@ -44,7 +44,7 @@ def reply_ticket(request, ticket_id):
   if request.POST:
     ticket = get_object_or_404(Ticket, pk=ticket_id)
     if request.user != ticket.owner and not request.user.is_staff:
-      return HttpResponseRedirect(reverse('comic_ak.help.views.index'))
+      return HttpResponseRedirect(reverse('comicagg.help.views.index'))
     new_data = request.POST
     form = ReplyTicketForm(new_data)
     if form.is_valid():
@@ -55,17 +55,17 @@ def reply_ticket(request, ticket_id):
       tm.save()
       ticket.set_open()
       ticket.save()
-      return HttpResponseRedirect(reverse('comic_ak.help.views.view_ticket', args=[ticket_id]))
+      return HttpResponseRedirect(reverse('comicagg.help.views.view_ticket', args=[ticket_id]))
   return render(request, 'help/new_ticket.html', {'form':form}, 'help')
 
 @login_required
 def close_ticket(request, ticket_id):
   ticket = get_object_or_404(Ticket, pk=ticket_id)
   if request.user != ticket.owner and not request.user.is_staff:
-    return HttpResponseRedirect(reverse('comic_ak.help.views.index'))
+    return HttpResponseRedirect(reverse('comicagg.help.views.index'))
   ticket.set_close()
   ticket.save()
-  return HttpResponseRedirect(reverse('comic_ak.help.views.view_ticket', args=[ticket_id]))
+  return HttpResponseRedirect(reverse('comicagg.help.views.view_ticket', args=[ticket_id]))
 
 @login_required
 def open_tickets(request):

@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('comic_ak.agregator.views',
+urlpatterns = patterns('comicagg.agregator.views',
     # Example:
     url(r'^$', 'read_view', name='read_index'),
     url(r'^read/$', 'read_view', name='read'),

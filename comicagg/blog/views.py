@@ -1,5 +1,5 @@
-from comic_ak import *
-from comic_ak.blog.models import *
+from comicagg import *
+from comicagg.blog.models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required

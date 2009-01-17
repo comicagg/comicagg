@@ -1,12 +1,11 @@
-# translation of django.po to Español
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# translation of django.po for Comic Aggregator to Español
+# Copyright (C) 2009 Jesús Fernández Sáez
+# This file is distributed under the same license as the comicagg package.
 #
-# Jesús Fernández <esu@proyectoanonimo.com>, 2008.
-# Jesus Fernandez <esu@proyectoanonimo.com>, 2008.
+# Jesús Fernández <esu@proyectoanonimo.com>, 2009.
 msgid ""
 msgstr ""
-"Project-Id-Version: django\n"
+"Project-Id-Version: Comic Aggregator\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-18 18:49+0100\n"
 "PO-Revision-Date: 2008-12-18 18:54+0100\n"

@@ -3,13 +3,14 @@
 import os, sys
 from traceback import *
 from datetime import datetime
+import settings_local
 
-sys.path.insert(0, "/home/esu/dev/django")
-os.environ['DJANGO_SETTINGS_MODULE'] = "comic_ak.settings"
+sys.path.insert(0, settings_local.ROOT)
+os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
-from comic_ak.agregator.models import *
-from comic_ak import send_email
-from comic_ak.agregator.check import check_comic
+from comicagg.agregator.models import *
+from comicagg import send_email
+from comicagg.agregator.check import check_comic
 
 print "Hora comienzo: %s" % datetime.now()
 print "Sólo se muestran errores de comics activos:"

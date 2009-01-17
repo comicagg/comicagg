@@ -1,10 +1,8 @@
 <!DOCTYPE webproject>
 <webproject>
-  <project type="Local" name="comic_ak" encoding="utf8" >
+  <project type="Local" name="Comic Aggregator" encoding="utf8" enableEvents="true" >
     <upload/>
-    <author>esú</author>
-    <email>esu en proyectoanonimo punto com</email>
-    <defaultDTD>-//W3C//DTD XHTML 1.1//EN</defaultDTD>
+    <defaultDTD>-//w3c//dtd xhtml 1.1//en</defaultDTD>
     <item url="__init__.py" uploadstatus="1" />
     <item url="manage.py" uploadstatus="1" />
     <item url="urls.py" uploadstatus="1" />
@@ -37,7 +35,6 @@
     <item url="locale/es/" uploadstatus="1" />
     <item url="locale/es/LC_MESSAGES/" uploadstatus="1" />
     <item url="locale/es/LC_MESSAGES/django.po" uploadstatus="1" />
-    <item url="settings.py.edit" uploadstatus="1" />
     <item url="blog/" uploadstatus="1" />
     <item url="blog/__init__.py" uploadstatus="1" />
     <item url="blog/models.py" uploadstatus="1" />
@@ -118,11 +115,21 @@
     <item url="media/css/gray_white.css" uploadstatus="1" />
     <item url="media/css/red_white.css" uploadstatus="1" />
     <item url="templates/robots.txt" uploadstatus="1" />
-    <item url="todo/" />
-    <item url="todo/__init__.py" />
-    <item url="todo/models.py" />
-    <item url="todo/views.py" />
-    <item url="todo/admin.py" />
-    <item url="settings_local.py" />
+    <item url="todo/" uploadstatus="1" />
+    <item url="todo/__init__.py" uploadstatus="1" />
+    <item url="todo/models.py" uploadstatus="1" />
+    <item url="todo/views.py" uploadstatus="1" />
+    <item url="todo/admin.py" uploadstatus="1" />
+    <item url="settings_local.py" uploadstatus="1" />
+    <author>esú</author>
+    <email>esu en proyectoanonimo punto com</email>
+    <debuggerclient persistentWatches="0" persistentBreakpoints="0" >Sin depurador</debuggerclient>
+    <exclude cvsignore="true" >*.pyc;*~</exclude>
+    <teamdata>
+      <taskleaders/>
+      <subprojectleaders/>
+      <mailinglist address="" />
+    </teamdata>
+    <events/>
   </project>
 </webproject>

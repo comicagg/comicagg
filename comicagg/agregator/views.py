@@ -7,10 +7,10 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
-from comic_ak import *
-from comic_ak.agregator.models import *
-from comic_ak.agregator.check import check_comic
-from comic_ak.blog.models import NewBlog
+from comicagg import *
+from comicagg.agregator.models import *
+from comicagg.agregator.check import check_comic
+from comicagg.blog.models import NewBlog
 from datetime import datetime
 from django.utils.translation import ugettext as _
 import sys, math, random
