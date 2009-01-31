@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}
-{% trans "Welcome" %}
-{% endblock %}
+{% block title %}{% trans "Welcome" %}{% endblock %}
+{% block onload %}focusOnLogin(){% endblock %}
 {% block content %}
 <div>
   <div id="login">

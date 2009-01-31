@@ -103,4 +103,3 @@ AUTH_PROFILE_MODULE = "accounts.userprofile"
 TAG_CLOUD_NUMBER = 1
 
 from settings_local import *
-
