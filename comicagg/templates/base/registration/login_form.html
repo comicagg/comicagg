@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %}{% trans 'Login'%}{% endblock %}
+{% block onload %}focusOnLogin(){% endblock %}
 {% block content %}
 <h3>{% trans 'Login into your account'%}</h3>
 <p class="info">{% trans 'Write your username and passwod to get you logged in.'%}</p>
