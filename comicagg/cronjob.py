@@ -9,7 +9,7 @@ sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
 from comicagg.agregator.models import *
-from comicagg import send_email
+from django.core.mail import send_mail
 from comicagg.agregator.check import check_comic
 
 print "Hora comienzo: %s" % datetime.now()
@@ -49,13 +49,7 @@ for comic in all:
     #si es un comic desactivado o terminado y se actualiza notificar posible activacion
     if not comic.activo or comic.ended:
       message = 'El desactivado o terminado %s se ha actualizado.\n' % (comic.name,)
-      details = {
-        'to':'admin@comicagg.com',
-        'from':'Comic Aggregator',
-        'subject':"[CA] Comic desactivado actualizado",
-        'message':message
-      }
-      send_email(details)
+      send_mail('[CA] Comic desactivado actualizado', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com'])
   else:
     no_change += 1
 

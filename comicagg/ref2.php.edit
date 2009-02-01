@@ -40,7 +40,7 @@ if(!file_exists($cached) or isset($_REQUEST['f'])) {
   // guardar la imagen real
   $image_path = sprintf('%s%s.%s', DIR, $md5, $ext);
   $ret = file_put_contents($image_path, $file);
-  if ($ret===FALSE) {echo "error1";}
+  if ($ret===FALSE) {echo "problem saving $image_path from $url";}
   // crea enlace simbolico
   exec("ln -s $image_path $cached");
 }

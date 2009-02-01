@@ -13,7 +13,6 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
     user = None
   context['user'] = user
   context['menu'] = menu
-  context['svn_revision'] = get_svn()
 
   resp_text = render_to_string(template, context)
   #ie no reconoce el mime que hay que usar para xhtml 1.1 :(
@@ -32,39 +31,8 @@ def error404(request):
 def error500(request):
   return render(request, '500.html', {}, responseClass=HttpResponseServerError)
 
-"""
-details = {
-  from
-  to
-  subject
-  message
-}
-"""
-
-def send_email(details):
-  #ruta a sendmail
-  MAIL = '/usr/sbin/sendmail'
-  #mensaje a enviar
-  msg = """To: %(to)s
-From: %(from)s
-Subject: %(subject)s
-
-%(message)s
-
-""" % details
-  #abrir pipe a sendmail
-  p = os.popen("%s -t" % MAIL, 'w')
-  p.write(msg)
-  exitcode = p.close()
-  if exitcode:
-    print "Exit code: %s" % exitcode
-  return exitcode
-
 def robots_txt(request):
   return render(request, 'robots.txt', {}, mime='text/plain; charset="utf-8"')
-
-def get_svn():
-  return get_svn_revision(comicagg_path[0])
 
 from django.views.debug import technical_500_response
 import sys

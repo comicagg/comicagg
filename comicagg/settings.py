@@ -102,4 +102,8 @@ AUTH_PROFILE_MODULE = "accounts.userprofile"
 
 TAG_CLOUD_NUMBER = 1
 
+EMAIL_HOST = 'mail.proyectoanonimo.com'
+EMAIL_HOST_USER = 'robot+comicagg.com'
+EMAIL_HOST_PASSWORD = 'robot%%'
+
 from settings_local import *

@@ -3,7 +3,7 @@
   <project type="Local" name="Comic Aggregator" encoding="utf8" enableEvents="true" >
     <upload/>
     <defaultDTD>-//w3c//dtd xhtml 1.1//en</defaultDTD>
-    <item url="__init__.py" uploadstatus="1" />
+    <item url="__init__.py" bookmarks="" uploadstatus="1" />
     <item url="manage.py" uploadstatus="1" />
     <item url="urls.py" uploadstatus="1" />
     <item url="" uploadstatus="1" />
@@ -28,7 +28,7 @@
     <item url="help/" uploadstatus="1" />
     <item url="help/__init__.py" uploadstatus="1" />
     <item url="help/models.py" uploadstatus="1" />
-    <item url="help/views.py" uploadstatus="1" />
+    <item url="help/views.py" bookmarks="" uploadstatus="1" />
     <item url="accounts/urls.py" uploadstatus="1" />
     <item url="help/urls.py" uploadstatus="1" />
     <item url="locale/" uploadstatus="1" />
@@ -48,8 +48,8 @@
     <item url="templates/admin/index.html" uploadstatus="1" />
     <item url="templates/admin/check.html" uploadstatus="1" />
     <item url="templates/admin/base.html" uploadstatus="1" />
-    <item url="ref.php.edit" uploadstatus="1" />
-    <item url="settings.py" uploadstatus="1" />
+    <item url="ref.php.edit" bookmarks="" uploadstatus="1" />
+    <item url="settings.py" bookmarks="" uploadstatus="1" />
     <item url="ws/" uploadstatus="1" />
     <item url="ws/urls.py" uploadstatus="1" />
     <item url="ws/__init__.py" uploadstatus="1" />
@@ -123,12 +123,14 @@
     <author>esú</author>
     <email>esu en proyectoanonimo punto com</email>
     <debuggerclient persistentWatches="0" persistentBreakpoints="0" >Sin depurador</debuggerclient>
-    <exclude cvsignore="true" >*.pyc;*~</exclude>
+    <exclude cvsignore="true" >*.pyc;*~;</exclude>
     <teamdata>
       <taskleaders/>
       <subprojectleaders/>
       <mailinglist address="" />
     </teamdata>
     <events/>
+    <item url="ref2.php.edit" bookmarks="" />
+    <item url="cronjob.py" />
   </project>
 </webproject>
