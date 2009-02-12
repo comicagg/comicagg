@@ -7,17 +7,17 @@ TEMPLATE_DEBUG = DEBUG
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'comic_ak'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'comic_ak'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'comic_ak'         # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-ROOT = '/home/esu/dev/django'
+ROOT = '/home/esu/dev/comicagg'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/esu/dev/django/comic_ak/media'
+MEDIA_ROOT = '/home/esu/dev/comicagg/comicagg/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -38,8 +38,8 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/esu/dev/django/comicagg/templates',
-    '/home/esu/dev/django/comicagg/templates/base',
-    '/home/esu/dev/django/comicagg/templates/%s' % THEME,
+    '/home/esu/dev/comicagg/comicagg/templates',
+    '/home/esu/dev/comicagg/comicagg/templates/base',
+    '/home/esu/dev/comicagg/comicagg/templates/%s' % THEME,
 )
 

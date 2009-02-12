@@ -73,7 +73,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'comicagg.urls'
 
-THEME = 'blue_white'
+#THEME = 'blue_white'
 
 #TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

@@ -48,7 +48,6 @@
     <item url="templates/admin/index.html" uploadstatus="1" />
     <item url="templates/admin/check.html" uploadstatus="1" />
     <item url="templates/admin/base.html" uploadstatus="1" />
-    <item url="cronjob.py.edit" uploadstatus="1" />
     <item url="ref.php.edit" uploadstatus="1" />
     <item url="settings.py" uploadstatus="1" />
     <item url="ws/" uploadstatus="1" />
@@ -123,8 +122,8 @@
     <item url="settings_local.py" uploadstatus="1" />
     <author>esú</author>
     <email>esu en proyectoanonimo punto com</email>
-    <debuggerclient persistentWatches="0" persistentBreakpoints="0" >Sin depurador</debuggerclient>
-    <exclude cvsignore="true" >*.pyc;*~</exclude>
+    <debuggerclient persistentWatches="0" persistentBreakpoints="0" >No Debugger</debuggerclient>
+    <exclude cvsignore="true" >*.pyc;*~;</exclude>
     <teamdata>
       <taskleaders/>
       <subprojectleaders/>
