@@ -19,11 +19,11 @@ class ComicAdmin(admin.ModelAdmin):
       'fields' : ('url', 'base_img', 'regexp', 'backwards')
     }),
     ('Opciones redirección', {
-      'classes': ('collapse',),
+      #'classes': ('collapse',),
       'fields' : ('url2', 'base2', 'regexp2', 'backwards2')
     }),
     ('Opciones avanzadas', {
-      'classes': ('collapse',),
+      #'classes': ('collapse',),
       'fields' : ('referer', 'fake_user_agent')
     }),
     ('Votos', {
