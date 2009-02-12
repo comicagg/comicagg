@@ -3,9 +3,8 @@ from django.db import IntegrityError
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core import serializers
-from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
+from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from comicagg import *
@@ -219,9 +218,11 @@ def request_comic(request, done=False):
       comment = form.cleaned_data['comment']
       req = Request(user=request.user, url=url, comment=comment)
       req.save()
-      print type(req.comment)
       message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
-      send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
+      details = {'to':'admin@comicagg.com', 'from':'Comic Aggregator', 'subject':'[CA] Nuevo request', 'message':message}
+      send_email(details)
+      details = {'to':'korosu.itai@gmail.com', 'from':'Comic Aggregator', 'subject':'[CA] Nuevo request', 'message':message}
+      send_email(details)
       return HttpResponseRedirect(reverse('done_request'))
   context['form'] = form
   return render(request, 'agregator/request_comic.html', context, 'configure')
@@ -271,9 +272,20 @@ def report_comic(request):
   comic_id = int(request.POST['id'])
   comic = get_object_or_404(Comic, pk=comic_id)
   message = 'El usuario %s dice que hay una imagen rota en el comic %s\n' % (request.user, comic.name,)
-  send_mail('[CA] Imagen rota', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
+  details = {
+    'to':'admin@comicagg.com',
+    'from':'Comic Aggregator',
+    'subject':"[CA] Imagen rota",
+    'message':message
+  }
+  send_email(details)
+  details = {
+    'to':'korosu.itai@gmail.com',
+    'from':'Comic Aggregator',
+    'subject':"[CA] Imagen rota",
+    'message':message}
+  send_email(details)
   return HttpResponse('0')
-
 @login_required
 def mark_all_read(request):
   un = UnreadComic.objects.filter(user=request.user)

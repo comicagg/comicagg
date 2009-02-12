@@ -1,74 +1,74 @@
 body {
-  padding:0;
-  margin:0;
-  font-size:10pt;
-  font-family: 'Bitstream Vera Sans' sans-serif;
-  min-width:900px;
+	padding:0;
+	margin:0;
+	font-size:10pt;
+	font-family: 'Bitstream Vera Sans' sans-serif;
+	min-width:900px;
 }
 
 a, .link {
-  text-decoration:none;
-  cursor:pointer;
+	text-decoration:none;
+	cursor:pointer;
 }
 
 a:hover, .link:hover {
-  text-decoration:underline;
+	text-decoration:underline;
 }
 
 a:visited {
-/*   color:gray; */
+/*	 color:gray; */
 }
 
 img {
-  border:0px;
-  vertical-align:middle;
+	border:0px;
+	vertical-align:middle;
 }
 
 a.no_hover:hover {
 }
 
 input, textarea, button {
-  padding:2px;
+	padding:2px;
 }
 
 input:focus, textarea:focus {
 }
 
 input[type="submit"], button {
-  border-style:outset;
+	border-style:outset;
 }
 
 input[type="submit"]:active, button:active {
-  border-style:inset;
+	border-style:inset;
 }
 
 .form_div {
-  padding:4px;
+	padding:4px;
 }
 
 .text_center {
-  text-align:center;
+	text-align:center;
 }
 
 .text_left {
-  text-align:left;
+	text-align:left;
 }
 
 .text_right {
-  text-align:right;
+	text-align:right;
 }
 
 .small_text {
-  color: gray;
-  font-size: smaller;
+	color: gray;
+	font-size: smaller;
 }
 
 .bolder {
-  font-weight:bolder;
+	font-weight:bolder;
 }
 
 .saving {
-  vertical-align:middle;
+	vertical-align:middle;
 }
 
 
@@ -78,33 +78,33 @@ input[type="submit"]:active, button:active {
 
 
 #head {
-  text-align:left;
-  height:50px;
-  margin:0px 40px 0px 40px;
-  font-size:8pt;
+	text-align:left;
+	height:50px;
+	margin:0px 40px 0px 40px;
+	font-size:8pt;
 }
 
 #menu {
-  list-style-type:none;
-  padding:0;
-  margin:0;
-  position:absolute;
-  right:62px;
-  top:0;
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	position:absolute;
+	right:62px;
+	top:0;
 }
 
 #menu li {
-  float:left;
-  padding:0;
-  margin:0;
-  display:block;
+	float:left;
+	padding:0;
+	margin:0;
+	display:block;
 }
 
 #menu a, .logged_in {
-  height:50px;
-  padding:16px 7px 0px 7px;
-  display:block;
-  vertical-align:bottom;
+	height:50px;
+	padding:16px 7px 0px 7px;
+	display:block;
+	vertical-align:bottom;
 }
 
 #menu a:first-letter, .logged_in:first-letter {
@@ -115,55 +115,55 @@ input[type="submit"]:active, button:active {
 }
 
 #menu a:hover {
-  text-decoration:none;
+	text-decoration:none;
 }
 
 #menu .active {
 }
 
 #welcome {
-  padding-right:240px;
+	padding-right:240px;
 }
 
 #login {
-  padding:3px;
-  width:200px;
-  text-align:right;
-  float:right;
+	padding:3px;
+	width:200px;
+	text-align:right;
+	float:right;
 }
 
 #error {
-  font-weight:bolder;
+	font-weight:bolder;
 }
 
 #new_comics_notice {
-  position:absolute;
-  top:60px;
-  right:50px;
-  text-align:right;
+	position:absolute;
+	top:60px;
+	right:50px;
+	text-align:right;
 }
 
 .new_comic {
-  font-weight:bolder;
+	font-weight:bolder;
 }
 
 #new_blogs_notice {
-  position:absolute;
-  top:60px;
-  left:50px;
-  text-align:left;
+	position:absolute;
+	top:60px;
+	left:50px;
+	text-align:left;
 }
 
 #new_blogs_notice ul {
-  padding:0;
-  padding-left:22px;
-  margin:3px;
-  list-style-type:disc;
+	padding:0;
+	padding-left:22px;
+	margin:3px;
+	list-style-type:disc;
 }
 
 #new_blogs_notice li {
-  padding:0;
-  margin:0;
+	padding:0;
+	margin:0;
 }
 
 
@@ -173,22 +173,22 @@ input[type="submit"]:active, button:active {
 
 
 #content_wrap {
-  min-height:600px;
+	min-height:600px;
 }
 
 #content {
-  padding:5px 15px 5px 15px;
-  margin:0px 40px 20px 40px;
+	padding:5px 15px 5px 15px;
+	margin:0px 40px 20px 40px;
 }
 
 .info {
-  margin-left:15px;
+	margin-left:15px;
 }
 
 #disclaimer {
-  text-align:center;
-  padding:5px;
-  clear:both;
+	text-align:center;
+	padding:5px;
+	clear:both;
 }
 
 
@@ -198,134 +198,134 @@ input[type="submit"]:active, button:active {
 
 
 #read_comics {
-  min-height:600px;
+	min-height:600px;
 }
 
 #no_unread_notice {
-  padding-bottom:20px;
+	padding-bottom:20px;
 }
 
 #navigation_box {
-  position:fixed;
-  left:0px;
-  bottom:0;
-  min-height:24px;
-  min-width:200px;
-  z-index:100;
+	position:fixed;
+	left:0px;
+	bottom:0;
+	min-height:24px;
+	min-width:200px;
+	z-index:100;
 }
 
 #navigation_box .navBar {
-  height:24px;
+	height:24px;
 }
 
 #navigation_box .navBar img {
-  vertical-align:middle;
+	vertical-align:middle;
 }
 
 #navigation {
-  margin: 6px 3px 3px 3px;
-  font-size:10pt;
-  padding-left:15px;
+	margin: 6px 3px 3px 3px;
+	font-size:10pt;
+	padding-left:15px;
 }
 
 #navtitle {
-  text-align:left;
-  margin:3px;
-  margin-left:20px;
-  font-size:10pt;
+	text-align:left;
+	margin:3px;
+	margin-left:20px;
+	font-size:10pt;
 }
 
 #navshowing {
-  text-align:left;
-  margin:3px;
+	text-align:left;
+	margin:3px;
 }
 
 #navunread {
-  font-weight:bolder;
+	font-weight:bolder;
 }
 
 #mark_all {
-  margin:2px;
-  text-align:right;
+	margin:2px;
+	text-align:right;
 }
 
 #navigation ul.column {
-  list-style-type:none;
-  padding:0;
-  float:left;
-  margin:0;
-  margin-right:10px;
-  margin-top:5px;
+	list-style-type:none;
+	padding:0;
+	float:left;
+	margin:0;
+	margin-right:10px;
+	margin-top:5px;
 }
 
 #comics {
-  border:0px solid black;
-  margin-top:15px;
+	border:0px solid black;
+	margin-top:15px;
 }
 
 div.comic {
-  border-top:0px solid gray;
-  padding:5px;
-  margin:5px;
-  text-align:center;
+	border-top:0px solid gray;
+	padding:5px;
+	margin:5px;
+	text-align:center;
 }
 
 .unread_comic {
-  font-weight:bolder;
+	font-weight:bolder;
 }
 
 #read_comics .comic_info {
-  margin: 15px 25% 10px 25%;
-  position:relative;
-  padding:2px;
+	margin: 15px 25% 10px 25%;
+	position:relative;
+	padding:2px;
 
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 
 #read_comics .comic_info ul.menu {
-  margin:0;
-  margin-top:3px;
-  padding:2px;
-  list-style-type:none;
-  width:140px;
-  font-size:smaller;
-  z-index:100;
+	margin:0;
+	margin-top:3px;
+	padding:2px;
+	list-style-type:none;
+	width:140px;
+	font-size:smaller;
+	z-index:100;
 }
 
 #read_comics .comic_info li {
-  margin:0;
-  padding:1px;
-  text-align:right;
-  cursor:pointer;
+	margin:0;
+	padding:1px;
+	text-align:right;
+	cursor:pointer;
 }
 
 #read_comics .comic_info li:hover {
-  cursor:pointer;
+	cursor:pointer;
 }
 
 .tagging_form {
-  clear:both;
-  padding-bottom:5px;
+	clear:both;
+	padding-bottom:5px;
 }
 
 .opts_left {
-/*   text-align:right; */
+/*	 text-align:right; */
 }
 
 .opts_right {
-  position:absolute;
-  right:2px;
-  text-align:right;
+	position:absolute;
+	right:2px;
+	text-align:right;
 }
 
 .more_img {
-  cursor:pointer;
+	cursor:pointer;
 }
 
 #no_comics {
-  text-align:center;
-  padding-top:25px;
+	text-align:center;
+	padding-top:25px;
 }
 
 
@@ -335,32 +335,32 @@ div.comic {
 
 
 .width_100 {
-  width:100%;
+	width:100%;
 }
 #errorContainer {
-  padding:5px;
-  padding-left:8px;
-  margin:15px;
-  width:40%;
+	padding:5px;
+	padding-left:8px;
+	margin:15px;
+	width:40%;
 }
 
 #errorContainer ul {
-  list-style-type:circle;
-  margin:3px;
+	list-style-type:circle;
+	margin:3px;
 }
 
 .errorlist {
-  padding:5px;
-  list-style-type:none;
-  margin:0px;
+	padding:5px;
+	list-style-type:none;
+	margin:0px;
 }
 
 .error_tr {
 }
 
 #register_table td {
-  padding:2px 8px 4px 8px;
-  vertical-align: super;
+	padding:2px 8px 4px 8px;
+	vertical-align: super;
 }
 
 
@@ -370,68 +370,72 @@ div.comic {
 
 
 #configure_wrapper {
-  text-align:center;
+	text-align:center;
 }
 
 #configure_wrapper img {
-  vertical-align:middle;
+	vertical-align:middle;
 }
 
 #configure_wrapper .table_wrap {
-  margin:auto;
+	margin:auto;
 }
 
 #configure_wrapper .table_wrap td {
-  vertical-align:top;
+	vertical-align:top;
 }
 
 #configure_wrapper .table_wrap h4 {
-  margin:3px;
-  margin-bottom:10px;
-  text-align:center;
+	margin:3px;
+	margin-bottom:10px;
+	text-align:center;
 }
 
 #configure_wrapper .extra_actions {
-  text-align:left;
+	text-align:left;
+}
+
+#sortables_loading {
+	text-align:center;
 }
 
 .emptyPlaceMarker {
-  margin-left:14px;
+	margin-left:14px;
 }
 
 div.sortable_box {
-  margin:5px;
-  min-width:300px;
-  max-width:330px;
+	margin:5px;
+	min-width:300px;
+	max-width:330px;
 }
 
 div.sortable_box ul.list {
-  list-style-type:none;
-  min-height:300px;
-  margin:0;
-  padding:5px;
-  padding-bottom:35px;
+	list-style-type:none;
+	min-height:300px;
+	margin:0;
+	padding:5px;
+	padding-bottom:35px;
 }
 
 #drag_drop {
-  padding:2px;
-  padding-left:10px;
-  margin:1px 15px 1px 15px;
+	padding:2px;
+	padding-left:10px;
+	margin:1px 15px 1px 15px;
 }
 
 div.sortable_box li.item {
-  padding:2px;
-  padding-left:10px;
-  margin:1px 15px 1px 15px;
-  text-align:left;
+	padding:2px;
+	padding-left:10px;
+	margin:1px 15px 1px 15px;
+	text-align:left;
 }
 
 div.sortable_box li.item:hover {
-  cursor:move;
+	cursor:move;
 }
 
 div.sortable_box li.item .rating, div.sortable_box li.item .votes, div.sortable_box li.item .name {
-  display:none;
+	display:none;
 }
 
 .blue li.item {
@@ -444,93 +448,93 @@ div.sortable_box li.item_hover {
 }
 
 div.sortable_box .comic_info {
-  width:30px;
-  height:20px;
-  position:absolute;
-  right:5px;
-  bottom:0;
-  cursor:pointer;
-  z-index:10000;
-  padding:0px;
+	width:30px;
+	height:20px;
+	position:absolute;
+	right:5px;
+	bottom:0;
+	cursor:pointer;
+	z-index:10000;
+	padding:0px;
 }
 
 div.sortable_box .comic_info img {
 }
 
 div.sortable_box .menu {
-  position:absolute;
-  right:5px;
-  margin:0;
-  padding:2px;
-  list-style-type:none;
-  z-index:100000;
-  font-size:smaller;
-  text-align:right;
+	position:absolute;
+	right:5px;
+	margin:0;
+	padding:2px;
+	list-style-type:none;
+	z-index:100000;
+	font-size:smaller;
+	text-align:right;
 }
 
 div.sortable_box .menu li {
-  margin:0;
-  padding:1px;
+	margin:0;
+	padding:1px;
 }
 
 div.sortable_box .menu li:hover {
-  cursor:pointer;
+	cursor:pointer;
 }
 
 .new_comics_box {
-  text-align:left;
-  margin:5px;
-  margin-top:10px;
-  padding:5px;
-  width:400px;
+	text-align:left;
+	margin:5px;
+	margin-top:10px;
+	padding:5px;
+	width:400px;
 }
 
 #show_new {
-  margin-left:20px;
+	margin-left:20px;
 }
 
 #loading_img {
-  vertical-align:middle;
+	vertical-align:middle;
 }
 
 #news, .saved {
-  font-size:smaller;
+	font-size:smaller;
 }
 
 .filter_input {
-  margin:0px;
+	margin:0px;
 }
 
 .filter_input:focus {
 }
 
 .filter_wrapper {
-  padding:2px 2px 2px 0px;
+	padding:2px 2px 2px 0px;
 }
 
 .filter_wrapper a img {
-  vertical-align:text-top;
+	vertical-align:text-top;
 }
 
 #tagging_wrap {
-  margin-left:100px;
-  margin-right:100px;
+	margin-left:100px;
+	margin-right:100px;
 }
 
 .cloud {
-  margin:2px 10px 2px 10px;
-  padding:10px;
-  font-size:8pt;
-  min-height:20px;
+	margin:2px 10px 2px 10px;
+	padding:10px;
+	font-size:8pt;
+	min-height:20px;
 }
 
 .no_border {
-  border-width:0px;
+	border-width:0px;
 }
 
 a.tag_link {
-  font-size:8pt;
-  float:right;
+	font-size:8pt;
+	float:right;
 }
 
 .tag_size1 { font-size: 8pt; }
@@ -546,11 +550,11 @@ a.tag_link {
 
 
 #help p {
-  margin-left:15px;
+	margin-left:15px;
 }
 
 #help p:first-letter {
-  color:orange;
+	color:orange;
 }
 
 
@@ -560,60 +564,60 @@ a.tag_link {
 
 
 #comic_list h5 {
-  margin:10px;
-  padding:0;
+	margin:10px;
+	padding:0;
 }
 
 #comic_list p {
 }
 
 #comic_list .comic {
-  padding:10px;
-  margin:10px;
-  text-align:left;
+	padding:10px;
+	margin:10px;
+	text-align:left;
 }
 
 #comic_list .comic div {
-  padding-left:10px;
+	padding-left:10px;
 }
 
 #comic_list .comic_cloud {
-  padding-left:10px;
-  float:right;
-  width:65%;
+	padding-left:10px;
+	float:right;
+	width:65%;
 }
 
 #comic_list .comic h3 {
-  margin:0;
-  padding:0;
-  margin-bottom:10px;
+	margin:0;
+	padding:0;
+	margin-bottom:10px;
 }
 
 #comic_list .comic .label {
-  color:black;
+	color:black;
 }
 
 #comic_list .comic img {
-  vertical-align:middle;
+	vertical-align:middle;
 }
 
 #comic_list .comic .votes {
-  font-size:smaller;
+	font-size:smaller;
 }
 
 #comic_list .comic .subscription {
-  font-size:smaller;
+	font-size:smaller;
 }
 
 #comic_list .last_strip {
-  text-align:center;
-  clear:both;
+	text-align:center;
+	clear:both;
 }
 
 #last_list {
-  padding:0;
-  margin:0px 0px 20px 15px;
-  list-style-type:none;
+	padding:0;
+	margin:0px 0px 20px 15px;
+	list-style-type:none;
 }
 
 
@@ -623,26 +627,26 @@ a.tag_link {
 
 
 .accounts_saved {
-  padding:5px;
+	padding:5px;
 }
 
 #web_colors {
-  margin:0;
-  padding:0;
-  padding-left:20px;
-  list-style-type:none;
+	margin:0;
+	padding:0;
+	padding-left:20px;
+	list-style-type:none;
 }
 
 .color {
 }
 
 #web_colors a {
-  padding:8px 15px;
-  margin-right:5px;
+	padding:8px 15px;
+	margin-right:5px;
 }
 
 #web_colors a:hover {
-  text-decoration:none;
+	text-decoration:none;
 }
 
 #color_blue { background:#5D8DCD; }
@@ -656,44 +660,44 @@ a.tag_link {
 
 
 #blog {
-  padding:0px 0px 5px 5px;
-  width:80%;
-  min-width:400px;
+	padding:0px 0px 5px 5px;
+	width:80%;
+	min-width:400px;
 }
 
 #blog .post {
-  padding-left:10px;
-  padding-bottom:5px;
+	padding-left:10px;
+	padding-bottom:5px;
 }
 
 #blog .new_post {
 }
 
 #blog .all_link {
-  margin:0;
-  padding:5px;
+	margin:0;
+	padding:5px;
 }
 
 #blog .info {
-  padding-top:10px;
+	padding-top:10px;
 }
 
 #blog_side {
-  text-align:right;
-  float:right;
-  width:20%;
-  padding-left:5px;
+	text-align:right;
+	float:right;
+	width:20%;
+	padding-left:5px;
 }
 
 #blog_side ul {
-  list-style-type:none;
-  margin:0;
-  padding:0;
-  padding-bottom:8px;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	padding-bottom:8px;
 }
 
 #blog_side li {
-  margin-top:5px;
+	margin-top:5px;
 }
 
 
@@ -703,26 +707,26 @@ a.tag_link {
 
 
 .rounded_box table, .rounded_box tr, .rounded_box td {
-  padding:0px;
-  margin:0px;
+	padding:0px;
+	margin:0px;
 }
 
 .rounded_box .cell {
 }
 
 .rounded_box .row {
-/*   border:0px solid blue; */
+/*	 border:0px solid blue; */
 }
 
 .rounded_box .t, .rounded_box .b {
-  height:20px;
+	height:20px;
 }
 
 .rounded_box .r, .rounded_box .l {
-  width:20px;
+	width:20px;
 }
 
 .rounded_box .bl, .rounded_box .tl, .rounded_box .br, .rounded_box .tr {
-  width:20px;
-  height:20px;
+	width:20px;
+	height:20px;
 }

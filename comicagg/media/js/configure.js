@@ -5,23 +5,23 @@
 filtering = false;
 
 function initConfigure() {
-  if($('show_new')) {
-    $('show_new').onclick = function() {
-      $('filter_input_available').value = '@new';
-      filter_list($('filter_input_available'), 'available_list');
-    };
-  }
-  //setup filters
-  $('filter_input_available').onkeyup = function() { filter_list($('filter_input_available'), 'available_list'); };
-  $('clear_available').onclick = function() { filter_clear('filter_input_available', 'available_list'); };
-  $('filter_input_selected').onkeyup = function() { filter_list($('filter_input_selected'), 'selected_list'); };
-  $('clear_selected').onclick = function() { filter_clear('filter_input_selected', 'selected_list'); };
-  //setup side options
-  $('sort_az').onclick = function() { sort_selected('az'); };
-  $('sort_rating').onclick = function() { sort_selected('rating'); };
-  $('add_all').onclick = function() { add_all(); };
-  $('remove_all').onclick = function() { remove_all(); };
-  $('sort_available').onclick = function() { sort_available(); };
+	if($('show_new')) {
+		$('show_new').onclick = function() {
+			$('filter_input_available').value = '@new';
+			filter_list($('filter_input_available'), 'available_list');
+		};
+	}
+	//setup filters
+	$('filter_input_available').onkeyup = function() { filter_list($('filter_input_available'), 'available_list'); };
+	$('clear_available').onclick = function() { filter_clear('filter_input_available', 'available_list'); };
+	$('filter_input_selected').onkeyup = function() { filter_list($('filter_input_selected'), 'selected_list'); };
+	$('clear_selected').onclick = function() { filter_clear('filter_input_selected', 'selected_list'); };
+	//setup side options
+	$('sort_az').onclick = function() { sort_selected('az'); };
+	$('sort_rating').onclick = function() { sort_selected('rating'); };
+	$('add_all').onclick = function() { add_all(); };
+	$('remove_all').onclick = function() { remove_all(); };
+	$('sort_available').onclick = function() { sort_available(); };
   //setup items
 /*  var es = $$('.sortable_box .item');
   for(var i=0; i < es.length; i++) {
@@ -34,56 +34,58 @@ function initConfigure() {
       infoHide(id);
     };
   }*/
-  var es = $$('.comic_info');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); menuToggle(id); };
-  }
-  var es = $$('.desc');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); gotoDescription(id); };
-  }
-  var es = $$('.desc_img');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); gotoDescription(id); };
-  }
-  var es = $$('.add');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); addComic(id); };
-  }
-  var es = $$('.add_img');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); addComic(id); };
-  }
-  var es = $$('.remove');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); removeComic(id); };
-  }
-  var es = $$('.remove_img');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); removeComic(id); };
-  }
+	var es = $$('.comic_info');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); menuToggle(id); };
+	}
+	var es = $$('.desc');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); gotoDescription(id); };
+	}
+	var es = $$('.desc_img');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); gotoDescription(id); };
+	}
+	var es = $$('.add');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); addComic(id); };
+	}
+	var es = $$('.add_img');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); addComic(id); };
+	}
+	var es = $$('.remove');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); removeComic(id); };
+	}
+	var es = $$('.remove_img');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); removeComic(id); };
+	}
 
-  Sortable.create("available_list", {
-    dropOnEmpty:true,
-    containment:["available_list","selected_list"],
-    constraint:false,
-    scroll: window,
-    only: "item"
-  });
-
-  Sortable.create("selected_list", {
-    dropOnEmpty:true,
-    containment:["available_list","selected_list"],
-    constraint:false,
-    scroll: window,
-    only: "item",
-    onUpdate:function(elem) {
-      do_save();
-      sort_available();
-    }
-  });
-  ajustar_alturas(true);
-  return true;
+	Sortable.create("available_list", {
+		dropOnEmpty:true,
+		containment:["available_list","selected_list"],
+		constraint:false,
+		scroll: window,
+		only: "item"
+	});
+	
+	Sortable.create("selected_list", {
+		dropOnEmpty:true,
+		containment:["available_list","selected_list"],
+		constraint:false,
+		scroll: window,
+		only: "item",
+		onUpdate:function(elem) {
+		do_save();
+		sort_available();
+		}
+	});
+	ajustar_alturas(true);
+	$('sortables_loading').hide();
+	$('sortables_wrap').show();
+	return true;
 }
 
 // **************

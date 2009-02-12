@@ -18,6 +18,8 @@
 {% endfor %}
     </div>
   </div>
+<div id="sortables_loading"><br/>{% trans "Loading the lists..." %}<br/><img src="{{ settings.MEDIA_URL }}images/loading.gif" alt="" /></div>
+<div id="sortables_wrap" style="display:none;">
 {% if new_comics %}
   <div class="new_comics_box"><img src="{{ settings.MEDIA_URL}}images/info2.png" alt=""/> {% trans "You have "%}{{ new_comics.count|default:0 }}{% trans " new comics. "%}<a href="{% url forget_new_comics %}">{% trans "Forget new comics." %}</a><br/><a id="show_new">{% trans "Show only new comics" %}</a></div>
 {% endif %}
@@ -97,5 +99,6 @@
   <div style="clear:both" id="cont">
   <!--   <button id="save_button" onclick="do_save()">Save selection</button> -->
   </div>
+</div>
 </div>
 {% endblock %}
