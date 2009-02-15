@@ -3,7 +3,7 @@
   <project type="Local" name="Comic Aggregator" encoding="utf8" enableEvents="true" >
     <upload/>
     <defaultDTD>-//w3c//dtd xhtml 1.1//en</defaultDTD>
-    <item url="__init__.py" uploadstatus="1" />
+    <item url="__init__.py" bookmarks="" uploadstatus="1" />
     <item url="manage.py" uploadstatus="1" />
     <item url="urls.py" uploadstatus="1" />
     <item url="" uploadstatus="1" />
@@ -14,7 +14,7 @@
     <item url="agregator/" uploadstatus="1" />
     <item url="agregator/__init__.py" uploadstatus="1" />
     <item url="agregator/models.py" uploadstatus="1" />
-    <item url="agregator/views.py" uploadstatus="1" />
+    <item url="agregator/views.py" bookmarks="306,257,530,411,497,395,242,21,379,345,277,209,141,567,550,516,363,484,229,110,554,283,539,437,267,80,523,64,388,508,424,373" uploadstatus="1" />
     <item url="media/" uploadstatus="1" />
     <item url="media/js/" uploadstatus="1" />
     <item url="media/js/functions.js" uploadstatus="1" />
@@ -28,7 +28,7 @@
     <item url="help/" uploadstatus="1" />
     <item url="help/__init__.py" uploadstatus="1" />
     <item url="help/models.py" uploadstatus="1" />
-    <item url="help/views.py" uploadstatus="1" />
+    <item url="help/views.py" bookmarks="" uploadstatus="1" />
     <item url="accounts/urls.py" uploadstatus="1" />
     <item url="help/urls.py" uploadstatus="1" />
     <item url="locale/" uploadstatus="1" />
@@ -40,7 +40,7 @@
     <item url="blog/models.py" uploadstatus="1" />
     <item url="blog/views.py" uploadstatus="1" />
     <item url="blog/urls.py" uploadstatus="1" />
-    <item url="agregator/admin.py" uploadstatus="1" />
+    <item url="agregator/admin.py" bookmarks="" uploadstatus="1" />
     <item url="accounts/admin.py" uploadstatus="1" />
     <item url="blog/admin.py" uploadstatus="1" />
     <item url="help/admin.py" uploadstatus="1" />
@@ -48,8 +48,8 @@
     <item url="templates/admin/index.html" uploadstatus="1" />
     <item url="templates/admin/check.html" uploadstatus="1" />
     <item url="templates/admin/base.html" uploadstatus="1" />
-    <item url="ref.php.edit" uploadstatus="1" />
-    <item url="settings.py" uploadstatus="1" />
+    <item url="ref.php.edit" bookmarks="" uploadstatus="1" />
+    <item url="settings.py" bookmarks="" uploadstatus="1" />
     <item url="ws/" uploadstatus="1" />
     <item url="ws/urls.py" uploadstatus="1" />
     <item url="ws/__init__.py" uploadstatus="1" />
@@ -76,7 +76,7 @@
     <item url="templates/base/agregator/" uploadstatus="1" />
     <item url="templates/base/base.html" uploadstatus="1" />
     <item url="templates/base/blog/" uploadstatus="1" />
-    <item url="templates/base/disclaimer.html" uploadstatus="1" />
+    <item url="templates/base/disclaimer.html" bookmarks="" uploadstatus="1" />
     <item url="templates/base/help/" uploadstatus="1" />
     <item url="templates/base/registration/" uploadstatus="1" />
     <item url="templates/base/rounded_box.html" uploadstatus="1" />
@@ -122,7 +122,7 @@
     <item url="settings_local.py" uploadstatus="1" />
     <author>esú</author>
     <email>esu en proyectoanonimo punto com</email>
-    <debuggerclient persistentWatches="0" persistentBreakpoints="0" >No Debugger</debuggerclient>
+    <debuggerclient persistentWatches="0" persistentBreakpoints="0" >Sin depurador</debuggerclient>
     <exclude cvsignore="true" >*.pyc;*~;</exclude>
     <teamdata>
       <taskleaders/>
@@ -130,5 +130,7 @@
       <mailinglist address="" />
     </teamdata>
     <events/>
+    <item url="ref2.php.edit" bookmarks="" uploadstatus="1" />
+    <item url="cronjob.py" bookmarks="" uploadstatus="1" />
   </project>
 </webproject>

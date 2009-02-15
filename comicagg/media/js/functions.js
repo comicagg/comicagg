@@ -88,6 +88,11 @@ function forget_new_posts() {
 // other pages
 // **************
 
+function focusOnLogin()
+{
+  $('id_username').focus();
+}
+
 function check_register(the_form)
 {
   valid = true;

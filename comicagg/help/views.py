@@ -26,7 +26,7 @@ def new_ticket(request):
       ticket = Ticket(owner=request.user, title=form.cleaned_data['title'], text=form.cleaned_data['text'])
       ticket.save()
       details = {'to':'esu@proyectoanonimo.com', 'from':'Comic Aggregator', 'subject':'[CA] Nuevo ticket', 'message':ticket.title}
-      send_email(details)
+      #send_email(details)
       return HttpResponseRedirect(reverse('comicagg.help.views.index'))
   return render(request, 'help/new_ticket.html', {'form':form}, 'help')
 
