@@ -65,6 +65,7 @@
     {% endif %}
     </div>
     <div id="content">
+		{% if settings.MAINTENANCE and user.is_superuser %}<b style="color:red">EN MANTENIMIENTO</b>{% endif %}
       <div id="content_wrap">
 {% block content %}
 {% endblock %}

@@ -132,7 +132,8 @@
     <events/>
     <item url="ref2.php.edit" bookmarks="" uploadstatus="1" />
     <item url="cronjob.py" bookmarks="" uploadstatus="1" />
-    <item url="middleware/" />
-    <item url="middleware/__init__.py" />
+    <item url="middleware/" uploadstatus="1" />
+    <item url="middleware/__init__.py" uploadstatus="1" />
+    <item url="templates/base/maintenance.html" />
   </project>
 </webproject>

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-12 17:24+0100\n"
-"PO-Revision-Date: 2009-02-12 17:26+0100\n"
+"POT-Creation-Date: 2009-02-18 20:37+0100\n"
+"PO-Revision-Date: 2009-02-18 20:38+0100\n"
 "Last-Translator: Jesus Fernandez <esu@proyectoanonimo.com>\n"
 "Language-Team: Español <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -31,15 +31,15 @@ msgstr "Usuario o contraseña no válida"
 msgid "Password reset on %s"
 msgstr "Cambio de contraseña en %s"
 
-#: agregator/views.py:177 agregator/views.py:206
+#: agregator/views.py:178 agregator/views.py:207
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:314 templates/admin/index.html:46
+#: agregator/views.py:302 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:578
+#: agregator/views.py:566
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -136,15 +136,23 @@ msgstr "Mis acciones"
 msgid "None available"
 msgstr "Ninguna disponible"
 
-#: templates/base/404.html:6
+#: templates/base/404.html:5
+msgid "Not Found"
+msgstr "No encontrado"
+
+#: templates/base/404.html:7
 msgid "I can't find what you are looking for."
 msgstr "No encuentro lo que has pedido :/"
 
-#: templates/base/500.html:6
-msgid "It seems that server is having problems. Try again in a few minutes."
+#: templates/base/500.html:5
+msgid "Server error"
+msgstr "Error en el servidor"
+
+#: templates/base/500.html:7
+msgid "It seems that server is having issues. Try again in a few minutes."
 msgstr ""
-"Parece que el servidor está teniendo problemas ahora mismo. Inténtalo de "
-"nuevo dentro de un par de minutos."
+"Parece que el servidor está teniendo algún problema ahora mismo. Inténtalo de "
+"nuevo dentro de un rato."
 
 #: templates/base/base.html:50
 msgid "Logged in as "
@@ -207,34 +215,38 @@ msgstr "Foro"
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/base/welcome.html:4
+#: templates/base/maintenance.html:3 templates/base/maintenance.html.py:6
+msgid "Down for maintenance"
+msgstr "En mantenimiento"
+
+#: templates/base/welcome.html:3
 msgid "Welcome"
 msgstr "Bienvenido"
 
-#: templates/base/welcome.html:12
-#: templates/base/registration/login_form.html:14
+#: templates/base/welcome.html:11
+#: templates/base/registration/login_form.html:15
 msgid "User: "
 msgstr "Usuario: "
 
-#: templates/base/welcome.html:16
-#: templates/base/registration/login_form.html:18
+#: templates/base/welcome.html:15
+#: templates/base/registration/login_form.html:19
 msgid "Password: "
 msgstr "Contraseña: "
 
-#: templates/base/welcome.html:20
-#: templates/base/registration/login_form.html:22
+#: templates/base/welcome.html:19
+#: templates/base/registration/login_form.html:23
 msgid "Log in"
 msgstr "Entrar"
 
-#: templates/base/welcome.html:24
+#: templates/base/welcome.html:23
 msgid "Lost password?"
 msgstr "¿Contraseña perdida?"
 
-#: templates/base/welcome.html:29
+#: templates/base/welcome.html:28
 msgid "Welcome to Comic Aggregator"
 msgstr "Bienvenido a Comic Aggregator"
 
-#: templates/base/welcome.html:30
+#: templates/base/welcome.html:29
 msgid ""
 "Comic Aggregator is just what its name says, a website to put all your "
 "favorite webcomics in the same page!"
@@ -242,13 +254,13 @@ msgstr ""
 "Comic Aggregator es un agregador de comics, es decir, aquí puedes leer tus "
 "webcomics favoritos, ¡todos en la misma página!"
 
-#: templates/base/welcome.html:31
+#: templates/base/welcome.html:30
 msgid ""
 "Log in to read your new comics or create a new account and start choosing "
 "your own list."
 msgstr "Entra para leer los nuevos comics o crea una cuenta y elige qué comics leer."
 
-#: templates/base/welcome.html:32
+#: templates/base/welcome.html:31
 msgid ""
 "Here</a> is the list of comics we currently have in the database. If you "
 "can't find a webcomic you like just ask for it!"
@@ -256,7 +268,7 @@ msgstr ""
 "Aquí</a> hay una lista con todos los comics que tenemos ahora mismo. Si no "
 "encuentras uno que te gusta, ¡pídelo!"
 
-#: templates/base/welcome.html:33
+#: templates/base/welcome.html:32
 msgid "These are the last added comics:"
 msgstr "Estos han sido los últimos comics añadidos:"
 
@@ -1073,29 +1085,29 @@ msgstr "Cámbialo"
 msgid "Go back."
 msgstr "Volver."
 
-#: templates/base/registration/login_form.html:5
+#: templates/base/registration/login_form.html:6
 msgid "Login into your account"
 msgstr "Entrar en tu cuenta"
 
-#: templates/base/registration/login_form.html:6
+#: templates/base/registration/login_form.html:7
 msgid "Write your username and passwod to get you logged in."
 msgstr "Escribe tu usuario y contraseña para conectarte."
 
-#: templates/base/registration/login_form.html:27
+#: templates/base/registration/login_form.html:28
 msgid ""
 "If you don't have an account to log in you can easily create one following "
 "this link:"
 msgstr "Si no tienes una cuenta es muy fácil crearla siguiendo este enlace:"
 
-#: templates/base/registration/login_form.html:27
+#: templates/base/registration/login_form.html:28
 msgid "create a new account."
 msgstr "crear una nueva cuenta."
 
-#: templates/base/registration/login_form.html:28
+#: templates/base/registration/login_form.html:29
 msgid "If you can't remember your password follow this link to get a new password:"
 msgstr "Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
 
-#: templates/base/registration/login_form.html:28
+#: templates/base/registration/login_form.html:29
 msgid "reset my password."
 msgstr "borrar mi contraseña."
 

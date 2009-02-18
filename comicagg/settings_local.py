@@ -4,16 +4,18 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+MAINTENANCE = False
+
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'comic_ak'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'comic_ak'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'comic_ak'         # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Absolute path to the directory that holds the comicagg folder
 # Example: "/home/media/media.lawrence.com/"
-ROOT = '/home/esu/dev/django/comicagg-hg/'
+ROOT = '/home/esu/dev/webs/comicagg/'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"

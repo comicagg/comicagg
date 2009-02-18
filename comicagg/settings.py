@@ -69,6 +69,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'comicagg.middleware.UserBasedExceptionMiddleware',
+    'comicagg.middleware.MaintenanceMiddleware',
 )
 
 ROOT_URLCONF = 'comicagg.urls'
