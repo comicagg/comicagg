@@ -1,8 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, HttpResponseServerError
 from django.template.loader import render_to_string
 from django.conf import settings
-from django.utils.version import get_svn_revision
-from comicagg import __path__ as comicagg_path
 import os, re
 
 def render(request, template, context, menu=None, xml=False, responseClass=HttpResponse, mime='text/html; charset="utf-8"'):
@@ -34,14 +32,3 @@ def error500(request):
 def robots_txt(request):
   return render(request, 'robots.txt', {}, mime='text/plain; charset="utf-8"')
 
-from django.views.debug import technical_500_response
-import sys
-
-class UserBasedExceptionMiddleware(object):
-  def process_exception(self, request, exception):
-    try:
-      user = request.user
-    except:
-      user = None
-    if user and user.is_superuser:
-      return technical_500_response(request, *sys.exc_info())
