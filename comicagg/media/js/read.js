@@ -64,6 +64,10 @@ function initRead() {
   for(var i=0; i < es.length; i++) {
     es[i].onclick = function(event) { $('head').scrollTo(); };
   }
+  var es = $$('.reloadimgs');
+  for(var i=0; i < es.length; i++) {
+    es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); reloadimgs(id); };
+  }
 }
 
 // **************
@@ -160,14 +164,8 @@ function removeComicLink(id) {
 			//quitarlo de las listas
 			unread_list[id] = false;
 			read_list[id] = false;
-			if ($('comics').childElements().length == 0)
-			{
-				$('no_comics').show();
-			}
-			else
-			{
-				mover_a.scrollTo();
-			}
+			if ($('comics').childElements().length == 0) { $('no_comics').show(); }
+			else { mover_a.scrollTo(); }
 		},
 		onFailure: function(response) {
 		}
@@ -377,3 +375,6 @@ function save_tags(id) {
   });
 }
 
+function reloadimgs(id) {
+	alert("TODO recargar imagenes para " + id);
+}

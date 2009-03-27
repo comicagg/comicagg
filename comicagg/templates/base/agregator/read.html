@@ -28,11 +28,11 @@
 {% if list %}
   {# list es una lista de unread_comic #}
   {% for item in list %}
-    <a href="{{ comic.website }}"><img id="img_unread{{ item.id}}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}"/></a><br/>
+    <a href="{{ comic.website }}"><img id="img_unread{{ comic.id }}-{{ item.id}}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}"/></a><br/>
     <script type="text/javascript">
       url_unread{{item.id}}="{{ item.history.get_url|safe }}";
       tmp_unread{{item.id}} = new Image();
-      f = 'loadimg("img_unread{{ item.id }}", tmp_unread{{ item.id }}, url_unread{{ item.id }})';
+      f = 'loadimg("img_unread{{ comic.id }}-{{ item.id }}", tmp_unread{{ item.id }}, url_unread{{ item.id }})';
       load_array.push(f);
     </script>
   {% endfor %}
@@ -63,9 +63,11 @@
         </ul>
       </div>
       <div class="opts_left">
-        {% if list %}
-        <a id="mark{{ comic.id }}" class="mark_as_read">{% trans 'Mark as read'%}</a><span id="done_read{{ comic.id }}" style="display:none">{% trans 'Up to date'%}&nbsp;</span><img id="mark_{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/tick.png" alt="" style="display:none" />&nbsp;&nbsp;/&nbsp;&nbsp;<span id="sel{{ comic.id }}">{% trans 'Rate it!'%} <a id="ratedown{{ comic.id }}" class="ratedown"><img src="{{ settings.MEDIA_URL}}images/vote_down.png" alt=""/></a>&nbsp;&nbsp;<a id="rateup{{ comic.id }}" class="rateup"><img src="{{ settings.MEDIA_URL}}images/vote_up.png" alt=""/></a>&nbsp;&nbsp;/&nbsp;&nbsp;</span>
-        {% endif %}<a id="tags{{ comic.id }}" class="tags_link"><span id="showtags{{ comic.id }}">{% trans 'Tags'%}</span><span id="hidetags{{ comic.id }}" style="display:none">{% trans 'Hide tags'%}</span></a>
+        {% if list %}<a id="mark{{ comic.id }}" class="mark_as_read">{% trans 'Mark as read'%}</a><span id="done_read{{ comic.id }}" style="display:none">{% trans 'Up to date'%}&nbsp;</span><img id="mark_{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/tick.png" alt="" style="display:none" />&nbsp;&nbsp;/&nbsp;&nbsp;<span id="sel{{ comic.id }}">{% trans 'Rate it!'%} <a id="ratedown{{ comic.id }}" class="ratedown"><img src="{{ settings.MEDIA_URL}}images/vote_down.png" alt=""/></a>&nbsp;&nbsp;<a id="rateup{{ comic.id }}" class="rateup"><img src="{{ settings.MEDIA_URL}}images/vote_up.png" alt=""/></a>&nbsp;&nbsp;/&nbsp;&nbsp;</span>{% endif %}
+				<a id="tags{{ comic.id }}" class="tags_link"><span id="showtags{{ comic.id }}">{% trans 'Tags'%}</span><span id="hidetags{{ comic.id }}" style="display:none">{% trans 'Hide tags'%}</span></a>
+      </div>
+      <div class="opts_left_error" style="display:none">
+				<a id="reloadimgs{{ comic.id }}" class="reloadimgs">{% trans "Reload image" %}</a>
       </div>
 {% endspaceless %}
       <div id="tagging_{{ comic.id }}">

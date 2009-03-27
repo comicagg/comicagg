@@ -313,6 +313,10 @@ div.comic {
 /*	 text-align:right; */
 }
 
+.opts_left_error {
+/*	 text-align:right; */
+}
+
 .opts_right {
 	position:absolute;
 	right:2px;

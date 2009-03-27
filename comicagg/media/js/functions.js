@@ -14,7 +14,12 @@ function loadimg(id, img, url) {
     if (e) { e.src = url; }
   };
   img.onerror = function(){
-    $(id).src = url_error;
+		$(id).src = url_error;
+		id = id.substring(10, id.indexOf('-'));
+		acc = "#c_" + id + " .opts_left";
+		acc2 = acc + "_error";
+		$$(acc)[0].hide();
+		$$(acc2)[0].show();
   };
   img.onabort = function(){ $(id).src = url_error; };
 }
