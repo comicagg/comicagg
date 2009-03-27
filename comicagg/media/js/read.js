@@ -135,37 +135,43 @@ function reportComic(id) {
 }
 
 function removeComicLink(id) {
-  if(unread_list[id]) {
-    mark_as_read(id);
-  }
-  var url = url_remove;
-//   Element.show('working'+id);
-  var params = {'id':id}
-  new Ajax.Request(url, {
-    method: 'post',
-    parameters: params,
-    onSuccess: function(response) {
-//       Element.hide('working'+id);
-      //quitarlo el comic de la principal
-      e = $('c_'+id);
-      e.hide();
-      e.remove();
-      //quitarlo de las columnas del menu
-      e = $('nav_unread_li_' + id);
-      if(e) { e.remove(); }
-      e = $('nav_all_li_' + id);
-      e.remove();
-      //quitarlo de las listas
-      unread_list[id] = false;
-      read_list[id] = false;
-      if ($('comics').childElements().length == 0)
-      {
-        $('no_comics').show();
-      }
-    },
-    onFailure: function(response) {
-    }
-  });
+	if(unread_list[id]) {
+		mark_as_read(id);
+	}
+	var url = url_remove;
+	var params = {'id':id}
+	new Ajax.Request(url, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(response) {
+			//quitarlo el comic de la principal
+			e = $('c_'+id);
+			mover_a = e.next();
+			if (mover_a == null) {
+				mover_a = e.previous();
+			}
+			e.hide();
+			e.remove();
+			//quitarlo de las columnas del menu
+			e = $('nav_unread_li_' + id);
+			if(e) { e.remove(); }
+			e = $('nav_all_li_' + id);
+			e.remove();
+			//quitarlo de las listas
+			unread_list[id] = false;
+			read_list[id] = false;
+			if ($('comics').childElements().length == 0)
+			{
+				$('no_comics').show();
+			}
+			else
+			{
+				mover_a.scrollTo();
+			}
+		},
+		onFailure: function(response) {
+		}
+	});
 }
 
 function ir_a(element_id, hidden) {

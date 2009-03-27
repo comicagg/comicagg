@@ -181,7 +181,6 @@ def save_selection(request):
 		c = Comic.objects.get(pk=comic_id)
 		s = Subscription(user=request.user, comic=c, position=pos)
 		s.save()
-		print s.id
 		#si es un comic nuevo lo marcamos como unread
 		if c.id in nuevos:
 			try:
