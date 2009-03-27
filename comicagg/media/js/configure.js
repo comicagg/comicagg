@@ -240,8 +240,8 @@ function do_save()
 
     },
     onFailure: function(response) {
-//       ret = response.responseText;
-//       document.write(ret);
+      ret = response.responseText;
+      document.write(ret);
     }
   });
 //   $('save_button').disabled = false;

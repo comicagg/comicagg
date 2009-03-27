@@ -30,9 +30,9 @@
   {% for item in list %}
     <a href="{{ comic.website }}"><img id="img_unread{{ item.id}}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}"/></a><br/>
     <script type="text/javascript">
-      url_unread{{item.id}}="{% if comic.referer %}/ref.php?url={{ item.history.url|urlencode }}&ref={{ comic.referer|urlencode }}{% else %}{{ item.history.url }}{% endif %}";
+      url_unread{{item.id}}="{{ item.history.get_url|safe }}";
       tmp_unread{{item.id}} = new Image();
-      f = 'loadimg("img_unread{{item.id}}", tmp_unread{{item.id}}, url_unread{{item.id}})';
+      f = 'loadimg("img_unread{{ item.id }}", tmp_unread{{ item.id }}, url_unread{{ item.id }})';
       load_array.push(f);
     </script>
   {% endfor %}
@@ -41,13 +41,13 @@
     {% if user.get_profile.hide_read %}
       {# para la lista de url de los comics leidos #}
       <script type="text/javascript">
-        url[{{ comic.id }}] = "{% if comic.referer %}/ref.php?url={{ comic.last_image|urlencode }}&amp;ref={{ comic.referer|urlencode }}{% else %}{{ comic.last_image }}{% endif %}";
+        url[{{ comic.id }}] = "{{ comic.get_url|safe }}";
       </script>
       <a href="{{ comic.website }}"><img id="img_read{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}"/></a>
     {% else %}
       <a href="{{ comic.website }}"><img id="img_read{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}" /></a>
       <script type="text/javascript">
-        url_read{{ comic.id }} = "{% if comic.referer %}/ref.php?url={{ comic.last_image|urlencode }}&amp;ref={{ comic.referer|urlencode }}{% else %}{{ comic.last_image }}{% endif %}";
+        url_read{{ comic.id }} = "{{ comic.get_url|safe }}";
         tmp_read{{ comic.id }} = new Image();
         loadimg("img_read{{ comic.id }}", tmp_read{{ comic.id }}, url_read{{ comic.id }});
       </script>

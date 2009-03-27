@@ -24,8 +24,8 @@
   <div id="comics">
 {% for comic in list %}
     <script type="text/javascript">
-      url{{ comic.id }}="{% if comic.referer %}/ref.php?url={{ comic.last_image|urlencode }}&ref={{ comic.referer|urlencode }}{% else %}{{ comic.last_image }}{% endif %}";
-        tmp{{ comic.id }} = new Image();
+      url{{ comic.id }}="{{ comic.get_url|safe }}";
+			tmp{{ comic.id }} = new Image();
     </script>
     <div id="comic{{ comic.id }}" class="comic">
       <h3><a href="{{ comic.website }}">{{ comic.name }}</a></h3>
