@@ -15,7 +15,7 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 
 # Absolute path to the directory that holds the comicagg folder
 # Example: "/home/media/media.lawrence.com/"
-ROOT = '/home/esu/dev/webs/comicagg/'
+ROOT = '/home/esu/dev/webs/comicagg-newread/'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -24,7 +24,7 @@ MEDIA_ROOT = '%scomicagg/media' % ROOT
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://localhost/media_comicagg/'
+MEDIA_URL = 'http://localhost:8000/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
