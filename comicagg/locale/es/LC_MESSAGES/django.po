@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-18 20:37+0100\n"
-"PO-Revision-Date: 2009-02-18 20:38+0100\n"
+"POT-Creation-Date: 2009-03-30 01:25+0200\n"
+"PO-Revision-Date: 2009-03-30 01:26+0200\n"
 "Last-Translator: Jesus Fernandez <esu@proyectoanonimo.com>\n"
 "Language-Team: Español <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -39,13 +39,13 @@ msgstr "Guardado =)"
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:566
+#: agregator/views.py:574
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
 
 #: agregator/templatetags/agregator_tags.py:40
-#: templates/base/agregator/read.html:26
+#: templates/base/agregator/read.html:35
 msgid "NEW!"
 msgstr "¡NUEVO!"
 
@@ -151,45 +151,45 @@ msgstr "Error en el servidor"
 #: templates/base/500.html:7
 msgid "It seems that server is having issues. Try again in a few minutes."
 msgstr ""
-"Parece que el servidor está teniendo algún problema ahora mismo. Inténtalo de "
-"nuevo dentro de un rato."
+"Parece que el servidor está teniendo algún problema ahora mismo. Inténtalo "
+"de nuevo dentro de un rato."
 
-#: templates/base/base.html:50
+#: templates/base/base.html:51
 msgid "Logged in as "
 msgstr "Conectado como "
 
-#: templates/base/base.html:51 templates/base/agregator/read.html:4
+#: templates/base/base.html:52 templates/base/agregator/read.html:4
 msgid "Read comics"
 msgstr "Leer comics"
 
-#: templates/base/base.html:52 templates/base/agregator/configure.html:4
+#: templates/base/base.html:53 templates/base/agregator/configure.html:4
 #: templates/base/agregator/configure.html:10
 msgid "Choose comics"
 msgstr "Elegir comics"
 
-#: templates/base/base.html:53 templates/base/base.html.py:62
+#: templates/base/base.html:54 templates/base/base.html.py:63
 #: templates/base/help/index.html:20
 msgid "Comic list"
 msgstr "Lista de comics"
 
-#: templates/base/base.html:54
+#: templates/base/base.html:55
 msgid "Account"
 msgstr "Perfil"
 
-#: templates/base/base.html:55 templates/base/base.html.py:63
+#: templates/base/base.html:56 templates/base/base.html.py:64
 #: templates/base/help/index.html:3
 msgid "Help"
 msgstr "Ayuda"
 
-#: templates/base/base.html:57
+#: templates/base/base.html:58
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base/base.html:60 templates/base/registration/login_form.html:3
+#: templates/base/base.html:61 templates/base/registration/login_form.html:3
 msgid "Login"
 msgstr "Entrar"
 
-#: templates/base/base.html:61
+#: templates/base/base.html:62
 msgid "Register"
 msgstr "Registrarse"
 
@@ -382,7 +382,7 @@ msgstr "Añadirlo a mi lista"
 #: templates/base/agregator/comic_list.html:53
 #: templates/base/agregator/comic_list.html:68
 #: templates/base/agregator/comic_list.html:83
-#: templates/base/agregator/read.html:62
+#: templates/base/agregator/read.html:57
 msgid "Go up"
 msgstr "Subir"
 
@@ -512,7 +512,7 @@ msgstr "Añadir a mi lista"
 
 #: templates/base/agregator/configure.html:64
 #: templates/base/agregator/configure.html:88
-#: templates/base/agregator/read.html:61
+#: templates/base/agregator/read.html:56
 msgid "Remove from list"
 msgstr "Quitarlo de mi lista"
 
@@ -550,43 +550,47 @@ msgstr "Mostrar todas"
 msgid "show unread"
 msgstr "mostrar sin leer"
 
-#: templates/base/agregator/read.html:58
+#: templates/base/agregator/read.html:53
 msgid "More"
 msgstr "Más"
 
-#: templates/base/agregator/read.html:60
+#: templates/base/agregator/read.html:55
 msgid "Report broken image"
 msgstr "Avisar imagen rota"
 
-#: templates/base/agregator/read.html:67
+#: templates/base/agregator/read.html:61
 msgid "Mark as read"
 msgstr "Marcar como leída"
 
-#: templates/base/agregator/read.html:67
+#: templates/base/agregator/read.html:61
 msgid "Up to date"
 msgstr "Al día"
 
-#: templates/base/agregator/read.html:67
+#: templates/base/agregator/read.html:61
 msgid "Rate it!"
 msgstr "¡Puntúalo!"
 
-#: templates/base/agregator/read.html:68 templates/base/help/index.html:23
+#: templates/base/agregator/read.html:62 templates/base/help/index.html:23
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: templates/base/agregator/read.html:68
+#: templates/base/agregator/read.html:62
 msgid "Hide tags"
 msgstr "Ocultar etiquetas"
 
-#: templates/base/agregator/read.html:81
+#: templates/base/agregator/read.html:65
+msgid "Reload"
+msgstr "Recargar"
+
+#: templates/base/agregator/read.html:78
 msgid "No new comics to read! Wanna "
 msgstr "¡No hay nuevos comics que leer! ¿Quieres "
 
-#: templates/base/agregator/read.html:81
+#: templates/base/agregator/read.html:78
 msgid "add some more"
 msgstr "añadir alguno más"
 
-#: templates/base/agregator/read.html:91
+#: templates/base/agregator/read.html:88
 msgid ""
 "You haven't chosen comics yet. Use the configure option in the menu and "
 "choose some comics."

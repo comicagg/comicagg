@@ -5,9 +5,6 @@
 var last_event = false;
 
 function initRead() {
-  for(var i=0; i < load_array.length; i++) {
-    eval(load_array[i]);
-  }
   var es = $$('.mark_as_read');
   for(var i=0; i < es.length; i++) {
     es[i].onclick = function(event) { id = parseInt(event.target.id.substring(4)); mark_as_read(id); };
@@ -36,10 +33,8 @@ function initRead() {
       var target = event.target;
       if(target.nodeName.toLowerCase() == "img") {
         id = parseInt(event.target.parentNode.id.substring(6));
-//         console.log("up "+id);
       } else {
         id = parseInt(event.target.id.substring(6));
-//         console.log("up "+id);
       }
       rate(id, 1);
     };
@@ -68,12 +63,76 @@ function initRead() {
   for(var i=0; i < es.length; i++) {
     es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); reloadimgs(id); };
   }
+	loadimages();
 }
 
 // **************
 // read page functions
 // **************
 
+function loadimages() {
+	_comics = lcomics.clone();
+	while(_comics.length > 0) {
+		while((comic = _comics.shift()) == null && _comics.length > 0);
+		if (comic != null) { loadcomicimages(comic); }
+	}
+}
+
+var max_concurrent = 10;
+var actual_no = 0;
+
+function loadcomicimages(comic) {
+// comics con imagenes nuevas
+	if(comic.list.length > 0) {
+		for (i=0; i<comic.list.length; i++) {
+			item = comic.list[i];
+			window['item' + item.id] = item;
+			loadimage('item' + item.id);
+		}
+	}
+}
+
+function loadimage(item_str) {
+	if(max_concurrent <= actual_no) {
+		setTimeout("loadimage('" + item_str + "')", 300);
+	} else {
+		actual_no += 1;
+		item = window[item_str];
+		loadimage2("img_unread" + item.id, item.cid, new Image(), item.url);
+	}
+}
+
+function loadimage2(id, cid, img, url) {
+	e = $(id);
+	e.src = url_loading;
+	if (comics_width == -1) {
+		comics_width = $('comics').getWidth();
+	}
+	img.src = url;
+	img.onload = function(){
+		e = $(id);
+		actual_no -= 1;
+		w = img.width;
+		if (w >= comics_width) {
+			if (e) { e.style.width = "100%"; }
+		}
+		if (e) { e.src = url; }
+	};
+	img.onerror = function(){
+		e = $(id);
+		actual_no -= 1;
+		e.src = url_error;
+		acc = "#c_" + cid + " .opts_left";
+		acc2 = acc + "_error";
+		$$(acc)[0].hide();
+		$$(acc2)[0].show();
+	};
+	img.onabort = function(){
+		e = $(id);
+		actual_no -= 1;
+		e.src = url_error;
+	};
+}
 
 // id del elemento actual mostrado
 var currentMenu = -1;
@@ -172,17 +231,23 @@ function removeComicLink(id) {
 	});
 }
 
-function ir_a(element_id, hidden) {
-  if (hidden) {
-    img = new Image();
-    loadimg('img_read'+element_id, img, url[element_id]);
-  }
-  Element.show('c_'+element_id);
-  setTimeout("$('c_"+element_id+"').scrollTo()", 500);
-  e = $('no_unread_notice');
-  if(e) {
-    Element.hide(e);
-  }
+function ir_a(id, hidden) {
+	e = $('c_' + id);
+	if (!e.visible()) {
+		o = {
+			"id":'img_read' + id,
+			"img":new Image(),
+			"url":comics[id].url,
+			"cb":"$('c_" + id + "').scrollTo()",
+		};
+		loadimgobj(o);
+	}
+	e.show();
+	e.scrollTo();
+	e = $('no_unread_notice');
+	if(e) {
+		e.hide();
+	}
 }
 
 function hide_new_comics() {
@@ -376,5 +441,15 @@ function save_tags(id) {
 }
 
 function reloadimgs(id) {
-	alert("TODO recargar imagenes para " + id);
+	list = comics[id].list;
+	if(list.length > 0) {
+		for (i=0; i<list.length; i++) {
+			item = window['item'+list[i].id];
+			actual_no += 1;
+			url = item.url + '?' + (new Date()).getTime();
+			loadimage2('img_unread'+item.id, item.cid, new Image(), url);
+		}
+	}
 }
+
+function hidereloading(id) { if (actual_no == 0) { $('reloading' + id).hide(); } }

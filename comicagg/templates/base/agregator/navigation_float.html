@@ -17,7 +17,7 @@
       <ul class="column">
 {% for comic, list in column %}
         <li id="nav_unread_li_{{comic.id}}">
-          <a onclick="ir_a('{{ comic.id }}', false)" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
+          <a onclick="ir_a('{{ comic.id }}')" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
 {% if list.count %}
           <span id="nav_unread_no_{{ comic.id }}" class="unread_comic">({{ list.count }})</span>
 {% endif %}
@@ -32,7 +32,7 @@
       <ul class="column">
 {% for comic, list in column %}
         <li id="nav_all_li_{{comic.id}}">
-          <a onclick="ir_a('{{ comic.id }}', {% if user.get_profile.hide_read %}true{% else %}false{% endif %})" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
+          <a onclick="ir_a('{{ comic.id }}')" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
 {% if list.count %}
             <span id="nav_all_no_{{ comic.id }}" class="unread_comic">({{ list.count }})</span>
 {% endif %}

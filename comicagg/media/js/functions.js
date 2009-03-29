@@ -1,27 +1,41 @@
 var comics_width = -1;
 /* id elemento img, objeto img donde precargar imagen, url de la imagen */
 function loadimg(id, img, url) {
-  if (comics_width == -1) {
-    comics_width = $('comics').getWidth();
-  }
-  img.src = url;
-  img.onload = function(){
-    e = $(id);
-    w = img.width;
-    if (w >= comics_width) {
-      if (e) { e.style.width = "100%"; }
-    }
-    if (e) { e.src = url; }
-  };
-  img.onerror = function(){
-		$(id).src = url_error;
-		id = id.substring(10, id.indexOf('-'));
-		acc = "#c_" + id + " .opts_left";
-		acc2 = acc + "_error";
-		$$(acc)[0].hide();
-		$$(acc2)[0].show();
-  };
-  img.onabort = function(){ $(id).src = url_error; };
+	if (comics_width == -1) {
+		comics_width = $('comics').getWidth();
+	}
+	img.src = url;
+	img.onload = function(){
+		e = $(id);
+		w = img.width;
+		if (w >= comics_width && e) { e.style.width = "100%"; }
+		if (e) { e.src = url; }
+	};
+	img.onerror = function(){ $(id).src = url_error; };
+	img.onabort = function(){ $(id).src = url_error; };
+}
+
+function loadimgobj(obj) {
+	if (comics_width == -1) {
+		comics_width = $('comics').getWidth();
+	}
+	img = new Image();
+	img.src = obj.url;
+	img.onload = function(){
+		e = $(obj.id);
+		w = img.width;
+		if (w >= comics_width && e) { e.style.width = "100%"; }
+		if (e) { e.src = obj.url; }
+		if(obj.cb) { eval(obj.cb); }
+	};
+	img.onerror = function(){
+		$(obj.id).src = url_error;
+		if(obj.cb) { eval(obj.cb); }
+	};
+	img.onabort = function(){
+		$(obj.id).src = url_error;
+		if(obj.cb) { eval(obj.cb); }
+	};
 }
 
 // **************
