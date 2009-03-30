@@ -37,9 +37,8 @@ def user_tags(comic, user):
 def is_new(comic, user):
   ret = ""
   if comic.is_new_for(user):
-    ret = '<span id="new_comic' + str(comic.id) + '" class="new_comic">' + _("NEW!") + '</span>&nbsp;'
+    ret = '<span id="new_comic' + str(comic.id) + '" class="new_comic">' + _("NEW!") + '&nbsp;</span>'
   return ret
-
 
 @register.filter(name='recortar')
 @stringfilter
@@ -73,3 +72,31 @@ def mult(value, arg):
 @register.filter()
 def toint(value):
   return int(value)
+
+class IsNewForUserNode(template.Node):
+	def __init__(self, comic, user, context_var):
+		self.comic = comic
+		self.user = user
+		self.context_var = context_var
+
+	def render(self, context):
+		comic = template.resolve_variable(self.comic, context)
+		user = template.resolve_variable(self.user, context)
+		
+		context[self.context_var] = comic.is_new_for(user)
+		return ''
+
+def do_is_new_for_user(parser, token):
+	"""
+	Example usage::
+		{% is_new_for_user comic user as var %}
+	"""
+
+	bits = token.contents.split()
+	if len(bits) != 5:
+		raise template.TemplateSyntaxError("'%s' tag takes exactly four arguments" % bits[0])
+	if bits[3] != 'as':
+		raise template.TemplateSyntaxError("second argument to '%s' tag must be 'as'" % bits[0])
+	return IsNewForUserNode(bits[1], bits[2], bits[4])
+
+register.tag('is_new_for_user', do_is_new_for_user)

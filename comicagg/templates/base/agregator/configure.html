@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n %}
-{% load agregator_tags %}
+{% load i18n agregator_tags %}
 {% block title %}{% trans 'Choose comics'%}{% endblock %}
 {% block head %}<script src="{{ settings.MEDIA_URL }}js/configure.js" type="text/javascript"></script>{% endblock %}
 {% block onload %}initConfigure(){% endblock %}
@@ -21,7 +20,7 @@
 <div id="sortables_loading"><br/>{% trans "Loading the lists..." %}<br/><img src="{{ settings.MEDIA_URL }}images/loading.gif" alt="" /></div>
 <div id="sortables_wrap" style="display:none;">
 {% if new_comics %}
-  <div class="new_comics_box"><img src="{{ settings.MEDIA_URL}}images/info2.png" alt=""/> {% trans "You have "%}{{ new_comics.count|default:0 }}{% trans " new comics. "%}<a href="{% url forget_new_comics %}">{% trans "Forget new comics." %}</a><br/><a id="show_new">{% trans "Show only new comics" %}</a></div>
+  <div id="new_comics_box"><img src="{{ settings.MEDIA_URL}}images/info2.png" alt=""/> {% trans "You have "%}<span id="new_comics_count">{{ new_comics.count|default:0 }}</span>{% trans " new comics. "%}<a href="{% url forget_new_comics %}">{% trans "Forget new comics." %}</a><br/><a id="show_new">{% trans "Show only new comics" %}</a></div>
 {% endif %}
 <table class="table_wrap">
 <tr>
@@ -48,26 +47,28 @@
 </tr>
 <tr>
 <td>
-  <div class="sortable_box blue">
-    <ul id="available_list" class="list">
+	<div class="sortable_box blue">
+		<ul id="available_list" class="list">
 {% for comic in available %}
-      <li id="comic_{{ comic.id }}" class="item" onmouseover="Element.show('info{{ comic.id }}')" onmouseout="infoHide({{ comic.id }})">
-        {% is_new comic user %}{{ comic.name }}&nbsp;<span class="small_text">({{ comic.get_rating }}%, {{ comic.votes }}v)</span>
-        <span class="rating">{{ comic.get_rating }}</span>
-        <span class="votes">{{ comic.votes }}</span>
-        <span class="name">{{ comic.name|slugify }}</span>
-        <div id="info{{ comic.id }}" class="comic_info" style="display:none">
-          <img id="menu_image{{ comic.id }}" src="{{ settings.MEDIA_URL}}images/configure.png" alt="[c]" />
-        </div>
-        <ul id="menu{{ comic.id }}" class="menu" style="display:none">
-          <li class="add">{% trans "Add to my list" %}&nbsp;<img class="add_img" src="{{ settings.MEDIA_URL }}images/add12.png" alt=""/></li>
-          <li class="remove" style="display:none">{% trans "Remove from list" %}&nbsp;<img class="remove_img" src="{{ settings.MEDIA_URL }}images/remove12.png" alt=""/></li>
-          <li class="desc">{% trans "Go to description" %}&nbsp;<img class="desc_img" src="{{ settings.MEDIA_URL }}images/info212.png" alt=""/></li>
-        </ul>
-      </li>
+{% is_new_for_user comic user as is_new %}
+			<li id="comic_{{ comic.id }}" class="item" onmouseover="Element.show('info{{ comic.id }}')" onmouseout="infoHide({{ comic.id }})">
+			{% is_new comic user %}{{ comic.name }}&nbsp;<span class="small_text">({{ comic.get_rating }}%, {{ comic.votes }}v)</span>
+			<span class="rating">{{ comic.get_rating }}</span>
+			<span class="votes">{{ comic.votes }}</span>
+			<span class="name">{{ comic.name|slugify }}</span>
+			<div id="info{{ comic.id }}" class="comic_info" style="display:none">
+				<img id="menu_image{{ comic.id }}" src="{{ settings.MEDIA_URL}}images/configure.png" alt="[c]" />
+			</div>
+			<ul id="menu{{ comic.id }}" class="menu" style="display:none">
+				<li class="add">{% trans "Add to my list" %}&nbsp;<img class="add_img" src="{{ settings.MEDIA_URL }}images/add12.png" alt=""/></li>
+				<li class="remove" style="display:none">{% trans "Remove from list" %}&nbsp;<img class="remove_img" src="{{ settings.MEDIA_URL }}images/remove12.png" alt=""/></li>
+				{% if is_new %}<li class="forget">{% trans "Forget this comic" %}&nbsp;<img class="forget_img" src="{{ settings.MEDIA_URL }}images/info12.png" alt=""/></li>{% endif %}
+				<li class="desc">{% trans "Go to description" %}&nbsp;<img class="desc_img" src="{{ settings.MEDIA_URL }}images/info212.png" alt=""/></li>
+			</ul>
+			</li>
 {% endfor %}
-    </ul>
-  </div>
+		</ul>
+	</div>
 </td>
 <td>
   <div class="sortable_box green">

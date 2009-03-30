@@ -1,4 +1,4 @@
-#coding: utf-8
+# -*- coding: utf-8 -*-
 from comicagg.accounts.models import *
 from datetime import datetime, timedelta
 from django import forms

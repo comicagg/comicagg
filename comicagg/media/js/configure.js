@@ -62,7 +62,16 @@ function initConfigure() {
 	for(var i=0; i < es.length; i++) {
 		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); removeComic(id); };
 	}
+	var es = $$('.forget');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); forgetComic(id); };
+	}
+	var es = $$('.forget_img');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.parentNode.id.substring(4)); forgetComic(id); };
+	}
 
+	
 	Sortable.create("available_list", {
 		dropOnEmpty:true,
 		containment:["available_list","selected_list"],
@@ -78,9 +87,12 @@ function initConfigure() {
 		scroll: window,
 		only: "item",
 		onUpdate:function(elem) {
-		do_save();
-		sort_available();
-		}
+			do_save();
+			sort_available();
+			if(last_item) {
+				if(last_item.element.select('.new_comic').length > 0) { updateNewComicCount(); }
+			}
+		},
 	});
 	ajustar_alturas(true);
 	$('sortables_loading').hide();
@@ -196,6 +208,7 @@ function remove_all()
 			//actualizar menu
 			node.select('.add')[0].show();
 			node.select('.remove')[0].hide();
+			if (node.select('.forget').length > 0) { node.select('.forget')[0].hide(); }
 		}
 		do_save();
 		//sort_available();
@@ -220,6 +233,10 @@ function do_save()
 		//actualizar menu para seleccionados
 		nodes[i].select('.add')[0].hide();
 		nodes[i].select('.remove')[0].show();
+		if(nodes[i].select('.new_comic').length > 0) {
+			nodes[i].select('.new_comic')[0].hide();
+			nodes[i].select('.forget')[0].hide();
+		}
 	}
 	var url = url_save_selection;
 	var params = {'selected_list[]': str}
@@ -382,32 +399,64 @@ function gotoDescription(id)
 // desde el menu contextual de cada comic
 function addComic(id)
 {
-  if(!id){ return false; }
-  //añadirlo a la lista
-  var elem = $('comic_'+id);
-  if (elem) {
-    elem.remove();
-    $('selected_list').appendChild(elem);
-  }
-  do_save();
-  //actualizar menu
-  $$('#comic_'+id+' .add')[0].hide();
-  $$('#comic_'+id+' .remove')[0].show();
+	if(!id){ return false; }
+	//añadirlo a la lista
+	var elem = $('comic_'+id);
+	if (elem) {
+		elem.remove();
+		$('selected_list').appendChild(elem);
+	}
+	do_save();
+	// no hay que actualizar el menu, lo hace do_save()
+	//$$('#comic_'+id+' .add')[0].hide();
+	//$$('#comic_'+id+' .remove')[0].show();
+	//$$('#comic_'+id+' .forget')[0].hide();
+	if(elem.select('.new_comic').length > 0) { updateNewComicCount(); }
 }
 
 // desde el menu contextual de cada comic
 function removeComic(id)
 {
-  if(!id){ return false; }
-  //quitarlo de la lista
-  var elem = $('comic_'+id);
-  if (elem) {
-    elem.remove();
-    $('available_list').appendChild(elem);
-  }
-  do_save();
-//   sort_available();
-  //actualizar menu
-  $$('#comic_'+id+' .remove')[0].hide();
-  $$('#comic_'+id+' .add')[0].show();
+	if(!id){ return false; }
+	//quitarlo de la lista
+	var elem = $('comic_'+id);
+	if (elem) {
+		elem.remove();
+		$('available_list').appendChild(elem);
+	}
+	do_save();
+	//sort_available();
+	//actualizar menu
+	$$('#comic_'+id+' .remove')[0].hide();
+	$$('#comic_'+id+' .add')[0].show();
+}
+
+// desde el menu contextual de cada comic
+function forgetComic(id)
+{
+	if(!id){ return false; }
+	//olvidar el comic
+	var url = url_forget_new_comics + id + '/';
+	var params = {}
+	new Ajax.Request(url, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(response) {
+			ret = response.responseText;
+			$('new_comics_count').innerHTML = ret;
+			$('new_comic' + id).remove();
+			//actualizar menu
+			$$('#comic_'+id+' .forget')[0].hide();
+			count = parseInt(ret);
+			if (count == 0) { $('new_comics_box').hide(); }
+		},
+		onFailure: function(response) { }
+	});
+}
+
+function updateNewComicCount() {
+	count = parseInt($('new_comics_count').innerHTML);
+	count -= 1;
+	$('new_comics_count').innerHTML = count;
+	if (count == 0) { $('new_comics_box').hide(); }
 }
