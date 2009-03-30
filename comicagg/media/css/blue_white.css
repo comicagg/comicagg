@@ -143,6 +143,13 @@ div.comic {
   background:#bbb;
 }
 
+#read_comics .comic_info .menu a {
+  color:#444;
+}
+
+#read_comics .comic_info .menu a:hover {
+  color:#444;
+}
 
 /*********************/
 /* Vista de registro */
@@ -223,6 +230,10 @@ div.sortable_box .menu li {
 
 div.sortable_box .menu li:hover {
   background:#bbb;
+}
+
+div.sortable_box .menu li a, div.sortable_box .menu li a:hover {
+  color:#444;
 }
 
 #new_comics_box {

@@ -460,3 +460,10 @@ function updateNewComicCount() {
 	$('new_comics_count').innerHTML = count;
 	if (count == 0) { $('new_comics_box').hide(); }
 }
+
+// desde el menu contextual de cada comic
+function abrirWeb(url)
+{
+	if(!id){ return false; }
+	window.open(url);
+}

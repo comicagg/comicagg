@@ -144,7 +144,6 @@ div.comic {
   background:#bbb;
 }
 
-
 /*********************/
 /* Vista de registro */
 /*********************/
@@ -224,6 +223,10 @@ div.sortable_box .menu li {
 
 div.sortable_box .menu li:hover {
   background:#bbb;
+}
+
+div.sortable_box .menu li a, div.sortable_box .menu li a:hover {
+  color:#444;
 }
 
 #new_comics_box {

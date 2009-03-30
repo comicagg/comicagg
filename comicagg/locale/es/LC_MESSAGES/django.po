@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-30 13:47+0200\n"
-"PO-Revision-Date: 2009-03-30 13:47+0200\n"
+"POT-Creation-Date: 2009-03-30 18:23+0200\n"
+"PO-Revision-Date: 2009-03-30 18:24+0200\n"
 "Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
 "Language-Team: Español <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -507,12 +507,12 @@ msgid "Reorder available list"
 msgstr "Reordenar comics disponibles"
 
 #: templates/base/agregator/configure.html:63
-#: templates/base/agregator/configure.html:88
+#: templates/base/agregator/configure.html:89
 msgid "Add to my list"
 msgstr "Añadir a mi lista"
 
 #: templates/base/agregator/configure.html:64
-#: templates/base/agregator/configure.html:89
+#: templates/base/agregator/configure.html:90
 #: templates/base/agregator/read.html:56
 msgid "Remove from list"
 msgstr "Quitarlo de mi lista"
@@ -522,11 +522,16 @@ msgid "Forget this comic"
 msgstr "Olvidar este comic"
 
 #: templates/base/agregator/configure.html:66
-#: templates/base/agregator/configure.html:90
+#: templates/base/agregator/configure.html:91
+msgid "Go to comic's website"
+msgstr "Ir a la web del comic"
+
+#: templates/base/agregator/configure.html:67
+#: templates/base/agregator/configure.html:92
 msgid "Go to description"
 msgstr "Ir a la descripción"
 
-#: templates/base/agregator/configure.html:76
+#: templates/base/agregator/configure.html:77
 msgid "Drag and drop a comic here"
 msgstr "Arrastra y suelta un comic aquí"
 

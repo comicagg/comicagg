@@ -485,6 +485,10 @@ div.sortable_box .menu li:hover {
 	cursor:pointer;
 }
 
+div.sortable_box .menu a {
+	text-decoration: none;
+}
+
 #new_comics_box {
 	text-align:left;
 	margin:5px;
