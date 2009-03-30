@@ -169,14 +169,16 @@ function sort_selected(kind)
 
 function add_all()
 {
-  Element.show('working');
-  var dest = $('selected_list')
-  while($('available_list').firstChild)
-  {
-    node = $('available_list').firstChild;
-    dest.appendChild(node);
-  }
-  do_save();
+	Element.show('working');
+	var dest = $('selected_list');
+	nodes = $('available_list').select('.item');
+	for(var i=0; i< nodes.length; i++)
+	{
+		node = nodes[i];
+		if(node.visible()) { dest.appendChild(node); }
+		// no hay que actualizar el menú de cada comic porque ya lo hace do_save()
+	}
+	do_save();
 }
 
 function remove_all()
