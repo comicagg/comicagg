@@ -409,19 +409,24 @@ def remove_comic(request, comic_id):
 
 @login_required
 def add_comic_ajax(request):
-  if request.POST:
-    try:
-      comic_id = int(request.POST['id'])
-    except:
-      comic_id = -1
-    comic = get_object_or_404(Comic, pk=comic_id)
-    try:
-      s = request.user.subscription_set.get(comic=comic)
-    except:
-      s = request.user.subscription_set.create(comic=comic, position=9999)
-      print s
-    return HttpResponse('0')
-  raise Http404
+	if request.POST:
+		try:
+			comic_id = int(request.POST['id'])
+		except:
+			comic_id = -1
+		comic = get_object_or_404(Comic, pk=comic_id)
+		try:
+			s = request.user.subscription_set.get(comic=comic)
+		except:
+			s = request.user.subscription_set.create(comic=comic, position=9999)
+		try:
+			history = ComicHistory.objects.filter(comic=comic)[0]
+			u = UnreadComic(user=request.user, comic=comic, history=history)
+			u.save()
+		except:
+			pass
+		return HttpResponse('0')
+	raise Http404
 
 @login_required
 def remove_comic_ajax(request):
