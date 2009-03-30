@@ -18,38 +18,38 @@ def _get_url(comic, url):
 
 # Create your models here.
 class Comic(models.Model):
-	name = models.CharField(max_length=255)
-	website = models.URLField(verify_exists=False)
-	activo = models.BooleanField(default=False)
-	notify = models.BooleanField(default=False)
-	ended = models.BooleanField(default=False)
+	name = models.CharField('Nombre del comic', max_length=255)
+	website = models.URLField('Página del comic', verify_exists=False)
+	activo = models.BooleanField('Comic activo', default=False, help_text='')
+	notify = models.BooleanField('Notificar comic nuevo a los usuarios', default=False, help_text='Siempre va a aparecer como desactivado aquí. Si se activa, se notifica y se deja la opción desactivada')
+	ended = models.BooleanField('Comic terminado', default=False, help_text='Si un comic termina marcar esta opción y desactivarlo también')
 
 	#url that points to the web page with the last strip
-	url = models.URLField(verify_exists=False)
+	url = models.URLField('Url donde se encuentra la imagen', verify_exists=False, help_text='Si hay redirección no se utiliza')
 	#base adress for the image
-	base_img = models.CharField(max_length=255)
+	base_img = models.CharField('Url base de la imagen', max_length=255, help_text='Debe contener %s que es donde se pondrá lo capturado por la expresión regular')
 	#regexp for the image
-	regexp = models.CharField(max_length=255)
+	regexp = models.CharField('Expresión regular', max_length=255, help_text='Lo que se quiera capturar se pone <b>entre paréntesis</b>. Si hace falta usar paréntesis para capturar, se toma como url lo que vaya aquí dentro <b>(?P&lt;url><i>RE de captura</i>)</b>')
 	#start searching from the end
-	backwards = models.BooleanField(default=False)
+	backwards = models.BooleanField('Empezar desde el final', default=False)
 
 	#url donde esta la direccion a la pagina de la ultima tira
-	url2 = models.URLField(null=True, blank=True,verify_exists=False)
+	url2 = models.URLField('Url donde se encuentra la dirección que contiene la imagen', null=True, blank=True, verify_exists=False, help_text='Si se pone algo aquí se usa redirección')
 	#base address for redirections
-	base2 = models.CharField(max_length=255, null=True, blank=True)
+	base2 = models.CharField('Url base', max_length=255, null=True, blank=True, help_text='Debe contener %s que es donde se pondrá lo capturado por la expresión regular')
 	#regexp para encontrar la url de la pagina de la ultima tira
-	regexp2 = models.CharField(max_length=255, null=True, blank=True)
+	regexp2 = models.CharField('Expresión regular', max_length=255, null=True, blank=True, help_text='Lo que se quiera capturar se pone <b>entre paréntesis</b>. Si hace falta usar paréntesis para capturar, se toma como url lo que vaya aquí dentro <b>(?P&lt;url><i>RE de captura</i>)</b>')
 	#start searching from the end
-	backwards2 = models.BooleanField(default=False)
+	backwards2 = models.BooleanField('Empezar desde el final', default=False)
 
-	referer = models.URLField(null=True, blank=True, verify_exists=False)
-	fake_user_agent = models.BooleanField(default=False)
+	referer = models.URLField('Referer', null=True, blank=True, verify_exists=False, help_text='Si la web del comic comprueba el referer poner aquí alguno para que no dé error')
+	fake_user_agent = models.BooleanField('Cambiar User-Agent', default=False, help_text='Si además la web comprueba el User-Agent marcar para conectarse a la web usando otro User-Agent')
 
-	last_check = models.DateTimeField(blank=True)
-	last_image = models.URLField(blank=True, verify_exists=False)
+	last_check = models.DateTimeField('Última actualización', blank=True)
+	last_image = models.URLField('Última imagen', blank=True, verify_exists=False)
 
-	rating = models.IntegerField(default=0)
-	votes = models.IntegerField(default=0)
+	rating = models.IntegerField('Votos positivos', default=0)
+	votes = models.IntegerField('Votos totales', default=0)
 
 	add_date = models.DateTimeField(auto_now_add=True)
 

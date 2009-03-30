@@ -9,13 +9,13 @@ MAINTENANCE = False
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'comic_ak'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'comic_ak'             # Not used with sqlite3.
-DATABASE_PASSWORD = ''         # Not used with sqlite3.
+DATABASE_PASSWORD = 'comic_ak'         # Not used with sqlite3.
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 # Absolute path to the directory that holds the comicagg folder
 # Example: "/home/media/media.lawrence.com/"
-ROOT = '/home/esu/dev/webs/comicagg-newread/'
+ROOT = '/home/esu/dev/django/comicagg/'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -24,7 +24,7 @@ MEDIA_ROOT = '%scomicagg/media' % ROOT
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://localhost:8000/media/'
+MEDIA_URL = 'http://localhost/media_comicagg/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.

@@ -1,3 +1,4 @@
+# encoding:utf-8
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -5,11 +6,11 @@ from django.db import models
 # Create your models here.
 class Post(models.Model):
   user = models.ForeignKey(User)
-  title = models.CharField(max_length=255)
-  text = models.TextField()
+  title = models.CharField('Título', max_length=255)
+  text = models.TextField('Texto')
   date = models.DateTimeField(auto_now_add=True)
-  html = models.BooleanField(default=False)
-  id_topic = models.IntegerField(null=True, blank=True, default=0)
+  html = models.BooleanField('Si se marca como HTML se pone a pelo en la web, si no, sólo los saltos de línea se convierten.', default=False)
+  id_topic = models.IntegerField('Id del tema en el foro', null=True, blank=True, default=0, help_text='Se rellena él sólo')
 
   def __unicode__(self):
     return u'%s' % self.title
