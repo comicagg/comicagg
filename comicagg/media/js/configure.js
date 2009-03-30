@@ -390,12 +390,6 @@ function ajustar_alturas(available)
 //   alert("ava:" + ava_h + " sel:" + sel_h);
 }
 
-function gotoDescription(id)
-{
-  var url = url_comic_list + '#comic' + id;
-  window.location = url;
-}
-
 // desde el menu contextual de cada comic
 function addComic(id)
 {

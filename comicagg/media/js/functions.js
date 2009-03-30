@@ -178,3 +178,11 @@ function check_register(the_form)
 }
 
 function abrirWeb(url) { window.open(url); return false; }
+
+function gotoDescription(id)
+{
+	var url = url_comic_list + '#comic' + id;
+	window.location = url;
+}
+
+

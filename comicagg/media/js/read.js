@@ -5,64 +5,68 @@
 var last_event = false;
 
 function initRead() {
-  var es = $$('.mark_as_read');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.id.substring(4)); mark_as_read(id); };
-  }
-  var es = $$('.tags_link');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); toggle_tagging(id); };
-  }
-  var es = $$('.ratedown');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) {
-      last_event = event;
-      var target = event.target;
-      if(target.nodeName.toLowerCase() == "img") {
-        id = parseInt(event.target.parentNode.id.substring(8));
-      } else {
-        id = parseInt(event.target.id.substring(8));
-      }
-      rate(id, -1);
-    };
-  }
-  var es = $$('.rateup');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) {
-      last_event = event;
-      var target = event.target;
-      if(target.nodeName.toLowerCase() == "img") {
-        id = parseInt(event.target.parentNode.id.substring(6));
-      } else {
-        id = parseInt(event.target.id.substring(6));
-      }
-      rate(id, 1);
-    };
-  }
-  var es = $$('.more');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.id.substring(4)); menuToggle(id); };
-  }
-  var es = $$('.more_img');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); menuToggle(id); };
-  }
-  var es = $$('.report');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); reportComic(id); };
-  }
-  var es = $$('.remove');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); removeComicLink(id); };
-  }
-  var es = $$('.up');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { $('head').scrollTo(); };
-  }
-  var es = $$('.reloadimgs');
-  for(var i=0; i < es.length; i++) {
-    es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); reloadimgs(id); };
-  }
+	var es = $$('.mark_as_read');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(4)); mark_as_read(id); };
+	}
+	var es = $$('.tags_link');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); toggle_tagging(id); };
+	}
+	var es = $$('.ratedown');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) {
+			last_event = event;
+			var target = event.target;
+			if(target.nodeName.toLowerCase() == "img") {
+			id = parseInt(event.target.parentNode.id.substring(8));
+			} else {
+			id = parseInt(event.target.id.substring(8));
+			}
+			rate(id, -1);
+		};
+	}
+	var es = $$('.rateup');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) {
+			last_event = event;
+			var target = event.target;
+			if(target.nodeName.toLowerCase() == "img") {
+			id = parseInt(event.target.parentNode.id.substring(6));
+			} else {
+			id = parseInt(event.target.id.substring(6));
+			}
+			rate(id, 1);
+		};
+	}
+	var es = $$('.more');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(4)); menuToggle(id); };
+	}
+	var es = $$('.more_img');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); menuToggle(id); };
+	}
+	var es = $$('.report');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); reportComic(id); };
+	}
+	var es = $$('.remove');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); removeComicLink(id); };
+	}
+	var es = $$('.up');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { $('head').scrollTo(); };
+	}
+	var es = $$('.reloadimgs');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); reloadimgs(id); };
+	}
+	var es = $$('.desc');
+	for(var i=0; i < es.length; i++) {
+		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); gotoDescription(id); };
+	}
 	loadimages();
 }
 

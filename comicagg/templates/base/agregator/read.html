@@ -52,9 +52,10 @@
 {% spaceless %}
 			<div class="opts_right"><img id="working{{ comic.id }}" src="{{ mediaurl }}images/loading12.gif" alt="" style="display:none"/><img id="tick{{ comic.id }}" src="{{ mediaurl }}images/tick12.png" alt="" style="display:none"/>&nbsp;<a id="more{{ comic.id }}" class="more">{% trans 'More'%}</a>&nbsp;<img id="menu_image{{ comic.id }}" class="more_img" src="{{ mediaurl }}images/menu_off.png" alt="" />
 				<ul id="menu{{ comic.id }}" class="menu" style="display:none">
-					<li class="report">{% trans "Report broken image" %} <img alt="" src="{{ mediaurl }}images/broken12.png"/></li>
-					<li class="remove">{% trans "Remove from list" %} <img alt="" src="{{ mediaurl }}images/remove12.png"/></li>
-					<li class="up">{% trans 'Go up'%} <img alt="" src="{{ mediaurl }}images/up12.png"/></li>
+					<li class="report">{% trans "Report broken image" %}&nbsp;<img alt="" src="{{ mediaurl }}images/broken12.png"/></li>
+					<li class="remove">{% trans "Remove from list" %}&nbsp;<img alt="" src="{{ mediaurl }}images/remove12.png"/></li>
+					<li class="desc">{% trans "Go to description" %}&nbsp;<img alt="" src="{{ mediaurl }}images/info212.png"/></li>
+					<li class="up">{% trans 'Go up'%}&nbsp;<img alt="" src="{{ mediaurl }}images/up12.png"/></li>
 				</ul>
 			</div>
 			<div class="opts_left">
