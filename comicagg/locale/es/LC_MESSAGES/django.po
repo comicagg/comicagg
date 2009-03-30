@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-30 18:23+0200\n"
-"PO-Revision-Date: 2009-03-30 18:24+0200\n"
+"POT-Creation-Date: 2009-03-30 18:34+0200\n"
+"PO-Revision-Date: 2009-03-30 18:35+0200\n"
 "Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
 "Language-Team: Español <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -952,6 +952,14 @@ msgstr ""
 "descargarla. También la puedes instalar <a href=\"http://www.comicagg.com/"
 "addon/comic_aggregator_notifier.xpi\">desde nuestro servidor</a> sin tener "
 "que estar registrado en ningún sitio."
+
+#: templates/base/help/index.html:27
+msgid "If you want to link us..."
+msgstr "Si quieres enlazarnos..."
+
+#: templates/base/help/index.html:28
+msgid "... you can use this image :)"
+msgstr "... puedes usar la siguiente imagen :)"
 
 #: templates/base/help/new_ticket.html:3
 msgid "New help ticket"

@@ -24,5 +24,8 @@
   <p>{% trans "You can assign any number of tags for every comic. To tag any comic follow this steps: </p><ul><li>Add it to your list.</li><li>Then go to the read page and below the last strip you will find an option called <i>"%}{% trans 'Tags for this comic'%}{% trans '</i>. Click on it and a tag cloud for that comic will appear and a form to add the tags.</li><li>Write there the tags separated by commas.</li></ul><p class="info">Notice that there&apos;s a minimum number of times that a tag must be assigned to a comic to appear in the tag clouds. This number can change in time. The current minimum is ' %}{{ settings.TAG_CLOUD_NUMBER }}{% trans ". Of course, you can't assign the same tag to a comic more than once."%}</p>
   <h4 id="extension">{% trans "Firefox Add-on: Comic Aggregator Notifier" %}</h4>
   <p>{% trans 'Our admin Korosu Itai has developed a Firefox add-on to keep you updated of the number of unread comics you have. This is <a href="https://addons.mozilla.org/en-US/firefox/addon/9171">the entry</a> in the official Firefox add-ons website. As it is marked as experimental you will have to signup to be able to install it. You can also install it <a href="http://www.comicagg.com/addon/comic_aggregator_notifier.xpi">from our server</a> without having to sign up anywhere.' %}</p>
+  <h4>{% trans "If you want to link us..." %}</h4>
+  <p>{% trans "... you can use this image :)" %}</p>
+  <p><img src="{{ mediaurl }}images/cartelito.png" alt="cartelito" /></p>
 </div>
 {% endblock %}
