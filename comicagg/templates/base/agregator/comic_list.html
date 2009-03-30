@@ -28,7 +28,7 @@
 			tmp{{ comic.id }} = new Image();
     </script>
     <div id="comic{{ comic.id }}" class="comic">
-      <h3><a href="{{ comic.website }}">{{ comic.name }}</a></h3>
+		<h3><a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')">{{ comic.name }}</a></h3>
       <div class="comic_cloud"><span class="label">{% trans 'Tag cloud:'%}</span><br/>{% tagcloud_comic comic %}</div>
       <div>
         <span class="label">{% trans 'Rating: '%}</span><b>{{ comic.getRating }}%</b> <span class="votes">({{ comic.votes }} {% trans 'votes' %}, {{ comic.positivevotes|toint }}% {% trans 'positive' %})</span><br />

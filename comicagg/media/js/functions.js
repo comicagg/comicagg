@@ -177,3 +177,4 @@ function check_register(the_form)
   return valid;
 }
 
+function abrirWeb(url) { window.open(url); return false; }

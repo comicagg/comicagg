@@ -32,20 +32,20 @@
 <div id="comics">
 {% for comic, list in comic_list %}
 	<div id="c_{{ comic.id }}" class="comic" {% if user.get_profile.hide_read and not list %}style="display:none"{% endif %}>
-		<h2><a href="{{ comic.website }}">{{ comic.name }}</a>{% if list %} <span id="new_{{ comic.id }}" class="unread_comic">{% trans 'NEW!'%}</span>{% endif %}</h2>
+		<h2><a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')">{{ comic.name }}</a>{% if list %} <span id="new_{{ comic.id }}" class="unread_comic">{% trans 'NEW!'%}</span>{% endif %}</h2>
 {# si list tiene elementos es que hay nuevas tiras por leer #}
 {% if list %}
 	{# list es una lista de unread_comic #}
 	{% for item in list %}
-		<a href="{{ comic.website }}"><img id="img_unread{{ item.id}}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}"/></a><br/>
+		<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_unread{{ item.id}}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}"/></a><br/>
 	{% endfor %}
 {# el usuario no tiene comics nuevos #}
 {% else %}
 	{% if user.get_profile.hide_read %}
 		{# para la lista de url de los comics leidos #}
-		<a href="{{ comic.website }}"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}"/></a>
+		<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}"/></a>
 	{% else %}
-		<a href="{{ comic.website }}"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" /></a>
+		<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" /></a>
 	{% endif %}
 {% endif %}
     <div class="comic_info">
