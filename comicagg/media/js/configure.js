@@ -181,70 +181,69 @@ function add_all()
 
 function remove_all()
 {
-  var dest = $('available_list')
-  nodes = $('selected_list').select('.item');
-  if (nodes.length > 0) {
-    Element.show('working');
-    for (var i = 0; i < nodes.length; i++)
-    {
-      node = nodes[i];
-      dest.appendChild(node);
-    }
-    do_save();
-//     sort_available();
-  }
+	var dest = $('available_list')
+	nodes = $('selected_list').select('.item');
+	//si hay seleccionados
+	if (nodes.length > 0) {
+		Element.show('working');
+		//recorrerlos
+		for (var i = 0; i < nodes.length; i++)
+		{
+			node = nodes[i];
+			dest.appendChild(node);
+			//actualizar menu
+			node.select('.add')[0].show();
+			node.select('.remove')[0].hide();
+		}
+		do_save();
+		//sort_available();
+	}
 }
 
 function do_save()
 {
-  Element.show('working');
-  $('saved').innerHTML = '';
-  nodes = $('selected_list').select('.item');
-  if(nodes.length > 0)
-  {
-    $('drag_drop').hide();
-  }
-  else
-  {
-    $('drag_drop').show();
-  }
-  str = "";
-  for (var i = 0; i < nodes.length; i++)
-  {
-    str += nodes[i].id;
-    if (i!=nodes.length-1)
-    {
-      str += ",";
-    }
-    //actualizar menu
-    nodes[i].select('.add')[0].hide();
-    nodes[i].select('.remove')[0].show();
-  }
-  var url = url_save_selection;
-  var params = {'selected_list[]': str}
-  new Ajax.Request(url, {
-    method: 'post',
-    parameters: params,
-    onSuccess: function(response) {
-      ret = response.responseText;
-      if (ret!=-1)
-      {
-        $('saved').innerHTML = ret;
-        $('saved').show();
-        $('available_list').style.height = "100%";
-        $('selected_list').style.height = "100%";
-        ajustar_alturas(false);
-        Element.hide('working');
-//         setTimeout("Effect.Fade('saved')", 15000)
-      }
-
-    },
-    onFailure: function(response) {
-      ret = response.responseText;
-      document.write(ret);
-    }
-  });
-//   $('save_button').disabled = false;
+	Element.show('working');
+	$('saved').innerHTML = '';
+	nodes = $('selected_list').select('.item');
+	//si no hay comics seleccionados mostrar el aviso d&d
+	if(nodes.length > 0) { $('drag_drop').hide(); } else { $('drag_drop').show(); }
+	
+	//lista de seleccionados separados por comas
+	str = "";
+	//recorrer los comics seleccionados
+	for (var i = 0; i < nodes.length; i++)
+	{
+		str += nodes[i].id;
+		if (i!=nodes.length-1) { str += ","; }
+		//actualizar menu para seleccionados
+		nodes[i].select('.add')[0].hide();
+		nodes[i].select('.remove')[0].show();
+	}
+	var url = url_save_selection;
+	var params = {'selected_list[]': str}
+	new Ajax.Request(url, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(response) {
+			ret = response.responseText;
+			if (ret!=-1)
+			{
+			$('saved').innerHTML = ret;
+			$('saved').show();
+			$('available_list').style.height = "100%";
+			$('selected_list').style.height = "100%";
+			ajustar_alturas(false);
+			Element.hide('working');
+	//         setTimeout("Effect.Fade('saved')", 15000)
+			}
+	
+		},
+		onFailure: function(response) {
+			ret = response.responseText;
+			document.write(ret);
+		}
+	});
+	//   $('save_button').disabled = false;
 }
 
 function sort_available()
