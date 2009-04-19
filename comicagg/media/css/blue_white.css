@@ -99,6 +99,10 @@ input[type="submit"]:active, button:active {
 /* Vista de lectura */
 /********************/
 
+#avisos {
+	border-left-color:#527AB3;
+	border-right-color:#527AB3;
+}
 
 #navigation_box {
   background: top left no-repeat #DFE5FF;

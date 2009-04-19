@@ -23,6 +23,7 @@
     var url_hide_new_blogs = '{% url hide_new_blogs %}';
     var url_forget_new_blogs = '{% url forget_new_blogs %}';
 	 var url_forget_new_comics = '{% url forget_new_comics %}';
+	 var url_forget_new_comics_quick = '{% url forget_new_comics_quick %}';
 	 var url_rate = '{% url rate %}';
     var url_mark_as_read = '{% url mark_read %}';
     var url_save_tags = '{% url save_tags %}';
@@ -66,6 +67,8 @@
       </ul>
     {% endif %}
     </div>
+{% block above_content %}
+{% endblock %}
     <div id="content">
 		{% if settings.MAINTENANCE and user.is_superuser %}<b style="color:red">EN MANTENIMIENTO</b>{% endif %}
       <div id="content_wrap">

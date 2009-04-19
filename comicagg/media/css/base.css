@@ -136,18 +136,18 @@ input[type="submit"]:active, button:active {
 	font-weight:bolder;
 }
 
-#new_comics_notice {
+/*#new_comics_notice {
 	position:absolute;
 	top:60px;
 	right:50px;
 	text-align:right;
-}
+}*/
 
 .new_comic {
 	font-weight:bolder;
 }
 
-#new_blogs_notice {
+/*#new_blogs_notice {
 	position:absolute;
 	top:60px;
 	left:50px;
@@ -164,7 +164,7 @@ input[type="submit"]:active, button:active {
 #new_blogs_notice li {
 	padding:0;
 	margin:0;
-}
+}*/
 
 
 /*******************/
@@ -174,6 +174,7 @@ input[type="submit"]:active, button:active {
 
 #content_wrap {
 	min-height:600px;
+/* 	border:1px solid green; */
 }
 
 #content {
@@ -196,6 +197,22 @@ input[type="submit"]:active, button:active {
 /* Vista de lectura */
 /********************/
 
+#avisos {
+	margin:0px 40px 0px 40px;
+	font-size:8pt;
+	padding:4px 6px;
+	background-color:white;
+	border-width:0 2px 0 2px;
+ 	border-style:solid;
+	line-height:18pt;
+}
+
+#avisos .aviso {
+	padding:3px;
+	border:1px solid gray;
+	-moz-border-radius: 5px 5px;
+	background-color:#fafafa;
+}
 
 #read_comics {
 	min-height:600px;
@@ -259,15 +276,17 @@ input[type="submit"]:active, button:active {
 }
 
 #comics {
-	border:0px solid black;
-	margin-top:15px;
+	margin-top:0px;
 }
 
-div.comic {
-	border-top:0px solid gray;
-	padding:5px;
-	margin:5px;
+#comics .comic {
+	padding:0px 5px 5px 5px;
+	margin:0px 5px 5px 5px;
 	text-align:center;
+}
+
+#comics .comic h2 {
+	margin-top:0px;
 }
 
 .unread_comic {

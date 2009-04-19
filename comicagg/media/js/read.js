@@ -233,6 +233,7 @@ function removeComicLink(id) {
 			read_list[id] = false;
 			if ($('comics').childElements().length == 0) { $('no_comics').show(); }
 			else { mover_a.scrollTo(); }
+			if(count==0) { $("no_unread_notice").show(); }
 		},
 		onFailure: function(response) {
 		}
@@ -348,6 +349,19 @@ function hide_new_blogs()
 		},
 		onFailure: function(response) {
 		}
+	});
+}
+
+function forget_new_comics()
+{
+	var url = url_forget_new_comics_quick;
+	new Ajax.Request(url, {
+		method: 'post',
+  onSuccess: function(response) {
+	  Effect.toggle('new_comics_notice');
+  },
+  onFailure: function(response) {
+  }
 	});
 }
 

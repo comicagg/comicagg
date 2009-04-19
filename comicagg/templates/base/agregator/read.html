@@ -5,7 +5,7 @@
 {% block head %}<script src="{{ mediaurl }}js/read.js" type="text/javascript"></script>{% endblock %}
 {% block onload %}initRead(){% endblock %}
 {% block onclick %}processClick(){% endblock %}
-
+{% block above_content %}{% include 'agregator/read_avisos.html' %}{% endblock %}
 {% block content %}
 <script type="text/javascript">{% spaceless %}
 	var comics = new Array(), lcomics = new Array();
@@ -21,10 +21,10 @@
 
 {% endspaceless %}</script>
 <div id="read_comics">
-{% if user.get_profile.alert_new_comics and user.get_profile.new_comics %}
+{% if user.get_profile.alert_new_comics and user.get_profile.new_comics and False %}
 	{% include 'agregator/read_new_comics.html' %}
 {% endif %}
-{% if user.get_profile.alert_new_blog and user.get_profile.new_blogs %}
+{% if user.get_profile.alert_new_blog and user.get_profile.new_blogs and False  %}
 	{% include 'agregator/read_new_blogs.html' %}
 {% endif %}
 {% if user.subscription_set.all %}
@@ -73,9 +73,9 @@
 	</div>
 {% endfor %}
 </div>
-{% if not has_unread and user.get_profile.hide_read %}
-{# mostrar un comic aleatorio #}
-<div id="no_unread_notice" class="text_center">
+{% if random %}
+{# si hay random es que hay algun comic que no lee, así que mostrar un comic aleatorio #}
+<div id="no_unread_notice" class="text_center"{% if not has_unread and user.get_profile.hide_read %}{# mostrar el comic aleatorio #}{% else %}style="display:none"{% endif %}>
 	<p><b>{% trans 'No new comics to read! Wanna ' %}<a href="{% url configure %}">{% trans 'add some more'%}</a>?</b></p>
 	{% if random_comic %}
 	<div id="random_comic">
@@ -83,8 +83,8 @@
 	</div>
 	{% endif %}
 </div>
-{% endif %}
-{% endif %}
+	{% endif %}
+{% endif %} {# user.subscription_set.all #}
 <p id="no_comics" class="info" {% if user.subscription_set.all %}style="display:none"{% endif %}>
 	{% trans "You haven't chosen comics yet. Use the configure option in the menu and choose some comics."%}<br/><br />
 	<a href="{% url configure %}"><img src="{{ mediaurl }}images/no_comic_banner.png" alt=""/></a>

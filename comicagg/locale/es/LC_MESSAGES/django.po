@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-30 18:34+0200\n"
-"PO-Revision-Date: 2009-03-30 18:35+0200\n"
+"POT-Creation-Date: 2009-04-19 19:21+0200\n"
+"PO-Revision-Date: 2009-04-19 19:22+0200\n"
 "Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
 "Language-Team: Español <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: accounts/views.py:48
 msgid "Your have to activate your user first"
-msgstr "Tienes que activar tu usuario primero"
+msgstr "   Tienes que activar tu usuario primero"
 
 #: accounts/views.py:54
 msgid "Username or password not valid!"
@@ -32,15 +32,15 @@ msgstr "Usuario o contraseña no válida"
 msgid "Password reset on %s"
 msgstr "Cambio de contraseña en %s"
 
-#: agregator/views.py:178 agregator/views.py:207
+#: agregator/views.py:177 agregator/views.py:206
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:302 templates/admin/index.html:46
+#: agregator/views.py:301 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:581
+#: agregator/views.py:587
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -155,42 +155,42 @@ msgstr ""
 "Parece que el servidor está teniendo algún problema ahora mismo. Inténtalo "
 "de nuevo dentro de un rato."
 
-#: templates/base/base.html:52
+#: templates/base/base.html:53
 msgid "Logged in as "
 msgstr "Conectado como "
 
-#: templates/base/base.html:53 templates/base/agregator/read.html:4
+#: templates/base/base.html:54 templates/base/agregator/read.html:4
 msgid "Read comics"
 msgstr "Leer comics"
 
-#: templates/base/base.html:54 templates/base/agregator/configure.html:3
+#: templates/base/base.html:55 templates/base/agregator/configure.html:3
 #: templates/base/agregator/configure.html:9
 msgid "Choose comics"
 msgstr "Elegir comics"
 
-#: templates/base/base.html:55 templates/base/base.html.py:64
+#: templates/base/base.html:56 templates/base/base.html.py:65
 #: templates/base/help/index.html:20
 msgid "Comic list"
 msgstr "Lista de comics"
 
-#: templates/base/base.html:56
+#: templates/base/base.html:57
 msgid "Account"
 msgstr "Perfil"
 
-#: templates/base/base.html:57 templates/base/base.html.py:65
+#: templates/base/base.html:58 templates/base/base.html.py:66
 #: templates/base/help/index.html:3
 msgid "Help"
 msgstr "Ayuda"
 
-#: templates/base/base.html:59
+#: templates/base/base.html:60
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base/base.html:62 templates/base/registration/login_form.html:3
+#: templates/base/base.html:63 templates/base/registration/login_form.html:3
 msgid "Login"
 msgstr "Entrar"
 
-#: templates/base/base.html:63
+#: templates/base/base.html:64
 msgid "Register"
 msgstr "Registrarse"
 
@@ -383,7 +383,7 @@ msgstr "Añadirlo a mi lista"
 #: templates/base/agregator/comic_list.html:53
 #: templates/base/agregator/comic_list.html:68
 #: templates/base/agregator/comic_list.html:83
-#: templates/base/agregator/read.html:57
+#: templates/base/agregator/read.html:58
 msgid "Go up"
 msgstr "Subir"
 
@@ -528,6 +528,7 @@ msgstr "Ir a la web del comic"
 
 #: templates/base/agregator/configure.html:67
 #: templates/base/agregator/configure.html:92
+#: templates/base/agregator/read.html:57
 msgid "Go to description"
 msgstr "Ir a la descripción"
 
@@ -568,45 +569,74 @@ msgstr "Más"
 msgid "Report broken image"
 msgstr "Avisar imagen rota"
 
-#: templates/base/agregator/read.html:61
+#: templates/base/agregator/read.html:62
 msgid "Mark as read"
 msgstr "Marcar como leída"
 
-#: templates/base/agregator/read.html:61
+#: templates/base/agregator/read.html:62
 msgid "Up to date"
 msgstr "Al día"
 
-#: templates/base/agregator/read.html:61
+#: templates/base/agregator/read.html:62
 msgid "Rate it!"
 msgstr "¡Puntúalo!"
 
-#: templates/base/agregator/read.html:62 templates/base/help/index.html:23
+#: templates/base/agregator/read.html:63 templates/base/help/index.html:23
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: templates/base/agregator/read.html:62
+#: templates/base/agregator/read.html:63
 msgid "Hide tags"
 msgstr "Ocultar etiquetas"
 
-#: templates/base/agregator/read.html:65
+#: templates/base/agregator/read.html:66
 msgid "Reload"
 msgstr "Recargar"
 
-#: templates/base/agregator/read.html:78
+#: templates/base/agregator/read.html:79
 msgid "No new comics to read! Wanna "
 msgstr "¡No hay nuevos comics que leer! ¿Quieres "
 
-#: templates/base/agregator/read.html:78
+#: templates/base/agregator/read.html:79
 msgid "add some more"
 msgstr "añadir alguno más"
 
-#: templates/base/agregator/read.html:88
+#: templates/base/agregator/read.html:89
 msgid ""
 "You haven't chosen comics yet. Use the configure option in the menu and "
 "choose some comics."
 msgstr ""
 "No has elegido ninguna tira aún. Usa la opción de elegir comics del menú "
 "para ver algo aquí."
+
+#: templates/base/agregator/read_avisos.html:5
+msgid "There are new entries in the blog."
+msgstr "Hay nuevas entradas en el blog."
+
+#: templates/base/agregator/read_avisos.html:5
+#: templates/base/agregator/read_avisos.html:8
+msgid "Remove the notice"
+msgstr "Quitar el aviso"
+
+#: templates/base/agregator/read_avisos.html:5
+msgid " or "
+msgstr " o "
+
+#: templates/base/agregator/read_avisos.html:5
+msgid "take me to the blog."
+msgstr "llévame al blog."
+
+#: templates/base/agregator/read_avisos.html:8
+#, python-format
+msgid "There are %(new_comic_count)s new comics in the database."
+msgstr "Hay %(new_comic_count)s nuevos comics en la base de datos."
+
+#: templates/base/agregator/read_avisos.html:8
+#, python-format
+msgid ""
+", <a href=\"%(conf_url)s\">go to the lists</a> or <a onclick="
+"\"forget_new_comics()\">forget the new comics."
+msgstr ", <a href=\"%(conf_url)s\">ir a las listas</a> u <a onclick=\"forget_new_comics()\">olvidar los comics nuevos."
 
 #: templates/base/agregator/read_new_blogs.html:5
 msgid "Updates in the blog!<br/>Go check it"

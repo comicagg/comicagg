@@ -135,5 +135,6 @@
     <item url="middleware/" uploadstatus="1" />
     <item url="middleware/__init__.py" uploadstatus="1" />
     <item url="templates/base/maintenance.html" uploadstatus="1" />
+    <item url="templates/base/agregator/read_avisos.html" uploadstatus="1" />
   </project>
 </webproject>
