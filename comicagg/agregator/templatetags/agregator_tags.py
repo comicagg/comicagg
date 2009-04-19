@@ -66,6 +66,13 @@ def div(value, arg):
     return 0
 
 @register.filter()
+def gt(value, arg):
+	try:
+		return int(value) > int(arg)
+	except:
+		return None
+
+@register.filter()
 def mult(value, arg):
   return float(value)*arg
 

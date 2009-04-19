@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n agregator_tags %}
 {% block title %}{% trans 'Request a comic'%}{% endblock %}
 {% block content %}
   <h3 class="text_left">{% trans 'Request a comic'%}</h3>
-  <p class="info text_left">{% trans 'Write there the url of the comic you would like to read here and I will try to add is as soon as possible.'%}</p>
+  <p class="info text_left">{% trans "Write the url of the comic you would like to read here and we will try to add it is as soon as possible (if it's possible, of course)."%}</p>
+{% if count %}<p class="info text_left">{% blocktrans %}Currently there are {{ count }} requests waiting to be added. We have to add them one by one by hand so, please, be patient. Thanks!{% endblocktrans %}</p>{% endif %}
 {% if form.url.errors %}
 <div id="errorContainer">{{ form.url.errors }}</div>
 {% endif %}

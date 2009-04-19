@@ -223,6 +223,7 @@ def request_comic(request, done=False):
       send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
       return HttpResponseRedirect(reverse('done_request'))
   context['form'] = form
+  context['count'] = Request.objects.all().count()
   return render(request, 'agregator/request_comic.html', context, 'configure')
 
 @login_required

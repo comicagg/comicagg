@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-19 20:27+0200\n"
-"PO-Revision-Date: 2009-04-19 20:28+0200\n"
+"POT-Creation-Date: 2009-04-19 21:13+0200\n"
+"PO-Revision-Date: 2009-04-19 21:14+0200\n"
 "Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
 "Language-Team: Español <es@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,11 +44,11 @@ msgstr "Cambio de contraseña en %s"
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:301 templates/admin/index.html:46
+#: agregator/views.py:302 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:587
+#: agregator/views.py:588
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -697,21 +697,28 @@ msgstr "Solicitar un comic"
 
 #: templates/base/agregator/request_comic.html:6
 msgid ""
-"Write there the url of the comic you would like to read here and I will try "
-"to add is as soon as possible."
+"Write the url of the comic you would like to read here and we will try to "
+"add it is as soon as possible (if it's possible, of course)."
 msgstr ""
-"Escribe aquí la dirección web del comic que te gustaría leer e intentaré "
+"Escribe aquí la dirección web del comic que te gustaría leer e intentaremos "
 "añadirlo lo antes posible (si es posible)."
 
-#: templates/base/agregator/request_comic.html:11
+#: templates/base/agregator/request_comic.html:7
+#, python-format
+msgid ""
+"Currently there are %(count)s requests waiting to be added. We have to add "
+"them one by one by hand so, please, be patient. Thanks!"
+msgstr "Ahora mismo hay %(count)s peticiones esperando. Tenemos que añadirlas a mano una a una, así que ten un poco de paciencia. ¡Gracias!"
+
+#: templates/base/agregator/request_comic.html:12
 msgid "The comic's Url"
 msgstr "La dirección del comic"
 
-#: templates/base/agregator/request_comic.html:12
+#: templates/base/agregator/request_comic.html:13
 msgid "Any comment?"
 msgstr "¿Algún comentario?"
 
-#: templates/base/agregator/request_comic.html:13
+#: templates/base/agregator/request_comic.html:14
 #: templates/base/help/edit_ticket.html:28
 #: templates/base/help/new_ticket.html:15
 msgid "Send"
