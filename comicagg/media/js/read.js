@@ -126,16 +126,27 @@ function loadimage2(id, cid, img, url) {
 		e = $(id);
 		actual_no -= 1;
 		e.src = url_error;
-		acc = "#c_" + cid + " .opts_left";
-		acc2 = acc + "_error";
-		$$(acc)[0].hide();
-		$$(acc2)[0].show();
+		ocultar_opciones(cid);
 	};
 	img.onabort = function(){
 		e = $(id);
 		actual_no -= 1;
 		e.src = url_error;
 	};
+}
+
+function ocultar_opciones(cid) {
+	acc = "#c_" + cid + " .opts_left";
+	acc2 = acc + "_error";
+	$$(acc)[0].hide();
+	$$(acc2)[0].show();
+}
+
+function mostrar_opciones(cid) {
+	acc = "#c_" + cid + " .opts_left";
+	acc2 = acc + "_error";
+	$$(acc)[0].show();
+	$$(acc2)[0].hide();
 }
 
 // **************
@@ -479,6 +490,7 @@ function save_tags(id) {
 }
 
 function reloadimgs(id) {
+	mostrar_opciones(id);
 	list = comics[id].list;
 	if(list.length > 0) {
 		for (i=0; i<list.length; i++) {
