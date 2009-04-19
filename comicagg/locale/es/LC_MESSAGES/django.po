@@ -10,14 +10,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-19 19:21+0200\n"
-"PO-Revision-Date: 2009-04-19 19:22+0200\n"
+"POT-Creation-Date: 2009-04-19 20:27+0200\n"
+"PO-Revision-Date: 2009-04-19 20:28+0200\n"
 "Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
 "Language-Team: Español <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
+
+#: accounts/models.py:31
+msgid "User profile"
+msgstr "Perfil de usuario"
+
+#: accounts/models.py:32
+msgid "User profiles"
+msgstr "Perfiles de usuario"
 
 #: accounts/views.py:48
 msgid "Your have to activate your user first"
@@ -90,6 +98,14 @@ msgstr "Volver a la web"
 #: templates/admin/base.html:33
 msgid "Home"
 msgstr "Inicio"
+
+#: templates/admin/base_site.html:4
+msgid "Comic Aggregator site admin"
+msgstr "Sitio de administración de Comic Aggregator"
+
+#: templates/admin/base_site.html:7
+msgid "Comic Aggregator administration"
+msgstr "Administración de Comic Aggregator"
 
 #: templates/admin/check.html:9
 msgid "was updated."
@@ -636,7 +652,9 @@ msgstr "Hay %(new_comic_count)s nuevos comics en la base de datos."
 msgid ""
 ", <a href=\"%(conf_url)s\">go to the lists</a> or <a onclick="
 "\"forget_new_comics()\">forget the new comics."
-msgstr ", <a href=\"%(conf_url)s\">ir a las listas</a> u <a onclick=\"forget_new_comics()\">olvidar los comics nuevos."
+msgstr ""
+", <a href=\"%(conf_url)s\">ir a las listas</a> u <a onclick="
+"\"forget_new_comics()\">olvidar los comics nuevos."
 
 #: templates/base/agregator/read_new_blogs.html:5
 msgid "Updates in the blog!<br/>Go check it"
