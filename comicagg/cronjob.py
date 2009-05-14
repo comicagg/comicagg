@@ -31,9 +31,9 @@ class CheckThread(threading.Thread):
 
 		comic = self.next()
 		while comic:
-			h_obj = None
+			changed = False
 			try:
-				h_obj = check_comic(comic)
+				changed = check_comic(comic)
 			except KeyboardInterrupt:
 				print '*** Matado %s ***' % (datetime.now())
 				sys.exit()
@@ -53,12 +53,8 @@ class CheckThread(threading.Thread):
 					self.errors_inactive.append(s)
 				#raise
 				#continue
-			if h_obj:
+			if changed:
 				new += 1
-				#foreach user who has a subscription, create the unreadcomic object
-				subscriptions = comic.subscription_set.all()
-				for subscription in subscriptions:
-					unread = UnreadComic.objects.get_or_create(user=subscription.user, history=h_obj, comic=subscription.comic)
 				#si es un comic desactivado o terminado y se actualiza notificar posible activacion
 				if not comic.activo or comic.ended:
 					s = '  El desactivado o terminado %s se ha actualizado.\n' % (comic.name,)

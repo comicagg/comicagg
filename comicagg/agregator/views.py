@@ -289,16 +289,7 @@ def admin_check(request, comic_id=None):
     if comic_id:
       comic = Comic.objects.get(pk=comic_id)
       context['last'] = comic
-      h_obj = check_comic(comic)
-      if h_obj:
-        #foreach user who has a subscription, create the unreadcomic object
-        subscriptions = comic.subscription_set.all()
-        for subscription in subscriptions:
-          unread = UnreadComic.objects.get_or_create(user=subscription.user, history=h_obj, comic=subscription.comic)
-        context['checked'] = True
-      else:
-        context['checked'] = False
-        context['no_change'] = True
+      context['changed'] = check_comic(comic)
     context['title'] = _('Update comic')
     return render(request, 'admin/check.html', context)
   else:

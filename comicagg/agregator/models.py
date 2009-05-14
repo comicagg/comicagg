@@ -24,6 +24,10 @@ class Comic(models.Model):
 	notify = models.BooleanField('Notificar comic nuevo a los usuarios', default=False, help_text='Siempre va a aparecer como desactivado aquí. Si se activa, se notifica y se deja la opción desactivada')
 	ended = models.BooleanField('Comic terminado', default=False, help_text='Si un comic termina marcar esta opción y desactivarlo también')
 
+	#campo para añadir una funcion custom de actualizacion
+	custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text='Debe añadir al array <i>historys</i> los objetos ComicHistory nuevos')
+	#ALTER TABLE agregator_comic add "custom_func" text NULL;
+
 	#url that points to the web page with the last strip
 	url = models.URLField('Url donde se encuentra la imagen', verify_exists=False, help_text='Si hay redirección no se utiliza')
 	#base adress for the image

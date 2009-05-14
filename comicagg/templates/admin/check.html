@@ -5,11 +5,12 @@
 
 {% block content %}
 <div id="content-main">
-{% if checked %}
+{% if last %}
+{% if changed %}
 {{ last.name }} {% trans "was updated." %} {{ last.subscription_set.count }} {% trans "readers notified." %}<br />
-{% endif %}
-{% if no_change %}
+{% else %}
 {{ last.name }} {% trans "was not modified." %}<br />
+{% endif %}
 {% endif %}
 <br />
 {% for comic in list %}
