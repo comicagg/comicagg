@@ -107,4 +107,6 @@ EMAIL_HOST = 'mail.proyectoanonimo.com'
 EMAIL_HOST_USER = 'robot+comicagg.com'
 EMAIL_HOST_PASSWORD = 'robot%%'
 
+CACHE_BACKEND = 'db://cachet1'
+
 from settings_local import *

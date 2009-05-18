@@ -16,6 +16,9 @@ from datetime import datetime
 from django.utils.translation import ugettext as _
 import sys, math, random
 
+from django.views.decorators.cache import cache_page
+
+
 # Create your views here.
 
 @login_required
@@ -295,6 +298,7 @@ def admin_check(request, comic_id=None):
   else:
     return HttpResponse("Nopes")
 
+@cache_page(60*2)
 def comic_list(request, sortby='name', tag=None):
   context = {}
   if tag:

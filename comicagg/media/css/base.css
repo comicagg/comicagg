@@ -598,10 +598,17 @@ a.tag_link {
 #comic_list p {
 }
 
+#comic_list ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
 #comic_list .comic {
-	padding:10px;
-	margin:10px;
+	padding:2px;
+	margin:3px;
 	text-align:left;
+	border:1px solid #ddd;
 }
 
 #comic_list .comic div {

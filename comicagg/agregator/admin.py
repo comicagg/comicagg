@@ -22,6 +22,9 @@ class ComicAdmin(admin.ModelAdmin):
       'classes': ('collapse',),
       'fields' : ('url2', 'base2', 'regexp2', 'backwards2')
     }),
+    ('Función personalizada', {
+      'fields' : ('custom_func', )
+    }),
     ('Opciones avanzadas', {
       'classes': ('collapse',),
       'fields' : ('referer', 'fake_user_agent')

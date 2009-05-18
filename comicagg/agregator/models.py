@@ -25,7 +25,20 @@ class Comic(models.Model):
 	ended = models.BooleanField('Comic terminado', default=False, help_text='Si un comic termina marcar esta opción y desactivarlo también')
 
 	#campo para añadir una funcion custom de actualizacion
-	custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text='Debe añadir al array <i>historys</i> los objetos ComicHistory nuevos')
+	help_text="""Debe añadir al array <i>historys</i> los objetos ComicHistory nuevos.<br/>
+	Funciones disponibles:<br/>
+		<b>- list open_url(comic, url)</b><br/>
+		<b>- MatchObject match_lines(comic, lineas, regexp, backwards)</b><br/>
+		<b>- Hay que comprobar de alguna manera que hay una tira nueva. Usar comic.last_image para comparar.</b><br/>
+		<b>- Actualizar comic y crear ComicHistory:</b><br/>
+comic.last_image = last_image<br/>
+comic.last_check = datetime.now()<br/>
+h = ComicHistory(comic=comic, url=comic.last_image)<br/>
+h.save()<br/>
+comic.save()<br/>
+return h<br/>
+	"""
+	custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text=help_text)
 	#ALTER TABLE agregator_comic add "custom_func" text NULL;
 
 	#url that points to the web page with the last strip

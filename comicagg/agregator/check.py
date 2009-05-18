@@ -2,7 +2,9 @@
 from comicagg.agregator.models import *
 import re, sys, urllib2
 
-def match_url(comic, url, regexp, backwards=False):
+def open_url(comic, _url):
+	#limpiar la url (entidades html)
+	url = unescape(_url)
 	r = urllib2.Request(url)
 	if comic.fake_user_agent:
 		r.add_header('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.9.0.7) Gecko/2009030814 Firefox/3.0.5 (Debian-3.0.7-1)')
@@ -12,16 +14,21 @@ def match_url(comic, url, regexp, backwards=False):
 	opener = urllib2.build_opener()
 	respuesta = opener.open(r)
 	lineas = respuesta.readlines()
+	return lineas
+
+def match_lines(comic, lineas, regexp, backwards=False):
+	indice = 0
+	#si hay que empezar desde el final a buscar
 	if backwards:
-		lineas.reverse()
-	respuesta.close()
+		indice = -1
 	#compilar regexp
 	rege = r'%s' % regexp
 	prog = re.compile(rege)
 	#search in every line for the regexp
-	for linea in lineas:
+	while len(lineas) > 0:
+		_linea = lineas.pop(indice)
 		try:
-			linea = linea.decode('utf-8')
+			linea = _linea.decode('utf-8')
 		except:
 			pass
 		match = prog.search(linea)
@@ -29,7 +36,7 @@ def match_url(comic, url, regexp, backwards=False):
 			break
 	if not match:
 		raise NoMatchException, "%s" % comic.name
-	return match
+	return (match, lineas)
 
 def custom_check(comic):
 	#la funcion custom debe rellenar este array con los history de las nuevas tiras
@@ -45,7 +52,8 @@ def custom_check(comic):
 def default_check(comic):
 	#si hay redireccion, obtener url de la redireccion
 	if comic.url2:
-		match = match_url(comic, comic.url2, comic.regexp2, backwards=comic.backwards2)
+		lineas = open_url(comic, comic.url2)
+		(match, rest) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
 		try:
 			url = match.group("url")
 		except IndexError:
@@ -55,7 +63,8 @@ def default_check(comic):
 		next_url = comic.url
 
 	#buscar url en la web que contiene la tira
-	match = match_url(comic, next_url, comic.regexp, backwards=comic.backwards)
+	lineas = open_url(comic, next_url)
+	(match, rest) = match_lines(comic, lineas, comic.regexp, comic.backwards)
 	try:
 		url = match.group("url")
 	except IndexError:
