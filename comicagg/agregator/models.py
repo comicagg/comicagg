@@ -42,11 +42,11 @@ return h<br/>
 	#ALTER TABLE agregator_comic add "custom_func" text NULL;
 
 	#url that points to the web page with the last strip
-	url = models.URLField('Url donde se encuentra la imagen', verify_exists=False, help_text='Si hay redirección no se utiliza')
+	url = models.URLField('Url donde se encuentra la imagen', verify_exists=False, null=True, blank=True, help_text='Si hay redirección no se utiliza')
 	#base adress for the image
-	base_img = models.CharField('Url base de la imagen', max_length=255, help_text='Debe contener %s que es donde se pondrá lo capturado por la expresión regular')
+	base_img = models.CharField('Url base de la imagen', max_length=255, null=True, blank=True, help_text='Debe contener %s que es donde se pondrá lo capturado por la expresión regular')
 	#regexp for the image
-	regexp = models.CharField('Expresión regular', max_length=255, help_text='Lo que se quiera capturar se pone <b>entre paréntesis</b>. Si hace falta usar paréntesis para capturar, se toma como url lo que vaya aquí dentro <b>(?P&lt;url><i>RE de captura</i>)</b>')
+	regexp = models.CharField('Expresión regular', max_length=255, null=True, blank=True, help_text='Lo que se quiera capturar se pone <b>entre paréntesis</b>. Si hace falta usar paréntesis para capturar, se toma como url lo que vaya aquí dentro <b>(?P&lt;url><i>RE de captura</i>)</b>')
 	#start searching from the end
 	backwards = models.BooleanField('Empezar desde el final', default=False)
 

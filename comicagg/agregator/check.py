@@ -41,13 +41,14 @@ def match_lines(comic, lineas, regexp, backwards=False):
 def custom_check(comic):
 	#la funcion custom debe rellenar este array con los history de las nuevas tiras
 	history_set = list()
-	f = comic.custom_func
-	exec(f)
+	f = comic.custom_func.replace('\r', '')
+	code = compile(f, '<string>', 'exec')
+	exec code
 	for h in history_set:
 		notifiy_subscribers(h)
 	if history_set:
 		return True
-	return false
+	return False
 
 def default_check(comic):
 	#si hay redireccion, obtener url de la redireccion
