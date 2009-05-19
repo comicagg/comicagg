@@ -23,6 +23,7 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^done_request/$', 'request_comic', {'done':True}, name='done_request'),
 
 	url(r'^list/$', 'comic_list', name='comic_list'),
+	url(r'^list/comic/$', 'comic_list_load', name='comic_list_load'),
 	url(r'^list/(?P<sortby>\w+)/$', 'comic_list', name='comic_list_sorted'),
 	url(r'^list/tag/(?P<tag>[^/]+)/$', 'comic_list', name='view_tag'),
 	url(r'^list/tag/(?P<tag>[^/]+)/(?P<sortby>\w+)/$', 'comic_list', name='view_tag_sorted'),

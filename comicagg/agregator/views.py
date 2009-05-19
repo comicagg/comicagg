@@ -298,7 +298,24 @@ def admin_check(request, comic_id=None):
   else:
     return HttpResponse("Nopes")
 
-@cache_page(60*2)
+@cache_page(60*10)
+def comic_list_load(request):
+	if request.POST:
+		cid = int(request.POST['id']);
+		comic = get_object_or_404(Comic, pk=cid)
+		context = {}
+		context['comic'] = comic
+		#si es un usuario registrado, coger su lista de comics
+		if request.user.is_authenticated():
+			user_subs = request.user.subscription_set.all()
+			user_comics = list()
+			for sub in user_subs:
+				user_comics.append(sub.comic)
+				context['user_comics'] = user_comics
+		return render(request, 'agregator/comic_list_comic.html', context, xml=True)
+	return Http404()
+
+@cache_page(60*10)
 def comic_list(request, sortby='name', tag=None):
   context = {}
   if tag:

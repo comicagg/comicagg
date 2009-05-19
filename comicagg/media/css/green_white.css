@@ -288,7 +288,7 @@ a.tag_link {
 
 
 #comic_list .comic {
-  border:1px solid #eee;
+	background:#749F64;
 }
 
 #comic_list .comic .label {
@@ -302,6 +302,7 @@ a.tag_link {
 #comic_list .comic .subscription {
   color:gray;
 }
+
 
 
 /*******************/

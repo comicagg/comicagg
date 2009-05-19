@@ -42,11 +42,15 @@ function loadimgobj(obj) {
 // comic list
 // **************
 
-function show_last(id, tmp, url) {
-  Element.show('last' + id);
-  Element.show('hidelast' + id);
-  Element.hide('showlast' + id);
-  loadimg('last' + id, tmp, url);
+function show_last(id, url) {
+	if (comics_width == -1) {
+		comics_width = $('comic'+id).getWidth();
+	}
+	Element.show('last' + id);
+	Element.show('hidelast' + id);
+	Element.hide('showlast' + id);
+	tmpimg = Image();
+	loadimg('last' + id, tmpimg, url);
 }
 
 function hide_last(id) {

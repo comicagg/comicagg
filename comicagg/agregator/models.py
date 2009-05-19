@@ -25,7 +25,7 @@ class Comic(models.Model):
 	ended = models.BooleanField('Comic terminado', default=False, help_text='Si un comic termina marcar esta opción y desactivarlo también')
 
 	#campo para añadir una funcion custom de actualizacion
-	help_text="""Debe añadir al array <i>historys</i> los objetos ComicHistory nuevos.<br/>
+	help_text="""Debe añadir al array <i>history_set</i> los nuevos objetos ComicHistory. Con <i>comic</i> se referencia al comic actual.<br/>
 	Funciones disponibles:<br/>
 		<b>- list open_url(comic, url)</b><br/>
 		<b>- MatchObject match_lines(comic, lineas, regexp, backwards)</b><br/>
@@ -37,6 +37,7 @@ h = ComicHistory(comic=comic, url=comic.last_image)<br/>
 h.save()<br/>
 comic.save()<br/>
 return h<br/>
+		<b>- CUIDADO CON LA INDENTACION.</b><br/>
 	"""
 	custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text=help_text)
 	#ALTER TABLE agregator_comic add "custom_func" text NULL;

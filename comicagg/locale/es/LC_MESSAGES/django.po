@@ -1,4 +1,4 @@
-# translation of django.po to Español
+# translation of django.po to Spanish
 # translation of django.po for Comic Aggregator to Español
 # Copyright (C) 2009 Jesús Fernández Sáez
 # This file is distributed under the same license as the comicagg package.
@@ -6,14 +6,15 @@
 # Jesús Fernández <esu@proyectoanonimo.com>, 2009.
 # Jesus Fernandez <esu@proyectoanonimo.com>, 2009.
 # Jesús Fernández <esu@kumomi.es>, 2009.
+# Jesus Fernandez <esu@kumomi.es>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-19 21:13+0200\n"
-"PO-Revision-Date: 2009-04-19 21:14+0200\n"
-"Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
-"Language-Team: Español <es@li.org>\n"
+"POT-Creation-Date: 2009-05-19 20:48+0200\n"
+"PO-Revision-Date: 2009-05-19 20:48+0200\n"
+"Last-Translator: Jesus Fernandez <esu@kumomi.es>\n"
+"Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -40,15 +41,15 @@ msgstr "Usuario o contraseña no válida"
 msgid "Password reset on %s"
 msgstr "Cambio de contraseña en %s"
 
-#: agregator/views.py:177 agregator/views.py:206
+#: agregator/views.py:180 agregator/views.py:209
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:302 templates/admin/index.html:46
+#: agregator/views.py:296 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:588
+#: agregator/views.py:600
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -107,11 +108,11 @@ msgstr "Sitio de administración de Comic Aggregator"
 msgid "Comic Aggregator administration"
 msgstr "Administración de Comic Aggregator"
 
-#: templates/admin/check.html:9
+#: templates/admin/check.html:10
 msgid "was updated."
 msgstr "fue actualizado."
 
-#: templates/admin/check.html:9
+#: templates/admin/check.html:10
 msgid "readers notified."
 msgstr "lectores notificados."
 
@@ -171,42 +172,42 @@ msgstr ""
 "Parece que el servidor está teniendo algún problema ahora mismo. Inténtalo "
 "de nuevo dentro de un rato."
 
-#: templates/base/base.html:53
+#: templates/base/base.html:54
 msgid "Logged in as "
 msgstr "Conectado como "
 
-#: templates/base/base.html:54 templates/base/agregator/read.html:4
+#: templates/base/base.html:55 templates/base/agregator/read.html:4
 msgid "Read comics"
 msgstr "Leer comics"
 
-#: templates/base/base.html:55 templates/base/agregator/configure.html:3
+#: templates/base/base.html:56 templates/base/agregator/configure.html:3
 #: templates/base/agregator/configure.html:9
 msgid "Choose comics"
 msgstr "Elegir comics"
 
-#: templates/base/base.html:56 templates/base/base.html.py:65
+#: templates/base/base.html:57 templates/base/base.html.py:66
 #: templates/base/help/index.html:20
 msgid "Comic list"
 msgstr "Lista de comics"
 
-#: templates/base/base.html:57
+#: templates/base/base.html:58
 msgid "Account"
 msgstr "Perfil"
 
-#: templates/base/base.html:58 templates/base/base.html.py:66
+#: templates/base/base.html:59 templates/base/base.html.py:67
 #: templates/base/help/index.html:3
 msgid "Help"
 msgstr "Ayuda"
 
-#: templates/base/base.html:60
+#: templates/base/base.html:61
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base/base.html:63 templates/base/registration/login_form.html:3
+#: templates/base/base.html:64 templates/base/registration/login_form.html:3
 msgid "Login"
 msgstr "Entrar"
 
-#: templates/base/base.html:64
+#: templates/base/base.html:65
 msgid "Register"
 msgstr "Registrarse"
 
@@ -289,121 +290,88 @@ msgstr ""
 msgid "These are the last added comics:"
 msgstr "Estos han sido los últimos comics añadidos:"
 
-#: templates/base/agregator/comic_list.html:3
+#: templates/base/agregator/comic_list.html:6
 msgid "Full list"
 msgstr "Lista completa"
 
-#: templates/base/agregator/comic_list.html:6
+#: templates/base/agregator/comic_list.html:9
 msgid "This are all the comics in the database"
 msgstr "Estos son todos los comics que tenemos"
 
-#: templates/base/agregator/comic_list.html:8
+#: templates/base/agregator/comic_list.html:10
+msgid "Jump to:"
+msgstr "Saltar a:"
+
+#: templates/base/agregator/comic_list.html:11
 #: templates/base/agregator/comic_list.html:12
 msgid "Active comics"
 msgstr "Comics activos"
 
-#: templates/base/agregator/comic_list.html:9
-#: templates/base/agregator/comic_list.html:58
-msgid "Inactive comics"
-msgstr "Comics desactivados"
+#: templates/base/agregator/comic_list.html:11
+msgid "inactive comics"
+msgstr "comics desactivados"
 
-#: templates/base/agregator/comic_list.html:10
-#: templates/base/agregator/comic_list.html:73
-msgid "Ended comics"
-msgstr "Comics terminados"
+#: templates/base/agregator/comic_list.html:11
+msgid "ended comics"
+msgstr "comics terminados"
 
 #: templates/base/agregator/comic_list.html:13
-msgid "Filtering with tag "
-msgstr "Filtrando con la etiqueta "
-
-#: templates/base/agregator/comic_list.html:13
-msgid "remove filter"
-msgstr "quitar filtro"
-
-#: templates/base/agregator/comic_list.html:14
 msgid "Tag cloud"
 msgstr "Nube de etiquetas"
 
-#: templates/base/agregator/comic_list.html:20
+#: templates/base/agregator/comic_list.html:19
 msgid "Sorted by"
 msgstr "Ordenados por"
 
-#: templates/base/agregator/comic_list.html:20
-#: templates/base/agregator/comic_list.html:22
+#: templates/base/agregator/comic_list.html:19
+#: templates/base/agregator/comic_list.html:21
 msgid "name"
 msgstr "nombre"
 
-#: templates/base/agregator/comic_list.html:20
-#: templates/base/agregator/comic_list.html:22
+#: templates/base/agregator/comic_list.html:19
+#: templates/base/agregator/comic_list.html:21
+#: templates/base/agregator/comic_list.html:33
+#: templates/base/agregator/comic_list.html:49
+#: templates/base/agregator/comic_list.html:65
 msgid "rating"
 msgstr "puntuación"
 
-#: templates/base/agregator/comic_list.html:20
-#: templates/base/agregator/comic_list.html:22
-#: templates/base/agregator/comic_list.html:36
+#: templates/base/agregator/comic_list.html:19
+#: templates/base/agregator/comic_list.html:21
+#: templates/base/agregator/comic_list.html:33
+#: templates/base/agregator/comic_list_comic.html:15
 msgid "readers"
 msgstr "lectores"
 
-#: templates/base/agregator/comic_list.html:22
+#: templates/base/agregator/comic_list.html:19
+msgid "and filtering with the tag "
+msgstr "y filtrando con la etiqueta "
+
+#: templates/base/agregator/comic_list.html:19
+msgid "remove filter"
+msgstr "quitar filtro"
+
+#: templates/base/agregator/comic_list.html:21
 msgid "Sort by:"
 msgstr "Ordenar por:"
 
-#: templates/base/agregator/comic_list.html:32
-#: templates/base/agregator/comic_list.html:64
-#: templates/base/agregator/comic_list.html:79
-msgid "Tag cloud:"
-msgstr "Nube de etiquetas:"
+#: templates/base/agregator/comic_list.html:33
+#: templates/base/agregator/comic_list.html:49
+#: templates/base/agregator/comic_list.html:65
+msgid "vote"
+msgstr "voto"
 
-#: templates/base/agregator/comic_list.html:34
-#: templates/base/agregator/comic_list.html:66
-#: templates/base/agregator/comic_list.html:81
-msgid "Rating: "
-msgstr "Puntuación: "
-
-#: templates/base/agregator/comic_list.html:34
-#: templates/base/agregator/comic_list.html:66
-#: templates/base/agregator/comic_list.html:81
-msgid "votes"
-msgstr "votos"
-
-#: templates/base/agregator/comic_list.html:34
+#: templates/base/agregator/comic_list.html:33
+#: templates/base/agregator/comic_list.html:49
+#: templates/base/agregator/comic_list.html:65
 msgid "positive"
 msgstr "positivos"
 
-#: templates/base/agregator/comic_list.html:35
-#: templates/base/agregator/comic_list.html:67
-#: templates/base/agregator/comic_list.html:82
-msgid "Last update: "
-msgstr "Última actualización: "
+#: templates/base/agregator/comic_list.html:37
+msgid "Inactive comics"
+msgstr "Comics desactivados"
 
 #: templates/base/agregator/comic_list.html:38
-msgid "Show last strip"
-msgstr "Ver la última tira"
-
-#: templates/base/agregator/comic_list.html:39
-msgid "Hide last strip"
-msgstr "Ocultar la tira"
-
-#: templates/base/agregator/comic_list.html:48
-msgid "You are reading this comic."
-msgstr "Estás leyendo este comic."
-
-#: templates/base/agregator/comic_list.html:48
-msgid "Remove it from my list"
-msgstr "Quitarlo de mi lista"
-
-#: templates/base/agregator/comic_list.html:49
-msgid "Add this comic to my list"
-msgstr "Añadirlo a mi lista"
-
-#: templates/base/agregator/comic_list.html:53
-#: templates/base/agregator/comic_list.html:68
-#: templates/base/agregator/comic_list.html:83
-#: templates/base/agregator/read.html:58
-msgid "Go up"
-msgstr "Subir"
-
-#: templates/base/agregator/comic_list.html:59
 msgid ""
 "This comics are inactive in the database. That means that even though they "
 "were added to the database they were found not to work properly and "
@@ -413,7 +381,11 @@ msgstr ""
 "base de datos parece que no funcionan bien. Quizá en el futuro vuelvan a "
 "activarse de nuevo si se encuentra una solución."
 
-#: templates/base/agregator/comic_list.html:74
+#: templates/base/agregator/comic_list.html:53
+msgid "Ended comics"
+msgstr "Comics terminados"
+
+#: templates/base/agregator/comic_list.html:54
 msgid ""
 "Either <i>The End</i> was written in their last strip or the author decided "
 "to put the comic in an indefinite hiatus so there won't be more updates "
@@ -425,6 +397,44 @@ msgstr ""
 "habrá más actualizaciones durante un tiempo. No nos gusta borrar comics de "
 "la base de datos así que los dejamos aquí para que no se pierdan en la "
 "Historia."
+
+#: templates/base/agregator/comic_list_comic.html:4
+#: templates/base/agregator/comic_list_comic.html:11
+#: templates/base/agregator/comic_list_comic.html:36
+msgid "Tag cloud:"
+msgstr "Nube de etiquetas:"
+
+#: templates/base/agregator/comic_list_comic.html:6
+#: templates/base/agregator/comic_list_comic.html:13
+#: templates/base/agregator/comic_list_comic.html:38
+msgid "Website"
+msgstr "Página web"
+
+#: templates/base/agregator/comic_list_comic.html:7
+#: templates/base/agregator/comic_list_comic.html:14
+#: templates/base/agregator/comic_list_comic.html:39
+msgid "Last update: "
+msgstr "Última actualización: "
+
+#: templates/base/agregator/comic_list_comic.html:19
+msgid "Show last strip"
+msgstr "Ver la última tira"
+
+#: templates/base/agregator/comic_list_comic.html:20
+msgid "Hide last strip"
+msgstr "Ocultar la tira"
+
+#: templates/base/agregator/comic_list_comic.html:29
+msgid "You are reading this comic."
+msgstr "Estás leyendo este comic."
+
+#: templates/base/agregator/comic_list_comic.html:29
+msgid "Remove it from my list"
+msgstr "Quitarlo de mi lista"
+
+#: templates/base/agregator/comic_list_comic.html:30
+msgid "Add this comic to my list"
+msgstr "Añadirlo a mi lista"
 
 #: templates/base/agregator/configure.html:10
 msgid ""
@@ -585,6 +595,10 @@ msgstr "Más"
 msgid "Report broken image"
 msgstr "Avisar imagen rota"
 
+#: templates/base/agregator/read.html:58
+msgid "Go up"
+msgstr "Subir"
+
 #: templates/base/agregator/read.html:62
 msgid "Mark as read"
 msgstr "Marcar como leída"
@@ -708,7 +722,9 @@ msgstr ""
 msgid ""
 "Currently there are %(count)s requests waiting to be added. We have to add "
 "them one by one by hand so, please, be patient. Thanks!"
-msgstr "Ahora mismo hay %(count)s peticiones esperando. Tenemos que añadirlas a mano una a una, así que ten un poco de paciencia. ¡Gracias!"
+msgstr ""
+"Ahora mismo hay %(count)s peticiones esperando. Tenemos que añadirlas a mano "
+"una a una, así que ten un poco de paciencia. ¡Gracias!"
 
 #: templates/base/agregator/request_comic.html:12
 msgid "The comic's Url"

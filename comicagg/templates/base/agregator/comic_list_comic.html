@@ -1,51 +1,44 @@
-    <script type="text/javascript">
-      url{{ comic.id }}="{{ comic.get_url|safe }}";
-			tmp{{ comic.id }} = new Image();
-    </script>
-    <div id="comic{{ comic.id }}" class="comic">
-		<h3><a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')">{{ comic.name }}</a></h3>
-      <div class="comic_cloud"><span class="label">{% trans 'Tag cloud:'%}</span><br/>{% tagcloud_comic comic %}</div>
-      <div>
-        <span class="label">{% trans 'Rating: '%}</span><b>{{ comic.getRating }}%</b> <span class="votes">({{ comic.votes }} {% trans 'votes' %}, {{ comic.positivevotes|toint }}% {% trans 'positive' %})</span><br />
-        <span class="label">{% trans 'Last update: '%}</span>{{ comic.last_check|date:"j F Y, H:i" }}<br />
-        {{ comic.subscription_set.count }} <span class="label">{% trans "readers" %}</span><br/>
-        <p>
-          <a id="showlast{{ comic.id }}" onclick="show_last({{ comic.id }}, tmp{{ comic.id }}, url{{ comic.id }})">{% trans "Show last strip" %}</a>
-          <a id="hidelast{{ comic.id }}" onclick="hide_last({{ comic.id}})" style="display:none">{% trans "Hide last strip" %}</a>
-        </p>
-        <p class="last_strip">
-          <img id="last{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}" style="display:none"/>
-        </p>
-{% if user.is_authenticated %}
-        <p id="subscription_{{ comic.id }}" class="subscription">
-          <img id="working{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading12.gif" alt="working" class="saving" style="display:none"/>
-{% with comic|is_in:user_comics as reading %}
-          <span id="reading{{ comic.id }}" {% if not reading %}style="display:none"{% endif %}>{% trans "You are reading this comic." %}&nbsp;<a onclick="removecomic({{ comic.id}});"><img src="{{ settings.MEDIA_URL }}images/remove12.png" alt="" />&nbsp;{% trans "Remove it from my list" %}</a></span>
-          <span id="notreading{{ comic.id }}" {% if reading %}style="display:none"{% endif %}><a onclick="addcomic({{ comic.id}});"><img src="{{ settings.MEDIA_URL }}images/add12.png" alt="" />&nbsp;{% trans "Add this comic to my list" %}</a></span>
-{% endwith %}
-        </p>
+{% load i18n agregator_tags %}
+<div id="holder{{ comic.id }}" class="holder">
+{% if comic.ended %}
+	<div class="comic_cloud"><span class="label">{% trans 'Tag cloud:'%}</span><br/>{% tagcloud_comic comic %}</div>
+	<p>
+		{% trans "Website" %}: <a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')">{{ comic.name }}</a><br/>
+		<span class="label">{% trans 'Last update: '%}</span>{{ comic.last_check|date:"j F Y, H:i" }}<br/>
+	</p>
+{% else %}
+	{% if comic.activo %}
+	<div class="comic_cloud"><span class="label">{% trans 'Tag cloud:'%}</span><br/>{% tagcloud_comic comic %}</div>
+	<p>
+		{% trans "Website" %}: <a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')">{{ comic.name }}</a><br/>
+		<span class="label">{% trans 'Last update: '%}</span>{{ comic.last_check|date:"j F Y, H:i" }}<br/>
+		{{ comic.subscription_set.count }} <span class="label">{% trans "readers" %}</span><br/>
+	</p>
+	<div class="last_strip">
+		<p>
+			<a id="showlast{{ comic.id }}" onclick="show_last({{ comic.id }}, '{{ comic.get_url|safe }}')">{% trans "Show last strip" %}</a>
+			<a id="hidelast{{ comic.id }}" onclick="hide_last({{ comic.id}})" style="display:none">{% trans "Hide last strip" %}</a>
+		</p>
+		<p class="strip">
+			<img id="last{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}" style="display:none"/>
+		</p>
+	{% if user.is_authenticated %}
+		<p id="subscription_{{ comic.id }}" class="subscription">
+			<img id="working{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading12.gif" alt="working" class="saving" style="display:none"/>
+	{% with comic|is_in:user_comics as reading %}
+			<span id="reading{{ comic.id }}" {% if not reading %}style="display:none"{% endif %}>{% trans "You are reading this comic." %}&#160;<a onclick="removecomic({{ comic.id}});"><img src="{{ settings.MEDIA_URL }}images/remove12.png" alt="" />&#160;{% trans "Remove it from my list" %}</a></span>
+			<span id="notreading{{ comic.id }}" {% if reading %}style="display:none"{% endif %}><a onclick="addcomic({{ comic.id}});"><img src="{{ settings.MEDIA_URL }}images/add12.png" alt="" />&#160;{% trans "Add this comic to my list" %}</a></span>
+	{% endwith %}
+		</p>
+	{% endif %}
+	</div>
+	{% else %}
+	<div class="comic_cloud"><span class="label">{% trans 'Tag cloud:'%}</span><br/>{% tagcloud_comic comic %}</div>
+	<p>
+		{% trans "Website" %}: <a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')">{{ comic.name }}</a><br/>
+		<span class="label">{% trans 'Last update: '%}</span>{{ comic.last_check|date:"j F Y, H:i" }}<br/>
+	</p>
+	{% endif %}
 {% endif %}
-        <p class="small_text text_right"><a href="#head"><img src="{{ settings.MEDIA_URL }}images/up12.png" alt="" />&nbsp;{% trans "Go up" %}</a></p>
-      </div>
-    </div>
-
-    <div id="comic{{ comic.id }}" class="comic">
-      <h3><a href="{{ comic.website }}">{{ comic.name }}</a></h3>
-<!--       <div class="comic_cloud"><span class="label">{% trans 'Tag cloud:'%}</span><br/>{% tagcloud_comic comic %}</div> -->
-      <div>
-        <span class="label">{% trans 'Rating: '%}</span><b>{{ comic.getRating }}%</b> <span class="votes">({{ comic.votes }} {% trans 'votes' %})</span><br />
-        <span class="label">{% trans 'Last update: '%}</span>{{ comic.last_check|date:"j F Y, H:i" }}<br />
-        <p class="small_text text_right"><a href="#head"><img src="{{ settings.MEDIA_URL }}images/up12.png" alt="" />&nbsp;{% trans "Go up" %}</a></p>
-      </div>
-    </div>
-
-
-    <div id="comic{{ comic.id }}" class="comic">
-      <h3><a href="{{ comic.website }}">{{ comic.name }}</a></h3>
-      <div class="comic_cloud"><span class="label">{% trans 'Tag cloud:'%}</span><br/>{% tagcloud_comic comic %}</div>
-      <div>
-        <span class="label">{% trans 'Rating: '%}</span><b>{{ comic.getRating }}%</b> <span class="votes">({{ comic.votes }} {% trans 'votes' %})</span><br />
-        <span class="label">{% trans 'Last update: '%}</span>{{ comic.last_check|date:"j F Y, H:i" }}<br />
-        <p class="small_text text_right"><a href="#head"><img src="{{ settings.MEDIA_URL }}images/up12.png" alt="" />&nbsp;{% trans "Go up" %}</a></p>
-      </div>
-    </div>
+	<div style="clear:both"></div>
+</div>

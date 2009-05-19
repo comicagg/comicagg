@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, HttpResponseServerError
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -14,11 +15,11 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
 	context['mediaurl'] = settings.MEDIA_URL
 
 	resp_text = render_to_string(template, context)
-	#ie no reconoce el mime que hay que usar para xhtml 1.1 :(
-	#response = HttpResponse(resp_text, mimetype="application/xhtml+xml")
 	response = responseClass(resp_text, mimetype=mime)
 	if xml:
 		response = responseClass(resp_text, mimetype='text/xml; charset="utf-8"')
+	#ie no reconoce el mime que hay que usar para xhtml 1.1 :(
+	#response = HttpResponse(resp_text, mimetype="application/xhtml+xml")
 	#response['Cache-Control'] = 'no-cache'
 	response['Cache-Control'] = 'max-age=1'
 	response['Expires'] = '-1'

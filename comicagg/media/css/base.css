@@ -589,18 +589,16 @@ a.tag_link {
 /*      Otras      */
 /*******************/
 
+#comic_list h4.jumpto {
+	margin-bottom:5px;
+}
+
+#comic_list div.jumpto {
+	margin-left:10px;
+}
 
 #comic_list h5 {
 	margin:10px;
-	padding:0;
-}
-
-#comic_list p {
-}
-
-#comic_list ul {
-	list-style-type:none;
-	margin:0;
 	padding:0;
 }
 
@@ -608,23 +606,30 @@ a.tag_link {
 	padding:2px;
 	margin:3px;
 	text-align:left;
-	border:1px solid #ddd;
+	border:1px solid #d0d0d0;
+	background: #f0f0f0;
 }
 
-#comic_list .comic div {
-	padding-left:10px;
+#comic_list .comic .button:hover {
+	cursor:pointer;
+}
+
+#comic_list .comic .holder {
+	padding:4px 18px;
+	background:white;
+	margin:0;
+	margin-top:3px;
+	border:1px solid #d0d0d0;
+}
+
+#comic_list .comic .holder p {
+	margin:0;
 }
 
 #comic_list .comic_cloud {
 	padding-left:10px;
 	float:right;
-	width:65%;
-}
-
-#comic_list .comic h3 {
-	margin:0;
-	padding:0;
-	margin-bottom:10px;
+	width:50%;
 }
 
 #comic_list .comic .label {
@@ -643,7 +648,11 @@ a.tag_link {
 	font-size:smaller;
 }
 
-#comic_list .last_strip {
+#comic_list .comic .last_strip p {
+	margin-top:5px;
+}
+
+#comic_list .comic .strip {
 	text-align:center;
 	clear:both;
 }
