@@ -3,62 +3,67 @@ from django.contrib import admin
 from comicagg.agregator.models import *
 
 class TagInline(admin.TabularInline):
-  model = Tag
-  ordering = ('name', 'comic',)
+	model = Tag
+	ordering = ('name', 'comic',)
 
 class ComicAdmin(admin.ModelAdmin):
-  list_display = ('name', 'activo', 'ended', 'rating', 'votes', 'last_check', 'last_image', )
-  search_fields = ['name']
-  save_on_top = True
-  inlines = [TagInline,]
-  fieldsets = (
-    ('Datos del comic', {
-      'fields' : ('name', 'website', 'activo', 'ended', 'notify')
-    }),
-    ('Configuración básica', {
-      'fields' : ('url', 'base_img', 'regexp', 'backwards')
-    }),
-    ('Opciones redirección', {
-      'classes': ('collapse',),
-      'fields' : ('url2', 'base2', 'regexp2', 'backwards2')
-    }),
-    ('Función personalizada', {
-      'classes': ('collapse',),
-      'fields' : ('custom_func',)
-    }),
-    ('Opciones avanzadas', {
-      'classes': ('collapse',),
-      'fields' : ('referer', 'fake_user_agent')
-    }),
-    ('Votos', {
-      'classes': ('collapse',),
-      'fields' : ('rating', 'votes')
-    }),
-    ('Otros datos', {
-      'fields' : ('last_check', 'last_image', 'last_image_alt_text')
-    }),
-  )
+	list_display = ('name', 'activo', 'ended', 'rating', 'votes', 'last_check', 'last_image', )
+	search_fields = ['name']
+	save_on_top = True
+	inlines = [TagInline,]
+	fieldsets = (
+		('Datos del comic', {
+			'fields' : ('name', 'website', 'activo', 'ended', 'notify')
+		}),
+		('Configuración básica', {
+			'classes': ('wide', ),
+			'fields' : ('url', 'base_img', 'regexp', 'backwards')
+		}),
+		('Opciones redirección', {
+			'classes': ('collapse', 'wide', ),
+			'fields' : ('url2', 'base2', 'regexp2', 'backwards2')
+		}),
+		('Función personalizada', {
+			'classes': ('collapse',),
+			'fields' : ('custom_func',)
+		}),
+		('Opciones avanzadas', {
+			'classes': ('collapse',),
+			'fields' : ('referer', 'fake_user_agent')
+		}),
+		('Votos', {
+			'classes': ('collapse',),
+			'fields' : ('rating', 'votes')
+		}),
+		('Otros datos', {
+			'fields' : ('last_check', 'last_image', 'last_image_alt_text')
+		}),
+	)
+	class Media:
+		css = {
+			'all': ('css/admin.css', )
+		}
 
 class ComicHistoryAdmin(admin.ModelAdmin):
-  list_display = ('comic', 'date', 'url',)
-  search_fields = ['comic__name']
-  ordering = ('-date', )
+	list_display = ('comic', 'date', 'url',)
+	search_fields = ['comic__name']
+	ordering = ('-date', )
 
 class SubscriptionAdmin(admin.ModelAdmin):
-  list_display = ('user', 'comic',)
-  search_fields = ['user__username']
-  ordering = ('user', 'position', )
+	list_display = ('user', 'comic',)
+	search_fields = ['user__username']
+	ordering = ('user', 'position', )
 
 class UnreadComicAdmin(admin.ModelAdmin):
-  list_display = ('user', 'comic', 'history',)
-  search_fields = ['user__username']
+	list_display = ('user', 'comic', 'history',)
+	search_fields = ['user__username']
 
 class NewComicAdmin(admin.ModelAdmin):
-  ordering = ('user', 'comic',)
-  search_fields = ['user__username', 'comic__name']
+	ordering = ('user', 'comic',)
+	search_fields = ['user__username', 'comic__name']
 
 class RequestAdmin(admin.ModelAdmin):
-  list_display = ('url', 'user', 'comment',)
+	list_display = ('url', 'user', 'comment',)
 
 admin.site.register(Comic, ComicAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
