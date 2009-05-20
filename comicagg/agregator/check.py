@@ -71,6 +71,11 @@ def default_check(comic):
 	except IndexError:
 		url = match.group(1)
 	last_image = comic.base_img % url#.decode("utf-8")
+	#coger el texto alternativo
+	try:
+		alt = match.group("alt")
+	except IndexError:
+		alt = None
 	#print ' fetched img %s' % last_image
 	#en este punto last_image debe estar completamente saneada, es decir
 	#si tiene entidades html, éstas pasadas a sus caracteres correspondientes
@@ -78,9 +83,10 @@ def default_check(comic):
 	if last_image == comic.last_image:
 		return None
 	comic.last_image = last_image
+	comic.last_image_alt_text = alt
 	#print u' new img %s' % self.last_image
 	comic.last_check = datetime.now()
-	h = ComicHistory(comic=comic, url=comic.last_image)
+	h = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt)
 	h.save()
 	comic.save()
 	return h

@@ -40,14 +40,14 @@ return h<br/>
 		<b>- CUIDADO CON LA INDENTACION.</b><br/>
 	"""
 	custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text=help_text)
-	#ALTER TABLE agregator_comic add "custom_func" text NULL;
+	#ALTER TABLE agregator_comic add "custom_func" text NULL default NULL;
 
 	#url that points to the web page with the last strip
 	url = models.URLField('Url donde se encuentra la imagen', verify_exists=False, null=True, blank=True, help_text='Si hay redirección no se utiliza')
 	#base adress for the image
 	base_img = models.CharField('Url base de la imagen', max_length=255, null=True, blank=True, help_text='Debe contener %s que es donde se pondrá lo capturado por la expresión regular')
 	#regexp for the image
-	regexp = models.CharField('Expresión regular', max_length=255, null=True, blank=True, help_text='Lo que se quiera capturar se pone <b>entre paréntesis</b>. Si hace falta usar paréntesis para capturar, se toma como url lo que vaya aquí dentro <b>(?P&lt;url><i>RE de captura</i>)</b>')
+	regexp = models.CharField('Expresión regular', max_length=255, null=True, blank=True, help_text='Lo que se quiera capturar se pone <b>entre paréntesis</b>.<br/>Si hace falta usar paréntesis para capturar, se toma como url lo que vaya aquí dentro <b>(?P&lt;url><i>RE de captura</i>)</b>.<br/>Para capturar el texto alternativo, usar la siguiente construcción <b>(?P&lt;alt><i>RE de captura</i>)</b>.')
 	#start searching from the end
 	backwards = models.BooleanField('Empezar desde el final', default=False)
 
@@ -65,6 +65,8 @@ return h<br/>
 
 	last_check = models.DateTimeField('Última actualización', blank=True)
 	last_image = models.URLField('Última imagen', blank=True, verify_exists=False)
+	last_image_alt_text = models.TextField('Texto alternativo', blank=True, null=True)
+	#ALTER TABLE agregator_comic add "last_image_alt_text" text NULL default NULL;
 
 	rating = models.IntegerField('Votos positivos', default=0)
 	votes = models.IntegerField('Votos totales', default=0)
@@ -159,6 +161,8 @@ class ComicHistory(models.Model):
 	comic = models.ForeignKey(Comic)
 	date = models.DateTimeField(default=datetime.now())
 	url = models.CharField(max_length=255)
+	alt_text = models.TextField('Texto alternativo', blank=True, null=True)
+	#ALTER TABLE agregator_comichistory add "alt_text" text NULL default NULL;
 
 	def __unicode__(self):
 		return u'%s %s' % (self.comic.name, self.date)

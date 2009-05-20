@@ -20,7 +20,7 @@
 			<a id="hidelast{{ comic.id }}" onclick="hide_last({{ comic.id}})" style="display:none">{% trans "Hide last strip" %}</a>
 		</p>
 		<p class="strip">
-			<img id="last{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}" style="display:none"/>
+			<img id="last{{ comic.id }}" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="{{ comic.name }}" style="display:none" title="{{ comic.last_image_alt_text }}"/>
 		</p>
 	{% if user.is_authenticated %}
 		<p id="subscription_{{ comic.id }}" class="subscription">

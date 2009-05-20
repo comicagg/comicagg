@@ -35,7 +35,7 @@ class ComicAdmin(admin.ModelAdmin):
       'fields' : ('rating', 'votes')
     }),
     ('Otros datos', {
-      'fields' : ('last_check', 'last_image')
+      'fields' : ('last_check', 'last_image', 'last_image_alt_text')
     }),
   )
 
