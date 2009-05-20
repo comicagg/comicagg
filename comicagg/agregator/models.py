@@ -2,8 +2,9 @@
 from comicagg.accounts.models import *
 from datetime import datetime, timedelta
 from django import forms
-from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.db import models
 from django.utils.http import urlquote
 from math import atan, pi, floor
 import re, urllib
@@ -25,20 +26,7 @@ class Comic(models.Model):
 	ended = models.BooleanField('Comic terminado', default=False, help_text='Si un comic termina marcar esta opción y desactivarlo también')
 
 	#campo para añadir una funcion custom de actualizacion
-	help_text="""Debe añadir al array <i>history_set</i> los nuevos objetos ComicHistory. Con <i>comic</i> se referencia al comic actual.<br/>
-	Funciones disponibles:<br/>
-		<b>- list open_url(comic, url)</b><br/>
-		<b>- MatchObject match_lines(comic, lineas, regexp, backwards)</b><br/>
-		<b>- Hay que comprobar de alguna manera que hay una tira nueva. Usar comic.last_image para comparar.</b><br/>
-		<b>- Actualizar comic y crear ComicHistory:</b><br/>
-comic.last_image = last_image<br/>
-comic.last_check = datetime.now()<br/>
-h = ComicHistory(comic=comic, url=comic.last_image)<br/>
-h.save()<br/>
-comic.save()<br/>
-return h<br/>
-		<b>- CUIDADO CON LA INDENTACION.</b><br/>
-	"""
+	help_text = 'Mirar la <a href="/docs/custom_func/">documentación</a>.'
 	custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text=help_text)
 	#ALTER TABLE agregator_comic add "custom_func" text NULL default NULL;
 

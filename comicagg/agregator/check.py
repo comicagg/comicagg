@@ -32,6 +32,7 @@ def custom_check(comic):
 		#actualizar last_image y last_image_alt_text
 		comic.last_image = history_set[0].url
 		comic.last_image_alt_text = history_set[0].alt_text
+		comic.last_check = datetime.now()
 		comic.save()
 		#llegado este punto, estamos seguros que son nuevas tiras, guardamos y notificamos
 		for h in history_set:
@@ -44,22 +45,12 @@ def custom_check(comic):
 def default_check(comic):
 	#si hay redireccion, obtener url de la redireccion
 	if comic.url2:
-		lineas = open_url(comic, comic.url2)
-		(match, rest) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
-		if not match:
-			raise NoMatchException, "%s" % comic.name
-		next_url = comic.base2 % geturl(match)#.decode("utf-8")
+		next_url = getredirect(comic)
 	else:
 		next_url = comic.url
 
 	#buscar url en la web que contiene la tira
-	lineas = open_url(comic, next_url)
-	(match, rest) = match_lines(comic, lineas, comic.regexp, comic.backwards)
-	if not match:
-		raise NoMatchException, "%s" % comic.name
-	last_image = comic.base_img % geturl(match)#.decode("utf-8")
-	#coger el texto alternativo
-	alt = getalt(match)
+	(last_image, alt) = getoneurl(comic, next_url)
 	#en este punto last_image debe estar completamente saneada, es decir
 	#si tiene entidades html, éstas pasadas a sus caracteres correspondientes
 	#y a continuación el url debe estar urlencoded
@@ -119,6 +110,26 @@ def match_lines(comic, lineas, regexp, backwards=False):
 		if match:
 			break
 	return (match, lineas)
+
+def getoneurl(comic, _url):
+	print "getoneurl"
+	lineas = open_url(comic, _url)
+	(match, rest) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+	if not match:
+		raise NoMatchException, "%s" % comic.name
+	url = comic.base_img % geturl(match)#.decode("utf-8")
+	#coger el texto alternativo
+	alt = getalt(match)
+	return (url, alt)
+
+def getredirect(comic):
+	print "getredirect"
+	lineas = open_url(comic, comic.url2)
+	(match, rest) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
+	if not match:
+		raise NoMatchException, "%s" % comic.name
+	next_url = comic.base2 % geturl(match)#.decode("utf-8")
+	return next_url
 
 def geturl(match):
 	try:
