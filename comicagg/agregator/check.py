@@ -2,6 +2,90 @@
 from comicagg.agregator.models import *
 import re, sys, urllib2
 
+#Funciones para comprobar comics
+
+def check_comic(comic):
+	#lo que devolvemos para indicar que se ha actualizado el comic
+	changes = False
+	#si el campo custom_func está tenemos una funcion personalizada
+	if comic.custom_func:
+		changes = custom_check(comic)
+	else:
+		h = default_check(comic)
+		if h:
+			notifiy_subscribers(h)
+			changes = True
+	return changes
+
+def custom_check(comic):
+	#la funcion custom debe rellenar este array con los history de las nuevas tiras
+	history_set = list()
+	f = comic.custom_func.replace('\r', '')
+	code = compile(f, '<string>', 'exec')
+	exec code
+	#si se han encontrado imagenes
+	if history_set:
+		#comprobar si son nuevas
+		print comic.last_image, history_set[0].url
+		if comic.last_image == history_set[0].url:
+			return False
+		#actualizar last_image y last_image_alt_text
+		comic.last_image = history_set[0].url
+		comic.last_image_alt_text = history_set[0].alt_text
+		comic.save()
+		#llegado este punto, estamos seguros que son nuevas tiras, guardamos y notificamos
+		for h in history_set:
+			h.save()
+			notifiy_subscribers(h)
+		return True
+	#no se ha encontrado ninguna imagen, lanzar excepcion
+	raise NoMatchException, "%s" % comic.name
+
+def default_check(comic):
+	#si hay redireccion, obtener url de la redireccion
+	if comic.url2:
+		lineas = open_url(comic, comic.url2)
+		(match, rest) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
+		if not match:
+			raise NoMatchException, "%s" % comic.name
+		next_url = comic.base2 % geturl(match)#.decode("utf-8")
+	else:
+		next_url = comic.url
+
+	#buscar url en la web que contiene la tira
+	lineas = open_url(comic, next_url)
+	(match, rest) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+	if not match:
+		raise NoMatchException, "%s" % comic.name
+	last_image = comic.base_img % geturl(match)#.decode("utf-8")
+	#coger el texto alternativo
+	alt = getalt(match)
+	#en este punto last_image debe estar completamente saneada, es decir
+	#si tiene entidades html, éstas pasadas a sus caracteres correspondientes
+	#y a continuación el url debe estar urlencoded
+	if last_image == comic.last_image:
+		return None
+	comic.last_image = last_image
+	comic.last_image_alt_text = alt
+	#print u' new img %s' % self.last_image
+	comic.last_check = datetime.now()
+	h = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt)
+	h.save()
+	comic.save()
+	return h
+
+def severalinpage(comic, history_set):
+	lineas = open_url(comic, comic.url)
+	(match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+	while match:
+		url = comic.base_img % geturl(match)
+		alt = getalt(match)
+		h = ComicHistory(comic=comic, url=url, alt_text=alt)
+		history_set.append(h)
+		(match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+
+#Funciones auxiliares para la comprobación
+
 def open_url(comic, _url):
 	#limpiar la url (entidades html)
 	url = unescape(_url)
@@ -34,81 +118,28 @@ def match_lines(comic, lineas, regexp, backwards=False):
 		match = prog.search(linea)
 		if match:
 			break
-	if not match:
-		raise NoMatchException, "%s" % comic.name
 	return (match, lineas)
 
-def custom_check(comic):
-	#la funcion custom debe rellenar este array con los history de las nuevas tiras
-	history_set = list()
-	f = comic.custom_func.replace('\r', '')
-	code = compile(f, '<string>', 'exec')
-	exec code
-	for h in history_set:
-		notifiy_subscribers(h)
-	if history_set:
-		return True
-	return False
-
-def default_check(comic):
-	#si hay redireccion, obtener url de la redireccion
-	if comic.url2:
-		lineas = open_url(comic, comic.url2)
-		(match, rest) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
-		try:
-			url = match.group("url")
-		except IndexError:
-			url = match.group(1)
-			next_url = comic.base2 % url#.decode("utf-8")
-	else:
-		next_url = comic.url
-
-	#buscar url en la web que contiene la tira
-	lineas = open_url(comic, next_url)
-	(match, rest) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+def geturl(match):
 	try:
 		url = match.group("url")
 	except IndexError:
 		url = match.group(1)
-	last_image = comic.base_img % url#.decode("utf-8")
-	#coger el texto alternativo
+	#devolver la url sin entidades html
+	return unescape(url)
+
+def getalt(match):
 	try:
 		alt = match.group("alt")
 	except IndexError:
 		alt = None
-	#print ' fetched img %s' % last_image
-	#en este punto last_image debe estar completamente saneada, es decir
-	#si tiene entidades html, éstas pasadas a sus caracteres correspondientes
-	#y a continuación el url debe estar urlencoded
-	if last_image == comic.last_image:
-		return None
-	comic.last_image = last_image
-	comic.last_image_alt_text = alt
-	#print u' new img %s' % self.last_image
-	comic.last_check = datetime.now()
-	h = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt)
-	h.save()
-	comic.save()
-	return h
+	return alt
 
 def notifiy_subscribers(history):
 	#por cada usuario que ha seleccionado el comic, añadir un unread
 	subscriptions = history.comic.subscription_set.all()
 	for subscription in subscriptions:
 		unread = UnreadComic.objects.get_or_create(user=subscription.user, history=history, comic=subscription.comic)
-
-def check_comic(comic):
-	#lo que devolvemos para indicar que se ha actualizado el comic
-	changes = False
-	#si el campo custom_func está tenemos una funcion personalizada
-	if comic.custom_func:
-		changes = custom_check(comic)
-	else:
-		h = default_check(comic)
-		if h:
-			notifiy_subscribers(h)
-			changes = True
-	return changes
 
 import re, htmlentitydefs
 
