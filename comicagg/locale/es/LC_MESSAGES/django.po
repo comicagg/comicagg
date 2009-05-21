@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-19 20:48+0200\n"
+"POT-Creation-Date: 2009-05-21 17:57+0200\n"
 "PO-Revision-Date: 2009-05-19 20:48+0200\n"
 "Last-Translator: Jesus Fernandez <esu@kumomi.es>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -276,7 +276,8 @@ msgstr ""
 msgid ""
 "Log in to read your new comics or create a new account and start choosing "
 "your own list."
-msgstr "Entra para leer los nuevos comics o crea una cuenta y elige qué comics leer."
+msgstr ""
+"Entra para leer los nuevos comics o crea una cuenta y elige qué comics leer."
 
 #: templates/base/welcome.html:31
 msgid ""
@@ -999,7 +1000,8 @@ msgstr ""
 
 #: templates/base/help/index.html:24
 msgid ". Of course, you can't assign the same tag to a comic more than once."
-msgstr ". Por supuesto, no puedes asignar la misma etiqueta a un comic varias veces."
+msgstr ""
+". Por supuesto, no puedes asignar la misma etiqueta a un comic varias veces."
 
 #: templates/base/help/index.html:25
 msgid "Firefox Add-on: Comic Aggregator Notifier"
@@ -1197,8 +1199,10 @@ msgid "create a new account."
 msgstr "crear una nueva cuenta."
 
 #: templates/base/registration/login_form.html:29
-msgid "If you can't remember your password follow this link to get a new password:"
-msgstr "Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
+msgid ""
+"If you can't remember your password follow this link to get a new password:"
+msgstr ""
+"Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
 
 #: templates/base/registration/login_form.html:29
 msgid "reset my password."
@@ -1246,8 +1250,10 @@ msgid "New password again."
 msgstr "Otra vez."
 
 #: templates/base/registration/password_change_form.html:43
-msgid "If you can't remember your current password, use the password reset page"
-msgstr "Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
+msgid ""
+"If you can't remember your current password, use the password reset page"
+msgstr ""
+"Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
 
 #: templates/base/registration/password_change_form.html:43
 msgid "here"
@@ -1364,7 +1370,8 @@ msgstr "Las contraseñas no coinciden"
 
 #: templates/base/registration/register.html:15
 msgid "The username you selected is already taken. Please choose another one."
-msgstr "El usuario que has elegido ya está siendo usado. Por favor, elige otro."
+msgstr ""
+"El usuario que has elegido ya está siendo usado. Por favor, elige otro."
 
 #: templates/base/registration/register.html:16
 msgid "You have to write \"comic\" in the field."
@@ -1378,7 +1385,8 @@ msgstr "Usuario"
 msgid ""
 "30 characters max. Alphanumeric characters only (letters, digits and "
 "underscores)."
-msgstr "30 caracteres máximo. Caracteres alfanuméricos sólo (letras, números y _)."
+msgstr ""
+"30 caracteres máximo. Caracteres alfanuméricos sólo (letras, números y _)."
 
 #: templates/base/registration/register.html:29
 #: templates/base/registration/register.html:36
@@ -1422,4 +1430,3 @@ msgid ""
 "Your account has been created. You can now log in using the username you "
 "selected."
 msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
-
