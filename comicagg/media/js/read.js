@@ -200,20 +200,23 @@ function menuToggle(id) {
 }
 
 function reportComic(id) {
-  var url = url_report;
-  Element.show('working'+id);
-  var params = {'id':id}
-  new Ajax.Request(url, {
-    method: 'post',
-    parameters: params,
-    onSuccess: function(response) {
-      Element.hide('working'+id);
-      Element.show('tick'+id);
-      setTimeout("Effect.Fade('tick"+id+"')", 10000)
-    },
-    onFailure: function(response) {
-    }
-  });
+	var url = url_report;
+	Element.show('working'+id);
+	var params = {'id':id}
+	new Ajax.Request(url, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(response) {
+			Element.hide('working'+id);
+			Element.hide('workingerror'+id);
+			Element.show('tick'+id);
+			setTimeout("Effect.Fade('tick"+id+"')", 10000)
+		},
+		onFailure: function(response) {
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+		}
+	});
 }
 
 function removeComicLink(id) {
@@ -368,11 +371,11 @@ function forget_new_comics()
 	var url = url_forget_new_comics_quick;
 	new Ajax.Request(url, {
 		method: 'post',
-  onSuccess: function(response) {
-	  Effect.toggle('new_comics_notice');
-  },
-  onFailure: function(response) {
-  }
+		onSuccess: function(response) {
+			Effect.toggle('new_comics_notice');
+		},
+		onFailure: function(response) {
+		}
 	});
 }
 
@@ -404,20 +407,26 @@ function updateNavCount() {
 
 function rate(id, val)
 {
+	Element.show('working'+id);
 	var url = url_rate;
 	var params = {'id': id, 'value':val}
 	new Ajax.Request(url, {
 		method: 'post',
 		parameters: params,
 		onSuccess: function(transport) {
-			mark_as_read(id);
-			Element.hide('sel'+id);
+			if(transport.status == 0) {
+				Element.hide('working'+id);
+				Element.show('workingerror'+id);
+			} else {
+				mark_as_read(id);
+				Element.hide('sel'+id);
+				Element.hide('working'+id);
+				Element.hide('workingerror'+id);
+			}
 		},
 		onFailure: function(transport) {
-			console.log("[CA] Got an error, dumping...")
-			console.log(last_event);
-			console.log(transport);
-			console.log("[CA] EOD")
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
 		}
 	});
 }
@@ -426,38 +435,52 @@ function mark_as_read(id)
 {
 	var url = url_mark_as_read;
 	var params = {'id': id}
+	Element.show('working'+id);
 	new Ajax.Request(url, {
 		method: 'post',
 		parameters: params,
-		onSuccess: function(response) {
-			ret = response.responseText;
-			if (ret==0)
-			{
-				Element.show('mark_'+id); //muestra tick
-				Element.hide('nav_all_no_'+id); //oculta numero en barra navegacion
-				Element.hide('nav_unread_no_'+id); //oculta numero en barra navegacion
-				$('nav_all_no_'+id).parentNode.className = ""; //quita la negrita del nombre del comic en navegacion
-				Element.hide('new_'+id);  //oculta cartel nuevo en titulo del comic
-				Element.show('done_read'+id); //muestra cartel leido
-				Element.hide('mark'+id); //oculta enlace para marcar como leido
-				Element.hide('sel'+id); //oculta votacion
-				read_list[id] = 'read_'+id; //añade el comic a la lista de leidos
-				unread_list[id] = undefined; //quita el comic de la lista de no leidos
-				balanceColumns(id); //quitar el comic de la lista sin leer
-				count--; //restar el contador de comics sin leer
-				updateTitle();
-				updateNavCount();
-				if(count<1) {
-					Element.hide('mark_all');
+		onSuccess: function(transport) {
+			if(transport.status == 0) {
+				Element.hide('working'+id);
+				Element.show('workingerror'+id);
+			} else {
+				ret = transport.responseText;
+				if (ret==0)
+				{
+					Element.hide('working'+id);
+					Element.hide('workingerror'+id);
+					Element.show('mark_'+id); //muestra tick
+					Element.hide('nav_all_no_'+id); //oculta numero en barra navegacion
+					Element.hide('nav_unread_no_'+id); //oculta numero en barra navegacion
+					$('nav_all_no_'+id).parentNode.className = ""; //quita la negrita del nombre del comic en navegacion
+					Element.hide('new_'+id);  //oculta cartel nuevo en titulo del comic
+					Element.show('done_read'+id); //muestra cartel leido
+					Element.hide('mark'+id); //oculta enlace para marcar como leido
+					Element.hide('sel'+id); //oculta votacion
+					read_list[id] = 'read_'+id; //añade el comic a la lista de leidos
+					unread_list[id] = undefined; //quita el comic de la lista de no leidos
+					balanceColumns(id); //quitar el comic de la lista sin leer
+					count--; //restar el contador de comics sin leer
+					updateTitle();
+					updateNavCount();
+					if(count<1) {
+						Element.hide('mark_all');
+					}
+				}
+				else
+				{
+					Element.hide('working'+id);
+					Element.show('workingerror'+id);
 				}
 			}
-			else
-			{
-	//         $('read').innerHTML = response.responseText;
-			}
 		},
-		onFailure: function(response) {
-	//       $('read').innerHTML = response.responseText;
+		onFailure: function(transport) {
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+		},
+		onException: function(req, exc) {
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
 		}
 	});
 }

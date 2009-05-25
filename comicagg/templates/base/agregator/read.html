@@ -37,20 +37,25 @@
 {% if list %}
 	{# list es una lista de unread_comic #}
 	{% for item in list %}
-		<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_unread{{ item.id}}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" title="{{ item.history.alt_text }}"/></a><br/>
+	<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_unread{{ item.id}}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" title="{{ item.history.alt_text|default_if_none:"" }}"/></a><br/>
 	{% endfor %}
 {# el usuario no tiene comics nuevos #}
 {% else %}
 	{% if user.get_profile.hide_read %}
 		{# para la lista de url de los comics leidos #}
-		<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" title="{{ comic.last_image_alt_text }}" /></a>
+	<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" title="{{ comic.last_image_alt_text|default_if_none:"" }}" /></a>
 	{% else %}
-		<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" title="{{ comic.last_image_alt_text }}" /></a>
+	<a href="{{ comic.website }}" onclick="return abrirWeb('{{ comic.website|safe }}')"><img id="img_read{{ comic.id }}" src="{{ mediaurl }}images/loading.gif" alt="{{ comic.name }}" title="{{ comic.last_image_alt_text|default_if_none:"" }}" /></a>
 	{% endif %}
 {% endif %}
     <div class="comic_info">
 {% spaceless %}
-			<div class="opts_right"><img id="working{{ comic.id }}" src="{{ mediaurl }}images/loading12.gif" alt="" style="display:none"/><img id="tick{{ comic.id }}" src="{{ mediaurl }}images/tick12.png" alt="" style="display:none"/>&nbsp;<a id="more{{ comic.id }}" class="more">{% trans 'More'%}</a>&nbsp;<img id="menu_image{{ comic.id }}" class="more_img" src="{{ mediaurl }}images/menu_off.png" alt="" />
+			<div class="opts_right">
+				<img id="working{{ comic.id }}" src="{{ mediaurl }}images/loading12.gif" alt="loading" style="display:none"/>
+				<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/remove12.png" alt="error" title="error :/" style="display:none"/>
+				<img id="tick{{ comic.id }}" src="{{ mediaurl }}images/tick12.png" alt="" style="display:none"/>
+				&nbsp;<a id="more{{ comic.id }}" class="more">{% trans 'More'%}</a>&nbsp;
+				<img id="menu_image{{ comic.id }}" class="more_img" src="{{ mediaurl }}images/menu_off.png" alt="" />
 				<ul id="menu{{ comic.id }}" class="menu" style="display:none">
 					<li class="report">{% trans "Report broken image" %}&nbsp;<img alt="" src="{{ mediaurl }}images/broken12.png"/></li>
 					<li class="remove">{% trans "Remove from list" %}&nbsp;<img alt="" src="{{ mediaurl }}images/remove12.png"/></li>
@@ -58,9 +63,26 @@
 					<li class="up">{% trans 'Go up'%}&nbsp;<img alt="" src="{{ mediaurl }}images/up12.png"/></li>
 				</ul>
 			</div>
-			<div class="opts_left">
-				{% if list %}<a id="mark{{ comic.id }}" class="mark_as_read">{% trans 'Mark as read'%}</a><span id="done_read{{ comic.id }}" style="display:none">{% trans 'Up to date'%}&nbsp;</span><img id="mark_{{ comic.id }}" src="{{ mediaurl }}images/tick.png" alt="" style="display:none" />&nbsp;&nbsp;/&nbsp;&nbsp;<span id="sel{{ comic.id }}">{% trans 'Rate it!'%} <a id="ratedown{{ comic.id }}" class="ratedown"><img src="{{ mediaurl}}images/vote_down.png" alt=""/></a>&nbsp;&nbsp;<a id="rateup{{ comic.id }}" class="rateup"><img src="{{ mediaurl}}images/vote_up.png" alt=""/></a>&nbsp;&nbsp;/&nbsp;&nbsp;</span>{% endif %}
-				<a id="tags{{ comic.id }}" class="tags_link"><span id="showtags{{ comic.id }}">{% trans 'Tags'%}</span><span id="hidetags{{ comic.id }}" style="display:none">{% trans 'Hide tags'%}</span></a>
+			<div class="opts_left">{% if list %}
+				<a id="mark{{ comic.id }}" class="mark_as_read">{% trans 'Mark as read'%}</a>
+				<span id="done_read{{ comic.id }}" style="display:none">{% trans 'Up to date'%}&nbsp;</span>
+				<img id="mark_{{ comic.id }}" src="{{ mediaurl }}images/tick.png" alt="" style="display:none" />
+				&nbsp;&nbsp;/&nbsp;&nbsp;
+				<span id="sel{{ comic.id }}">
+					{% trans 'Rate it!'%}&nbsp;
+					<a id="ratedown{{ comic.id }}" class="ratedown">
+						<img src="{{ mediaurl}}images/vote_down.png" alt=""/>
+					</a>
+					&nbsp;&nbsp;
+					<a id="rateup{{ comic.id }}" class="rateup">
+						<img src="{{ mediaurl}}images/vote_up.png" alt=""/>
+					</a>
+					&nbsp;&nbsp;/&nbsp;&nbsp;
+				</span>{% endif %}
+				<a id="tags{{ comic.id }}" class="tags_link">
+					<span id="showtags{{ comic.id }}">{% trans 'Tags'%}</span>
+					<span id="hidetags{{ comic.id }}" style="display:none">{% trans 'Hide tags'%}</span>
+				</a>
 			</div>
 			<div class="opts_left_error" style="display:none">
 				<a id="reloadimgs{{ comic.id }}" class="reloadimgs">{% trans "Reload" %}</a>
@@ -73,7 +95,7 @@
 	</div>
 {% endfor %}
 </div>
-{% if random %}
+{% if random_comic %}
 {# si hay random es que hay algun comic que no lee, así que mostrar un comic aleatorio #}
 <div id="no_unread_notice" class="text_center"{% if not has_unread and user.get_profile.hide_read %}{# mostrar el comic aleatorio #}{% else %}style="display:none"{% endif %}>
 	<p><b>{% trans 'No new comics to read! Wanna ' %}<a href="{% url configure %}">{% trans 'add some more'%}</a>?</b></p>

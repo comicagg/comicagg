@@ -34,7 +34,7 @@
 	{% endspaceless %}</div>
 {% endfor %}
 	</div>
-	<h4 id="inactive">{% trans 'Inactive comics' %} <span class="small_text">({{ inactive_list|length }} comic{{ inactive_list|length|pluralize }})</span></h4>
+	<h4 id="inactive">{% trans 'Inactive comics' %} <span class="small_text">({{ inactive_list|length }} comic{{ inactive_list|length|pluralize }}) (<a href="#head">{% trans "go up" %}</a>)</span></h4>
 	<p class="info">{% trans "This comics are inactive in the database. That means that even though they were added to the database they were found not to work properly and therefore they were deactivated. In the future they may be active again."%}</p>
 	<div class="inactive_comics">
 {% for comic in inactive_list %}
@@ -50,7 +50,7 @@
 	{% endspaceless %}</div>
 {% endfor %}
 	</div>
-	<h4 id="ended">{% trans 'Ended comics' %} <span class="small_text">({{ ended_list|length }} comic{{ ended_list|length|pluralize }})</span></h4>
+	<h4 id="ended">{% trans 'Ended comics' %} <span class="small_text">({{ ended_list|length }} comic{{ ended_list|length|pluralize }}) (<a href="#head">{% trans "go up" %}</a>)</span></h4>
 	<p class="info">{% trans "Either <i>The End</i> was written in their last strip or the author decided to put the comic in an indefinite hiatus so there won't be more updates anytime soon. We don't like to delete comics from the database so they will be kept here so they won't fade away in History."%}</p>
 	<div class="ended_comics">
 {% for comic in ended_list %}

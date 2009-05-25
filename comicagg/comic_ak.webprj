@@ -136,6 +136,10 @@
     <item url="middleware/__init__.py" uploadstatus="1" />
     <item url="templates/base/maintenance.html" uploadstatus="1" />
     <item url="templates/base/agregator/read_avisos.html" uploadstatus="1" />
-    <item url="templates/admin/base_site.html" />
+    <item url="templates/admin/base_site.html" uploadstatus="1" />
+    <item url="media/css/admin.css" uploadstatus="1" />
+    <item url="media/js/comiclist.js" uploadstatus="1" />
+    <item url="templates/admin/custom_func.html" uploadstatus="1" />
+    <item url="templates/base/agregator/comic_list_comic.html" uploadstatus="1" />
   </project>
 </webproject>
