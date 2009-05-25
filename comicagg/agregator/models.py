@@ -28,7 +28,6 @@ class Comic(models.Model):
 	#campo para añadir una funcion custom de actualizacion
 	help_text = 'Mirar la <a href="/docs/custom_func/">documentación</a>.'
 	custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text=help_text)
-	#ALTER TABLE `agregator_comic` ADD `custom_func` TEXT NULL DEFAULT NULL 
 
 	#url that points to the web page with the last strip
 	url = models.URLField('Url donde se encuentra la imagen', verify_exists=False, null=True, blank=True, help_text='Si hay redirección no se utiliza')
@@ -53,8 +52,7 @@ class Comic(models.Model):
 
 	last_check = models.DateTimeField('Última actualización', blank=True)
 	last_image = models.URLField('Última imagen', blank=True, verify_exists=False)
-	last_image_alt_text = models.TextField('Texto alternativo', blank=True, null=True)
-	#ALTER TABLE `agregator_comic` ADD `last_image_alt_text` TEXT NULL DEFAULT NULL 
+	last_image_alt_text = models.TextField('Texto alternativo', blank=True, null=True) 
 
 	rating = models.IntegerField('Votos positivos', default=0)
 	votes = models.IntegerField('Votos totales', default=0)
@@ -150,7 +148,6 @@ class ComicHistory(models.Model):
 	date = models.DateTimeField(default=datetime.now())
 	url = models.CharField(max_length=255)
 	alt_text = models.TextField('Texto alternativo', blank=True, null=True)
-	#ALTER TABLE `agregator_comichistory` ADD `alt_text` TEXT NULL DEFAULT NULL
 
 	def __unicode__(self):
 		return u'%s %s' % (self.comic.name, self.date)
