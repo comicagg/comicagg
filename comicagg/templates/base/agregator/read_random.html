@@ -1,7 +1,7 @@
 {% load i18n %}
               <p>{% trans "This is a random strip of a comic you haven't added =)"%}</p>
               <h3><a href="{{ random_comic.comic.website }}">{{ random_comic.comic.name }}</a></h3>
-              <img src="{{ settings.MEDIA_URL }}images/loading.gif" alt="" id="img_random" title="{{ random_comic.alt_text|default_if_none:"" }}"/>
+              <img src="{{ settings.MEDIA_URL }}images/loading.gif" alt="" id="img_random" title="{{ random_comic.alt_text|safe|default_if_none:"" }}"/>
               <script type="text/javascript">
                 url_random = '{{ random_comic.get_url|safe }}';
                 tmp_random = new Image();
