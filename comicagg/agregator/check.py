@@ -100,6 +100,7 @@ def match_lines(comic, lineas, regexp, backwards=False):
 	rege = r'%s' % regexp
 	prog = re.compile(rege)
 	#search in every line for the regexp
+	match = None
 	while len(lineas) > 0:
 		linea = lineas.pop(indice)
 		try:
