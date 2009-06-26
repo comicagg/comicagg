@@ -245,6 +245,26 @@ input[type="submit"]:active, button:active {
 	padding-left:15px;
 }
 
+#nav_wrap {
+	font-size:8pt;
+}
+
+#navigation ul.column {
+	list-style-type:none;
+	padding:0;
+	float:left;
+	margin:0;
+	margin-right:10px;
+	margin-top:5px;
+}
+
+#navunread {
+	font-weight:bolder;
+}
+
+#nav_all {
+}
+
 #navtitle {
 	text-align:left;
 	margin:3px;
@@ -257,22 +277,9 @@ input[type="submit"]:active, button:active {
 	margin:3px;
 }
 
-#navunread {
-	font-weight:bolder;
-}
-
 #mark_all {
 	margin:2px;
 	text-align:right;
-}
-
-#navigation ul.column {
-	list-style-type:none;
-	padding:0;
-	float:left;
-	margin:0;
-	margin-right:10px;
-	margin-top:5px;
 }
 
 #comics {

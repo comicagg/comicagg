@@ -11,54 +11,56 @@
   var items_per_column = {{ items_per_column }};
 </script>
 <div id="navigation_box" onmouseover="Element.show('navigation')" onmouseout="Element.hide('navigation')">
-  <div id="navigation" style="display:none">
-    <div id="nav_unread">
-{% for column in unread_list_nav %}
-      <ul class="column">
-{% for comic, list in column %}
-        <li id="nav_unread_li_{{comic.id}}">
-          <a onclick="ir_a('{{ comic.id }}')" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
-{% if list.count %}
-          <span id="nav_unread_no_{{ comic.id }}" class="unread_comic">({{ list.count }})</span>
-{% endif %}
-          </a>
-        </li>
-{% endfor %}
-      </ul>
-{% endfor %}
-    </div>
-    <div id="nav_all" style="display:none">
-{% for column in comic_list_nav %}
-      <ul class="column">
-{% for comic, list in column %}
-        <li id="nav_all_li_{{comic.id}}">
-          <a onclick="ir_a('{{ comic.id }}')" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
-{% if list.count %}
-            <span id="nav_all_no_{{ comic.id }}" class="unread_comic">({{ list.count }})</span>
-{% endif %}
-          </a>
-        </li>
-{% endfor %}
-      </ul>
-{% endfor %}
-    </div>
-    <div style="clear:both"></div>
-  {% if has_unread %}
-    <p id="mark_all">
-      <a onclick="mark_all();">{% trans 'Mark all comics as read' %}</a>
-      <img id="mark_all_tick" src="{{ settings.MEDIA_URL }}images/tick.png" alt="" style="display:none"/>
-      <img id="loading_img" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="" style="display:none"/>
-    </p>
-  {% endif %}
-    <p class="small_text" id="navshowing">
-      <span>{% trans 'Showing: '%}</span>
-      <span id="showing_unread" class="bolder">{% trans 'unread'%}</span>
-      <span id="showing_all" class="bolder" style="display:none">{% trans 'all'%}</span>
-      <br />
-      <a id="show_all" onclick="show_all()" class="small_text">{% trans 'Display all'%}</a>, 
-      <a id="show_unread" onclick="show_unread()" class="small_text">{% trans 'show unread'%}</a>.
-    </p>
-  </div>
-  <p id="navtitle">Comics <span id="navunread" {% if list.count %}{% else %}style="display:none"{% endif %}>(<span id="navcount"></span> {% trans "unread" %})</span></p>
-    <script type="text/javascript">updateNavCount();</script>
+	<div id="navigation" style="display:none">
+		<div id="nav_wrap">
+			<div id="nav_unread">
+			{% for column in unread_list_nav %}
+				<ul class="column">
+			{% for comic, list in column %}
+					<li id="nav_unread_li_{{comic.id}}">
+					<a onclick="ir_a('{{ comic.id }}')" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
+			{% if list.count %}
+					<span id="nav_unread_no_{{ comic.id }}" class="unread_comic">({{ list.count }})</span>
+			{% endif %}
+					</a>
+					</li>
+			{% endfor %}
+				</ul>
+			{% endfor %}
+			</div>
+			<div id="nav_all" style="display:none">
+			{% for column in comic_list_nav %}
+				<ul class="column">
+			{% for comic, list in column %}
+					<li id="nav_all_li_{{comic.id}}">
+					<a onclick="ir_a('{{ comic.id }}')" {% if list.count %}class="bolder"{% endif %}>{{ comic.name|recortar:40 }}
+			{% if list.count %}
+						<span id="nav_all_no_{{ comic.id }}" class="unread_comic">({{ list.count }})</span>
+			{% endif %}
+					</a>
+					</li>
+			{% endfor %}
+				</ul>
+			{% endfor %}
+			</div>
+			<div style="clear:both"></div>
+	{% if has_unread %}
+			<p id="mark_all">
+				<a onclick="mark_all();">{% trans 'Mark all comics as read' %}</a>
+				<img id="mark_all_tick" src="{{ settings.MEDIA_URL }}images/tick.png" alt="" style="display:none"/>
+				<img id="loading_img" src="{{ settings.MEDIA_URL }}images/loading.gif" alt="" style="display:none"/>
+			</p>
+	{% endif %}
+		</div>
+		<p class="small_text" id="navshowing">
+			<span>{% trans 'Showing: '%}</span>
+			<span id="showing_unread" class="bolder">{% trans 'unread'%}</span>
+			<span id="showing_all" class="bolder" style="display:none">{% trans 'all'%}</span>
+			<br />
+			<a id="show_all" onclick="show_all()" class="small_text">{% trans 'Display all'%}</a>, 
+			<a id="show_unread" onclick="show_unread()" class="small_text">{% trans 'show unread'%}</a>.
+		</p>
+	</div>
+	<p id="navtitle">Comics <span id="navunread" {% if list.count %}{% else %}style="display:none"{% endif %}>(<span id="navcount"></span> {% trans "unread" %})</span></p>
+	<script type="text/javascript">updateNavCount();</script>
 </div>
