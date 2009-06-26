@@ -100,10 +100,11 @@ def match_lines(comic, lineas, regexp, backwards=False):
 	rege = r'%s' % regexp
 	prog = re.compile(rege)
 	#search in every line for the regexp
+	match = None
 	while len(lineas) > 0:
-		_linea = lineas.pop(indice)
+		linea = lineas.pop(indice)
 		try:
-			linea = _linea.decode('utf-8')
+			linea = linea.decode('utf-8')
 		except:
 			pass
 		match = prog.search(linea)
