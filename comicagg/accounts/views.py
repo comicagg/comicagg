@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Create your views here.
 from comicagg.accounts.models import *
 from comicagg.agregator.models import Comic
@@ -15,11 +16,14 @@ from django.utils.translation import ugettext as _
 import re
 
 def index(request):
-  if request.user.is_authenticated():
-    return HttpResponseRedirect(reverse('read'))
-  last = Comic.objects.filter(activo=True).filter(ended=False).order_by('-id')[:5]
-  form = LoginForm()
-  return render(request, 'welcome.html', {'last':last, 'form':form})
+	if request.user.is_authenticated():
+		return HttpResponseRedirect(reverse('read'))
+	else:
+		return HttpResponseRedirect(reverse('login'))
+
+	#last = Comic.objects.filter(activo=True).filter(ended=False).order_by('-id')[:5]
+	#form = LoginForm()
+	#return render(request, 'welcome.html', {'last':last, 'form':form})
 
 def logout_view(request):
   logout(request)

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'New account'%}{% endblock %}
+{% block content %}
+<h3>{% trans 'Register new account'%}</h3>
+<p class="info">{% trans 'Please fill in the following fields to create your account. Once you have finished you will be able to log in.'%}</p>
+
+<form method="post" action="{% url register %}" enctype="application/x-www-form-urlencoded">
+{% if form.errors.others %}
+  <div id="errorContainer">
+    <p>{% trans 'There were some errors:'%}</p>
+    <ul>
+{% if form.errors.others.username_error %}<li id="usernameNotValid" >{% trans 'Username is not valid.'%}</li>{% endif %}
+{% if form.errors.others.passwords_dont_match %}<li id="passwordsDontMatch">{% trans 'Passwords do not match'%}.</li>{% endif %}
+{% if form.errors.others.duplicated_user %}<li id="duplicateUser">{% trans 'The username you selected is already taken. Please choose another one.'%}</li>{% endif %}
+{% if form.errors.others.captcha_error %}<li id="captchaError">{% trans 'You have to write "comic" in the field.'%}</li>{% endif %}
+    </ul>
+  </div>
+{% endif %}
+  <table id="register_table">
+    <tr {% if form.username.errors %}class="error_tr"{% endif %}>
+      <td id="username_label"><label>{% trans 'Username'%}</label></td>
+      <td>{{ form.username }}<br/><span class="small_text">{% trans '30 characters max. Alphanumeric characters only (letters, digits and underscores).'%}</span></td>
+{% if form.username.errors %}
+<td>{{ form.username.errors }}</td>
+{% endif %}
+    </tr>
+    <tr {% if form.password1.errors or form.errors.others.passwords_dont_match %}class="error_tr"{% endif %}>
+      <td id="password_label"><label>{% trans 'Password'%}</label></td>
+      <td>{{ form.password1 }}</td>
+{% if form.password1.errors %}
+<td>{{ form.password1.errors }}</td>
+{% endif %}
+    </tr>
+    <tr {% if form.password2.errors or form.errors.others.passwords_dont_match %}class="error_tr"{% endif %}>
+      <td id="password2_label" {% if passwordBlank or passwordMatch %}class="error"{% endif %}><label>{% trans 'Password'%}</label></td>
+      <td>{{ form.password2 }}<br/><span class="small_text">{% trans 'Type your password again. Just in case.'%}</span></td>
+{% if form.password2.errors %}
+<td>{{ form.password2.errors }}</td>
+{% endif %}
+    </tr>
+    <tr {% if form.email.errors %}class="error_tr"{% endif %}>
+      <td id="email_label"{% if emailError %}class="error"{% endif %}><label>{% trans 'E-mail'%}</label></td>
+      <td>{{ form.email }}<br/><span class="small_text">{% trans 'Used to recover your password.'%}</span></td>
+{% if form.email.errors %}
+<td>{{ form.email.errors }}</td>
+{% endif %}
+    </tr>
+    <tr {% if form.captcha.errors or form.errors.others.captcha_error %}class="error_tr"{% endif %}>
+      <td id="captcha_label"{% if captchaError %}class="error"{% endif %}><label>{% trans 'No Robots!'%}</label></td>
+      <td>{{ form.captcha }}<br/><span class="small_text">{% trans 'Write here the word "comic" (without the quotes). This is to prevent automated registrations.'%}</span></td>
+{% if form.captcha.errors %}
+<td>{{ form.captcha.errors }}</td>
+{% endif %}
+    </tr>
+    <tr><td colspan="2" style="text-align:center;"><input type="submit" value="{% trans 'Create account'%}"/></td></tr>
+  </table>
+</form>
+
+{% endblock %}

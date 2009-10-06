@@ -32,6 +32,7 @@ def read_view(request):
 			up = UserProfile(user=request.user, last_read_access=datetime.now())
 			up.save()
 		comic_list = list()
+		unread_list = list()
 		unread_list_nav = list()
 		has_unread = False
 		sub_set = list(request.user.subscription_set.filter(comic__activo=True).filter(comic__ended=False))
@@ -39,12 +40,13 @@ def read_view(request):
 			l = request.user.unreadcomic_set.filter(comic=subs.comic)
 			#repr(l)
 			#triple = (objeto comic, lista de unread)
-			triple = (subs.comic, l)
+			tup = (subs.comic, l)
 			if l:
 				has_unread = True
-			comic_list.append(triple)
+			comic_list.append(tup)
 			if l:
-				unread_list_nav.append(triple)
+				unread_list_nav.append(tup)
+				unread_list.append(tup)
 		nmc = up.navigation_max_columns
 		nmpc = up.navigation_max_per_column
 		(comic_list_nav, items_per_column) = make_groups(comic_list, nmc, nmpc)
@@ -53,6 +55,7 @@ def read_view(request):
 		random = random_comic(request.user)
 		context = {
 			'comic_list':comic_list,
+			'unread_list':unread_list,
 			'comic_list_nav':comic_list_nav,
 			'unread_list_nav':unread_list_nav,
 			'has_unread':has_unread,

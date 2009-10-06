@@ -1,0 +1,139 @@
+/* Roger Shah presents Magic Island - Music for Balearic People Episode 061 */
+body {
+	font-family:sans-serif;
+	font-size:10pt;
+	color:#333;
+	padding:0;
+	margin:0;
+	background:transparent url(../../images/v2009/trama.gif) top left;
+}
+a {
+	color:#333;
+	text-decoration:underline;
+}
+a:hover, a:visited:hover {
+	color:#bbb;
+}
+a:visited {
+	color:#444;
+}
+.text_left {
+	text-align:left;
+}
+.text_right {
+	text-align:right;
+}
+.text_center {
+	text-align:center;
+}
+#content {
+	margin-top:40px;
+	padding:0em 2em;
+}
+
+/* Menu*/
+#head {
+	color:white;
+	padding: 10px 1em 2px 1em;
+/* 	border-bottom:1px solid #8e8e8e; */
+/* 	background:url(trans-bg-30.png) transparent top left repeat; */
+/* 	background-color:white; */
+	height:28px; /*40-h*/
+	background:transparent url(../../images/v2009/background.png) top center repeat-x;
+	position:fixed;
+	left:0;
+	right:0;
+	top:0;
+}
+#head a {
+	color:white;
+}
+#head a:hover {
+	color:#ddd;
+}
+#head_right {
+	float:right;
+	min-width:25%;
+	text-align:right;
+}
+#head_left {
+	float:left;
+	min-width:25%;
+}
+#branding {
+	text-align:center;
+	font-weight:bolder;
+}
+#branding a {
+	text-decoration:none;
+}
+#quickgotobutton {
+	border:1px solid white;
+	text-decoration:none;
+	padding:0px 2px;
+}
+
+/* Login views */
+.loginbox {
+	border:1px gray solid;
+	-moz-border-radius:15px;
+	background-color:white;
+	width:500px;
+	margin:10% auto 0px auto;
+	text-align:center;
+	padding:15px;
+}
+.loginbox:hover, #login_wrap input:hover {
+	border-color: #7cb9ff;
+	border-color: #8baec1;
+}
+#login_wrap {
+	margin-top:20px;
+}
+#login_wrap table {
+	margin:auto;
+	text-align:right;
+}
+#login_wrap input {
+	border:1px solid gray;
+	-moz-border-radius:3px;
+	padding:2px;
+}
+#login_wrap input:focus {
+	border-width:2px;
+}
+
+/* Read page */
+.comic {
+	border:1px solid gray;
+	background-color:white;
+	-moz-border-radius:10px;
+	padding:5px 1em 5px 1em;
+	margin-top:10px;
+}
+.comic h3 {
+	margin:0;
+	padding:0;
+}
+.comic .striplist {
+	margin:5px auto 5px auto;
+	text-align:center;
+}
+.comic .comicextra {
+	border-top:1px dashed gray;
+}
+.comic .comicextra a {
+	text-decoration:none;
+}
+.comic .comicextra img {
+	vertical-align:middle;
+	border:0;
+}
+.comic .newstripsnotice {
+	color:orange;
+	font-weight:bolder;
+}
+.info {
+	margin:0;
+	padding:0;
+}

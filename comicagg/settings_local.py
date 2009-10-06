@@ -34,14 +34,14 @@ ADMIN_MEDIA_PREFIX = 'http://localhost/admin-media/'
 #used for password reset email
 DOMAIN = 'http://192.168.0.3:8000'
 
-THEME = 'blue_white'
+THEME = 'v2009'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     '%scomicagg/templates' % ROOT,
-    '%scomicagg/templates/base' % ROOT,
+#    '%scomicagg/templates/base' % ROOT,
     '%scomicagg/templates/%s' % (ROOT, THEME),
 )
 

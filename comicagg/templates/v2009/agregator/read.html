@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Read comics' %} - {% endblock %}
+{% block onload %}updateCounters(){% endblock %}
+{% block content %}
+<script language="javascript">
+	var unreadCounter = {{ unread_list|length }};
+	var comicCounter = {{ comic_list|length }};
+	var unreadComics = new Array();
+{% for comic,unreadlist in unread_list %}
+	unreadComics[{{ comic.id }}] = true;
+{% endfor %}
+	
+</script>
+<div>
+	<p class="info">{% blocktrans with comic_list|length as len with unread_list|length as unr %} You are reading <b id="totalComicCounter">{{ len }}</b> comics and <b id="infoUnreadCounter">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
+	<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a href="#" onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>
+	<p class="info" id="showingAll" style="display:none">{% blocktrans %}Showing <b>all</b> comics. <a href="#" onclick="showUnreadComics()">Click here</a> to show only unread comics.{% endblocktrans %}</p>
+</div>
+{% for comic,unreadlist in comic_list %}
+<div id="c{{ comic.id }}" class="comic" style="{% if not unreadlist %}display:none{% endif %}">
+	<h3>{{ comic.name }}</h3>
+	{% if unreadlist %}<span class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
+	<div class="striplist">
+		{% for unread in unreadlist %}
+		<img src="a{{ unread.history.get_url }}" alt="new: {{ unread.history.get_url }}"/><br/>
+		{% empty %}
+		<img src="a{{ comic.get_url }}" alt="last: {{ comic.get_url }}"/>
+		{% endfor %}
+	</div>
+	<div class="comicextra">
+		<img src="{{ mediaurl }}images/loading12.gif" id="extraloading" alt=""/>
+		<a href="#">{% trans "Mark as read"%}</a> | 
+		{% trans "Vote" %} 
+		<a href="#"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> 
+		<a href="#"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> | 
+		<a href="#">{% trans "Report broken image" %}</a> | 
+		{% trans "More options" %}
+	</div>
+</div>
+{% empty %}
+There are no comics here
+{% endfor %}
+{% endblock %}
