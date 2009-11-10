@@ -18,21 +18,32 @@ function initLoadImages() {
 }
 
 function _loadComic(comic) {
-		if(!comic.loaded) {
-			if (console) { console.log("loading " + comic.list.length + " strips"); }
-			for(i = 0; i < comic.list.length; i++) {
-				unread = comic.list[i];
-				if (console) { console.log(unread.unreadid); }
-				imge = $('imgu'+unread.unreadid);
-				imge.src = unread.url;
-			}
-			if (comic.list.length == 0) {
-				if (console) { console.log("loading last strip"); }
-				imge = $('imgl'+comic.id);
-				imge.src = comic.last_url;				
-			}
-			comic.loaded = true;
+	if(!comic.loaded) {
+		$('reload' + comic.id).hide();
+		for(i = 0; i < comic.list.length; i++) {
+			unread = comic.list[i];
+			image = $('imgu' + unread.unreadid);
+			_loadImage(unread.url, image, comic);
 		}
+		if (comic.list.length == 0) {
+			image = $('imgl' + comic.id);
+			_loadImage(comic.last_url, image, comic);
+		}
+		comic.loaded = true;
+	}
+}
+
+function _loadImage(url, elem, comic) {
+	elem.src = url;
+	elem.cid = comic.id;
+}
+
+function imageErrorHandler(elem) {
+	elem.alt = "ERROR";
+	elem.src = media_url + 'images/error.png';
+	comics[elem.cid].error = true;
+	$('reload'+elem.cid).show();
+	console.log($('reload'+elem.cid).visible());
 }
 
 function updateCounters() {

@@ -24,7 +24,9 @@
 				"id":{{ comic.id }},
 				"last_url":"{{ comic.last_image|safe }}",
 				"last_alt_text":"{{ comic.last_image_alt_text|default_if_none:""|safe }}",
-				"list":tmp};
+				"list":tmp,
+				"error":false,
+				"loaded":false};
 		comics[{{ comic.id }}] = c;
 {% endfor %}	
 </script>
@@ -39,14 +41,15 @@
 	{% if unreadlist %}<span class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
 	<div class="striplist">
 		{% for unread in unreadlist %}
-		<img id="imgu{{ unread.id }}" src="a{{ unread.history.get_url }}" alt="new" title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
+		<img id="imgu{{ unread.id }}" asrc="{{ unread.history.get_url }}" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}" onerror="imageErrorHandler(this)"/><br/>
 		{% empty %}
-		<img id="imgl{{ comic.id }}" src="a{{ comic.get_url }}" alt="last" title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
+		<img id="imgl{{ comic.id }}" asrc="{{ comic.get_url }}" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}" onerror="imageErrorHandler(this)"/>
 		{% endfor %}
 	</div>
 	<div class="comicextra">
 		{% if unreadlist %}
-		<img src="{{ mediaurl }}images/loading12.gif" id="extraloading{{ comic.id }}" alt="" style="display:none"/>
+		<span id="reload{{ comic.id }}" class="reload" style="display:none"><a href="#">{% trans "Reload images" %}</a> | </span>
+		<img src="{{ mediaurl }}images/loading12.gif" id="extraloading{{ comic.id }}" alt="" style="display:none"/> 
 		<a href="#">{% trans "Mark as read"%}</a> | 
 		{% trans "Vote" %} 
 		<a href="#"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> 

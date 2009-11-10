@@ -137,6 +137,9 @@ a:visited {
 	vertical-align:middle;
 	border:0;
 }
+.comic .comicextra .reload {
+font-weight:bolder;
+}
 .comic .newstripsnotice {
 	color:orange;
 	font-weight:bolder;
