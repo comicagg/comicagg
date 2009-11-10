@@ -1,16 +1,32 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block title %}{% trans 'Read comics' %} - {% endblock %}
-{% block onload %}updateCounters(){% endblock %}
+{% block extra_head %}
+		<script src="{{ mediaurl }}js/v2009/read.js" type="text/javascript"></script>
+{% endblock%}
+{% block onload %}onReadLoad();{% endblock %}
 {% block content %}
 <script language="javascript">
 	var unreadCounter = {{ unread_list|length }};
 	var comicCounter = {{ comic_list|length }};
 	var unreadComics = new Array();
-{% for comic,unreadlist in unread_list %}
+	var comics = new Array();
+{% for comic,unreadlist in comic_list %}
 	unreadComics[{{ comic.id }}] = true;
-{% endfor %}
-	
+	tmp = Array();
+	{% for unread in unreadlist %}
+		tmp.push({	"unreadid":{{ unread.id }},
+					"comicid":{{ comic.id }},
+					"url":"{{ unread.history.get_url|safe }}",
+					"alt_text":"{{ unread.history.alt_text|default_if_none:""|safe }}"});
+	{% endfor %}
+		c = {	"name":"{{ comic.name}}",
+				"id":{{ comic.id }},
+				"last_url":"{{ comic.last_image|safe }}",
+				"last_alt_text":"{{ comic.last_image_alt_text|default_if_none:""|safe }}",
+				"list":tmp};
+		comics[{{ comic.id }}] = c;
+{% endfor %}	
 </script>
 <div>
 	<p class="info">{% blocktrans with comic_list|length as len with unread_list|length as unr %} You are reading <b id="totalComicCounter">{{ len }}</b> comics and <b id="infoUnreadCounter">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
@@ -23,20 +39,23 @@
 	{% if unreadlist %}<span class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
 	<div class="striplist">
 		{% for unread in unreadlist %}
-		<img src="a{{ unread.history.get_url }}" alt="new: {{ unread.history.get_url }}"/><br/>
+		<img id="imgu{{ unread.id }}" src="a{{ unread.history.get_url }}" alt="new" title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
 		{% empty %}
-		<img src="a{{ comic.get_url }}" alt="last: {{ comic.get_url }}"/>
+		<img id="imgl{{ comic.id }}" src="a{{ comic.get_url }}" alt="last" title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
 		{% endfor %}
 	</div>
 	<div class="comicextra">
-		<img src="{{ mediaurl }}images/loading12.gif" id="extraloading" alt=""/>
+		{% if unreadlist %}
+		<img src="{{ mediaurl }}images/loading12.gif" id="extraloading{{ comic.id }}" alt="" style="display:none"/>
 		<a href="#">{% trans "Mark as read"%}</a> | 
 		{% trans "Vote" %} 
-		<a href="#"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> 
-		<a href="#"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> | 
+		<a href="#"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> 
+		<a href="#"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> | 
+		{% endif %}
 		<a href="#">{% trans "Report broken image" %}</a> | 
 		{% trans "More options" %}
 	</div>
+	<h5 id="outc{{ comic.id }}"></h5>
 </div>
 {% empty %}
 There are no comics here
