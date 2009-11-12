@@ -32,7 +32,7 @@ MEDIA_URL = 'http://localhost:8000/media/'
 ADMIN_MEDIA_PREFIX = 'http://localhost/admin-media/'
 
 #used for password reset email
-DOMAIN = 'http://192.168.0.3:8000'
+DOMAIN = 'http://localhost:8000'
 
 THEME = 'v2009'
 
