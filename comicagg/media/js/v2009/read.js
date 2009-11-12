@@ -54,21 +54,41 @@ function _loadComic(comic, seed) {
 		for(i = 0; i < comic.list.length; i++) {
 			unread = comic.list[i];
 			image = $('imgu' + unread.unreadid);
-			url = seed ? addSeed(unread.url) : unread.url;
+			url = seed ? _addSeed(unread.url) : unread.url;
 			_loadImage(url, image, comic);
 		}
 		if (comic.list.length == 0) {
 			image = $('imgl' + comic.id);
-			url = seed ? addSeed(comic.last_url) : comic.last_url;
+			url = seed ? _addSeed(comic.last_url) : comic.last_url;
 			_loadImage(url, image, comic);
 		}
 		comic.loaded = true;
 	}
 }
+//add a bit in the url to make it different so browser caching won't happen
+function _addSeed(url) {
+	console.log(url.indexOf('?'));
+	if (url.indexOf('?') == -1) {
+		url += "?" + (new Date()).getTime();
+	} else {
+		url += "&" + (new Date()).getTime();
+	}
+	return url;
+}
 
 function _loadImage(url, elem, comic) {
-	elem.src = url;
+	img = new Image();
 	elem.cid = comic.id;
+	img.onload = function () {
+		elem.src = url;
+	}
+	img.onerror = function () {
+		elem.alt = "ERROR";
+		elem.src = media_url + 'images/error.png';
+		comics[elem.cid].error = true;
+		$('reload'+elem.cid).show();
+	}
+	img.src = url;
 }
 
 function imageErrorHandler(elem) {
