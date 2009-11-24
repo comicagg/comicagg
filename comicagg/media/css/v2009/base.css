@@ -30,6 +30,13 @@ a:visited {
 	margin-top:40px;
 	padding:0em 2em;
 }
+input {
+	background-color:#f0f0f0;
+	color:#333;
+	border:1px solid gray;
+	-moz-border-radius:5px;
+	padding:1px 3px;
+}
 
 /* Menu*/
 #head {
@@ -104,11 +111,34 @@ a:visited {
 	border-width:2px;
 }
 
+#register_table td {
+	vertical-align:text-top;
+	padding-bottom:5px;
+}
+#register_table tr>:first-child {
+	text-align:right;
+	padding-right:5px;
+}
+
 #errorContainer {
 	border:1px solid red;
+	-moz-border-radius:4px;
 	background-color:#ffcccc;
-	padding:3px;
+	padding:5px;
 }
+.error_tr td {
+/* 	border:1px solid red; */
+}
+
+.errorlist {
+	color:red;
+	margin:3px;
+	padding-left:15px;
+}
+
+.errorlist li {
+}
+
 /* Read page */
 
 .comic {

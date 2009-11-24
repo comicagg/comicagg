@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('comicagg.accounts.views',
@@ -11,5 +12,5 @@ urlpatterns = patterns('comicagg.accounts.views',
     url(r'^password/reset/$', 'password_reset', name='reset_password'),
     url(r'^email/$', 'email', name='change_email'),
     url(r'^done_(?P<kind>\w+)/$', 'done', name='done'),
-    url(r'^save_color/$', 'save_color', name='save_color'),
+    url(r'^ajax/save_color/$', 'save_color', name='save_color'),
 )

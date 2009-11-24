@@ -5,7 +5,6 @@ function updateCounters() {
 }
 
 function showAllComics() {
-	clist = $$('.comic');
 	for (i = 0; i < clist.length; i++) {
 		clist[i].show();
 	}
@@ -15,11 +14,11 @@ function showAllComics() {
 }
 
 function showUnreadComics() {
-	clist = $$('.comic');
 	for (i = 0; i < clist.length; i++) {
 		cid = clist[i].id.substring(1);
 		if (!unreadComics[cid]) {
 			clist[i].hide();
+			console.log("unread " + comics[cid].name);
 		}
 	}
 	$('showingAll').hide();
@@ -27,15 +26,18 @@ function showUnreadComics() {
 	updateViewport(true);
 }
 
+clist = new Array();
+
 function onReadLoad() {
 	updateCounters();
 	initScrolling();
 	initLoadImages();
+	clist = $$('.comic');
 }
 
 function initLoadImages() {
 	//1. actualizar los que estan dentro del viewport
-	//2. sascar el primero de la lista y cargarlo
+	//2. sacar el primero de la lista y cargarlo
 	//ir a 2
 	updateViewport(false);
 	lista = cdivInView;
@@ -48,7 +50,6 @@ function initLoadImages() {
 
 function _loadComic(comic, seed) {
 	if(!comic.loaded) {
-		if (window.console) { console.log("loading "+comic.name); }
 		s = 'reload' + comic.id;
 		$(s).hide();
 		for(i = 0; i < comic.list.length; i++) {

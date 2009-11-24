@@ -11,8 +11,10 @@
 	var comicCounter = {{ comic_list|length }};
 	var unreadComics = new Array();
 	var comics = new Array();
-{% for comic,unreadlist in comic_list %}
+{% for comic,unreadlist in unread_list %}
 	unreadComics[{{ comic.id }}] = true;
+{% endfor %}
+{% for comic,unreadlist in comic_list %}
 	tmp = Array();
 	{% for unread in unreadlist %}
 		tmp.push({	"unreadid":{{ unread.id }},

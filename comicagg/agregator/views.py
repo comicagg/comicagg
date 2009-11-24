@@ -401,31 +401,7 @@ def forget_new_comics(request, quick=False):
 	return HttpResponseRedirect(reverse('configure'))
 
 @login_required
-def add_comic(request, comic_id, next='comic_list'):
-	comic = get_object_or_404(Comic, pk=comic_id)
-	try:
-		s = request.user.subscription_set.get(comic=comic)
-	except:
-		s = request.user.subscription_set.create(comic=comic, position=9999)
-		#TODO añadir nuevo unread
-		      #try:
-        #history = ComicHistory.objects.filter(comic=c)[0]
-        #u = UnreadComic(user=request.user, comic=c, history=history)
-        #u.save()
-      #except:
-        #pass
-
-	return HttpResponseRedirect(reverse(next))
-
-@login_required
-def remove_comic(request, comic_id):
-  comic = get_object_or_404(Comic, pk=comic_id)
-  s = request.user.subscription_set.get(comic=comic)
-  s.delete()
-  return HttpResponseRedirect(reverse('comic_list'))
-
-@login_required
-def add_comic_ajax(request):
+def add_comic(request):
 	if request.POST:
 		try:
 			comic_id = int(request.POST['id'])
@@ -446,7 +422,7 @@ def add_comic_ajax(request):
 	raise Http404
 
 @login_required
-def remove_comic_ajax(request):
+def remove_comic(request):
 	if request.POST:
 		try:
 			comic_id = int(request.POST['id'])
