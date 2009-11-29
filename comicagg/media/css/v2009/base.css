@@ -91,7 +91,7 @@ input {
 	text-align:center;
 	padding:15px;
 }
-.loginbox:hover, #login_wrap input:hover {
+.loginbox:hover, .loginbox input:hover {
 	border-color: #7cb9ff;
 	border-color: #8baec1;
 }
@@ -102,18 +102,23 @@ input {
 	margin:auto;
 	text-align:right;
 }
-#login_wrap input {
+.loginbox input {
 	border:1px solid gray;
 	-moz-border-radius:3px;
 	padding:2px;
 }
-#login_wrap input:focus {
+.loginbox input:focus {
 	border-width:2px;
+}
+#register_wrap {
+	width:700px;
+	margin-top:60px;
 }
 
 #register_table td {
 	vertical-align:text-top;
 	padding-bottom:5px;
+	text-align:left;
 }
 #register_table tr>:first-child {
 	text-align:right;
@@ -126,8 +131,8 @@ input {
 	background-color:#ffcccc;
 	padding:5px;
 }
-.error_tr td {
-/* 	border:1px solid red; */
+.error_tr input {
+	border-color:red;
 }
 
 .errorlist {

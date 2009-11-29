@@ -41,10 +41,10 @@
 		<div id="head">
 			{% if user.is_authenticated %}
 			<div id="head_right">
-				<i><b>{{ user.username }}</b></i> | {% trans "profile "%} | {% trans "help" %} | {% trans "news" %} | <a href="{% url logout %}">{% trans "logout" %}</a>
+				<i><b>{{ user.username }}</b></i> / {% trans "profile"%} {% trans "help" %} {% trans "news" %} <a href="{% url logout %}">{% trans "logout" %}</a>
 			</div>
 			<div id="head_left">
-				Comics: <a href="{% url read %}">{% trans "read" %}<span id="menuUnreadCounter"></span></a> | <a href="{% url configure %}">{% trans "choose" %}</a> | {% trans "request" %} | <a href="{% url comic_list %}">{% trans "list" %}</a>
+				Comics: <a href="{% url read %}">{% trans "read" %}<span id="menuUnreadCounter"></span></a> <a href="{% url configure %}">{% trans "choose" %}</a> {% trans "request" %} <a href="{% url comic_list %}">{% trans "list" %}</a>
 			</div>
 			{% endif %}
 			<div id="branding">
