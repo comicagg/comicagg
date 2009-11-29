@@ -43,9 +43,9 @@
 	{% if unreadlist %}<span class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
 	<div class="striplist">
 		{% for unread in unreadlist %}
-		<img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/v2009/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}" onerror="imageErrorHandler(this)"/><br/>
+		<img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/v2009/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
 		{% empty %}
-		<img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/v2009/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}" onerror="imageErrorHandler(this)"/>
+		<img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/v2009/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
 		{% endfor %}
 	</div>
 	<div class="comicextra">
