@@ -113,35 +113,36 @@ def make_groups(the_list, max_columns=5, max_per_column=20):
 
 @login_required
 def configure(request, tag = None):
-  context = {}
-  #mostrar pagina de configuracion
-  #build available list depending on not selected comics
-  all_comics = set(Comic.objects.filter(activo=True).filter(ended=False))
-  user_subs = request.user.subscription_set.all().filter(comic__activo=True).filter(comic__ended=False)
-  user_comics = list()
-  for sub in user_subs:
-    user_comics.append(sub.comic)
-  available = list()
-  for comic in all_comics:
-    if not comic in user_comics:
-      available.append(comic)
-  available.sort(comic_sort_name)
-  if tag:
-    available_list = list()
-    #filter available list, show only ones with tag
-    for comic in available:
-      if comic.tag_set.filter(name=tag):
-        available_list.append(comic)
-    context['tag'] = tag
-  else:
-    available_list = available
-  context['new_comics'] = NewComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False)
-  #add lists to context
-  context['tags'] = get_full_tagcloud()
-  context['available'] = available_list
-  #quitar aviso de nuevos comics
-  hide_new_comics(request)
-  return render(request, 'agregator/configure.html', context, 'configure')
+	context = {}
+	#mostrar pagina de configuracion
+	#build available list depending on not selected comics
+	all_comics = set(Comic.objects.filter(activo=True).filter(ended=False))
+	user_subs = request.user.subscription_set.all().filter(comic__activo=True).filter(comic__ended=False)
+	user_comics = list()
+	for sub in user_subs:
+		user_comics.append(sub.comic)
+	available = list()
+	for comic in all_comics:
+		if not comic in user_comics:
+			available.append(comic)
+	available.sort(comic_sort_name)
+	if tag:
+		available_list = list()
+		#filter available list, show only ones with tag
+		for comic in available:
+			if comic.tag_set.filter(name=tag):
+				available_list.append(comic)
+		context['tag'] = tag
+	else:
+		available_list = available
+	context['new_comics'] = NewComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False)
+	#add lists to context
+	context['tags'] = get_full_tagcloud()
+	context['available'] = available_list
+	context['user_comics'] = user_comics
+	#quitar aviso de nuevos comics
+	hide_new_comics(request)
+	return render(request, 'agregator/configure.html', context, 'configure')
 
 @login_required
 def save_selection(request):

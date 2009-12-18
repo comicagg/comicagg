@@ -6,13 +6,14 @@ body {
 	padding:0;
 	margin:0;
 	background:transparent url(../../images/v2009/trama.gif) top left;
+	min-width:800px;
 }
 a {
 	color:#333;
 	text-decoration:underline;
 }
 a:hover, a:visited:hover {
-	color:#bbb;
+	color:#6b98b5;
 }
 a:visited {
 	color:#444;
@@ -30,11 +31,12 @@ a:visited {
 	margin-top:40px;
 	padding:0em 2em;
 }
-input {
+input, button {
 	background-color:#f0f0f0;
 	color:#333;
 	border:1px solid gray;
 	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
 	padding:1px 3px;
 }
 
@@ -85,6 +87,7 @@ input {
 .loginbox {
 	border:1px gray solid;
 	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
 	background-color:white;
 	width:500px;
 	margin:10% auto 0px auto;
@@ -105,6 +108,7 @@ input {
 .loginbox input {
 	border:1px solid gray;
 	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
 	padding:2px;
 }
 .loginbox input:focus {
@@ -128,6 +132,7 @@ input {
 #errorContainer {
 	border:1px solid red;
 	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
 	background-color:#ffcccc;
 	padding:5px;
 }
@@ -146,17 +151,24 @@ input {
 
 /* Read page */
 
+.extras_div {
+	float:right;
+	text-align:right;
+}
+
 .comic {
 	border:1px solid gray;
 	background-color:white;
 	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
 	padding:5px 1em 5px 1em;
 	margin-top:10px;
+	margin-bottom:10px;
 }
 .comic h3 {
 	margin:0;
 	padding:0;
-	font-size:larger;
+	font-size:12pt;
 }
 .comic .striplist {
 	margin:5px auto 5px auto;
@@ -184,3 +196,98 @@ font-weight:bolder;
 	padding:0;
 }
 
+/* Configure page */
+.comic_list {
+	font-size:9pt;
+	border:1px solid gray;
+	-moz-border-radius:8pt;
+	-webkit-border-radius:8pt;
+	padding:5px;
+/* 	line-height:14pt; */
+	background:white;
+	margin-bottom:2em;
+	margin-top:1.5em;
+	clear:both;
+}
+.comic_list .item {
+}
+.dndContainer {
+	cursor: default;
+}
+/*.dojoDndContainerOver {
+}*/
+.dojoDndItem { 
+	background:white;
+	float:left;
+	border:1px solid gray;
+	padding:2px 12px;
+	margin:0px 3px 3px 0px;
+	-moz-border-radius:5pt 5pt;
+	-webkit-border-radius:5pt 5pt;
+}
+.dojoDndItemOver {
+	background: #ededed;
+	cursor:pointer;
+}
+.dojoDndItemSelected {
+	background: #ccddff; color: #444;
+}
+.dojoDndItemAnchor {
+	background: #ccddff; color: black;
+}
+.dojoDndItemOver .dojoDndItemSelected {
+	background: #ccddff;
+}
+.dojoDndItemOver .dojoDndItemAnchor {
+	background: #ededed;
+}
+.dojoDndItemBefore {
+	background:url(/media/images/2leftarrow_bw10.png) #ccc left center no-repeat;
+}
+.dojoDndItemAfter {
+	background:url(/media/images/2rightarrow_bw10.png) #ccc right center no-repeat;
+}
+.dojoDndAvatar {
+	border:2px solid #ccc;
+	font-size: 75%;
+	-moz-border-radius:8pt 8pt;
+	radius:8pt;
+	background:white;
+}
+	
+.dojoDndAvatarHeader {
+	background: #aaa;
+}
+
+.dojoDndAvatarItem {
+	background: #fff;
+	border-bottom:1px solid #666;
+}
+#trash {
+/* 	width:48px; */
+	height:48px;
+/* 	border:1px solid gray; */
+	padding-right:50px;
+	float:right;
+	vertical-align:middle;
+	background:url(/media/images/trash.png) right center no-repeat transparent;
+	cursor:pointer;
+}
+.save {
+	float:left;
+}
+.save img {
+	vertical-align:middle;
+}
+.save_button {
+	width:auto;
+	background:#96d25a;
+	border:2px solid gray;
+	line-height:16px;
+}
+.save_button:hover {
+	width:auto;
+	background:white;/*#8ec755;*/
+	float:left;
+	cursor:pointer;
+}

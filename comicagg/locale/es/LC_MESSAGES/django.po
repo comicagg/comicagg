@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-29 17:05+0100\n"
-"PO-Revision-Date: 2009-11-29 17:06+0100\n"
+"POT-Creation-Date: 2009-12-18 19:34+0100\n"
+"PO-Revision-Date: 2009-12-18 19:41+0100\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "Perfiles de usuario"
 
 #: accounts/views.py:53
 msgid "Your have to activate your user first"
-msgstr "   Tienes que activar tu usuario primero"
+msgstr "Tienes que activar tu usuario primero"
 
 #: accounts/views.py:59
 msgid "Username or password not valid!"
@@ -67,20 +67,20 @@ msgstr ""
 msgid "Password reset on %s"
 msgstr "Cambio de contraseña en %s"
 
-#: agregator/views.py:183 agregator/views.py:212
+#: agregator/views.py:184 agregator/views.py:213
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:299 templates/admin/index.html:46
+#: agregator/views.py:300 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:579
+#: agregator/views.py:580
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
 
-#: agregator/templatetags/agregator_tags.py:40
+#: agregator/templatetags/agregator_tags.py:41
 #: templates/base/agregator/read.html:35
 msgid "NEW!"
 msgstr "¡NUEVO!"
@@ -205,6 +205,7 @@ msgid "Logged in as "
 msgstr "Conectado como "
 
 #: templates/base/base.html:55 templates/base/agregator/read.html:4
+#: templates/v2009/agregator/configure.html:3
 #: templates/v2009/agregator/read.html:3
 msgid "Read comics"
 msgstr "Leer comics"
@@ -629,7 +630,7 @@ msgid "More"
 msgstr "Más"
 
 #: templates/base/agregator/read.html:60
-#: templates/v2009/agregator/read.html:60
+#: templates/v2009/agregator/read.html:64
 msgid "Report broken image"
 msgstr "Avisar imagen rota"
 
@@ -638,7 +639,7 @@ msgid "Go up"
 msgstr "Subir"
 
 #: templates/base/agregator/read.html:67
-#: templates/v2009/agregator/read.html:55
+#: templates/v2009/agregator/read.html:59
 msgid "Mark as read"
 msgstr "Marcar como leída"
 
@@ -797,6 +798,7 @@ msgstr "Tus etiquetas: "
 
 #: templates/base/agregator/tagging_form.html:5
 #: templates/base/registration/account.html:27
+#: templates/v2009/agregator/configure.html:14
 #: templates/v2009/registration/account.html:27
 msgid "Save"
 msgstr "Guardar"
@@ -1545,48 +1547,86 @@ msgid ""
 "selected."
 msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
 
-#: templates/v2009/base.html:44
+#: templates/v2009/base.html:46
 msgid "profile"
 msgstr "perfil"
 
-#: templates/v2009/base.html:44
+#: templates/v2009/base.html:47
 msgid "help"
 msgstr "ayuda"
 
-#: templates/v2009/base.html:44
+#: templates/v2009/base.html:48
 msgid "news"
 msgstr "noticias"
 
-#: templates/v2009/base.html:44
+#: templates/v2009/base.html:49
 msgid "logout"
 msgstr "salir"
 
-#: templates/v2009/base.html:47
+#: templates/v2009/base.html:54
 msgid "read"
 msgstr "lee"
 
-#: templates/v2009/base.html:47
+#: templates/v2009/base.html:55
 msgid "choose"
 msgstr "elige"
 
-#: templates/v2009/base.html:47
+#: templates/v2009/base.html:56
 msgid "request"
 msgstr "solicita"
 
-#: templates/v2009/base.html:47
+#: templates/v2009/base.html:57
 msgid "list"
 msgstr "lista"
 
-#: templates/v2009/agregator/read.html:36
-#, python-format
+#: templates/v2009/agregator/configure.html:9
+msgid "Sort your comics"
+msgstr "Organiza tus comics"
+
+#: templates/v2009/agregator/configure.html:11
+msgid "Drop comics here<br/>to delete them"
+msgstr "Suelta comics aquí<br/>para borrarlos"
+
+#: templates/v2009/agregator/configure.html:13
 msgid ""
-" You are reading <b id=\"totalComicCounter\">%(len)s</b> comics and <b id="
-"\"infoUnreadCounter\">%(unr)s</b> of them have unread strips."
+"Here you can sort your comics. Just select one or some of them (holding the "
+"Ctrl/Meta key) and drag them around."
 msgstr ""
-" Estás leyendo <b id=\"totalComicCounter\">%(len)s</b> comics y <b id="
-"\"infoUnreadCounter\">%(unr)s</b> de ellos tienen nuevas tiras sin leer."
+"Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
+"Ctrl/Meta) y múevelos."
+
+#: templates/v2009/agregator/configure.html:17
+msgid "Sort them:"
+msgstr "Ordenar por:"
+
+#: templates/v2009/agregator/configure.html:18
+msgid "by name"
+msgstr "por nombre"
+
+#: templates/v2009/agregator/configure.html:19
+msgid "by score"
+msgstr "por puntuación"
+
+#: templates/v2009/agregator/read.html:36
+#, fuzzy
+msgid "There are 0 new news items"
+msgstr "Hay nuevas entradas en el blog."
 
 #: templates/v2009/agregator/read.html:37
+#, fuzzy
+msgid "There are 0 new comics in the database."
+msgstr "Estos son todos los comics que tenemos"
+
+#: templates/v2009/agregator/read.html:40
+#, python-format
+msgid ""
+"You are reading <b id=\"totalComicCounter\">%(len)s</b> comics and <b id="
+"\"infoUnreadCounter\">%(unr)s</b> of them have unread strips."
+msgstr ""
+"Estás leyendo <b id=\"totalComicCounter\">%(len)s</b> comics y <b id="
+"\"infoUnreadCounter\">%(unr)s</b> de ellos tienen nuevas tiras sin leer."
+
+#: templates/v2009/agregator/read.html:41
 msgid ""
 "Showing only <b>unread</b> comics. <a href=\"#\" onclick=\"showAllComics()"
 "\">Click here</a> to show all comics."
@@ -1594,7 +1634,7 @@ msgstr ""
 "Mostrando comics <b>sin leer</b>. <a href=\"#\" onclick=\"showAllComics()"
 "\">Pulsa aquí</a> para ver todos los comics."
 
-#: templates/v2009/agregator/read.html:38
+#: templates/v2009/agregator/read.html:42
 msgid ""
 "Showing <b>all</b> comics. <a href=\"#\" onclick=\"showUnreadComics()"
 "\">Click here</a> to show only unread comics."
@@ -1602,19 +1642,19 @@ msgstr ""
 "Mostrando <b>todos</b> los comics. <a href=\"#\" onclick=\"showUnreadComics()"
 "\">Pulsa aquí</a> para ver sólo los que tienes sin leer."
 
-#: templates/v2009/agregator/read.html:43
+#: templates/v2009/agregator/read.html:47
 msgid "New strips!"
 msgstr "¡Nuevas tiras!"
 
-#: templates/v2009/agregator/read.html:52
+#: templates/v2009/agregator/read.html:56
 msgid "Reload images"
 msgstr "Recargar"
 
-#: templates/v2009/agregator/read.html:56
+#: templates/v2009/agregator/read.html:60
 msgid "Vote"
 msgstr "Vota"
 
-#: templates/v2009/agregator/read.html:61
+#: templates/v2009/agregator/read.html:65
 msgid "More options"
 msgstr "Más acciones"
 
@@ -1673,4 +1713,5 @@ msgstr "Otra vez"
 #: templates/v2009/registration/register_done.html:7
 msgid "Back to login"
 msgstr "Volver al inicio"
+
 

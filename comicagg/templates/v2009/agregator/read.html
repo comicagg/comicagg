@@ -32,8 +32,12 @@
 		comics[{{ comic.id }}] = c;
 {% endfor %}	
 </script>
+<div class="extras_div">
+	<p class="info">{% blocktrans %}There are 0 new news items{% endblocktrans %}</p>
+	<p class="info">{% blocktrans %}There are 0 new comics in the database.{% endblocktrans %}</p>
+</div>
 <div>
-	<p class="info">{% blocktrans with comic_list|length as len with unread_list|length as unr %} You are reading <b id="totalComicCounter">{{ len }}</b> comics and <b id="infoUnreadCounter">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
+	<p class="info">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="totalComicCounter">{{ len }}</b> comics and <b id="infoUnreadCounter">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
 	<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a href="#" onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>
 	<p class="info" id="showingAll" style="display:none">{% blocktrans %}Showing <b>all</b> comics. <a href="#" onclick="showUnreadComics()">Click here</a> to show only unread comics.{% endblocktrans %}</p>
 </div>
