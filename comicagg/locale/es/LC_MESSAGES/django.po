@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-18 19:34+0100\n"
-"PO-Revision-Date: 2009-12-18 19:41+0100\n"
+"POT-Creation-Date: 2009-12-19 16:37+0100\n"
+"PO-Revision-Date: 2009-12-19 16:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -67,15 +67,15 @@ msgstr ""
 msgid "Password reset on %s"
 msgstr "Cambio de contraseña en %s"
 
-#: agregator/views.py:184 agregator/views.py:213
+#: agregator/views.py:185 agregator/views.py:214
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:300 templates/admin/index.html:46
+#: agregator/views.py:301 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:580
+#: agregator/views.py:581
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -205,7 +205,6 @@ msgid "Logged in as "
 msgstr "Conectado como "
 
 #: templates/base/base.html:55 templates/base/agregator/read.html:4
-#: templates/v2009/agregator/configure.html:3
 #: templates/v2009/agregator/read.html:3
 msgid "Read comics"
 msgstr "Leer comics"
@@ -798,7 +797,7 @@ msgstr "Tus etiquetas: "
 
 #: templates/base/agregator/tagging_form.html:5
 #: templates/base/registration/account.html:27
-#: templates/v2009/agregator/configure.html:14
+#: templates/v2009/agregator/configure.html:29
 #: templates/v2009/registration/account.html:27
 msgid "Save"
 msgstr "Guardar"
@@ -1568,8 +1567,8 @@ msgid "read"
 msgstr "lee"
 
 #: templates/v2009/base.html:55
-msgid "choose"
-msgstr "elige"
+msgid "organize"
+msgstr "organizar"
 
 #: templates/v2009/base.html:56
 msgid "request"
@@ -1579,15 +1578,16 @@ msgstr "solicita"
 msgid "list"
 msgstr "lista"
 
-#: templates/v2009/agregator/configure.html:9
-msgid "Sort your comics"
+#: templates/v2009/agregator/configure.html:3
+#: templates/v2009/agregator/configure.html:22
+msgid "Organize your comics"
 msgstr "Organiza tus comics"
 
-#: templates/v2009/agregator/configure.html:11
+#: templates/v2009/agregator/configure.html:24
 msgid "Drop comics here<br/>to delete them"
 msgstr "Suelta comics aquí<br/>para borrarlos"
 
-#: templates/v2009/agregator/configure.html:13
+#: templates/v2009/agregator/configure.html:26
 msgid ""
 "Here you can sort your comics. Just select one or some of them (holding the "
 "Ctrl/Meta key) and drag them around."
@@ -1595,17 +1595,25 @@ msgstr ""
 "Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
 "Ctrl/Meta) y múevelos."
 
-#: templates/v2009/agregator/configure.html:17
+#: templates/v2009/agregator/configure.html:33
+msgid "Saving..."
+msgstr "Guardando..."
+
+#: templates/v2009/agregator/configure.html:39
 msgid "Sort them:"
 msgstr "Ordenar por:"
 
-#: templates/v2009/agregator/configure.html:18
+#: templates/v2009/agregator/configure.html:40
 msgid "by name"
 msgstr "por nombre"
 
-#: templates/v2009/agregator/configure.html:19
+#: templates/v2009/agregator/configure.html:41
 msgid "by score"
 msgstr "por puntuación"
+
+#: templates/v2009/agregator/configure.html:42
+msgid "how it was saved"
+msgstr "como está guardado"
 
 #: templates/v2009/agregator/read.html:36
 #, fuzzy
@@ -1714,4 +1722,8 @@ msgstr "Otra vez"
 msgid "Back to login"
 msgstr "Volver al inicio"
 
+#~ msgid "Sort your comics"
+#~ msgstr "Organiza tus comics"
 
+#~ msgid "choose"
+#~ msgstr "elige"

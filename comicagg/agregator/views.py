@@ -116,7 +116,8 @@ def configure(request, tag = None):
 	context = {}
 	#mostrar pagina de configuracion
 	#build available list depending on not selected comics
-	all_comics = set(Comic.objects.filter(activo=True).filter(ended=False))
+	all_comics = list(Comic.objects.filter(activo=True).filter(ended=False))
+	all_comics.sort(comic_sort_name)
 	user_subs = request.user.subscription_set.all().filter(comic__activo=True).filter(comic__ended=False)
 	user_comics = list()
 	for sub in user_subs:
@@ -140,16 +141,17 @@ def configure(request, tag = None):
 	context['tags'] = get_full_tagcloud()
 	context['available'] = available_list
 	context['user_comics'] = user_comics
+	context['all_comics'] = all_comics
 	#quitar aviso de nuevos comics
 	hide_new_comics(request)
-	return render(request, 'agregator/configure.html', context, 'configure')
+	return render(request, 'agregator/configure_add.html', context, 'configure')
 
 @login_required
 def save_selection(request):
 	if not request.POST:
-		return HttpResponseForbidden('no')
-	#get selection removing comic_ chars
-	selection = request.POST['selected_list[]'].replace('comic_','').split(',')
+		return HttpResponseForbidden('')
+	#get selection
+	selection = request.POST['selected'].split(',')
 	#remove duplicates
 	selection_clean = list()
 	for item in selection:
@@ -159,6 +161,7 @@ def save_selection(request):
 				selection_clean.index(int(item))
 			except:
 				selection_clean.append(int(item))
+	print selection_clean
 	#primero vemos qué comics nuevos se han elegido
 	subscriptions = [s.comic.id for s in request.user.subscription_set.all()]
 	nuevos = list()

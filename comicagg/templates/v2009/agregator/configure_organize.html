@@ -11,16 +11,7 @@ var usercomics = [
 ];
 var newcomics = usercomics.clone();
 var removedcomics = new Array();
-var availablecomics = [
-{% for comic in available %}
-	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating }}, 'votes':{{ comic.votes }}},
-{% endfor %}
-];
-var available_new = [
-{% for newcomic in new_comics %}
-{{ newcomic.comic.id }},
-{% endfor %}
-];
+var addedcomics = new Array();
 dojo.require("dojo.dnd.Container");
 dojo.require("dojo.dnd.Manager");
 dojo.require("dojo.dnd.Source");
@@ -30,25 +21,7 @@ dojo.addOnLoad(initDND);
 {% endblock%}
 {% block onload %}{% endblock %}
 {% block content %}
-<div id="add">
-	<h3>{% trans "Add comics" %}</h3>
-	<div class="comic_list_wrap">
-		<ul class="comic_list">
-{% for comic in available %}
-			<li id="add_{{ comic.id }}" class="comic {% if forloop.last %}last{% endif %}">{{ comic }}</li>
-{% endfor %}
-		</ul>
-	</div>
-	<script type="text/javascript">
-		var h = $('add').select('.comic_list_wrap')[0].cumulativeOffset()['top'];
-		console.debug(h);
-		var th = document.viewport.getDimensions()['height'];
-		console.debug(th);
-		$('add').select('.comic_list')[0].style.height = th-h-24+"px";
-	</script>
-</div>
-
-<div id="organize" style="display:none">
+<div id="organize">
 	<h3>{% trans "Organize your comics" %}</h3>
 	<div id="trash">
 		<p>{% trans "Drop comics here<br/>to delete them" %}</p>

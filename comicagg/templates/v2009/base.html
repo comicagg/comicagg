@@ -46,13 +46,16 @@
 				<span class="">{% trans "profile"%}</span>&nbsp;
 				<span class="">{% trans "help" %}</span>&nbsp;
 				<span class="">{% trans "news" %}</span>&nbsp;
+{% if user.is_staff %}
+				<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;
+{% endif %}
 				<span class=""><a href="{% url logout %}">{% trans "logout" %}</a></span>
 {% endspaceless %}
 			</div>
 			<div id="head_left">
 				Comics:&nbsp;
 				<span class=""><a href="{% url read %}">{% trans "read" %}<span id="menuUnreadCounter"></span></a></span>&nbsp;
-				<span class=""><a href="{% url configure %}">{% trans "choose" %}</a></span>&nbsp;
+				<span class=""><a href="{% url configure %}">{% trans "organize" %}</a></span>&nbsp;
 				<span class="">{% trans "request" %}</span>&nbsp;
 				<span class=""><a href="{% url comic_list %}">{% trans "list" %}</a></span>&nbsp;
 			</div>
