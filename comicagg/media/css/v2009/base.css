@@ -334,6 +334,13 @@ button:hover {
 #add .new {
 	background:#ddffcc url(/media/images/flag12.png) right center no-repeat;
 }
+#add .noimages:after {
+	content: url(/media/images/warning12.png);
+	vertical-align:middle;
+}
+#comic_new {
+	color:orange;
+}
 #comic_info {
 	position:absolute;
 	margin-left:310px;

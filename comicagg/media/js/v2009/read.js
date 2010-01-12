@@ -42,7 +42,9 @@ function initLoadImages() {
 	do {
 		div = lista.shift();
 		comic = comics[div.id.substring(1)];
-		_loadComic(comic, false);
+		if(comic.last_url) {
+			_loadComic(comic, false);
+		}
 	} while (lista.length > 0);
 }
 // will load the images of this comic if it hasnt been loaded  yet.

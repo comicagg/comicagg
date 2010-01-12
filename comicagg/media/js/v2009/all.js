@@ -214,16 +214,25 @@ function onMouseOverComic(event){
 	var elem = event.element();
 	var id = elem.id.substring(6);
 	if (comic = containsComicId(available_new, id)) {
-		//TODO select comic
+		//es un comic nuevo
+		$('comic_new').show();
 	} else if (comic = containsComicId(usercomics, id)) {
 		//TODO deselect comic
+		$('comic_new').hide();
 	} else if (comic = containsComicId(availablecomics, id)) {
 		//TODO select comic
+		$('comic_new').hide();
 	}
 	$('comic_info_wrap').show();
 	$('comic_name').innerHTML = comic.name;
 	$('comic_score').innerHTML = comic.score;
 	$('comic_votes').innerHTML = comic.votes;
+	$('comic_url').href = comic.url;
+	if(comic.noimages) {
+		$('noimages').show();
+	} else {
+		$('noimages').hide();
+	}
 }
 function onMouseOutComic(event){
 	var elem = event.element();

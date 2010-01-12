@@ -8,6 +8,7 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from django.template import RequestContext
 from comicagg import *
 from comicagg.agregator.models import *
 from comicagg.agregator.check import check_comic
@@ -53,7 +54,7 @@ def read_view(request):
 		(unread_list_nav, items_per_column) = make_groups(unread_list_nav, nmc, nmpc)
 		#request.user.unreadcomic_set.all().delete()
 		random = random_comic(request.user)
-		context = {
+		context = RequestContext(request, {
 			'comic_list':comic_list,
 			'unread_list':unread_list,
 			'comic_list_nav':comic_list_nav,
@@ -63,7 +64,7 @@ def read_view(request):
 			'random_comic':random,
 			'new_posts':NewBlog.objects.filter(user=request.user),
 			'new_comic_count':NewComic.objects.filter(user=request.user).count(),
-		}
+		})
 		return render(request, 'agregator/read.html', context, 'read')
 
 def random_comic(user, xhtml=False, request=None):

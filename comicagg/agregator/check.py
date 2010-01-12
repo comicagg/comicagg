@@ -26,7 +26,6 @@ def custom_check(comic):
 	#si se han encontrado imagenes
 	if history_set:
 		#comprobar si son nuevas
-		print comic.last_image, history_set[0].url
 		if comic.last_image == history_set[0].url:
 			return False
 		#actualizar last_image y last_image_alt_text
@@ -58,7 +57,6 @@ def default_check(comic):
 		return None
 	comic.last_image = last_image
 	comic.last_image_alt_text = alt
-	#print u' new img %s' % self.last_image
 	comic.last_check = datetime.now()
 	h = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt)
 	h.save()
@@ -113,7 +111,6 @@ def match_lines(comic, lineas, regexp, backwards=False):
 	return (match, lineas)
 
 def getoneurl(comic, _url):
-	print "getoneurl"
 	lineas = open_url(comic, _url)
 	(match, rest) = match_lines(comic, lineas, comic.regexp, comic.backwards)
 	if not match:
@@ -124,7 +121,6 @@ def getoneurl(comic, _url):
 	return (url, alt)
 
 def getredirect(comic):
-	print "getredirect"
 	lineas = open_url(comic, comic.url2)
 	(match, rest) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
 	if not match:
