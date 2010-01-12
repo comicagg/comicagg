@@ -160,3 +160,86 @@ function inViewport(cdiv, vmin, vmax) {
 		return false;
 	}
 }
+
+/* AJAX */
+
+function markread(id, vote) {
+	var url = url_mark_as_read;
+	var params = {'id': id, 'value':vote };
+	Element.show('working' + id);
+	new Ajax.Request(url, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(transport) {
+			if(transport.status == 0) {
+				//Error
+				Element.hide('working'+id);
+				Element.show('workingerror'+id);
+			} else {
+				ret = transport.responseText;
+				if (ret==0) {
+					Element.hide('working'+id);
+					Element.hide('workingerror'+id);
+					Element.hide('reading'+id);
+					Element.hide('newnotice'+id);
+					unreadCounter--;
+					unreadComics[id] = false;
+					updateCounters();
+				}
+				else {
+					//Error
+					Element.hide('working'+id);
+					Element.show('workingerror'+id);
+				}
+			}
+		},
+		onFailure: function(transport) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+		},
+		onException: function(req, exc) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+		}
+	});
+}
+
+function reportbroken(id) {
+	var url = url_report;
+	var params = {'id': id};
+	Element.show('working' + id);
+	new Ajax.Request(url, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(transport) {
+			if(transport.status == 0) {
+				//Error
+				Element.hide('working'+id);
+				Element.show('workingerror'+id);
+			} else {
+				ret = transport.responseText;
+				if (ret==0) {
+					Element.hide('working'+id);
+					Element.hide('workingerror'+id);
+				}
+				else {
+					//Error
+					Element.hide('working'+id);
+					Element.show('workingerror'+id);
+				}
+			}
+		},
+		onFailure: function(transport) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+		},
+		onException: function(req, exc) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+		}
+	});
+}

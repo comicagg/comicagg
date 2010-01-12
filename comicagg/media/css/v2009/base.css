@@ -14,6 +14,7 @@ a {
 }
 a:hover, a:visited:hover {
 	color:#6b98b5;
+	cursor:pointer;
 }
 a:visited {
 	color:#444;

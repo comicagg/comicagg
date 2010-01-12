@@ -18,23 +18,15 @@
 	tmp = Array();
 {% if not comic.noimages or perms.agregator.all_images %}
 	{% for unread in unreadlist %}
-		tmp.push({	"unreadid":{{ unread.id }},
-					"comicid":{{ comic.id }},
-					"url":"{{ unread.history.get_url|safe }}",
-					"alt_text":"{{ unread.history.alt_text|default_if_none:""|safe }}"});
+	tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:""|safe }}"});
 	{% endfor %}
 {% endif %}
-		c = {	"name":"{{ comic.name}}",
-				"id":{{ comic.id }},
+	c = {"name":"{{ comic.name}}", "id":{{ comic.id }},
 {% if not comic.noimages or perms.agregator.all_images %}
-				"last_url":"{{ comic.last_image|safe }}",
-				"last_alt_text":"{{ comic.last_image_alt_text|default_if_none:""|safe }}",
-				"list":tmp,
+		"last_url":"{{ comic.last_image|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:""|safe }}", "list":tmp,
 {% endif %}
-				"error":false,
-				"loaded":false,
-		};
-		comics[{{ comic.id }}] = c;
+		"error":false, "loaded":false,};
+	comics[{{ comic.id }}] = c;
 {% endfor %}	
 </script>
 <div id="read">
@@ -50,7 +42,7 @@
 	{% for comic,unreadlist in comic_list %}
 	<div id="c{{ comic.id }}" class="comic" style="{% if not unreadlist %}display:none{% endif %}">
 		<h3>{{ comic.name }}</h3>
-		{% if unreadlist %}<span class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
+		{% if unreadlist %}<span id="newnotice{{ comic.id }}" class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
 		<div class="striplist">
 {% if comic.noimages and not perms.agregator.all_images %}
 			{% blocktrans with comic.url as url %}The comic has been updated. <a href="{{ url }}">Click here</a> to go to the comic's website.{% endblocktrans %}
@@ -63,15 +55,18 @@
 {% endif %}
 		</div>
 		<div class="comicextra">
+			<img id="working{{ comic.id }}" src="{{ mediaurl }}images/loaderarrows.gif" alt="" style="display:none"/>&nbsp;
+			<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/error12.png" alt="" style="display:none"/>&nbsp;
 			<span id="reload{{ comic.id }}" class="reload" style="display:none"><a onclick="reloadComic({{ comic.id }})">{% trans "Reload images" %}</a> | </span>
 			{% if unreadlist %}
-			<img src="{{ mediaurl }}images/loading12.gif" id="extraloading{{ comic.id }}" alt="" style="display:none"/> 
-			<a href="#">{% trans "Mark as read"%}</a> | 
-			{% trans "Vote" %} 
-			<a href="#"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> 
-			<a href="#"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> | 
+			<span id="reading{{ comic.id }}">
+				<a onclick="markread({{ comic.id }}, 0)">{% trans "Mark as read"%}</a> | 
+				{% trans "Vote" %} 
+				<a onclick="markread({{ comic.id }}, -1)"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> 
+				<a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> | 
+			</span>
 			{% endif %}
-			<a href="#">{% trans "Report broken image" %}</a> | 
+			<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a> | 
 			{% trans "More options" %}
 		</div>
 		<h5 id="outc{{ comic.id }}"></h5>

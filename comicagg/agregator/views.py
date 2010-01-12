@@ -267,13 +267,37 @@ def save_tags(request):
 
 @login_required
 def mark_read(request):
-  if not request.POST:
-    return HttpResponseRedirect(reverse('index'))
-  comic_id = request.POST['id']
-  comic = get_object_or_404(Comic, pk=comic_id)
-  un = UnreadComic.objects.filter(user=request.user, comic=comic)
-  un.delete()
-  return HttpResponse('0')
+	if not request.POST:
+		return HttpResponseRedirect(reverse('index'))
+	comic_id = request.POST['id']
+	try:
+		value = int(request.POST['value'])
+	except:
+		value = False
+	if value:
+		rate_comic(request)
+	comic = get_object_or_404(Comic, pk=comic_id)
+	un = UnreadComic.objects.filter(user=request.user, comic=comic)
+	un.delete()
+	return HttpResponse('0')
+
+@login_required
+def rate_comic(request):
+	if request.POST:
+		id = int(request.POST['id'])
+		value = int(request.POST['value'])
+		comic = get_object_or_404(Comic, pk=id)
+		if value == -1:
+			value = 0
+		elif value == 1:
+			value = 1
+		else:
+			raise Http404
+		comic.rating += value
+		comic.votes += 1
+		comic.save()
+		return HttpResponse("0")
+	raise Http404
 
 @login_required
 def report_comic(request):
@@ -361,24 +385,6 @@ def comic_list(request, sortby='name', tag=None):
       user_comics.append(sub.comic)
     context['user_comics'] = user_comics
   return render(request, 'agregator/comic_list.html', context, menu='comic_list')
-
-@login_required
-def rate_comic(request):
-  if request.POST:
-    id = int(request.POST['id'])
-    value = int(request.POST['value'])
-    comic = get_object_or_404(Comic, pk=id)
-    if value == -1:
-      value = 0
-    elif value == 1:
-      value = 1
-    else:
-      raise Http404
-    comic.rating += value
-    comic.votes += 1
-    comic.save()
-    return HttpResponse("0")
-  raise Http404
 
 @login_required
 def hide_new_comics(request):
