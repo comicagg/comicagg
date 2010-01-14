@@ -5,7 +5,7 @@ body {
 	color:#333;
 	padding:0;
 	margin:0;
-	background:transparent url(../../images/v2009/trama.gif) top left;
+	background:transparent url(/media/images/v2010/trama.gif) top left;
 	min-width:800px;
 }
 a {
@@ -52,7 +52,7 @@ button:hover {
 /* 	background:url(trans-bg-30.png) transparent top left repeat; */
 /* 	background-color:white; */
 	height:28px; /*40-h*/
-	background:transparent url(../../images/v2009/background.png) top center repeat-x;
+	background:transparent url(../../images/v2010/background.png) top center repeat-x;
 	position:fixed;
 	left:0;
 	right:0;

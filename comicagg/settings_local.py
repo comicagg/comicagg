@@ -15,7 +15,7 @@ DATABASE_PORT = ''             # Set to empty string for default. Not used with 
 
 # Absolute path to the directory that holds the comicagg folder
 # Example: "/home/media/media.lawrence.com/"
-ROOT = '/home/esu/dev/comicagg/'
+ROOT = '/home/esu/dev/comicagg-v2010/'
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -34,7 +34,7 @@ ADMIN_MEDIA_PREFIX = 'http://localhost/admin-media/'
 #used for password reset email
 DOMAIN = 'http://localhost:8000'
 
-THEME = 'v2009'
+THEME = 'v2010'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

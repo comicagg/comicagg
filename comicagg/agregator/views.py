@@ -145,7 +145,7 @@ def configure(request, tag = None):
 	context['all_comics'] = all_comics
 	#quitar aviso de nuevos comics
 	hide_new_comics(request)
-	return render(request, 'agregator/configure_add.html', context, 'configure')
+	return render(request, 'agregator/configure_organize.html', context, 'configure')
 
 @login_required
 def save_selection(request):
