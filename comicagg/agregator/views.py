@@ -113,7 +113,7 @@ def make_groups(the_list, max_columns=5, max_per_column=20):
   return (groups, max_per_column)
 
 @login_required
-def configure(request, tag = None):
+def organize(request, tag = None, add=False):
 	context = {}
 	#mostrar pagina de configuracion
 	#build available list depending on not selected comics
@@ -143,9 +143,14 @@ def configure(request, tag = None):
 	context['available'] = available_list
 	context['user_comics'] = user_comics
 	context['all_comics'] = all_comics
-	#quitar aviso de nuevos comics
-	hide_new_comics(request)
-	return render(request, 'agregator/configure_organize.html', context, 'configure')
+	if add:
+		#quitar aviso de nuevos comics
+		hide_new_comics(request)
+		template = 'agregator/organize_add.html'
+	else:
+		template = 'agregator/organize_organize.html'
+	
+	return render(request, template, context, 'configure')
 
 @login_required
 def save_selection(request):
@@ -386,6 +391,9 @@ def comic_list(request, sortby='name', tag=None):
     context['user_comics'] = user_comics
   return render(request, 'agregator/comic_list.html', context, menu='comic_list')
 
+"""
+Oculta el aviso de nuevos comics
+"""
 @login_required
 def hide_new_comics(request):
   try:

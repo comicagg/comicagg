@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'agregator/organize_base.html' %}
 {% load i18n %}
 {% block title %}{% trans 'Add comics' %} - {% endblock %}
 {% block extra_head %}
@@ -26,7 +26,7 @@ dojo.addOnLoad(initAdd);
 		</script>
 {% endblock%}
 {% block onload %}{% endblock %}
-{% block content %}
+{% block orgcontent %}
 <div id="add">
 	<h3>{% trans "Add comics" %}</h3>
 	<div id="comic_info">
@@ -52,7 +52,7 @@ dojo.addOnLoad(initAdd);
 		// Ajusta la altura de la lista de comics
 		var h = $('add').select('.comic_list_wrap')[0].cumulativeOffset()['top'];
 		var th = document.viewport.getDimensions()['height'];
-		$('add').select('.comic_list')[0].style.height = th-h-24+"px";
+		$('add').select('.comic_list')[0].style.height = th-h-30+"px";
 	</script>
 </div>
 {% endblock %}

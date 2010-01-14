@@ -1,7 +1,8 @@
-{% extends 'base.html' %}
+{% extends 'agregator/organize_base.html' %}
 {% load i18n %}
 {% block title %}{% trans 'Organize your comics' %} - {% endblock %}
 {% block extra_head %}
+		<link rel="stylesheet" href="{{ mediaurl }}css/v2010/dnd.css" type="text/css"/>
 		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js" type="text/javascript"></script>
 		<script type="text/javascript">
 var usercomics = [
@@ -20,7 +21,7 @@ dojo.addOnLoad(initDND);
 		</script>
 {% endblock%}
 {% block onload %}{% endblock %}
-{% block content %}
+{% block orgcontent %}
 <div id="organize">
 	<h3>{% trans "Organize your comics" %}</h3>
 	<div id="trash">

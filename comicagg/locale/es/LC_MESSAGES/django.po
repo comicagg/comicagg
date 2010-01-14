@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-14 17:39+0100\n"
+"POT-Creation-Date: 2010-01-14 18:20+0100\n"
 "PO-Revision-Date: 2009-12-19 16:38+0100\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
@@ -67,15 +67,15 @@ msgstr ""
 msgid "Password reset on %s"
 msgstr "Cambio de contraseña en %s"
 
-#: agregator/views.py:188 agregator/views.py:217
+#: agregator/views.py:193 agregator/views.py:222
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:328 templates/admin/index.html:46
+#: agregator/views.py:333 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:590
+#: agregator/views.py:598
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -797,8 +797,8 @@ msgstr "Tus etiquetas: "
 
 #: templates/base/agregator/tagging_form.html:5
 #: templates/base/registration/account.html:27
-#: templates/v2010/agregator/configure.html:59
-#: templates/v2010/agregator/configure_organize.html:32
+#: templates/v2010/agregator/organize.html:59
+#: templates/v2010/agregator/organize_organize.html:33
 #: templates/v2010/registration/account.html:27
 msgid "Save"
 msgstr "Guardar"
@@ -1583,27 +1583,27 @@ msgstr "solicita"
 msgid "list"
 msgstr "lista"
 
-#: templates/v2010/agregator/configure.html:3
-#: templates/v2010/agregator/configure.html:52
-#: templates/v2010/agregator/configure_organize.html:3
-#: templates/v2010/agregator/configure_organize.html:25
+#: templates/v2010/agregator/organize.html:3
+#: templates/v2010/agregator/organize.html:52
+#: templates/v2010/agregator/organize_organize.html:3
+#: templates/v2010/agregator/organize_organize.html:26
 msgid "Organize your comics"
 msgstr "Organiza tus comics"
 
-#: templates/v2010/agregator/configure.html:34
-#: templates/v2010/agregator/configure_add.html:3
-#: templates/v2010/agregator/configure_add.html:31
+#: templates/v2010/agregator/organize.html:34
+#: templates/v2010/agregator/organize_add.html:3
+#: templates/v2010/agregator/organize_add.html:31
 #, fuzzy
 msgid "Add comics"
 msgstr "comics terminados"
 
-#: templates/v2010/agregator/configure.html:54
-#: templates/v2010/agregator/configure_organize.html:27
+#: templates/v2010/agregator/organize.html:54
+#: templates/v2010/agregator/organize_organize.html:28
 msgid "Drop comics here<br/>to delete them"
 msgstr "Suelta comics aquí<br/>para borrarlos"
 
-#: templates/v2010/agregator/configure.html:56
-#: templates/v2010/agregator/configure_organize.html:29
+#: templates/v2010/agregator/organize.html:56
+#: templates/v2010/agregator/organize_organize.html:30
 msgid ""
 "Here you can sort your comics. Just select one or some of them (holding the "
 "Ctrl/Meta key) and drag them around."
@@ -1611,58 +1611,58 @@ msgstr ""
 "Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
 "Ctrl/Meta) y múevelos."
 
-#: templates/v2010/agregator/configure.html:63
-#: templates/v2010/agregator/configure_organize.html:36
+#: templates/v2010/agregator/organize.html:63
+#: templates/v2010/agregator/organize_organize.html:37
 msgid "Saving..."
 msgstr "Guardando..."
 
-#: templates/v2010/agregator/configure.html:69
-#: templates/v2010/agregator/configure_organize.html:42
+#: templates/v2010/agregator/organize.html:69
+#: templates/v2010/agregator/organize_organize.html:43
 msgid "Sort them:"
 msgstr "Ordenar por:"
 
-#: templates/v2010/agregator/configure.html:70
-#: templates/v2010/agregator/configure_organize.html:43
+#: templates/v2010/agregator/organize.html:70
+#: templates/v2010/agregator/organize_organize.html:44
 msgid "by name"
 msgstr "por nombre"
 
-#: templates/v2010/agregator/configure.html:71
-#: templates/v2010/agregator/configure_organize.html:44
+#: templates/v2010/agregator/organize.html:71
+#: templates/v2010/agregator/organize_organize.html:45
 msgid "by score"
 msgstr "por puntuación"
 
-#: templates/v2010/agregator/configure.html:72
-#: templates/v2010/agregator/configure_organize.html:45
+#: templates/v2010/agregator/organize.html:72
+#: templates/v2010/agregator/organize_organize.html:46
 msgid "how it was saved"
 msgstr "como está guardado"
 
-#: templates/v2010/agregator/configure_add.html:36
+#: templates/v2010/agregator/organize_add.html:36
 #, fuzzy
 msgid "New comic!"
 msgstr " comics nuevos. "
 
-#: templates/v2010/agregator/configure_add.html:37
+#: templates/v2010/agregator/organize_add.html:37
 #, fuzzy
 msgid "Score"
 msgstr "Más"
 
-#: templates/v2010/agregator/configure_add.html:37
+#: templates/v2010/agregator/organize_add.html:37
 #, fuzzy
 msgid "votos"
 msgstr "voto"
 
-#: templates/v2010/agregator/configure_add.html:38
+#: templates/v2010/agregator/organize_add.html:38
 msgid ""
 "<b>Warning!</b> Instead of showing the images of this comic, you will see a "
 "link to its website when the comic updates."
 msgstr ""
 
-#: templates/v2010/agregator/configure_add.html:39
+#: templates/v2010/agregator/organize_add.html:39
 #, fuzzy
 msgid "Link to its website"
 msgstr "Volver a la web"
 
-#: templates/v2010/agregator/configure_add.html:47
+#: templates/v2010/agregator/organize_add.html:47
 #, fuzzy
 msgid "You won't see the images of this comic"
 msgstr "Estás leyendo este comic."
