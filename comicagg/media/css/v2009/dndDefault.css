@@ -1,0 +1,60 @@
+.dndContainer {
+	cursor: default;
+}
+
+/*.dojoDndContainerOver {
+}*/
+
+.dojoDndItem { 
+	background:white;
+	float:left;
+	border:1px solid gray;
+	padding:2px 12px;
+	margin:0px 3px 3px 0px;
+	-moz-border-radius:5pt 5pt;
+	-webkit-border-radius:5pt 5pt;
+}
+
+.dojoDndItemOver {
+	background: #ededed;
+	cursor:pointer;
+}
+
+.dojoDndItemSelected {
+	background: #ccddff; color: #444;
+}
+
+.dojoDndItemAnchor {
+	background: #ccddff; color: black;
+}
+
+.dojoDndItemOver .dojoDndItemSelected {
+	background: #ccddff;
+}
+
+.dojoDndItemOver .dojoDndItemAnchor {
+	background: #ededed;
+}
+
+.dojoDndItemBefore {
+	background:url(/media/images/2leftarrow_bw10.png) #ccc left center no-repeat;
+}
+.dojoDndItemAfter {
+	background:url(/media/images/2rightarrow_bw10.png) #ccc right center no-repeat;
+}
+.dojoDndAvatar {
+	border:2px solid #ccc;
+	font-size: 75%;
+	-moz-border-radius:8pt 8pt;
+	radius:8pt;
+	background:white;
+}
+	
+.dojoDndAvatarHeader {
+	background: #aaa;
+}
+
+.dojoDndAvatarItem {
+	background: #fff;
+	border-bottom:1px solid #666;
+}

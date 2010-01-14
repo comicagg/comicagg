@@ -1,0 +1,370 @@
+/* Roger Shah presents Magic Island - Music for Balearic People Episode 061 */
+body {
+	font-family:sans-serif;
+	font-size:9pt;
+	color:#333;
+	padding:0;
+	margin:0;
+	background:transparent url(../../images/v2009/trama.gif) top left;
+	min-width:800px;
+}
+a {
+	color:#333;
+	text-decoration:underline;
+}
+a:hover, a:visited:hover {
+	color:#6b98b5;
+	cursor:pointer;
+}
+a:visited {
+	color:#444;
+}
+.text_left {
+	text-align:left;
+}
+.text_right {
+	text-align:right;
+}
+.text_center {
+	text-align:center;
+}
+#content {
+	margin-top:40px;
+	padding:0em 2em;
+}
+input, button {
+	background-color:#f0f0f0;
+	color:#333;
+	border:1px solid gray;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	padding:1px 3px;
+}
+button:hover {
+	background-color:#ddd;
+	border-color:#6b98b5;
+}
+/* Menu*/
+#head {
+	color:white;
+	padding: 10px 1em 2px 1em;
+/* 	border-bottom:1px solid #8e8e8e; */
+/* 	background:url(trans-bg-30.png) transparent top left repeat; */
+/* 	background-color:white; */
+	height:28px; /*40-h*/
+	background:transparent url(../../images/v2009/background.png) top center repeat-x;
+	position:fixed;
+	left:0;
+	right:0;
+	top:0;
+}
+#head a {
+	color:white;
+}
+#head a:hover {
+	color:#ddd;
+}
+#head_right {
+	float:right;
+	min-width:25%;
+	text-align:right;
+}
+#head_left {
+	float:left;
+	min-width:25%;
+}
+#branding {
+	text-align:center;
+	font-weight:bolder;
+}
+#branding a {
+	text-decoration:none;
+}
+#quickgotobutton {
+	border:1px solid white;
+	text-decoration:none;
+	padding:0px 2px;
+}
+
+/* Login views */
+
+.loginbox {
+	border:1px gray solid;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	background-color:white;
+	width:500px;
+	margin:10% auto 0px auto;
+	text-align:center;
+	padding:15px;
+}
+.loginbox:hover, .loginbox input:hover {
+	border-color: #7cb9ff;
+	border-color: #8baec1;
+}
+#login_wrap {
+	margin-top:20px;
+}
+#login_wrap table {
+	margin:auto;
+	text-align:right;
+}
+.loginbox input {
+	border:1px solid gray;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	padding:2px;
+}
+.loginbox input:focus {
+	border-width:2px;
+}
+#register_wrap {
+	width:700px;
+	margin-top:60px;
+}
+
+#register_table td {
+	vertical-align:text-top;
+	padding-bottom:5px;
+	text-align:left;
+}
+#register_table tr>:first-child {
+	text-align:right;
+	padding-right:5px;
+}
+
+#errorContainer {
+	border:1px solid red;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	background-color:#ffcccc;
+	padding:5px;
+}
+.error_tr input {
+	border-color:red;
+}
+
+.errorlist {
+	color:red;
+	margin:3px;
+	padding-left:15px;
+}
+
+.errorlist li {
+}
+
+/* Read page */
+
+#read .extras_div {
+	float:right;
+	text-align:right;
+}
+
+#read .comic {
+	border:1px solid gray;
+	background-color:white;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	padding:5px 1em 5px 1em;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#read .comic h3 {
+	margin:0;
+	padding:0;
+	font-size:12pt;
+}
+#read .comic .striplist {
+	margin:5px auto 5px auto;
+	text-align:center;
+}
+#read .comic .comicextra {
+	border-top:1px dashed gray;
+}
+#read .comic .comicextra a {
+	text-decoration:none;
+}
+#read .comic .comicextra img {
+	vertical-align:middle;
+	border:0;
+}
+#read .comic .comicextra .reload {
+	font-weight:bolder;
+}
+#read .comic .newstripsnotice {
+	color:orange;
+	font-weight:bolder;
+}
+#read .info {
+	margin:0;
+	padding:0;
+}
+
+/* Configure page */
+
+#organize .comic_list {
+	font-size:9pt;
+	border:1px solid gray;
+	-moz-border-radius:8pt;
+	-webkit-border-radius:8pt;
+	padding:5px;
+/* 	line-height:14pt; */
+	background:white;
+	margin-bottom:2em;
+	margin-top:1.5em;
+	clear:both;
+}
+#organize .comic_list .item {
+}
+#organize .comic_list .name, .comic_list .score, .comic_list .votes {
+	display:none;
+}
+#organize .dndContainer {
+	cursor: default;
+}
+/*.dojoDndContainerOver {
+}*/
+#organize .dojoDndItem { 
+	background:white;
+	float:left;
+	border:1px solid gray;
+	padding:2px 12px;
+	margin:0px 3px 3px 0px;
+	-moz-border-radius:5pt 5pt;
+	-webkit-border-radius:5pt 5pt;
+}
+#organize .dojoDndItemOver {
+	background: #ededed;
+	cursor:pointer;
+}
+#organize .dojoDndItemSelected {
+	background: #ccddff; color: #444;
+}
+#organize .dojoDndItemAnchor {
+	background: #ccddff; color: black;
+}
+#organize .dojoDndItemOver .dojoDndItemSelected {
+	background: #ccddff;
+}
+#organize .dojoDndItemOver .dojoDndItemAnchor {
+	background: #ededed;
+}
+#organize .dojoDndItemBefore {
+	background:url(/media/images/2leftarrow_bw10.png) #ccc left center no-repeat;
+}
+#organize .dojoDndItemAfter {
+	background:url(/media/images/2rightarrow_bw10.png) #ccc right center no-repeat;
+}
+#organize .dojoDndAvatar {
+	border:2px solid #ccc;
+	font-size: 75%;
+	-moz-border-radius:8pt 8pt;
+	radius:8pt;
+	background:white;
+}
+#organize .dojoDndAvatarHeader {
+	background: #aaa;
+}
+#organize .dojoDndAvatarItem {
+	background: #fff;
+	border-bottom:1px solid #666;
+}
+#trash {
+/* 	width:48px; */
+	height:48px;
+/* 	border:1px solid gray; */
+	padding-right:50px;
+	float:right;
+	vertical-align:middle;
+	background:url(/media/images/trash.png) right center no-repeat transparent;
+	cursor:pointer;
+}
+#organize .save {
+	float:left;
+	cursor:pointer;
+}
+#organize .save:hover {
+	color:#6b98b5;
+	background:#efefef;
+}
+#organize .save img {
+	vertical-align:middle;
+}
+#organize .save_button {
+	width:auto;
+	background:#96d25a;
+	border:2px solid gray;
+	line-height:16px;
+}
+#organize .save_button:hover {
+	width:auto;
+	background:white;/*#8ec755;*/
+	float:left;
+	cursor:pointer;
+}
+#add .comic_list_wrap {
+}
+#add .comic_list {
+	border:1px solid gray;
+	border-width:1px 0px;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	overflow:scroll;
+	overflow-x:hidden;
+	width:300px;
+}
+#add .comic {
+/* 	width:300px; */
+	padding:2px 0px;
+	text-align:center;
+	border-bottom:1px solid gray;
+	border-left:1px solid gray;
+	background:white;
+	cursor:pointer;
+}
+#add .comic:hover {
+	background-color:#ccc;
+}
+#add .last {
+	border-bottom:0;
+}
+#add .added {
+	background:#ccddff url(/media/images/ok12.png) right center no-repeat;
+}
+#add .new {
+	background:#ddffcc url(/media/images/flag12.png) right center no-repeat;
+}
+#add .noimages:after {
+	content: url(/media/images/warning12.png);
+	vertical-align:middle;
+}
+#comic_new {
+	color:orange;
+}
+#comic_info {
+	position:absolute;
+	margin-left:310px;
+	right:10px;
+	left:30px;
+	padding:3px 8px;
+	background:white;
+	border:1px solid gray;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;
+	min-height:200px;
+}
+#comic_info h3 {
+	margin:5px 0;
+	padding:0;
+}
+#comic_info h4 {
+	margin:0;
+	padding:0;
+}
+#comic_info p {
+	margin-left:2em;
+}
+#comic_info_wrap {
+	margin-left:2em;
+}

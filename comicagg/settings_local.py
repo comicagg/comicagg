@@ -24,7 +24,7 @@ MEDIA_ROOT = '%scomicagg/media' % ROOT
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://localhost:8000/media/'
+MEDIA_URL = 'http://localhost/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -32,16 +32,16 @@ MEDIA_URL = 'http://localhost:8000/media/'
 ADMIN_MEDIA_PREFIX = 'http://localhost/admin-media/'
 
 #used for password reset email
-DOMAIN = 'http://192.168.0.3:8000'
+DOMAIN = 'http://localhost:8000'
 
-THEME = 'blue_white'
+THEME = 'v2009'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     '%scomicagg/templates' % ROOT,
-    '%scomicagg/templates/base' % ROOT,
+#    '%scomicagg/templates/base' % ROOT,
     '%scomicagg/templates/%s' % (ROOT, THEME),
 )
 

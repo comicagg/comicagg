@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Read comics' %} - {% endblock %}
+{% block extra_head %}
+		<script src="{{ mediaurl }}js/v2009/read.js" type="text/javascript"></script>
+{% endblock%}
+{% block onload %}onReadLoad();{% endblock %}
+{% block content %}
+<script language="javascript">
+	var unreadCounter = {{ unread_list|length }};
+	var comicCounter = {{ comic_list|length }};
+	var unreadComics = new Array();
+	var comics = new Array();
+{% for comic,unreadlist in unread_list %}
+	unreadComics[{{ comic.id }}] = true;
+{% endfor %}
+{% for comic,unreadlist in comic_list %}
+	tmp = Array();
+{% if not comic.noimages or perms.agregator.all_images %}
+	{% for unread in unreadlist %}
+	tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:""|safe }}"});
+	{% endfor %}
+{% endif %}
+	c = {"name":"{{ comic.name}}", "id":{{ comic.id }},
+{% if not comic.noimages or perms.agregator.all_images %}
+		"last_url":"{{ comic.last_image|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:""|safe }}", "list":tmp,
+{% endif %}
+		"error":false, "loaded":false,};
+	comics[{{ comic.id }}] = c;
+{% endfor %}	
+</script>
+<div id="read">
+	<div class="extras_div">
+		<p class="info">{% blocktrans %}There are 0 new news items{% endblocktrans %}</p>
+		<p class="info">{% blocktrans %}There are 0 new comics in the database.{% endblocktrans %}</p>
+	</div>
+	<div>
+		<p class="info">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="totalComicCounter">{{ len }}</b> comics and <b id="infoUnreadCounter">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
+		<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a href="#" onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>
+		<p class="info" id="showingAll" style="display:none">{% blocktrans %}Showing <b>all</b> comics. <a href="#" onclick="showUnreadComics()">Click here</a> to show only unread comics.{% endblocktrans %}</p>
+	</div>
+	{% for comic,unreadlist in comic_list %}
+	<div id="c{{ comic.id }}" class="comic" style="{% if not unreadlist %}display:none{% endif %}">
+		<h3>{{ comic.name }}</h3>
+		{% if unreadlist %}<span id="newnotice{{ comic.id }}" class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
+		<div class="striplist">
+{% if comic.noimages and not perms.agregator.all_images %}
+			{% blocktrans with comic.url as url %}The comic has been updated. <a href="{{ url }}">Click here</a> to go to the comic's website.{% endblocktrans %}
+{% else %}
+			{% for unread in unreadlist %}
+			<img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/v2009/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
+			{% empty %}
+			<img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/v2009/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
+			{% endfor %}
+{% endif %}
+		</div>
+		<div class="comicextra">
+			<img id="working{{ comic.id }}" src="{{ mediaurl }}images/loaderarrows.gif" alt="" style="display:none"/>&nbsp;
+			<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/error12.png" alt="" style="display:none"/>&nbsp;
+			<span id="reload{{ comic.id }}" class="reload" style="display:none"><a onclick="reloadComic({{ comic.id }})">{% trans "Reload images" %}</a> | </span>
+			{% if unreadlist %}
+			<span id="reading{{ comic.id }}">
+				<a onclick="markread({{ comic.id }}, 0)">{% trans "Mark as read"%}</a> | 
+				{% trans "Vote" %} 
+				<a onclick="markread({{ comic.id }}, -1)"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> 
+				<a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> | 
+			</span>
+			{% endif %}
+			<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a> | 
+			{% trans "More options" %}
+		</div>
+		<h5 id="outc{{ comic.id }}"></h5>
+	</div>
+	{% empty %}
+	There are no comics here
+	{% endfor %}
+</div>
+{% endblock %}

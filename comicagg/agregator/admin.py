@@ -13,7 +13,7 @@ class ComicAdmin(admin.ModelAdmin):
 	inlines = [TagInline,]
 	fieldsets = (
 		('Datos del comic', {
-			'fields' : ('name', 'website', 'activo', 'ended', 'notify')
+			'fields' : ('name', 'website', 'activo', 'ended', 'notify', 'noimages')
 		}),
 		('Configuración básica', {
 			'classes': ('wide', ),

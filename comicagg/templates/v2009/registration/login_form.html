@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Login'%} -{% endblock %}
+{% block onload %}focusOnLogin(){% endblock %}
+{% block content %}
+{% block done-content %}{% endblock %}
+<p class="loginbox">{% trans "Comic Aggregator allows you to read lots and lots of webcomics in the same page." %}</p>
+<div id="login_wrap" class="loginbox">
+	<h3>{% trans 'Login into your account'%}</h3>
+	<p>{% trans 'Write your username and passwod to get you logged in.'%}</p>
+	{% if error %}
+	<p><span id="errorContainer">{{ error }}</p>
+	{% endif %}
+	<div class="text_left">
+		<div id="error"></div>
+		<form method="post" action="{% url login %}" enctype="application/x-www-form-urlencoded">
+			<table>
+				<tr>
+					<td><label class="small_text">{% trans 'User '%}</label></td>
+					<td>{{ form.username }}<td>
+				</tr>
+				<tr>
+					<td><label class="small_text">{% trans 'Password '%}</label></td>
+					<td>{{ form.password }}</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="text_center"><input type="submit" value="{% trans 'Log in'%}" />{{ form.next }}</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<p>{% trans "Don't you have an account?" %} <a href="{% url register %}">{% trans "Create a one." %}</a></p>
+	<p>{% trans "Can't remember your password?" %} <a href="{% url reset_password %}">{% trans 'Send me a new password.'%}</a></p>
+</div>
+{% endblock %}

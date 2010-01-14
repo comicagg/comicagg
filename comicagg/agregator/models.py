@@ -24,6 +24,7 @@ class Comic(models.Model):
 	activo = models.BooleanField('Comic activo', default=False, help_text='')
 	notify = models.BooleanField('Notificar comic nuevo a los usuarios', default=False, help_text='Siempre va a aparecer como desactivado aquí. Si se activa, se notifica y se deja la opción desactivada')
 	ended = models.BooleanField('Comic terminado', default=False, help_text='Si un comic termina marcar esta opción y desactivarlo también')
+	noimages = models.BooleanField('No mostrar imágenes', default=False, help_text='Si no se pueden mostrar las imágenes del comic, marcar para que únicamente salga un texto indicando que se ha actualizado')
 
 	#campo para añadir una funcion custom de actualizacion
 	help_text = 'Mirar la <a href="/docs/custom_func/">documentación</a>.'
@@ -61,6 +62,9 @@ class Comic(models.Model):
 
 	class Meta:
 		ordering = ['name']
+		permissions = (
+			("all_images", "Can see all images"),
+		)
 
 	def __unicode__(self):
 		return u'%s' % self.name

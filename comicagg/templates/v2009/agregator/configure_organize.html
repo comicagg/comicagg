@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Organize your comics' %} - {% endblock %}
+{% block extra_head %}
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js" type="text/javascript"></script>
+		<script type="text/javascript">
+var usercomics = [
+{% for comic in user_comics %}
+	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating }}, 'votes':{{ comic.votes }}},
+{% endfor %}
+];
+var newcomics = usercomics.clone();
+var removedcomics = new Array();
+var addedcomics = new Array();
+dojo.require("dojo.dnd.Container");
+dojo.require("dojo.dnd.Manager");
+dojo.require("dojo.dnd.Source");
+dojo.require("dojo.dnd.Avatar");
+dojo.addOnLoad(initDND);
+		</script>
+{% endblock%}
+{% block onload %}{% endblock %}
+{% block content %}
+<div id="organize">
+	<h3>{% trans "Organize your comics" %}</h3>
+	<div id="trash">
+		<p>{% trans "Drop comics here<br/>to delete them" %}</p>
+	</div>
+	<p>{% trans "Here you can sort your comics. Just select one or some of them (holding the Ctrl/Meta key) and drag them around." %}</p>
+	<div class="save" onclick="saveSort()">
+		<img src="{{ mediaurl }}images/save24.png" alt="save"/>
+		<span id="save_text">{% trans "Save" %}&nbsp;
+			<img id="saved_ok" style="display:none" src="{{ mediaurl }}images/ok16.png" alt=""/>
+			<img id="save_error" style="display:none" src="{{ mediaurl }}images/remove.png" alt=""/>
+		</span>
+		<span id="saving_text" style="display:none">{% trans "Saving..." %}&nbsp;
+			<img src="{{ mediaurl }}images/loaderarrows.gif" alt=""/>
+		</span>
+	</div>
+	<div class="text_center">
+	{% spaceless %}
+		{% trans "Sort them:" %}&nbsp;
+		<a onclick="sort_items(true)">{% trans "by name" %}</a>,&nbsp;
+		<a onclick="sort_items(false)">{% trans "by score" %}</a>,&nbsp;
+		<a onclick="revert()">{% trans "how it was saved" %}</a>.
+	{% endspaceless %}
+	</div>
+	<div class="comic_list">
+		<div id="user_comics">
+	{% for comic in auser_comics %}
+			<span id="comic_{{ comic.id }}" class="dojoDndItem item">{{ comic }}</span>
+	{% endfor %}
+		</div>
+		<div style="clear:both"></div>
+	</div>
+</div>
+{% endblock %}

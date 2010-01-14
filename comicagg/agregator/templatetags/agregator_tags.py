@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import stringfilter
@@ -47,6 +48,13 @@ def recortar(value, arg):
   if len(value)<=n: return value
   m = n/2
   return '%s...%s' % (value[:m], value[len(value)-m:len(value)])
+
+@register.filter(name='recortar2')
+@stringfilter
+def recortar2(value, arg):
+  n = int(arg)-3
+  if len(value)<=n: return value
+  return '%s...' % (value[:n])
 
 @register.filter()
 def is_in(value, arg):
