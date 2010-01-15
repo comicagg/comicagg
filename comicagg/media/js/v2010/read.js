@@ -69,10 +69,11 @@ function _loadComic(comic, seed) {
 }
 // add a bit in the url to make it different so browser caching won't happen
 function _addSeed(url) {
+	_date = new Date();
 	if (url.indexOf('?') == -1) {
-		url += "?" + (new Date()).getTime();
+		url += "?" + _date.getTime();
 	} else {
-		url += "&" + (new Date()).getTime();
+		url += "&" + _date.getTime();
 	}
 	return url;
 }

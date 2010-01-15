@@ -95,7 +95,7 @@ function etoString(e) {
 	return s.toLowerCase();
 }
 
-//TODO borrar esta variable
+//borrar esta variable
 var tmp;
 
 var dojo_usercomics;
