@@ -21,7 +21,7 @@ function saveSort() {
 	$('saved_ok').hide();
 	var params = {'selected': ids, 'removed':idsr};
 	tmp = params;
-	new Ajax.Request(aurl_save_selection, {
+	new Ajax.Request(url_save_selection, {
 		method: 'post',
 		parameters: params,
 		onSuccess: function(response) {
