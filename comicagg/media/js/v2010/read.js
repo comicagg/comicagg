@@ -12,8 +12,11 @@ function updateCounters() {
 		$('unreadCounterP').hide();
 		$('menuUnreadCounter').innerHTML = '';
 	}
-	$('totalComicCounter').innerHTML = comicCounter;
-	$('totalComicCounter2').innerHTML = comicCounter;
+	try {
+		$('totalComicCounter').innerHTML = comicCounter;
+		$('totalComicCounter2').innerHTML = comicCounter;
+	} catch(error){
+	}
 }
 // shows all the comics divs
 function showAllComics() {

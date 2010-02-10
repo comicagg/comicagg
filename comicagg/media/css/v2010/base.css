@@ -279,24 +279,24 @@ button:hover {
 	background:url(/media/images/trash.png) right center no-repeat transparent;
 	cursor:pointer;
 }
-#organize .save {
+#organize .save, #add .save {
 	float:left;
 	cursor:pointer;
 }
-#organize .save:hover {
+#organize .save:hover, #add .save:hover {
 	color:#6b98b5;
 	background:#efefef;
 }
-#organize .save img {
+#organize .save, #add .save img {
 	vertical-align:middle;
 }
-#organize .save_button {
+#organize .save_button, #add .save_button {
 	width:auto;
 	background:#96d25a;
 	border:2px solid gray;
 	line-height:16px;
 }
-#organize .save_button:hover {
+#organize .save_button:hover, #add .save_button:hover {
 	width:auto;
 	background:white;/*#8ec755;*/
 	float:left;
@@ -371,8 +371,8 @@ button:hover {
 	padding:0;
 }
 #comic_info p {
-	margin-left:2em;
+	margin-left:1em;
 }
 #comic_info_wrap {
-	margin-left:2em;
+	margin-left:1em;
 }

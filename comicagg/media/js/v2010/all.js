@@ -4,7 +4,7 @@ function focusOnLogin() {
 
 // Configure
 
-function saveSort() {
+function save() {
 	var ids = "";
 	for (var i = 0, len = newcomics.length; i < len; i++) {
 		ids += newcomics[i].id;
@@ -233,6 +233,7 @@ function mouseOverAction() {
 	$('comic_name').innerHTML = comic.name;
 	$('comic_score').innerHTML = comic.score;
 	$('comic_votes').innerHTML = comic.votes;
+	$('comic_updated').innerHTML = comic.updated;
 	$('comic_url').href = comic.url;
 	if(comic.noimages) {
 		$('noimages').show();

@@ -68,8 +68,7 @@
 				<a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> | 
 			</span>
 			{% endif %}
-			<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a> | 
-			{% trans "More options" %}
+			<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a>
 		</div>
 		<h5 id="outc{{ comic.id }}"></h5>
 	</div>

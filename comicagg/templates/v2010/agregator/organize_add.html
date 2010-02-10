@@ -6,7 +6,7 @@
 		<script type="text/javascript">
 var usercomics = [
 {% for comic in user_comics %}
-	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}"},
+	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}"},
 {% endfor %}
 ];
 var newcomics = usercomics.clone();
@@ -14,12 +14,12 @@ var removedcomics = new Array();
 var addedcomics = new Array();
 var availablecomics = [
 {% for comic in all_comics %}
-	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}"},
+	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}"},
 {% endfor %}
 ];
 var available_new = [
 {% for newcomic in new_comics %}
-	{'id':{{ newcomic.comic.id}}, 'name':"{{ newcomic.comic.name|escape }}", 'slug':"{{ newcomic.comic.name|slugify }}", 'score':{{ newcomic.comic.getRating }}, 'votes':{{ newcomic.comic.votes }}, 'noimages':{{ newcomic.comic.noimages }}, 'url': "{{ newcomic.comic.url }}"},
+	{'id':{{ newcomic.comic.id}}, 'name':"{{ newcomic.comic.name|escape }}", 'slug':"{{ newcomic.comic.name|slugify }}", 'score':{{ newcomic.comic.getRating }}, 'votes':{{ newcomic.comic.votes }}, 'noimages':{{ newcomic.comic.noimages }}, 'url': "{{ newcomic.comic.url }}", 'updated':"{{ newcomic.comic.last_check|date:"j F, Y" }}"},
 {% endfor %}
 ];
 dojo.addOnLoad(initAdd);
@@ -36,12 +36,23 @@ dojo.addOnLoad(initAdd);
 			<p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.getRating }}</span>%</b> (<span id="comic_votes">{{ comic.votes }}</span> {% trans "votes" %})</p>
 			<p id="noimages" style="display:none">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>
 			<p><a id="comic_url">{% trans "Link to its website"%}</a></p>
-			<p>{% trans "Last update:" %}&nbsp;{{ comic.last_update }}</p>
+			<p>{% trans "Last update:" %}&nbsp;<span id="comic_updated"></span></p>
 		</div>
 	</div>
 	<div id="comic_list_wrap">
 		<p>Ordenar por: nombre, puntuación, lectores.</p>
-		<div style="float:right"><button>Guardar</button></div>
+		<div class="save" onclick="save()" style="float:right">
+			<span id="save_text">
+				<img id="saved_ok" style="display:none" src="{{ mediaurl }}images/ok16.png" alt=""/>
+				<img id="save_error" style="display:none" src="{{ mediaurl }}images/remove.png" alt=""/>
+				{% trans "Save" %}&nbsp;
+			</span>
+			<span id="saving_text" style="display:none">
+				<img src="{{ mediaurl }}images/loaderarrows.gif" alt=""/>
+				{% trans "Saving..." %}&nbsp;
+			</span>
+			<img src="{{ mediaurl }}images/save24.png" alt="save"/>
+		</div>
 		<p><b>{% trans "Hover over a comic to see details." %}</b></p>
 		<ul id="comic_list">
 {% for comic in all_comics %}

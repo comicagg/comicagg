@@ -28,7 +28,7 @@ dojo.addOnLoad(initDND);
 		<p>{% trans "Drop comics here<br/>to delete them" %}</p>
 	</div>
 	<p>{% trans "Here you can sort your comics. Just select one or some of them (holding the Ctrl/Meta key) and drag them around." %}</p>
-	<div class="save" onclick="saveSort()">
+	<div class="save" onclick="save()">
 		<img src="{{ mediaurl }}images/save24.png" alt="save"/>
 		<span id="save_text">{% trans "Save" %}&nbsp;
 			<img id="saved_ok" style="display:none" src="{{ mediaurl }}images/ok16.png" alt=""/>
