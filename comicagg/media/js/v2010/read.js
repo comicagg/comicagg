@@ -1,8 +1,19 @@
 // updates html counters
 function updateCounters() {
-	$('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
-	$('infoUnreadCounter').innerHTML = unreadCounter;
+	if (unreadCounter > 0) {
+		document.title = titlei18n + " (" + unreadCounter + ") - " + titlebase;
+		$('noUnreadCounter').hide();
+		$('unreadCounterP').show();
+		$('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
+		$('infoUnreadCounter').innerHTML = unreadCounter;
+	} else {
+		document.title = titlei18n + " - " + titlebase;
+		$('noUnreadCounter').show();
+		$('unreadCounterP').hide();
+		$('menuUnreadCounter').innerHTML = '';
+	}
 	$('totalComicCounter').innerHTML = comicCounter;
+	$('totalComicCounter2').innerHTML = comicCounter;
 }
 // shows all the comics divs
 function showAllComics() {

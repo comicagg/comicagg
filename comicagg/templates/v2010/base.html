@@ -11,6 +11,7 @@
 		<script src="{{ mediaurl }}js/lib/scriptaculous.js" type="text/javascript"></script>
 		<script src="{{ mediaurl }}js/v2010/all.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			var titlebase = " Comic Aggregator";
 			var url_hide_new_comics = '{% url hide_new_comics %}';
 			var url_hide_new_blogs = '{% url hide_new_blogs %}';
 			var url_forget_new_blogs = '{% url forget_new_blogs %}';
@@ -41,23 +42,10 @@
 		<div id="head">
 			{% if user.is_authenticated %}
 			<div id="head_right">
-{% spaceless %}
-				<i><b>{{ user.username }}</b></i>&nbsp;/&nbsp;
-				<span class="">{% trans "profile"%}</span>&nbsp;
-				<span class="">{% trans "help" %}</span>&nbsp;
-				<span class="">{% trans "news" %}</span>&nbsp;
-{% if user.is_staff %}
-				<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;
-{% endif %}
-				<span class=""><a href="{% url logout %}">{% trans "logout" %}</a></span>
-{% endspaceless %}
+				<i><b>{{ user.username }}</b></i>&nbsp;&nbsp;-&nbsp;&nbsp;<span class="">{% trans "profile"%}</span>&nbsp;&nbsp;<span class="">{% trans "help" %}</span>&nbsp;&nbsp;<span class="">{% trans "news" %}</span>&nbsp;&nbsp;{% if user.is_staff %}<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;&nbsp;{% endif %}<span class=""><a href="{% url logout %}">{% trans "logout" %}</a></span>
 			</div>
 			<div id="head_left">
-				Comics:&nbsp;
-				<span class=""><a href="{% url read %}">{% trans "read" %}<span id="menuUnreadCounter"></span></a></span>&nbsp;
-				<span class=""><a href="{% url organize %}">{% trans "organize" %}</a></span>&nbsp;
-				<span class="">{% trans "request" %}</span>&nbsp;
-				<span class=""><a href="{% url comic_list %}">{% trans "list" %}</a></span>&nbsp;
+				Comics:&nbsp;&nbsp;<span class=""><a href="{% url read %}">{% trans "read" %}<span id="menuUnreadCounter"></span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url organize %}">{% trans "organize" %}</a></span>&nbsp;&nbsp;<span class="">{% trans "request" %}</span>&nbsp;&nbsp;<span class=""><a href="{% url comic_list %}">{% trans "list" %}</a></span>
 			</div>
 			{% endif %}
 			<div id="branding">
