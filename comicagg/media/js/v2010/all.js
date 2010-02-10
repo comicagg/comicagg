@@ -210,8 +210,14 @@ function onClickComic(event) {
 		}
 	}
 }
+var lastevent;
+var timerid;
 function onMouseOverComic(event){
-	var elem = event.element();
+	lastevent = event;
+	timerid = setTimeout("mouseOverAction()", 500);
+}
+function mouseOverAction() {
+	var elem = lastevent.element();
 	var id = elem.id.substring(6);
 	if (comic = containsComicId(available_new, id)) {
 		//es un comic nuevo
@@ -237,4 +243,5 @@ function onMouseOverComic(event){
 function onMouseOutComic(event){
 	var elem = event.element();
 	var id = elem.id.substring(6);
+	clearTimeout(timerid);
 }

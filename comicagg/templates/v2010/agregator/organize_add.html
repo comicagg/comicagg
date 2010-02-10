@@ -30,19 +30,20 @@ dojo.addOnLoad(initAdd);
 <div id="add">
 	<h3>{% trans "Add comics" %}</h3>
 	<div id="comic_info">
-		<h4>Hover over a comic to see details</h4>
 		<div id="comic_info_wrap" style="display:none">
 			<h3 id="comic_name"></h3>
 			<h4 id="comic_new">{% trans "New comic!" %}</h4>
-			<p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.getRating }}</span>%</b> (<span id="comic_votes">{{ comic.votes }}</span> {% trans "votos" %})</p>
+			<p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.getRating }}</span>%</b> (<span id="comic_votes">{{ comic.votes }}</span> {% trans "votes" %})</p>
 			<p id="noimages" style="display:none">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>
 			<p><a id="comic_url">{% trans "Link to its website"%}</a></p>
+			<p>{% trans "Last update:" %}&nbsp;{{ comic.last_update }}</p>
 		</div>
 	</div>
-	<div class="comic_list_wrap">
-		Ordenar por: nombre, puntuación, lectores.
-		<button>Guardar</button>
-		<ul class="comic_list">
+	<div id="comic_list_wrap">
+		<p>Ordenar por: nombre, puntuación, lectores.</p>
+		<div style="float:right"><button>Guardar</button></div>
+		<p><b>{% trans "Hover over a comic to see details." %}</b></p>
+		<ul id="comic_list">
 {% for comic in all_comics %}
 			<li id="comic_{{ comic.id }}" class="comic {% if forloop.last %}last{% endif %} {% if comic.noimages %}noimages{% endif %}" {% if comic.noimages %}title="{% trans "You won't see the images of this comic" %}"{% endif %}>{{ comic }}</li>
 {% endfor %}
@@ -50,9 +51,9 @@ dojo.addOnLoad(initAdd);
 	</div>
 	<script type="text/javascript">
 		// Ajusta la altura de la lista de comics
-		var h = $('add').select('.comic_list_wrap')[0].cumulativeOffset()['top'];
-		var th = document.viewport.getDimensions()['height'];
-		$('add').select('.comic_list')[0].style.height = th-h-30+"px";
+		$('comic_info').style.top = $('comic_list').cumulativeOffset()['top'] + "px";
+		var h = $('comic_info').getDimensions()['height'];
+		$('comic_list').style.height = h+"px";
 	</script>
 </div>
 {% endblock %}

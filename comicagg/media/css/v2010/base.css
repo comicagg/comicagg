@@ -302,19 +302,25 @@ button:hover {
 	float:left;
 	cursor:pointer;
 }
-#add .comic_list_wrap {
+#comic_list_wrap {
+	width:350px;
 }
-#add .comic_list {
+#comic_list_wrap p {
+	height:24px;
+	margin:0;
+}
+#comic_list {
 	border:1px solid gray;
 	border-width:1px 0px;
 	list-style-type:none;
 	margin:0;
+	margin-top:8px;
 	padding:0;
 	overflow:scroll;
 	overflow-x:hidden;
-	width:300px;
+	clear:both;
 }
-#add .comic {
+#comic_list .comic {
 /* 	width:300px; */
 	padding:2px 0px;
 	text-align:center;
@@ -323,19 +329,19 @@ button:hover {
 	background:white;
 	cursor:pointer;
 }
-#add .comic:hover {
+#comic_list .comic:hover {
 	background-color:#ccc;
 }
-#add .last {
+#comic_list .last {
 	border-bottom:0;
 }
-#add .added {
+#comic_list .added {
 	background:#ccddff url(/media/images/ok12.png) right center no-repeat;
 }
-#add .new {
+#comic_list .new {
 	background:#ddffcc url(/media/images/flag12.png) right center no-repeat;
 }
-#add .noimages:after {
+#comic_list .noimages:after {
 	content: url(/media/images/warning12.png);
 	vertical-align:middle;
 }
@@ -344,9 +350,11 @@ button:hover {
 }
 #comic_info {
 	position:absolute;
-	margin-left:310px;
+	margin-left:360px;
+	top:100px;
 	right:10px;
 	left:30px;
+	bottom:10px;
 	padding:3px 8px;
 	background:white;
 	border:1px solid gray;
