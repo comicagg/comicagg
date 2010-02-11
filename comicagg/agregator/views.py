@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import IntegrityError
+from django.db.models import Count
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -143,6 +144,8 @@ def organize(request, tag = None, add=False):
 	context['available'] = available_list
 	context['user_comics'] = user_comics
 	context['all_comics'] = all_comics
+	unr = UnreadComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False).aggregate(Count('comic'))
+	context['unreadCount'] = unr['comic__count']
 	if add:
 		#quitar aviso de nuevos comics
 		hide_new_comics(request)

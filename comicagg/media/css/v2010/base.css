@@ -376,3 +376,8 @@ button:hover {
 #comic_info_wrap {
 	margin-left:1em;
 }
+input.filter {
+  background:white;
+  color:#666;
+  width:200px;
+}

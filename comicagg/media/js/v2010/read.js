@@ -18,6 +18,7 @@ function updateCounters() {
 	} catch(error){
 	}
 }
+
 // shows all the comics divs
 function showAllComics() {
 	for (i = 0; i < clist.length; i++) {

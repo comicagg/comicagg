@@ -146,8 +146,9 @@ function initDND() {
 			(this.manager.nodes.length != 1 ? "s" : ""));
 	};
 }
+var comics;
 function initAdd() {
-	var comics = $('add').select('.comic');
+	comics = $('add').select('.comic');
 	for (var i=0, len=comics.length; i < len; i++) {
 		var comic = comics[i];
 		var id = comic.id.substring(6);
@@ -241,8 +242,33 @@ function mouseOverAction() {
 		$('noimages').hide();
 	}
 }
-function onMouseOutComic(event){
-	var elem = event.element();
-	var id = elem.id.substring(6);
+function onMouseOutComic(event) {
 	clearTimeout(timerid);
+}
+function switchFilter(back) {
+	if(back && $('filterReal').value.length == 0) {
+		$('filter').show();
+		$('filterReal').hide();
+	} else {
+		$('filter').hide();
+		$('filterReal').show();
+		$('filterReal').focus();
+	}
+}
+var idFilter = -1;
+function filter(v) {
+	clearTimeout(idFilter);
+	idFilter = setTimeout('applyFilter("'+ v +'")', 100);
+}
+function applyFilter(v){
+	l = v.length;
+	for(i=0, len=comics.length; i < len; i++) {
+		var comic = comics[i];
+		txt = comic.innerHTML.toLowerCase();
+		if(l>0 && txt.indexOf(v) < 0) {
+			comic.hide();
+		} else {
+			comic.show();
+		}
+	}
 }

@@ -41,6 +41,7 @@ dojo.addOnLoad(initAdd);
 	</div>
 	<div id="comic_list_wrap">
 		<p>Ordenar por: nombre, puntuación, lectores.</p>
+		<p><b>{% trans "Hover over a comic to see details." %}</b></p>
 		<div class="save" onclick="save()" style="float:right">
 			<span id="save_text">
 				<img id="saved_ok" style="display:none" src="{{ mediaurl }}images/ok16.png" alt=""/>
@@ -53,7 +54,8 @@ dojo.addOnLoad(initAdd);
 			</span>
 			<img src="{{ mediaurl }}images/save24.png" alt="save"/>
 		</div>
-		<p><b>{% trans "Hover over a comic to see details." %}</b></p>
+		<input id="filter" type="text" value="Escribe aquí para filtrar" class="filter" onclick="switchFilter(false)"/>
+		<input id="filterReal" type="text" value="" class="filter" style="display:none" onblur="switchFilter(true)" onkeyup="filter(this.value)"/>
 		<ul id="comic_list">
 {% for comic in all_comics %}
 			<li id="comic_{{ comic.id }}" class="comic {% if forloop.last %}last{% endif %} {% if comic.noimages %}noimages{% endif %}" {% if comic.noimages %}title="{% trans "You won't see the images of this comic" %}"{% endif %}>{{ comic }}</li>
