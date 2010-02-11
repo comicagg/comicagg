@@ -33,4 +33,3 @@ def error500(request):
 
 def robots_txt(request):
 	return render(request, 'robots.txt', {}, mime='text/plain; charset="utf-8"')
-

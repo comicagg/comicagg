@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.http import urlquote
-from math import atan, pi, floor
+from math import atan, pi, floor, sqrt
 import re, urllib
 
 #Aux functions
@@ -95,32 +95,61 @@ class Comic(models.Model):
 	def get_rating(self):
 		return self.getRating()
 
-	def getRating(self):
+	_readers = None
+	def readers(self):
+		if not self._readers:
+			self._readers = self.subscription_set.count()
+		return int(self._readers)
+
+	_strips = None
+	def strips(self):
+		if not self._strips:
+			self._strips= self.comichistory_set.count()
+		return int(self._strips)
+
+	def getRating(self, method='statisticRating'):
 		if not hasattr(self, '__rating'):
-			r = 50
-			if self.votes > 0:
-				#p = self.rating
-				#n = self.votes - self.rating
-				#x = p - n
-				x = 2 * self.rating - self.votes
-				if x > 0:
-					r = int(((20-atan(x/5.0)/(x/100.0))/40+0.5)*100)
-				elif x < 0:
-					r = int((0.5-(20-atan(x/5.0)/(x/100.0))/40)*100)
-				#porcentaje de votos positivos
-				#r = int(floor(self.rating / float(self.votes) * 100))
-				#porcentaje de votos negativos
-				#n = 100 - r
-				#g(x)=2/sqrt(pi)*(x-x^3/3+x^5/10-x^7/42+x^9/216)
+			r = getattr(self, method)()
 			setattr(self, '__rating', r)
 		return getattr(self, '__rating')
 
+	def statisticRating(self):
+		pos = self.rating
+		n = self.votes
+		if n == 0:
+			return 0.0
+		#z = Statistics2.pnormaldist(1-power/2)
+		z = 3.95
+		phat = 1.0*pos/n
+		return (phat + z*z/(2*n) - z * sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)
+
+	def miRating(self):
+		r = 0.5
+		if self.votes > 0:
+			#p = self.rating
+			#n = self.votes - self.rating
+			#x = p - n
+			x = 2 * self.rating - self.votes
+			if x > 0:
+				r = ((20-atan(x/5.0)/(x/100.0))/40+0.5)
+			elif x < 0:
+				r = (0.5-(20-atan(x/5.0)/(x/100.0))/40)
+			#porcentaje de votos positivos
+			#r = int(floor(self.rating / float(self.votes) * 100))
+			#porcentaje de votos negativos
+			#n = 100 - r
+			#g(x)=2/sqrt(pi)*(x-x^3/3+x^5/10-x^7/42+x^9/216)
+		return r
+
 	def positivevotes(self):
 		try:
-			r = float(self.rating)/self.votes*100
+			r = float(self.rating)/self.votes
 		except:
-			r = 0
+			r = 0.0
 		return r
+
+	def negativevotes(self):
+		return self.votes-self.rating
 
 	def is_new_for(self, user):
 		return NewComic.objects.filter(comic=self, user=user).count() != 0

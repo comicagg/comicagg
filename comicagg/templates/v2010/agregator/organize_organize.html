@@ -1,5 +1,5 @@
 {% extends 'agregator/organize_base.html' %}
-{% load i18n %}
+{% load i18n agregator_tags %}
 {% block title %}{% trans 'Organize your comics' %} - {% endblock %}
 {% block extra_head %}
 		<link rel="stylesheet" href="{{ mediaurl }}css/v2010/dnd.css" type="text/css"/>
@@ -7,7 +7,7 @@
 		<script type="text/javascript">
 var usercomics = [
 {% for comic in user_comics %}
-	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating }}, 'votes':{{ comic.votes }}},
+	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:8 }}, 'votes':{{ comic.votes }}},
 {% endfor %}
 ];
 var newcomics = usercomics.clone();

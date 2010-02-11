@@ -73,6 +73,10 @@ def div(value, arg):
   except ZeroDivisionError:
     return 0
 
+@register.filter(name='perc')
+def perc(value, arg=0):
+	return round(float(value)*100, arg)
+
 @register.filter()
 def gt(value, arg):
 	try:

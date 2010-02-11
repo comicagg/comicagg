@@ -1,0 +1,31 @@
+{% load agregator_tags %}
+<html>
+	<head>
+		<title>Stats</title>
+		<style>
+			table { border:1px solid black }
+			td { min-width:6em; border-top:1px solid gray; }
+			th, td { text-align:center }
+			.left { text-align:left }
+		</style>
+	</head>
+	<body>
+		<table>
+			<tr><th class="left">n</th><th class="left">Comic</th><th>Lectores</th><th>Tiras</th><th>Total</th><th>Votos pos</th><th>Votos neg</th><th>% pos</th><th>Alg 1</th><th>Alg est.</th></tr>
+{% for comic in comics %}
+			<tr>
+				<td class="left">{{ forloop.counter }}</td>
+				<td class="left">{{ comic.name }}</td>
+				<td>{{ comic.readers }}</td>
+				<td>{{ comic.strips }}</td>
+				<td>{{ comic.votes }}</td>
+				<td>{{ comic.rating }}</td>
+				<td>{{ comic.negativevotes }}</td>
+				<td>{{ comic.positivevotes|perc:3 }}</td>
+				<td>{{ comic.miRating|perc:3 }}</td>
+				<td>{{ comic.getRating|perc:3 }}</td>
+			</tr>
+{% endfor %}
+		</table>
+	</body>
+</html>

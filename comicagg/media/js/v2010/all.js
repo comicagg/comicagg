@@ -70,6 +70,9 @@ function _sort_score(a, b) {
 		x = parseInt(a.votes);
 		y = parseInt(b.votes);
 		ret = y - x;
+		if (ret == 0) {
+			ret = _sort_az(a,b);
+		}
 	}
 	return ret;
 }
@@ -217,9 +220,11 @@ function onMouseOverComic(event){
 	lastevent = event;
 	timerid = setTimeout("mouseOverAction()", 500);
 }
+var currentid = 0;
 function mouseOverAction() {
 	var elem = lastevent.element();
 	var id = elem.id.substring(6);
+	currentid = id;
 	if (comic = containsComicId(available_new, id)) {
 		//es un comic nuevo
 		$('comic_new').show();
@@ -235,11 +240,61 @@ function mouseOverAction() {
 	$('comic_score').innerHTML = comic.score;
 	$('comic_votes').innerHTML = comic.votes;
 	$('comic_updated').innerHTML = comic.updated;
+	$('comic_readers').innerHTML = comic.readers;
 	$('comic_url').href = comic.url;
 	if(comic.noimages) {
 		$('noimages').show();
+		$('comic_last').hide();
 	} else {
 		$('noimages').hide();
+		$('loading').show();
+		$('comic_last').hide();
+		img = new Image();
+		img.src = comic.last;
+		img.id = comic.id;
+		img.onload = function() {
+			if (currentid != this.id) { return 0; }
+			$('loading').hide();
+			$('comic_last').show();
+			t = $('comic_last').cumulativeOffset()['top'];
+			d = $('comic_info').getDimensions();
+			di = $('comic_info').cumulativeOffset();
+			r = this.width / this.height;
+			maxw = d['width'] - 40;
+			maxh = di['top'] + d['height'] - t - 10;
+			$('comic_last').style.width = this.width + "px";
+			$('comic_last').style.height = this.height + "px";
+			if (r > 1) { //horiz
+				if (this.width > maxw) {
+				console.log("r>1 w>m");
+					h = parseInt(maxw / r);
+					$('comic_last').style.width = maxw + "px";
+					$('comic_last').style.height = h + "px";
+				} else if (this.height > maxh) {
+				console.log("r>1 h>m");
+					w = parseInt(maxh * r);
+					$('comic_last').style.width = w + "px";
+					$('comic_last').style.height = maxh + "px";
+				}
+			} else {
+				if (this.height > maxh) {
+				console.log("r<1 h>m");
+					w = parseInt(maxh * r);
+					$('comic_last').style.width = w + "px";
+					$('comic_last').style.height = maxh + "px";
+				} else {
+				console.log("r<1 w>m");
+				}
+			}
+			$('comic_last').src = this.src;
+		};
+		img.onerror = function() {
+			$('loading').hide();
+			$('comic_last').show();
+			$('comic_last').src = media_url + "images/broken32.png";
+			$('comic_last').style.width = "32px";
+			$('comic_last').style.height = "32px";
+		}
 	}
 }
 function onMouseOutComic(event) {

@@ -456,6 +456,22 @@ def remove_comic(request):
 		return HttpResponse('0')
 	raise Http404
 
+"""
+Genera una página de estadísticas para cada comic ordenada según la puntuación de cada comic
+"""
+def stats(request):
+	comics = list(Comic.objects.all())
+	comics.sort(sort_rate)
+	return render(request, 'stats.html', {'comics':comics})
+"""
+Ordenar únicamente por la puntuación de los comics
+"""
+def sort_rate(a,b):
+	c = b.getRating() - a.getRating()
+	if c>0: return 1
+	elif c<0: return -1
+	else: return 0
+
 #Funciones auxiliares
 def get_full_tagcloud():
   #build tag cloud
