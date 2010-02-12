@@ -372,13 +372,22 @@ button:hover {
 	padding:0;
 }
 #comic_info p {
-	margin-left:1em;
+/* 	margin-left:1em; */
 }
 #comic_info_wrap {
-	margin-left:1em;
+/* 	margin-left:1em; */
 }
 input.filter {
-  background:white;
-  color:#666;
-  width:200px;
+	background:white;
+	color:#666;
+	width:200px;
+}
+#comic_image {
+	margin:0;
+	padding:0;
+	text-align:center;
+}
+#comic_image img {
+	margin:0;
+	padding:0;
 }

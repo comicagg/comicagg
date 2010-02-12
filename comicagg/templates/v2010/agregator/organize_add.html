@@ -37,8 +37,8 @@ dojo.addOnLoad(initAdd);
 			<p>{% trans "Readers" %}: <b><span id="comic_readers">{{ comic.readers }}</span></b></p>
 			<p><a id="comic_url">{% trans "Link to its website"%}</a></p>
 			<p>{% trans "Last update:" %}&nbsp;<b><span id="comic_updated"></span></b></p>
-			<p class="center">
-				<img id="loading" src="{{ mediaurl }}images/loading.gif" alt="" style="display:none"/><br/>
+			<p id="comic_image">
+				<img id="loading" src="{{ mediaurl }}images/loading.gif" alt="" style="display:none"/>
 				<img id="comic_last" src="" alt="" title="" style="display:none"/>
 			</p>
 			<p id="noimages" style="display:none">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>

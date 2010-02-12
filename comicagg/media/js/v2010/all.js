@@ -260,30 +260,33 @@ function mouseOverAction() {
 			d = $('comic_info').getDimensions();
 			di = $('comic_info').cumulativeOffset();
 			r = this.width / this.height;
-			maxw = d['width'] - 40;
+			maxw = $('comic_image').getDimensions()['width'];
 			maxh = di['top'] + d['height'] - t - 10;
 			$('comic_last').style.width = this.width + "px";
 			$('comic_last').style.height = this.height + "px";
+			w = this.width;
+			h = this.height;
 			if (r > 1) { //horiz
-				if (this.width > maxw) {
-				console.log("r>1 w>m");
+				if (w > maxw) {
 					h = parseInt(maxw / r);
 					$('comic_last').style.width = maxw + "px";
 					$('comic_last').style.height = h + "px";
-				} else if (this.height > maxh) {
-				console.log("r>1 h>m");
+				}
+				if (h > maxh) {
 					w = parseInt(maxh * r);
 					$('comic_last').style.width = w + "px";
 					$('comic_last').style.height = maxh + "px";
 				}
 			} else {
-				if (this.height > maxh) {
-				console.log("r<1 h>m");
+				if (h > maxh) {
 					w = parseInt(maxh * r);
 					$('comic_last').style.width = w + "px";
 					$('comic_last').style.height = maxh + "px";
-				} else {
-				console.log("r<1 w>m");
+				}
+				if (w > maxw) {
+					h = parseInt(maxw / r);
+					$('comic_last').style.width = maxw + "px";
+					$('comic_last').style.height = h + "px";
 				}
 			}
 			$('comic_last').src = this.src;
