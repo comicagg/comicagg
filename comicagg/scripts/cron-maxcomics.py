@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os, sys, settings_local, time
+import os, sys, time
 from datetime import datetime
 
+sys.path.insert(0, os.path.abspath('..'))
+import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
