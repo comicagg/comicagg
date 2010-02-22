@@ -47,7 +47,11 @@ var clist = new Array();
 function onReadLoad() {
 	updateCounters();
 	initScrolling();
-	initLoadImages();
+	if (unreadCounter) {
+		initLoadImages();
+	} else {
+		//TODO mostrar comic aleatorio
+	}
 	clist = $$('.comic');
 }
 // first batch load of comic images. will load only those comics in the viewport
@@ -126,7 +130,7 @@ function initScrolling() {
 }
 
 function onScrollHandler(e) {
-	updateViewport(true);
+	setTimeout("updateViewport(true)", 10);
 }
 
 function updateViewport(loadImages) {
