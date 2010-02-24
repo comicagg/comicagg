@@ -50,8 +50,10 @@
 			{% blocktrans with comic.url as url %}The comic has been updated. <a href="{{ url }}">Click here</a> to go to the comic's website.{% endblocktrans %}
 {% else %}
 			{% for unread in unreadlist %}
+			<h5>{{ unread.history.date|date:"d F Y" }}</h5>
 			<img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/v2010/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
 			{% empty %}
+			<h5>{{ comic.last_check|date:"d F Y" }}</h5>
 			<img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/v2010/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
 			{% endfor %}
 {% endif %}

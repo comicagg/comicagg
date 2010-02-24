@@ -105,7 +105,6 @@ function _loadImage(url, elem, comic) {
 	img.onload = function () {
 		elem.src = url;
 		if (this.width > maxwidth) {
-			console.log(this.width +">"+maxwidth);
 			elem.style.width = "100%";
 		}
 	}
