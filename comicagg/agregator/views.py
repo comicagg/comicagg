@@ -170,7 +170,6 @@ def save_selection(request):
 				selection_clean.index(int(item))
 			except:
 				selection_clean.append(int(item))
-	print selection_clean
 	#primero vemos qué comics nuevos se han elegido
 	subscriptions = [s.comic.id for s in request.user.subscription_set.all()]
 	nuevos = list()
@@ -212,10 +211,8 @@ def save_selection(request):
 			n = NewComic.objects.get(user=request.user, comic=c)
 			n.delete()
 		except IntegrityError, (errno, errstr):
-			#print "Subscription error %s: %s" % (errno, errstr)
 			pass
 		except Exception, inst:
-			#print "***Unexpected error %s ***" % inst
 			pass
 		pos += 1
 	if NewComic.objects.filter(user=request.user).count() == 0:
@@ -237,7 +234,6 @@ def request_comic(request, done=False):
       comment = form.cleaned_data['comment']
       req = Request(user=request.user, url=url, comment=comment)
       req.save()
-      print type(req.comment)
       message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
       send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
       return HttpResponseRedirect(reverse('done_request'))

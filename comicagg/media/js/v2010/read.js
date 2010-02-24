@@ -45,6 +45,7 @@ var clist = new Array();
 
 // function exed when loading of html ends
 function onReadLoad() {
+	clist = $$('.comic');
 	updateCounters();
 	initScrolling();
 	if (unreadCounter) {
@@ -52,7 +53,6 @@ function onReadLoad() {
 	} else {
 		//TODO mostrar comic aleatorio
 	}
-	clist = $$('.comic');
 }
 // first batch load of comic images. will load only those comics in the viewport
 function initLoadImages() {
@@ -66,9 +66,11 @@ function initLoadImages() {
 		}
 	} while (lista.length > 0);
 }
+var maxwidth = 0;
 // will load the images of this comic if it hasnt been loaded  yet.
 // if seed is true, it will add a seed in the image url
 function _loadComic(comic, seed) {
+	maxwidth = $('c'+comic.id).select('.comicextra')[0].getDimensions()['width'];
 	if(!comic.loaded) {
 		s = 'reload' + comic.id;
 		$(s).hide();
@@ -102,6 +104,10 @@ function _loadImage(url, elem, comic) {
 	elem.cid = comic.id;
 	img.onload = function () {
 		elem.src = url;
+		if (this.width > maxwidth) {
+			console.log(this.width +">"+maxwidth);
+			elem.style.width = "100%";
+		}
 	}
 	img.onerror = function () {
 		elem.alt = "ERROR";

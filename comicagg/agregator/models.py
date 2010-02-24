@@ -189,7 +189,7 @@ class ComicHistory(models.Model):
 		return _get_url(self.comic, self.url)
 
 	class Meta:
-		ordering = ['-date']
+		ordering = ['-id']
 
 
 class UnreadComic(models.Model):
