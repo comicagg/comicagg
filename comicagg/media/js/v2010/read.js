@@ -192,7 +192,8 @@ function markread(id, vote) {
 	var url = url_mark_as_read;
 	var params = {'id': id, 'value':vote };
 	Element.show('working' + id);
-	new Ajax.Request(url, {
+	Element.hide('workingerror'+id);
+	new Ajax.Request(aurl, {
 		method: 'post',
 		parameters: params,
 		onSuccess: function(transport) {

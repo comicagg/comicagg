@@ -192,6 +192,13 @@ button:hover {
 #read .comic .comicextra .reload {
 	font-weight:bolder;
 }
+#read .comic .comicextra .wrap {
+	margin-left:6px;
+}
+#read .comic .comicextra .anims {
+	float:left;
+	width:20px;
+}
 #read .comic .newstripsnotice {
 	color:orange;
 	font-weight:bolder;

@@ -59,18 +59,22 @@
 {% endif %}
 		</div>
 		<div class="comicextra">
-			<img id="working{{ comic.id }}" src="{{ mediaurl }}images/loaderarrows.gif" alt="" style="display:none"/>&nbsp;
-			<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/error12.png" alt="" style="display:none"/>&nbsp;
-			<span id="reload{{ comic.id }}" class="reload" style="display:none"><a onclick="reloadComic({{ comic.id }})">{% trans "Reload images" %}</a> | </span>
-			{% if unreadlist %}
-			<span id="reading{{ comic.id }}">
-				<a onclick="markread({{ comic.id }}, 0)">{% trans "Mark as read"%}</a> | 
-				{% trans "Vote" %} 
-				<a onclick="markread({{ comic.id }}, -1)"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a> 
-				<a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a> | 
+			<div class="anims">
+				<img id="working{{ comic.id }}" src="{{ mediaurl }}images/loaderarrows.gif" alt="" style="display:none"/>
+				<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/error12.png" alt="" style="display:none"/>&nbsp;
+			</div>
+			<span class="wrap">
+				<span id="reload{{ comic.id }}" class="reload" style="display:none"><a onclick="reloadComic({{ comic.id }})">{% trans "Reload images" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				{% if unreadlist %}
+				<span id="reading{{ comic.id }}">
+					<a onclick="markread({{ comic.id }}, 0)">{% trans "Mark as read"%}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					{% trans "Vote" %}&nbsp;&nbsp;
+					<a onclick="markread({{ comic.id }}, -1)"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a>&nbsp;&nbsp;
+					<a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a>&nbsp;&nbsp;&nbsp;&nbsp;
+				</span>
+				{% endif %}
+				<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a>
 			</span>
-			{% endif %}
-			<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a>
 		</div>
 		<h5 id="outc{{ comic.id }}"></h5>
 	</div>
