@@ -36,19 +36,20 @@
 		<p class="info">{% blocktrans %}There are 0 new comics in the database.{% endblocktrans %}</p>
 	</div>
 	<div>
-		<p class="info" id="unreadCounterP">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="totalComicCounter">{{ len }}</b> comics and <b id="infoUnreadCounter">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
-		<p class="info" id="noUnreadCounter" style="display:none">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="totalComicCounter2">{{ len }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
+		<p class="info" id="unreadCounters">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="unreadCountersTotal">{{ len }}</b> comics and <b id="unreadCountersUnread">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
+		<p class="info" id="noUnreadCounters" style="display:none">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="noUnreadCountersTotal">{{ len }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
 		<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a href="#" onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>
 		<p class="info" id="showingAll" style="display:none">{% blocktrans %}Showing <b>all</b> comics. <a href="#" onclick="showUnreadComics()">Click here</a> to show only unread comics.{% endblocktrans %}</p>
 	</div>
+	<div id="comics">
 	{% for comic,unreadlist in comic_list %}
 	<div id="c{{ comic.id }}" class="comic" style="{% if not unreadlist %}display:none{% endif %}">
 		<h3>{{ comic.name }}</h3>
 		{% if unreadlist %}<span id="newnotice{{ comic.id }}" class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
 		<div class="striplist">
-{% if comic.noimages and not perms.agregator.all_images %}
+		{% if comic.noimages and not perms.agregator.all_images %}
 			{% blocktrans with comic.url as url %}The comic has been updated. <a href="{{ url }}">Click here</a> to go to the comic's website.{% endblocktrans %}
-{% else %}
+		{% else %}
 			{% for unread in unreadlist %}
 			<h5>{{ unread.history.date|date:"d F Y" }}</h5>
 			<img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/v2010/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
@@ -56,12 +57,14 @@
 			<h5>{{ comic.last_check|date:"d F Y" }}</h5>
 			<img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/v2010/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
 			{% endfor %}
-{% endif %}
+		{% endif %}
 		</div>
 		<div class="comicextra">
 			<div class="anims">
 				<img id="working{{ comic.id }}" src="{{ mediaurl }}images/loaderarrows.gif" alt="" style="display:none"/>
-				<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/error12.png" alt="" style="display:none"/>&nbsp;
+				<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/error12.png" alt="" style="display:none"/>
+				<img id="ok{{ comic.id }}" src="{{ mediaurl }}images/ok12.png" alt="" style="display:none"/>
+				&nbsp;
 			</div>
 			<span class="wrap">
 				<span id="reload{{ comic.id }}" class="reload" style="display:none"><a onclick="reloadComic({{ comic.id }})">{% trans "Reload images" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -73,13 +76,16 @@
 					<a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a>&nbsp;&nbsp;&nbsp;&nbsp;
 				</span>
 				{% endif %}
-				<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a>
+				<a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a onclick="removecomic({{ comic.id }})">{% trans "Remove this comic" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 			</span>
 		</div>
 		<h5 id="outc{{ comic.id }}"></h5>
 	</div>
-	{% empty %}
-	There are no comics here
 	{% endfor %}
+	<div id="noComicsSelected" style="display:none">
+	{% trans "You haven't selected any comics!" %}
+	</div>
+	</div>
 </div>
 {% endblock %}

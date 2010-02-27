@@ -2,21 +2,19 @@
 function updateCounters() {
 	if (unreadCounter > 0) {
 		document.title = titlei18n + " (" + unreadCounter + ") - " + titlebase;
-		$('noUnreadCounter').hide();
-		$('unreadCounterP').show();
+		$('noUnreadCounters').hide();
+		$('unreadCounters').show();
 		$('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
-		$('infoUnreadCounter').innerHTML = unreadCounter;
+		$('unreadCountersUnread').innerHTML = unreadCounter;
+		$('unreadCountersTotal').innerHTML = comicCounter;
 	} else {
 		document.title = titlei18n + " - " + titlebase;
-		$('noUnreadCounter').show();
-		$('unreadCounterP').hide();
+		$('noUnreadCounters').show();
+		$('unreadCounters').hide();
 		$('menuUnreadCounter').innerHTML = '';
+		$('noUnreadCountersTotal').innerHTML = comicCounter;
 	}
-	try {
-		$('totalComicCounter').innerHTML = comicCounter;
-		$('totalComicCounter2').innerHTML = comicCounter;
-	} catch(error){
-	}
+	return 0;
 }
 
 // shows all the comics divs
@@ -48,10 +46,14 @@ function onReadLoad() {
 	clist = $$('.comic');
 	updateCounters();
 	initScrolling();
-	if (unreadCounter) {
-		initLoadImages();
+	if (comicCounter) {
+		if (unreadCounter) {
+			initLoadImages();
+		} else {
+			//TODO mostrar comic aleatorio
+		}
 	} else {
-		//TODO mostrar comic aleatorio
+		$('noComicsSelected').show();
 	}
 }
 // first batch load of comic images. will load only those comics in the viewport
@@ -208,6 +210,8 @@ function markread(id, vote) {
 					Element.hide('workingerror'+id);
 					Element.hide('reading'+id);
 					Element.hide('newnotice'+id);
+					Element.show('ok'+id);
+					setTimeout("Element.hide('ok" + id + "')", 5000);
 					unreadCounter--;
 					unreadComics[id] = false;
 					updateCounters();
@@ -249,6 +253,8 @@ function reportbroken(id) {
 				if (ret==0) {
 					Element.hide('working'+id);
 					Element.hide('workingerror'+id);
+					Element.show('ok'+id);
+					setTimeout("Element.hide('ok" + id + "')", 5000);
 				}
 				else {
 					//Error
@@ -266,6 +272,71 @@ function reportbroken(id) {
 			//Error
 			Element.hide('working'+id);
 			Element.show('workingerror'+id);
+		}
+	});
+}
+
+function removecomic(id) {
+	if(unreadComics[id]) {
+		markread(id, 0);
+	}
+	var url = url_remove;
+	var params = {'id':id}
+	Element.show('working' + id);
+	new Ajax.Request(url, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(transport) {
+			if (transport.status == 0) {
+				//Error
+				Element.hide('working'+id);
+				Element.show('workingerror'+id);
+				console.log("Error removing comic: no status 200");
+			} else if (transport.status == 200) {
+				//quitar el comic de la principal
+				cdiv = $('c'+id);
+				//siguiente div hermano
+				mover_a = cdiv.next();
+				//buscamos uno que sea visible ahora mismo
+				while(mover_a != null && !mover_a.visible()) {
+					mover_a = mover_a.next();
+				}
+				if (mover_a == null) {
+					//no hay siguiente, pues anterior
+					mover_a = cdiv.previous();
+					//buscamos uno que sea visible ahora mismo
+					while(mover_a != null && !mover_a.visible()) {
+						mover_a = mover_a.previous();
+					}
+				}
+				//ocultar el div y quitarlo del dom
+				cdiv.hide();
+				cdiv.remove();
+				//quitarlo de las listas
+				comics[id] = null;
+				//no quedan comics en la lista, mostrar aviso
+				if ($('comics').childElements().length == 0) {
+					$('noComicsSelected').show();
+				}
+				else {
+					mover_a.scrollToExtra(-40);
+				}
+				//actualizar contadores
+				comicCounter -= 1;
+				updateCounters();
+			}
+		},
+		onFailure: function(transport) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+			console.log("Error removing comic: failure");
+		},
+		onException: function(req, exc) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+			console.log("Error removing comic: exception: " + exc);
 		}
 	});
 }

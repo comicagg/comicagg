@@ -2186,6 +2186,14 @@ Element.Methods = {
     return element;
   },
 
+  scrollToExtra: function(element, extraTop) {
+    element = $(element);
+    var pos = Element.cumulativeOffset(element);
+    ntop = pos[1]+extraTop;
+    window.scrollTo(pos[0], ntop);
+    return element;
+  },
+
   getStyle: function(element, style) {
     element = $(element);
     style = style == 'float' ? 'cssFloat' : style.camelize();
