@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Activate account' %} -{% endblock %}
+{% block extra_head %}{% endblock%}
+{% block onload %}{% endblock %}
+{% block content %}
+<div class="box">
+    <p>{% trans "Your account was inactivated because you didn't read your comics for 45 days. You can reactivate it here." %}</p>
+    <form method="post" action="{% url accounts_activate %}">
+        <input type="hidden" name="activate" value="1"/>
+        <input type="submit" value="{% trans "Reactivate" %}"/>
+    </form>
+</div>
+{% endblock %}
