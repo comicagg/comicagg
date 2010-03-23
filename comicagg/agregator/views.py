@@ -25,48 +25,43 @@ from django.views.decorators.cache import cache_page
 
 @login_required
 def read_view(request):
-	if request.user and request.user.is_authenticated():
-		try:
-			up = request.user.get_profile()
-			up.last_read_access=datetime.now()
-			up.save()
-		except:
-			up = UserProfile(user=request.user, last_read_access=datetime.now())
-			up.save()
-		comic_list = list()
-		unread_list = list()
-		unread_list_nav = list()
-		has_unread = False
-		sub_set = list(request.user.subscription_set.filter(comic__activo=True).filter(comic__ended=False))
-		for subs in sub_set:
-			l = request.user.unreadcomic_set.filter(comic=subs.comic)
-			#repr(l)
-			#triple = (objeto comic, lista de unread)
-			tup = (subs.comic, l)
-			if l:
-				has_unread = True
-			comic_list.append(tup)
-			if l:
-				unread_list_nav.append(tup)
-				unread_list.append(tup)
-		nmc = up.navigation_max_columns
-		nmpc = up.navigation_max_per_column
-		(comic_list_nav, items_per_column) = make_groups(comic_list, nmc, nmpc)
-		(unread_list_nav, items_per_column) = make_groups(unread_list_nav, nmc, nmpc)
-		#request.user.unreadcomic_set.all().delete()
-		random = random_comic(request.user)
-		context = RequestContext(request, {
-			'comic_list':comic_list,
-			'unread_list':unread_list,
-			'comic_list_nav':comic_list_nav,
-			'unread_list_nav':unread_list_nav,
-			'has_unread':has_unread,
-			'items_per_column':items_per_column,
-			'random_comic':random,
-			'new_posts':NewBlog.objects.filter(user=request.user),
-			'new_comic_count':NewComic.objects.filter(user=request.user).count(),
-		})
-		return render(request, 'agregator/read.html', context, 'read')
+    if request.user and request.user.is_authenticated():
+        up = request.user.get_profile()
+        up.last_read_access = datetime.now()
+        up.save()
+        comic_list = list()
+        unread_list = list()
+        unread_list_nav = list()
+        has_unread = False
+        sub_set = list(request.user.subscription_set.filter(comic__activo=True).filter(comic__ended=False))
+        for subs in sub_set:
+            l = request.user.unreadcomic_set.filter(comic=subs.comic)
+            #repr(l)
+            #triple = (objeto comic, lista de unread)
+            tup = (subs.comic, l)
+            if l:
+                has_unread = True
+            comic_list.append(tup)
+            if l:
+                unread_list_nav.append(tup)
+                unread_list.append(tup)
+        nmc = up.navigation_max_columns
+        nmpc = up.navigation_max_per_column
+        (comic_list_nav, items_per_column) = make_groups(comic_list, nmc, nmpc)
+        (unread_list_nav, items_per_column) = make_groups(unread_list_nav, nmc, nmpc)
+        random = random_comic(request.user)
+        context = RequestContext(request, {
+            'comic_list':comic_list,
+            'unread_list':unread_list,
+            'comic_list_nav':comic_list_nav,
+            'unread_list_nav':unread_list_nav,
+            'has_unread':has_unread,
+            'items_per_column':items_per_column,
+            'random_comic':random,
+            'new_posts':NewBlog.objects.filter(user=request.user),
+            'new_comic_count':NewComic.objects.filter(user=request.user).count(),
+        })
+        return render(request, 'agregator/read.html', context, 'read')
 
 def random_comic(user, xhtml=False, request=None):
   not_in_list = Comic.objects.filter(activo=True).filter(ended=False).exclude(id__in=[s.comic.id for s in Subscription.objects.filter(user=user)])
@@ -115,111 +110,111 @@ def make_groups(the_list, max_columns=5, max_per_column=20):
 
 @login_required
 def organize(request, tag = None, add=False):
-	context = {}
-	#mostrar pagina de configuracion
-	#build available list depending on not selected comics
-	all_comics = list(Comic.objects.filter(activo=True).filter(ended=False))
-	all_comics.sort(comic_sort_name)
-	user_subs = request.user.subscription_set.all().filter(comic__activo=True).filter(comic__ended=False)
-	user_comics = list()
-	for sub in user_subs:
-		user_comics.append(sub.comic)
-	available = list()
-	for comic in all_comics:
-		if not comic in user_comics:
-			available.append(comic)
-	available.sort(comic_sort_name)
-	if tag:
-		available_list = list()
-		#filter available list, show only ones with tag
-		for comic in available:
-			if comic.tag_set.filter(name=tag):
-				available_list.append(comic)
-		context['tag'] = tag
-	else:
-		available_list = available
-	context['new_comics'] = NewComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False)
-	#add lists to context
-	context['tags'] = get_full_tagcloud()
-	context['available'] = available_list
-	context['user_comics'] = user_comics
-	context['all_comics'] = all_comics
-	unr = UnreadComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False).aggregate(Count('comic'))
-	context['unreadCount'] = unr['comic__count']
-	if add:
-		#quitar aviso de nuevos comics
-		hide_new_comics(request)
-		template = 'agregator/organize_add.html'
-	else:
-		template = 'agregator/organize_organize.html'
-	
-	return render(request, template, context, 'configure')
+    context = {}
+    #mostrar pagina de configuracion
+    #build available list depending on not selected comics
+    all_comics = list(Comic.objects.filter(activo=True).filter(ended=False))
+    all_comics.sort(comic_sort_name)
+    user_subs = request.user.subscription_set.all().filter(comic__activo=True).filter(comic__ended=False)
+    user_comics = list()
+    for sub in user_subs:
+        user_comics.append(sub.comic)
+    available = list()
+    for comic in all_comics:
+        if not comic in user_comics:
+            available.append(comic)
+    available.sort(comic_sort_name)
+    if tag:
+        available_list = list()
+        #filter available list, show only ones with tag
+        for comic in available:
+            if comic.tag_set.filter(name=tag):
+                available_list.append(comic)
+        context['tag'] = tag
+    else:
+        available_list = available
+    context['new_comics'] = NewComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False)
+    #add lists to context
+    context['tags'] = get_full_tagcloud()
+    context['available'] = available_list
+    context['user_comics'] = user_comics
+    context['all_comics'] = all_comics
+    unr = UnreadComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False).aggregate(Count('comic'))
+    context['unreadCount'] = unr['comic__count']
+    if add:
+        #quitar aviso de nuevos comics
+        hide_new_comics(request)
+        template = 'agregator/organize_add.html'
+    else:
+        template = 'agregator/organize_organize.html'
+    
+    return render(request, template, context, 'configure')
 
 @login_required
 def save_selection(request):
-	if not request.POST:
-		return HttpResponseForbidden('')
-	#get selection
-	selection = request.POST['selected'].split(',')
-	#remove duplicates
-	selection_clean = list()
-	for item in selection:
-		if len(item)>0:
-			#try to get an index, if it fails, item is not in the list so we append the item to the list
-			try:
-				selection_clean.index(int(item))
-			except:
-				selection_clean.append(int(item))
-	#primero vemos qué comics nuevos se han elegido
-	subscriptions = [s.comic.id for s in request.user.subscription_set.all()]
-	nuevos = list()
-	for s in selection_clean:
-		if s not in subscriptions:
-			nuevos.append(s)
-	#comics que ahora no se seleccionan
-	quitar = list()
-	for s in subscriptions:
-		if s not in selection_clean:
-			quitar.append(s)
-	#hay que quitar los unread de los comics que ya no leemos
-	for cid in quitar:
-		c = Comic.objects.get(pk=cid)
-		request.user.unreadcomic_set.filter(comic=c).delete()
-	#quitamos todas las suscripciones primero
-	try:
-		request.user.subscription_set.all().delete()
-	except Exception, inst:
-		return HttpResponse('-1')
-	#si la seleccion esta vacia salimos
-	if len(selection_clean)==0:
-		return HttpResponse(_('Saved =)'))
-	pos = 0
-	for comic_id in selection_clean:
-		c = Comic.objects.get(pk=comic_id)
-		s = Subscription(user=request.user, comic=c, position=pos)
-		s.save()
-		#si es un comic nuevo lo marcamos como unread
-		if c.id in nuevos:
-			try:
-				history = ComicHistory.objects.filter(comic=c)[0]
-				u = UnreadComic(user=request.user, comic=c, history=history)
-				u.save()
-			except:
-				pass
-		try:
-			#borra el objeto newcomic si hubiera
-			n = NewComic.objects.get(user=request.user, comic=c)
-			n.delete()
-		except IntegrityError, (errno, errstr):
-			pass
-		except Exception, inst:
-			pass
-		pos += 1
-	if NewComic.objects.filter(user=request.user).count() == 0:
-		up = request.user.get_profile()
-		up.new_comics = False
-		up.save()
-	return HttpResponse(_('Saved =)'))
+    if not request.POST:
+        return HttpResponseForbidden('')
+    #get selection
+    selection = request.POST['selected'].split(',')
+    #remove duplicates
+    selection_clean = list()
+    for item in selection:
+        if len(item)>0:
+            #try to get an index, if it fails, item is not in the list so we append the item to the list
+            try:
+                selection_clean.index(int(item))
+            except:
+                selection_clean.append(int(item))
+    #primero vemos qué comics nuevos se han elegido
+    subscriptions = [s.comic.id for s in request.user.subscription_set.all()]
+    nuevos = list()
+    for s in selection_clean:
+        if s not in subscriptions:
+            nuevos.append(s)
+    #comics que ahora no se seleccionan
+    quitar = list()
+    for s in subscriptions:
+        if s not in selection_clean:
+            quitar.append(s)
+    #hay que quitar los unread de los comics que ya no leemos
+    for cid in quitar:
+        c = Comic.objects.get(pk=cid)
+        request.user.unreadcomic_set.filter(comic=c).delete()
+    #quitamos todas las suscripciones primero
+    try:
+        request.user.subscription_set.all().delete()
+    except Exception, inst:
+        return HttpResponse('-1')
+    #si la seleccion esta vacia salimos
+    if len(selection_clean)==0:
+        return HttpResponse(_('Saved =)'))
+    pos = 0
+    for comic_id in selection_clean:
+        c = Comic.objects.get(pk=comic_id)
+        s = Subscription(user=request.user, comic=c, position=pos)
+        s.save()
+        #si es un comic nuevo lo marcamos como unread
+        if c.id in nuevos:
+            try:
+                history = ComicHistory.objects.filter(comic=c)[0]
+                u = UnreadComic(user=request.user, comic=c, history=history)
+                u.save()
+            except:
+                pass
+        try:
+            #borra el objeto newcomic si hubiera
+            n = NewComic.objects.get(user=request.user, comic=c)
+            n.delete()
+        except IntegrityError, (errno, errstr):
+            pass
+        except Exception, inst:
+            pass
+        pos += 1
+    if NewComic.objects.filter(user=request.user).count() == 0:
+        up = request.user.get_profile()
+        up.new_comics = False
+        up.save()
+    return HttpResponse(_('Saved =)'))
 
 @login_required
 def request_comic(request, done=False):
@@ -271,37 +266,37 @@ def save_tags(request):
 
 @login_required
 def mark_read(request):
-	if not request.POST:
-		return HttpResponseRedirect(reverse('index'))
-	comic_id = request.POST['id']
-	try:
-		value = int(request.POST['value'])
-	except:
-		value = False
-	if value:
-		rate_comic(request)
-	comic = get_object_or_404(Comic, pk=comic_id)
-	un = UnreadComic.objects.filter(user=request.user, comic=comic)
-	un.delete()
-	return HttpResponse('0')
+    if not request.POST:
+        return HttpResponseRedirect(reverse('index'))
+    comic_id = request.POST['id']
+    try:
+        value = int(request.POST['value'])
+    except:
+        value = False
+    if value:
+        rate_comic(request)
+    comic = get_object_or_404(Comic, pk=comic_id)
+    un = UnreadComic.objects.filter(user=request.user, comic=comic)
+    un.delete()
+    return HttpResponse('0')
 
 @login_required
 def rate_comic(request):
-	if request.POST:
-		id = int(request.POST['id'])
-		value = int(request.POST['value'])
-		comic = get_object_or_404(Comic, pk=id)
-		if value == -1:
-			value = 0
-		elif value == 1:
-			value = 1
-		else:
-			raise Http404
-		comic.rating += value
-		comic.votes += 1
-		comic.save()
-		return HttpResponse("0")
-	raise Http404
+    if request.POST:
+        id = int(request.POST['id'])
+        value = int(request.POST['value'])
+        comic = get_object_or_404(Comic, pk=id)
+        if value == -1:
+            value = 0
+        elif value == 1:
+            value = 1
+        else:
+            raise Http404
+        comic.rating += value
+        comic.votes += 1
+        comic.save()
+        return HttpResponse("0")
+    raise Http404
 
 @login_required
 def report_comic(request):
@@ -336,20 +331,20 @@ def admin_check(request, comic_id=None):
 
 @cache_page(60*10)
 def comic_list_load(request):
-	if request.POST:
-		cid = int(request.POST['id']);
-		comic = get_object_or_404(Comic, pk=cid)
-		context = {}
-		context['comic'] = comic
-		#si es un usuario registrado, coger su lista de comics
-		if request.user.is_authenticated():
-			user_subs = request.user.subscription_set.all()
-			user_comics = list()
-			for sub in user_subs:
-				user_comics.append(sub.comic)
-				context['user_comics'] = user_comics
-		return render(request, 'agregator/comic_list_comic.html', context, xml=True)
-	return Http404()
+    if request.POST:
+        cid = int(request.POST['id']);
+        comic = get_object_or_404(Comic, pk=cid)
+        context = {}
+        context['comic'] = comic
+        #si es un usuario registrado, coger su lista de comics
+        if request.user.is_authenticated():
+            user_subs = request.user.subscription_set.all()
+            user_comics = list()
+            for sub in user_subs:
+                user_comics.append(sub.comic)
+                context['user_comics'] = user_comics
+        return render(request, 'agregator/comic_list_comic.html', context, xml=True)
+    return Http404()
 
 @cache_page(60*10)
 def comic_list(request, sortby='name', tag=None):
@@ -395,78 +390,75 @@ Oculta el aviso de nuevos comics
 """
 @login_required
 def hide_new_comics(request):
-  try:
-    up = request.user.get_profile()
-  except:
-    up = UserProfile(user=request.user, last_read_access=datetime.now())
+  up = request.user.get_profile()
   up.new_comics = False;
   up.save()
   return HttpResponse("0")
 
 @login_required
 def forget_new_comic(request, comic_id=None):
-	comic = get_object_or_404(Comic, pk=comic_id)
-	NewComic.objects.filter(user=request.user, comic=comic).delete()
-	count = str(NewComic.objects.filter(user=request.user).count())
-	return HttpResponse(count)
+    comic = get_object_or_404(Comic, pk=comic_id)
+    NewComic.objects.filter(user=request.user, comic=comic).delete()
+    count = str(NewComic.objects.filter(user=request.user).count())
+    return HttpResponse(count)
 
 @login_required
 def forget_new_comics(request, quick=False):
-	hide_new_comics(request)
-	NewComic.objects.filter(user=request.user).delete()
-	if quick:
-		return HttpResponse('0')
-	return HttpResponseRedirect(reverse('configure'))
+    hide_new_comics(request)
+    NewComic.objects.filter(user=request.user).delete()
+    if quick:
+        return HttpResponse('0')
+    return HttpResponseRedirect(reverse('configure'))
 
 @login_required
 def add_comic(request):
-	if request.POST:
-		try:
-			comic_id = int(request.POST['id'])
-		except:
-			comic_id = -1
-		comic = get_object_or_404(Comic, pk=comic_id)
-		try:
-			s = request.user.subscription_set.get(comic=comic)
-		except:
-			s = request.user.subscription_set.create(comic=comic, position=9999)
-		try:
-			history = ComicHistory.objects.filter(comic=comic)[0]
-			u = UnreadComic(user=request.user, comic=comic, history=history)
-			u.save()
-		except:
-			pass
-		return HttpResponse('0')
-	raise Http404
+    if request.POST:
+        try:
+            comic_id = int(request.POST['id'])
+        except:
+            comic_id = -1
+        comic = get_object_or_404(Comic, pk=comic_id)
+        try:
+            s = request.user.subscription_set.get(comic=comic)
+        except:
+            s = request.user.subscription_set.create(comic=comic, position=9999)
+        try:
+            history = ComicHistory.objects.filter(comic=comic)[0]
+            u = UnreadComic(user=request.user, comic=comic, history=history)
+            u.save()
+        except:
+            pass
+        return HttpResponse('0')
+    raise Http404
 
 @login_required
 def remove_comic(request):
-	if request.POST:
-		try:
-			comic_id = int(request.POST['id'])
-		except:
-			comic_id = -1
-		comic = get_object_or_404(Comic, pk=comic_id)
-		s = request.user.subscription_set.get(comic=comic)
-		s.delete()
-		return HttpResponse('0')
-	raise Http404
+    if request.POST:
+        try:
+            comic_id = int(request.POST['id'])
+        except:
+            comic_id = -1
+        comic = get_object_or_404(Comic, pk=comic_id)
+        s = request.user.subscription_set.get(comic=comic)
+        s.delete()
+        return HttpResponse('0')
+    raise Http404
 
 """
 Genera una página de estadísticas para cada comic ordenada según la puntuación de cada comic
 """
 def stats(request):
-	comics = list(Comic.objects.all())
-	comics.sort(sort_rate)
-	return render(request, 'stats.html', {'comics':comics})
+    comics = list(Comic.objects.all())
+    comics.sort(sort_rate)
+    return render(request, 'stats.html', {'comics':comics})
 """
 Ordenar únicamente por la puntuación de los comics
 """
 def sort_rate(a,b):
-	c = b.getRating() - a.getRating()
-	if c>0: return 1
-	elif c<0: return -1
-	else: return 0
+    c = b.getRating() - a.getRating()
+    if c>0: return 1
+    elif c<0: return -1
+    else: return 0
 
 #Funciones auxiliares
 def get_full_tagcloud():
