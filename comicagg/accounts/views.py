@@ -52,16 +52,16 @@ def login_view(request):
                 else:
                     context['error'] =_('Your have to activate your user first')
                     context['form'] = form
-                    return render(request, 'registration/login_form.html', context, 'login')
+                    return render(request, 'accounts/login_form.html', context, 'login')
                     # Return a 'disabled account' error message
             else:
                 # Return an 'invalid login' error message.
                 context['error'] = _('Username or password not valid!')
                 context['form'] = LoginForm(initial={'username': username})
-                return render(request, 'registration/login_form.html', context, 'login')
+                return render(request, 'accounts/login_form.html', context, 'login')
         context['form'] = form
         #received nothing so show login form
-        return render(request, 'registration/login_form.html', context, 'login')
+        return render(request, 'accounts/login_form.html', context, 'login')
     try:
         next = request.GET['next']
         form = LoginForm(initial={'next': next})
@@ -69,7 +69,7 @@ def login_view(request):
         form = LoginForm()
     context['form'] = form
     #received nothing so show login form
-    return render(request, 'registration/login_form.html', context, 'login')
+    return render(request, 'accounts/login_form.html', context, 'login')
 
 def register(request):
     logout(request)
@@ -119,11 +119,11 @@ def register(request):
                     form._errors['username'] = ErrorList([msg])
 
     context['form'] = form
-    return render(request, 'registration/register.html', context, 'register')
+    return render(request, 'accounts/register.html', context, 'register')
 
 def done(request, kind):
     try:
-        return render(request, 'registration/%s_done.html' % kind, {}, 'account')
+        return render(request, 'accounts/%s_done.html' % kind, {}, 'account')
     except:
         return HttpResponseRedirect(reverse('index'))
 
@@ -146,7 +146,7 @@ def password_reset(request):
                     new_pass = User.objects.make_random_password()
                     user.set_password(new_pass)
                     user.save()
-                    t = loader.get_template('registration/password_reset_email.html')
+                    t = loader.get_template('accounts/password_reset_email.html')
                     c = {
                             'new_password': new_pass,
                             'email': user.email,
@@ -157,7 +157,7 @@ def password_reset(request):
                     send_mail(_('Password reset on %s') % settings.SITE_NAME, t.render(Context(c)), None, [user.email])
             return HttpResponseRedirect(reverse('done', args=['password_reset']))
     context['form'] = form
-    return render(request, 'registration/password_reset_form.html', context, 'account')
+    return render(request, 'accounts/password_reset_form.html', context, 'account')
 
 @login_required
 def password_change(request):
@@ -179,7 +179,7 @@ def password_change(request):
                 request.user.save()
                 return HttpResponseRedirect(reverse('done', args=['password_change']))
     context['form'] = form
-    return render(request, 'registration/password_change_form.html', context, 'account')
+    return render(request, 'accounts/password_change_form.html', context, 'account')
 
 @login_required
 def email(request):
@@ -197,7 +197,7 @@ def email(request):
                 request.user.save()
                 return HttpResponseRedirect(reverse('done', args=['email_change']))
     context['form'] = form
-    return render(request, 'registration/email_change_form.html', context, 'account')
+    return render(request, 'accounts/email_change_form.html', context, 'account')
 
 @login_required
 def edit_profile(request, saved=False):
@@ -210,7 +210,7 @@ def edit_profile(request, saved=False):
         'navigation_max_per_column':p.navigation_max_per_column,
     }
     form = ProfileForm(data)
-    return render(request, 'registration/account.html', {'form':form, 'saved':saved}, 'account')
+    return render(request, 'accounts/account.html', {'form':form, 'saved':saved}, 'account')
 
 @login_required
 def save_profile(request):

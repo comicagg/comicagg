@@ -33,4 +33,4 @@ class ActiveUserMiddleware(object):
             try:
                 request.POST['activate']
             except:
-                return render(request, "registration/activate.html", {})
+                return render(request, "accounts/activate.html", {})
