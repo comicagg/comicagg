@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from comicagg.agregator.models import *
-import re, sys, urllib2
+import re, sys, urllib2, cookielib
 
 #Funciones para comprobar comics
 
@@ -84,7 +84,8 @@ def open_url(comic, _url):
     #obtener url
     #respuesta = urllib2.urlopen(url)
     #lineas = respuesta.readlines()
-    opener = urllib2.build_opener()
+    cj = cookielib.LWPCookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
     respuesta = opener.open(r)
     lineas = respuesta.readlines()
     return lineas
