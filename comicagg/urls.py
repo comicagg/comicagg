@@ -11,7 +11,7 @@ handler500 = 'comicagg.error500'
 urlpatterns = patterns('',
 	url(r'^$', 'comicagg.accounts.views.index', name='index'),
 	url(r'^robots.txt$', 'comicagg.robots_txt', name='robots'),
-	url(r'^stats$', 'comicagg.agregator.views.stats', name='stats'),
+	url(r'^stats/$', 'comicagg.agregator.views.stats', name='stats'),
 	(r'^comics/', include('comicagg.agregator.urls')),
 	(r'^accounts/', include('comicagg.accounts.urls')),
 	(r'^blog/', include('comicagg.blog.urls')),

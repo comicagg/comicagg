@@ -73,8 +73,8 @@ def random_comic(user, xhtml=False, request=None):
     except:
       history = None
     if xhtml and history:
-      return render(request, 'agregator/read_random.html', {'random_comic':history})
       #TODO
+      return render(request, 'agregator/read_random.html', {'random_comic':history})
     return history
   return None
 
@@ -117,8 +117,10 @@ def organize(request, tag = None, add=False):
     all_comics.sort(comic_sort_name)
     user_subs = request.user.subscription_set.all().filter(comic__activo=True).filter(comic__ended=False)
     user_comics = list()
+    user_comics_id = list()
     for sub in user_subs:
         user_comics.append(sub.comic)
+        user_comics_id.append(sub.comic.id)
     available = list()
     for comic in all_comics:
         if not comic in user_comics:
@@ -139,7 +141,7 @@ def organize(request, tag = None, add=False):
     context['available'] = available_list
     context['user_comics'] = user_comics
     context['all_comics'] = all_comics
-    unr = UnreadComic.objects.filter(user=request.user).filter(comic__activo=True).filter(comic__ended=False).aggregate(Count('comic'))
+    unr = request.user.unreadcomic_set.filter(comic__activo=True).filter(comic__ended=False).aggregate(Count('comic', distinct=True))
     context['unreadCount'] = unr['comic__count']
     if add:
         #quitar aviso de nuevos comics
@@ -147,7 +149,6 @@ def organize(request, tag = None, add=False):
         template = 'agregator/organize_add.html'
     else:
         template = 'agregator/organize_organize.html'
-    
     return render(request, template, context, 'configure')
 
 @login_required

@@ -13,4 +13,5 @@ urlpatterns = patterns('comicagg.accounts.views',
     url(r'^email/$', 'email', name='change_email'),
     url(r'^done_(?P<kind>\w+)/$', 'done', name='done'),
     url(r'^ajax/save_color/$', 'save_color', name='save_color'),
+    url(r'activate/$', 'activate', name='accounts_activate'),
 )

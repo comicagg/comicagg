@@ -89,7 +89,7 @@ button:hover {
 
 /* Login views */
 
-.loginbox {
+.loginbox, .box {
 	border:1px gray solid;
 	-moz-border-radius:15px;
 	-webkit-border-radius:15px;
@@ -380,6 +380,7 @@ button:hover {
 }
 #comic_info p {
 /* 	margin-left:1em; */
+    margin:2px 5px;
 }
 #comic_info_wrap {
 /* 	margin-left:1em; */
