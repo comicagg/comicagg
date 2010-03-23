@@ -32,8 +32,8 @@
 </script>
 <div id="read">
     <div class="extras_div">
-        <p class="info">{% blocktrans %}There are 0 new news items{% endblocktrans %}</p>
-        <p class="info">{% blocktrans %}There are 0 new comics in the database.{% endblocktrans %}</p>
+        <p class="info">{% blocktrans %}There are {{ new_blog_count }} new news items{% endblocktrans %}</p>
+        <p class="info">{% blocktrans %}There are {{ new_comic_count }} new comics in the database.{% endblocktrans %}</p>
     </div>
     <div>
         <p class="info" id="unreadCounters">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="unreadCountersTotal">{{ len }}</b> comics and <b id="unreadCountersUnread">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>

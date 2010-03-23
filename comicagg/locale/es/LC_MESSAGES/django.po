@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-23 17:00+0100\n"
-"PO-Revision-Date: 2010-03-23 17:06+0100\n"
+"POT-Creation-Date: 2010-03-23 17:32+0100\n"
+"PO-Revision-Date: 2010-03-23 17:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -697,6 +697,7 @@ msgid "take me to the blog."
 msgstr "llévame al blog."
 
 #: templates/base/agregator/read_avisos.html:8
+#: templates/v2010/agregator/read.html:36
 #, python-format
 msgid "There are %(new_comic_count)s new comics in the database."
 msgstr "Hay %(new_comic_count)s nuevos comics en la base de datos."
@@ -1656,14 +1657,9 @@ msgid "how it was saved"
 msgstr "como está guardado"
 
 #: templates/v2010/agregator/read.html:35
-#, fuzzy
-msgid "There are 0 new news items"
-msgstr "Hay nuevas entradas en el blog."
-
-#: templates/v2010/agregator/read.html:36
-#, fuzzy
-msgid "There are 0 new comics in the database."
-msgstr "Estos son todos los comics que tenemos"
+#, python-format
+msgid "There are %(new_blog_count)s new news items"
+msgstr "Hay %(new_blog_count)s nuevas entradas en el blog."
 
 #: templates/v2010/agregator/read.html:39
 #, python-format
@@ -1681,8 +1677,7 @@ msgid ""
 "of them have unread strips."
 msgstr ""
 "Estás leyendo <b id=\"noUnreadCountersTotal\">%(len)s</b> comics y ninguno "
-"de "
-"ellos tienen nuevas tiras sin leer."
+"de ellos tienen nuevas tiras sin leer."
 
 #: templates/v2010/agregator/read.html:41
 msgid ""
@@ -1800,6 +1795,10 @@ msgstr "Otra vez"
 #: templates/v2010/registration/register_done.html:7
 msgid "Back to login"
 msgstr "Volver al inicio"
+
+#, fuzzy
+#~ msgid "There are 0 new comics in the database."
+#~ msgstr "Estos son todos los comics que tenemos"
 
 #~ msgid "profile"
 #~ msgstr "perfil"

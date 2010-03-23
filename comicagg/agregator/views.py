@@ -58,8 +58,8 @@ def read_view(request):
             'has_unread':has_unread,
             'items_per_column':items_per_column,
             'random_comic':random,
-            'new_posts':NewBlog.objects.filter(user=request.user),
-            'new_comic_count':NewComic.objects.filter(user=request.user).count(),
+            'new_blog_count':request.user.newblog_set.count(),
+            'new_comic_count':request.user.newcomic_set.count(),
         })
         return render(request, 'agregator/read.html', context, 'read')
 
