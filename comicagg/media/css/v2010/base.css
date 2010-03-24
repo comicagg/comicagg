@@ -11,6 +11,7 @@ body {
 a {
 	color:#333;
 	text-decoration:underline;
+	text-shadow:#ccc 1px 1px 1px;
 }
 a:hover, a:visited:hover {
 	color:#6b98b5;
@@ -58,9 +59,11 @@ button:hover {
 	left:0;
 	right:0;
 	top:0;
+	text-shadow:#45545D 1px 1px 1px;
 }
 #head a {
 	color:white;
+    text-shadow:#45545D 1px 1px 1px;
 }
 #head a:hover {
 	color:#ddd;
@@ -169,6 +172,7 @@ button:hover {
 	padding:5px 1em 5px 1em;
 	margin-top:10px;
 	margin-bottom:10px;
+/* 	position:relative; */
 }
 #read .comic h3 {
 	margin:0;
@@ -202,6 +206,8 @@ button:hover {
 #read .comic .newstripsnotice {
 	color:orange;
 	font-weight:bolder;
+	float:left;
+/*     position:absolute; */
 }
 #read .info {
 	margin:0;

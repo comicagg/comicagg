@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans 'Read comics' %} -{% endblock %}
+<!-- {% block title %}{% trans 'Read' %} -{% endblock %} -->
 {% block extra_head %}
         <script src="{{ mediaurl }}js/v2010/read.js" type="text/javascript"></script>
 {% endblock%}
 {% block onload %}onReadLoad();{% endblock %}
 {% block content %}
 <script language="javascript">
-    var titlei18n = "{% trans 'Read comics' %}";
+    var titlei18n = "{% trans 'Read' %}";
     var unreadCounter = {{ unread_list|length }};
     var comicCounter = {{ comic_list|length }};
     var unreadComics = new Array();

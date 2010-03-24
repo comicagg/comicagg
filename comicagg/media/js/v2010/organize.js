@@ -1,4 +1,14 @@
 // Configure
+function save_organize() {
+    items = $('user_comics').select('.dojoDndItem');
+    items_o = new Array();
+    for (var i = 0, len = items.length; i < len; i++) {
+        id = items[i].getAttribute('comicid');
+        items_o.push(usercomics_id[id]);
+    }
+    newcomics = items_o;
+    save();
+}
 
 function save() {
 	var ids = "";
@@ -111,7 +121,7 @@ function convertNodes() {
 	return nodes;
 }
 
-//recibe una lista de nodosa borrar, saca el id del comic de cada nodo
+//recibe una lista de nodos a borrar, saca el id del comic de cada nodo
 //elimina los comic de la lista newcomics y compacta la lista
 function dndRemoveComics(nodes) {
 	var tmp = new Array();
@@ -132,7 +142,7 @@ function initDND() {
 	});
 	//insert nodes in dojo dnd
 	dojo_usercomics.insertNodes(false, convertNodes());
-	
+	//iniciar la papelera
 	var trash = new dojo.dnd.Target("trash");
 	dojo.connect(trash, "onDropExternal", function(source, nodes, copy) {
 		dndRemoveComics(nodes);
@@ -140,6 +150,7 @@ function initDND() {
 		trash.deleteSelectedNodes();
 		trash.clearItems();
 	});
+	//texto que sale al arrastrar
 	dojo.dnd.Avatar.prototype._generateText = function(){
 		return (this.manager.nodes.length + " comic" +
 			(this.manager.nodes.length != 1 ? "s" : ""));
