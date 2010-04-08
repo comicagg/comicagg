@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n agregator_tags %}
-<!-- {% block title %}{% trans 'Read' %} -{% endblock %} -->
-{% block extra_head %}
-        <script src="{{ mediaurl }}js/v2010/read.js" type="text/javascript"></script>
-{% endblock%}
+{% block title %}{% trans 'Requests' %} -{% endblock %}
 {% block content %}
 {% regroup user.request_set.all by done as request_list %}
 <div id="request_list" class="box">

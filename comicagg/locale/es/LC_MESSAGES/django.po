@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-08 18:18+0200\n"
-"PO-Revision-Date: 2010-04-08 18:18+0200\n"
+"POT-Creation-Date: 2010-04-08 18:25+0200\n"
+"PO-Revision-Date: 2010-04-08 18:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -745,12 +745,12 @@ msgstr "¡Añádelo a mi lista!"
 #: templates/base/agregator/request_comic.html:3
 #: templates/base/agregator/request_comic.html:5
 #: templates/base/agregator/request_comic_done.html:6
-#: templates/v2010/agregator/request_index.html:10
+#: templates/v2010/agregator/request_index.html:7
 msgid "Request a comic"
 msgstr "Solicitar un comic"
 
 #: templates/base/agregator/request_comic.html:6
-#: templates/v2010/agregator/request_index.html:16
+#: templates/v2010/agregator/request_index.html:13
 msgid ""
 "Write the url of the comic you would like to read here and we will try to "
 "add it is as soon as possible (if it's possible, of course)."
@@ -759,7 +759,7 @@ msgstr ""
 "añadirlo lo antes posible (si es posible)."
 
 #: templates/base/agregator/request_comic.html:7
-#: templates/v2010/agregator/request_index.html:17
+#: templates/v2010/agregator/request_index.html:14
 #, python-format
 msgid ""
 "Currently there are %(count)s requests waiting to be added. We have to add "
@@ -769,19 +769,19 @@ msgstr ""
 "una a una, así que ten un poco de paciencia. ¡Gracias!"
 
 #: templates/base/agregator/request_comic.html:12
-#: templates/v2010/agregator/request_index.html:22
+#: templates/v2010/agregator/request_index.html:19
 msgid "The comic's Url"
 msgstr "La dirección del comic"
 
 #: templates/base/agregator/request_comic.html:13
-#: templates/v2010/agregator/request_index.html:23
+#: templates/v2010/agregator/request_index.html:20
 msgid "Any comment?"
 msgstr "¿Algún comentario?"
 
 #: templates/base/agregator/request_comic.html:14
 #: templates/base/help/edit_ticket.html:28
 #: templates/base/help/new_ticket.html:15
-#: templates/v2010/agregator/request_index.html:24
+#: templates/v2010/agregator/request_index.html:21
 msgid "Send"
 msgstr "Enviar"
 
@@ -1741,7 +1741,6 @@ msgstr "como está guardado"
 
 #: templates/v2010/agregator/read.html:3
 #: templates/v2010/agregator/read.html:10
-#: templates/v2010/agregator/request_index.html:3
 msgid "Read"
 msgstr "Leer"
 
@@ -1813,27 +1812,31 @@ msgstr "Quitar este comic"
 msgid "You haven't selected any comics!"
 msgstr "¡No has seleccionado ningún comic!"
 
-#: templates/v2010/agregator/request_index.html:12
+#: templates/v2010/agregator/request_index.html:3
+msgid "Requests"
+msgstr "Solicitudes"
+
+#: templates/v2010/agregator/request_index.html:9
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
-#: templates/v2010/agregator/request_index.html:27
+#: templates/v2010/agregator/request_index.html:24
 msgid "Pending requests"
 msgstr "Solicitudes pendientes"
 
-#: templates/v2010/agregator/request_index.html:31
+#: templates/v2010/agregator/request_index.html:28
 msgid "Your comment:"
 msgstr "Tu comentario:"
 
-#: templates/v2010/agregator/request_index.html:34
+#: templates/v2010/agregator/request_index.html:31
 msgid "Rejected requests"
 msgstr "Solicitudes rechazadas"
 
-#: templates/v2010/agregator/request_index.html:38
+#: templates/v2010/agregator/request_index.html:35
 msgid "Our comment:"
 msgstr "Nuestro comentario:"
 
-#: templates/v2010/agregator/request_index.html:41
+#: templates/v2010/agregator/request_index.html:38
 msgid "Accepted requests"
 msgstr "Solicitudes aceptadas"
 
