@@ -92,6 +92,11 @@ def mult(value, arg):
 def toint(value):
   return int(value)
 
+@register.filter()
+def reverse(value):
+    value.reverse()
+    return value
+
 class IsNewForUserNode(template.Node):
 	def __init__(self, comic, user, context_var):
 		self.comic = comic

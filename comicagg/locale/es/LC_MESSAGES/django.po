@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-23 17:32+0100\n"
-"PO-Revision-Date: 2010-03-23 17:32+0100\n"
+"POT-Creation-Date: 2010-04-08 18:18+0200\n"
+"PO-Revision-Date: 2010-04-08 18:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -71,11 +71,11 @@ msgstr "Cambio de contraseña en %s"
 msgid "Saved =)"
 msgstr "Guardado =)"
 
-#: agregator/views.py:328 templates/admin/index.html:46
+#: agregator/views.py:331 templates/admin/index.html:46
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:606
+#: agregator/views.py:609
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -109,8 +109,8 @@ msgstr "Bienvenido,"
 msgid "Documentation"
 msgstr "Documentación"
 
-#: templates/admin/base.html:28 templates/base/accounts/account.html:41
-#: templates/base/accounts/password_change_done.html:5
+#: templates/admin/base.html:28 templates/base/registration/account.html:41
+#: templates/base/registration/password_change_done.html:5
 #: templates/v2010/accounts/account.html:41
 #: templates/v2010/accounts/password_change_done.html:5
 msgid "Change password"
@@ -205,8 +205,6 @@ msgid "Logged in as "
 msgstr "Conectado como "
 
 #: templates/base/base.html:55 templates/base/agregator/read.html:4
-#: templates/v2010/agregator/read.html:3
-#: templates/v2010/agregator/read.html:10
 msgid "Read comics"
 msgstr "Leer comics"
 
@@ -233,7 +231,7 @@ msgstr "Ayuda"
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base/base.html:64 templates/base/accounts/login_form.html:3
+#: templates/base/base.html:64 templates/base/registration/login_form.html:3
 #: templates/v2010/accounts/login_form.html:3
 msgid "Login"
 msgstr "Entrar"
@@ -260,7 +258,7 @@ msgid "Forums"
 msgstr "Foro"
 
 #: templates/base/disclaimer.html:4 templates/base/blog/base.html:3
-#: templates/base/help/index.html:8
+#: templates/base/help/index.html:8 templates/v2010/blog/base.html:3
 msgid "Blog"
 msgstr "Blog"
 
@@ -273,17 +271,17 @@ msgid "Welcome"
 msgstr "Bienvenido"
 
 #: templates/base/welcome.html:11
-#: templates/base/accounts/login_form.html:15
+#: templates/base/registration/login_form.html:15
 msgid "User: "
 msgstr "Usuario: "
 
 #: templates/base/welcome.html:15
-#: templates/base/accounts/login_form.html:19
+#: templates/base/registration/login_form.html:19
 msgid "Password: "
 msgstr "Contraseña: "
 
 #: templates/base/welcome.html:19
-#: templates/base/accounts/login_form.html:23
+#: templates/base/registration/login_form.html:23
 #: templates/v2010/accounts/login_form.html:27
 msgid "Log in"
 msgstr "Entrar"
@@ -747,10 +745,12 @@ msgstr "¡Añádelo a mi lista!"
 #: templates/base/agregator/request_comic.html:3
 #: templates/base/agregator/request_comic.html:5
 #: templates/base/agregator/request_comic_done.html:6
+#: templates/v2010/agregator/request_index.html:10
 msgid "Request a comic"
 msgstr "Solicitar un comic"
 
 #: templates/base/agregator/request_comic.html:6
+#: templates/v2010/agregator/request_index.html:16
 msgid ""
 "Write the url of the comic you would like to read here and we will try to "
 "add it is as soon as possible (if it's possible, of course)."
@@ -759,6 +759,7 @@ msgstr ""
 "añadirlo lo antes posible (si es posible)."
 
 #: templates/base/agregator/request_comic.html:7
+#: templates/v2010/agregator/request_index.html:17
 #, python-format
 msgid ""
 "Currently there are %(count)s requests waiting to be added. We have to add "
@@ -768,16 +769,19 @@ msgstr ""
 "una a una, así que ten un poco de paciencia. ¡Gracias!"
 
 #: templates/base/agregator/request_comic.html:12
+#: templates/v2010/agregator/request_index.html:22
 msgid "The comic's Url"
 msgstr "La dirección del comic"
 
 #: templates/base/agregator/request_comic.html:13
+#: templates/v2010/agregator/request_index.html:23
 msgid "Any comment?"
 msgstr "¿Algún comentario?"
 
 #: templates/base/agregator/request_comic.html:14
 #: templates/base/help/edit_ticket.html:28
 #: templates/base/help/new_ticket.html:15
+#: templates/v2010/agregator/request_index.html:24
 msgid "Send"
 msgstr "Enviar"
 
@@ -798,10 +802,10 @@ msgid "Your tags: "
 msgstr "Tus etiquetas: "
 
 #: templates/base/agregator/tagging_form.html:5
-#: templates/base/accounts/account.html:27
-#: templates/v2010/agregator/organize_add.html:54
-#: templates/v2010/agregator/organize_organize.html:34
+#: templates/base/registration/account.html:27
 #: templates/v2010/accounts/account.html:27
+#: templates/v2010/agregator/organize_add.html:54
+#: templates/v2010/agregator/organize_organize.html:36
 msgid "Save"
 msgstr "Guardar"
 
@@ -809,19 +813,20 @@ msgstr "Guardar"
 msgid "Saved :)"
 msgstr "Guardado =)"
 
-#: templates/base/blog/index.html:9
+#: templates/base/blog/index.html:9 templates/v2010/blog/index.html:9
 msgid "Read it in the forum"
 msgstr "Leerlo en el foro"
 
-#: templates/base/blog/index.html:13
+#: templates/base/blog/index.html:13 templates/v2010/blog/index.html:13
 msgid "Nothing here right now"
 msgstr "Nada aquí ahora mismo"
 
 #: templates/base/blog/index.html:16 templates/base/blog/side.html:10
+#: templates/v2010/blog/index.html:16 templates/v2010/blog/side.html:10
 msgid "All posts"
 msgstr "Todos los posts"
 
-#: templates/base/blog/side.html:3
+#: templates/base/blog/side.html:3 templates/v2010/blog/side.html:3
 msgid "Recent posts"
 msgstr "Posts recientes"
 
@@ -910,7 +915,7 @@ msgid "Where you can ask for a comic to be added to the database."
 msgstr "Donde puedes pedir que se añada un comic a la base de datos."
 
 #: templates/base/help/index.html:10
-#: templates/base/accounts/account.html:14
+#: templates/base/registration/account.html:14
 #: templates/v2010/accounts/account.html:14
 msgid "Reading comics"
 msgstr "Leyendo comics"
@@ -1090,14 +1095,14 @@ msgstr "Nuevo ticket"
 msgid "Comentario"
 msgstr "Comentario"
 
-#: templates/base/accounts/account.html:3
-#: templates/base/accounts/account.html:6
+#: templates/base/registration/account.html:3
+#: templates/base/registration/account.html:6
 #: templates/v2010/accounts/account.html:3
 #: templates/v2010/accounts/account.html:6
 msgid "Account settings"
 msgstr "Configuración de la cuenta"
 
-#: templates/base/accounts/account.html:7
+#: templates/base/registration/account.html:7
 #: templates/v2010/accounts/account.html:7
 msgid ""
 "You can review here your settings. Use this page to change your e-mail "
@@ -1106,12 +1111,12 @@ msgstr ""
 "Aquí puedes revisar la configuración de tu cuenta. Úsala para cambiar tu "
 "dirección de correo electrónico o tu contraseña."
 
-#: templates/base/accounts/account.html:8
+#: templates/base/registration/account.html:8
 #: templates/v2010/accounts/account.html:8
 msgid "Change settings:"
 msgstr "Cambiar configuración:"
 
-#: templates/base/accounts/account.html:11
+#: templates/base/registration/account.html:11
 #: templates/v2010/accounts/account.html:11
 msgid ""
 "Alert new comics.<br/>A box will appear in the read page everytime a new "
@@ -1120,7 +1125,7 @@ msgstr ""
 "Avisar sobre nuevos comics añadidos.<br/>Un mensaje aparecerá en la sección "
 "de lectura cuando un nuevo comic sea añadido a la base de datos."
 
-#: templates/base/accounts/account.html:16
+#: templates/base/registration/account.html:16
 #: templates/v2010/accounts/account.html:16
 msgid ""
 "Hide read comics.<br/>Up-to-date comics will be hidden so the page will load "
@@ -1133,12 +1138,12 @@ msgstr ""
 "eliges un comic oculto, éste se mostrará de nuevo. Además, si no tienes "
 "ningún comic nuevo se mostrará una tira aleatoria."
 
-#: templates/base/accounts/account.html:18
+#: templates/base/registration/account.html:18
 #: templates/v2010/accounts/account.html:18
 msgid "Navigation box"
 msgstr "Caja de navegación"
 
-#: templates/base/accounts/account.html:20
+#: templates/base/registration/account.html:20
 #: templates/v2010/accounts/account.html:20
 msgid ""
 "Max number of columns.<br/>This is the maximum number of columns to display "
@@ -1148,7 +1153,7 @@ msgstr ""
 "puede tener la lista. Tiene preferencia sobre el número máximo de elementos "
 "por columna."
 
-#: templates/base/accounts/account.html:23
+#: templates/base/registration/account.html:23
 #: templates/v2010/accounts/account.html:23
 msgid ""
 "Max number of elements per column.<br/>This is the maximum number of "
@@ -1159,61 +1164,61 @@ msgstr ""
 "que puede tener cada columna de la lista. Puede ser aumentado para ajustar "
 "el número máximo de columnas."
 
-#: templates/base/accounts/account.html:30
+#: templates/base/registration/account.html:30
 #: templates/v2010/accounts/account.html:30
 msgid "Saved."
 msgstr "Guardado."
 
-#: templates/base/accounts/account.html:31
+#: templates/base/registration/account.html:31
 #: templates/v2010/accounts/account.html:31
 msgid "Web colors"
 msgstr "Colores de la web"
 
-#: templates/base/accounts/account.html:39
+#: templates/base/registration/account.html:39
 #: templates/v2010/accounts/account.html:39
 msgid "Password, e-mail"
 msgstr "Contraseña, correo electrónico"
 
-#: templates/base/accounts/account.html:42
+#: templates/base/registration/account.html:42
 #: templates/v2010/accounts/account.html:42
 msgid "Change e-mail"
 msgstr "Cambiar correo electrónico"
 
-#: templates/base/accounts/account.html:42
+#: templates/base/registration/account.html:42
 #: templates/v2010/accounts/account.html:42
 msgid "current:"
 msgstr "actual:"
 
-#: templates/base/accounts/email_change_done.html:3
+#: templates/base/registration/email_change_done.html:3
 #: templates/v2010/accounts/email_change_done.html:3
 msgid "E-mail updated"
 msgstr "Correo electrónico actualizado"
 
-#: templates/base/accounts/email_change_done.html:5
-#: templates/base/accounts/email_change_form.html:5
+#: templates/base/registration/email_change_done.html:5
+#: templates/base/registration/email_change_form.html:5
 #: templates/v2010/accounts/email_change_done.html:5
 #: templates/v2010/accounts/email_change_form.html:5
 msgid "Change e-mail address"
 msgstr "Cambiar correo electrónico"
 
-#: templates/base/accounts/email_change_done.html:6
+#: templates/base/registration/email_change_done.html:6
 #: templates/v2010/accounts/email_change_done.html:6
 msgid "Your e-mail address has been changed."
 msgstr "Tu dirección de correo electrónico ha sido cambiada."
 
-#: templates/base/accounts/email_change_done.html:7
-#: templates/base/accounts/password_change_done.html:7
+#: templates/base/registration/email_change_done.html:7
+#: templates/base/registration/password_change_done.html:7
 #: templates/v2010/accounts/email_change_done.html:7
 #: templates/v2010/accounts/password_change_done.html:7
 msgid "Back to account settings."
 msgstr "Volver a la configuración de la cuenta."
 
-#: templates/base/accounts/email_change_form.html:3
+#: templates/base/registration/email_change_form.html:3
 #: templates/v2010/accounts/email_change_form.html:3
 msgid "E-mail change"
 msgstr "Cambiar correo electrónico"
 
-#: templates/base/accounts/email_change_form.html:6
+#: templates/base/registration/email_change_form.html:6
 #: templates/v2010/accounts/email_change_form.html:6
 msgid ""
 "Here you can change the e-mail of your account. Type your current password, "
@@ -1222,86 +1227,86 @@ msgstr ""
 "Aquí puedes cambiar el correo electrónico asociado a tu cuenta. Escribe tu "
 "contraseña actual y la nueva dirección de correo."
 
-#: templates/base/accounts/email_change_form.html:10
+#: templates/base/registration/email_change_form.html:10
 #: templates/v2010/accounts/email_change_form.html:10
 msgid "The password is not valid."
 msgstr "La contraseña no es válida."
 
-#: templates/base/accounts/email_change_form.html:17
-#: templates/base/accounts/password_change_form.html:19
+#: templates/base/registration/email_change_form.html:17
+#: templates/base/registration/password_change_form.html:19
 #: templates/v2010/accounts/email_change_form.html:17
 #: templates/v2010/accounts/password_change_form.html:19
 msgid "Current password."
 msgstr "Contraseña actual."
 
-#: templates/base/accounts/email_change_form.html:24
+#: templates/base/registration/email_change_form.html:24
 #: templates/v2010/accounts/email_change_form.html:24
 msgid "New e-mail address."
 msgstr "Nuevo correo."
 
-#: templates/base/accounts/email_change_form.html:31
-#: templates/base/accounts/password_change_form.html:40
+#: templates/base/registration/email_change_form.html:31
+#: templates/base/registration/password_change_form.html:40
 #: templates/v2010/accounts/email_change_form.html:31
 #: templates/v2010/accounts/password_change_form.html:40
 msgid "Change it"
 msgstr "Cámbialo"
 
-#: templates/base/accounts/email_change_form.html:34
-#: templates/base/accounts/password_change_form.html:44
-#: templates/base/accounts/password_reset_form.html:20
+#: templates/base/registration/email_change_form.html:34
+#: templates/base/registration/password_change_form.html:44
+#: templates/base/registration/password_reset_form.html:20
 #: templates/v2010/accounts/email_change_form.html:34
 #: templates/v2010/accounts/password_change_form.html:44
 msgid "Go back."
 msgstr "Volver."
 
-#: templates/base/accounts/login_form.html:6
+#: templates/base/registration/login_form.html:6
 #: templates/v2010/accounts/login_form.html:9
 msgid "Login into your account"
 msgstr "Entrar en tu cuenta"
 
-#: templates/base/accounts/login_form.html:7
+#: templates/base/registration/login_form.html:7
 #: templates/v2010/accounts/login_form.html:10
 msgid "Write your username and passwod to get you logged in."
 msgstr "Escribe tu usuario y contraseña para conectarte."
 
-#: templates/base/accounts/login_form.html:28
+#: templates/base/registration/login_form.html:28
 msgid ""
 "If you don't have an account to log in you can easily create one following "
 "this link:"
 msgstr "Si no tienes una cuenta es muy fácil crearla siguiendo este enlace:"
 
-#: templates/base/accounts/login_form.html:28
+#: templates/base/registration/login_form.html:28
 msgid "create a new account."
 msgstr "crear una nueva cuenta."
 
-#: templates/base/accounts/login_form.html:29
+#: templates/base/registration/login_form.html:29
 msgid ""
 "If you can't remember your password follow this link to get a new password:"
 msgstr ""
 "Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
 
-#: templates/base/accounts/login_form.html:29
+#: templates/base/registration/login_form.html:29
 msgid "reset my password."
 msgstr "borrar mi contraseña."
 
-#: templates/base/accounts/password_change_done.html:3
+#: templates/base/registration/password_change_done.html:3
 #: templates/v2010/accounts/password_change_done.html:3
 msgid "Password changed"
 msgstr "Contraseña cambiada"
 
-#: templates/base/accounts/password_change_done.html:6
+#: templates/base/registration/password_change_done.html:6
 #: templates/v2010/accounts/password_change_done.html:6
 msgid "Your password has been changed."
 msgstr "Tu contraseña ha sido cambiada."
 
-#: templates/base/accounts/password_change_form.html:3
-#: templates/base/accounts/password_change_form.html:5
+#: templates/base/registration/password_change_form.html:3
+#: templates/base/registration/password_change_form.html:5
 #: templates/v2010/accounts/password_change_form.html:3
 #: templates/v2010/accounts/password_change_form.html:5
 msgid "Password change"
 msgstr "Cambio de contraseña"
 
-#: templates/base/accounts/password_change_form.html:6
+#: templates/base/registration/password_change_form.html:6
 #: templates/v2010/accounts/password_change_form.html:6
 msgid ""
 "Here you can change the password for your account. Type your current "
@@ -1310,58 +1315,58 @@ msgstr ""
 "Aquí puedes cambiar la contraseña de tu cuenta. Escribe tu contraseña actual "
 "y la nueva dos veces."
 
-#: templates/base/accounts/password_change_form.html:10
+#: templates/base/registration/password_change_form.html:10
 #: templates/v2010/accounts/password_change_form.html:10
 msgid "The current password is not valid."
 msgstr "La contraseña actual no es válida."
 
-#: templates/base/accounts/password_change_form.html:11
+#: templates/base/registration/password_change_form.html:11
 #: templates/v2010/accounts/password_change_form.html:11
 msgid "New passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: templates/base/accounts/password_change_form.html:12
+#: templates/base/registration/password_change_form.html:12
 #: templates/v2010/accounts/password_change_form.html:12
 msgid "The new password cannot be blank!"
 msgstr "La contraseña no puede estar vacía."
 
-#: templates/base/accounts/password_change_form.html:26
+#: templates/base/registration/password_change_form.html:26
 #: templates/v2010/accounts/password_change_form.html:26
 msgid "New password."
 msgstr "Nueva contraseña."
 
-#: templates/base/accounts/password_change_form.html:33
+#: templates/base/registration/password_change_form.html:33
 #: templates/v2010/accounts/password_change_form.html:33
 msgid "New password again."
 msgstr "Otra vez."
 
-#: templates/base/accounts/password_change_form.html:43
+#: templates/base/registration/password_change_form.html:43
 #: templates/v2010/accounts/password_change_form.html:43
 msgid ""
 "If you can't remember your current password, use the password reset page"
 msgstr ""
 "Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
 
-#: templates/base/accounts/password_change_form.html:43
+#: templates/base/registration/password_change_form.html:43
 #: templates/v2010/accounts/password_change_form.html:43
 msgid "here"
 msgstr "aquí"
 
-#: templates/base/accounts/password_reset_done.html:3
+#: templates/base/registration/password_reset_done.html:3
 #: templates/v2010/accounts/password_reset_done.html:3
 msgid "E-mail sent"
 msgstr "Correo enviado"
 
-#: templates/base/accounts/password_reset_done.html:5
-#: templates/base/accounts/password_reset_form.html:3
-#: templates/base/accounts/password_reset_form.html:5
+#: templates/base/registration/password_reset_done.html:5
+#: templates/base/registration/password_reset_form.html:3
+#: templates/base/registration/password_reset_form.html:5
 #: templates/v2010/accounts/password_reset_done.html:5
 #: templates/v2010/accounts/password_reset_form.html:3
 #: templates/v2010/accounts/password_reset_form.html:5
 msgid "Password reset"
 msgstr "Reseteo de contraseña"
 
-#: templates/base/accounts/password_reset_done.html:6
+#: templates/base/registration/password_reset_done.html:6
 #: templates/v2010/accounts/password_reset_done.html:6
 msgid ""
 "If you provided a correct username or e-mail, an e-mail has been sent to the "
@@ -1371,7 +1376,7 @@ msgstr ""
 "correctos, un correo electrónico ha sido enviado a la dirección de correo. "
 "Encontrarás la nueva contraseña en él."
 
-#: templates/base/accounts/password_reset_done.html:7
+#: templates/base/registration/password_reset_done.html:7
 #: templates/v2010/accounts/password_reset_done.html:7
 msgid ""
 "If you don't receive any e-mail in the next minutes, try again reseting the "
@@ -1380,52 +1385,52 @@ msgstr ""
 "Si no recibes ningún correo en los próximos minutos, prueba de nuevo a "
 "restablecer la contraseña."
 
-#: templates/base/accounts/password_reset_done.html:7
+#: templates/base/registration/password_reset_done.html:7
 #: templates/v2010/accounts/password_reset_done.html:7
 msgid "Back to home."
 msgstr "Volver a principal."
 
-#: templates/base/accounts/password_reset_email.html:2
+#: templates/base/registration/password_reset_email.html:2
 #: templates/v2010/accounts/password_reset_email.html:2
 msgid "You're receiving this e-mail because you requested a password reset"
 msgstr ""
 "Estás recibiendo este correo electrónico porque has solicitado una nueva "
 "contraseña"
 
-#: templates/base/accounts/password_reset_email.html:3
+#: templates/base/registration/password_reset_email.html:3
 #: templates/v2010/accounts/password_reset_email.html:3
 #, python-format
 msgid "for your user account at %(site_name)s"
 msgstr "para tu cuenta de usuario en %(site_name)s"
 
-#: templates/base/accounts/password_reset_email.html:5
+#: templates/base/registration/password_reset_email.html:5
 #: templates/v2010/accounts/password_reset_email.html:5
 #, python-format
 msgid "Your new password is: %(new_password)s"
 msgstr "Tu nueva contraseña es: %(new_password)s"
 
-#: templates/base/accounts/password_reset_email.html:7
+#: templates/base/registration/password_reset_email.html:7
 #: templates/v2010/accounts/password_reset_email.html:7
 msgid "Feel free to change this password by going to this page:"
 msgstr "Cambia esta contraseña yendo a esta página:"
 
-#: templates/base/accounts/password_reset_email.html:11
+#: templates/base/registration/password_reset_email.html:11
 #: templates/v2010/accounts/password_reset_email.html:11
 msgid "Your username, in case you've forgotten:"
 msgstr "Tu usuario es, por si lo habías olvidado:"
 
-#: templates/base/accounts/password_reset_email.html:13
+#: templates/base/registration/password_reset_email.html:13
 #: templates/v2010/accounts/password_reset_email.html:13
 msgid "Thanks for using our site!"
 msgstr "¡Gracias por usar nuestro sitio! =)"
 
-#: templates/base/accounts/password_reset_email.html:15
+#: templates/base/registration/password_reset_email.html:15
 #: templates/v2010/accounts/password_reset_email.html:15
 #, python-format
 msgid "The %(site_name)s team"
 msgstr "El equipo de %(site_name)s"
 
-#: templates/base/accounts/password_reset_form.html:6
+#: templates/base/registration/password_reset_form.html:6
 #: templates/v2010/accounts/password_reset_form.html:6
 msgid ""
 "Please enter your username or e-mail address and we will send you a new "
@@ -1434,28 +1439,28 @@ msgstr ""
 "Por favor escribe tu usuario o correo electrónico y te enviaremos una nueva "
 "contraseña por correo electrónico."
 
-#: templates/base/accounts/password_reset_form.html:10
+#: templates/base/registration/password_reset_form.html:10
 msgid "Your username/email. "
 msgstr "Tu usuario/correo. "
 
-#: templates/base/accounts/password_reset_form.html:17
+#: templates/base/registration/password_reset_form.html:17
 #: templates/v2010/accounts/password_reset_form.html:18
 msgid "Reset my password"
 msgstr "Borra mi contraseña"
 
-#: templates/base/accounts/register.html:3
+#: templates/base/registration/register.html:3
 #: templates/v2010/accounts/register.html:3
 msgid "New account"
 msgstr "Nueva cuenta"
 
-#: templates/base/accounts/register.html:5
-#: templates/base/accounts/register_done.html:5
+#: templates/base/registration/register.html:5
+#: templates/base/registration/register_done.html:5
 #: templates/v2010/accounts/register.html:6
 #: templates/v2010/accounts/register_done.html:5
 msgid "Register new account"
 msgstr "Crear una nueva cuenta"
 
-#: templates/base/accounts/register.html:6
+#: templates/base/registration/register.html:6
 #: templates/v2010/accounts/register.html:7
 msgid ""
 "Please fill in the following fields to create your account. Once you have "
@@ -1464,66 +1469,66 @@ msgstr ""
 "Por favor rellena el formulario para crear tu cuenta. Una vez que lo hayas "
 "completado y enviado podrás conectarte."
 
-#: templates/base/accounts/register.html:11
+#: templates/base/registration/register.html:11
 msgid "There were some errors:"
 msgstr "Hubo algún error:"
 
-#: templates/base/accounts/register.html:13
+#: templates/base/registration/register.html:13
 msgid "Username is not valid."
 msgstr "Usuario no válido."
 
-#: templates/base/accounts/register.html:14
+#: templates/base/registration/register.html:14
 msgid "Passwords do not match"
 msgstr "Las contraseñas no coinciden"
 
-#: templates/base/accounts/register.html:15
+#: templates/base/registration/register.html:15
 msgid "The username you selected is already taken. Please choose another one."
 msgstr ""
 "El usuario que has elegido ya está siendo usado. Por favor, elige otro."
 
-#: templates/base/accounts/register.html:16
+#: templates/base/registration/register.html:16
 msgid "You have to write \"comic\" in the field."
 msgstr "Tienes que escribir \"comic\" en el último campo."
 
-#: templates/base/accounts/register.html:22
+#: templates/base/registration/register.html:22
 #: templates/v2010/accounts/register.html:12
 msgid "Username"
 msgstr "Usuario"
 
-#: templates/base/accounts/register.html:23
+#: templates/base/registration/register.html:23
 msgid ""
 "30 characters max. Alphanumeric characters only (letters, digits and "
 "underscores)."
 msgstr ""
 "30 caracteres máximo. Caracteres alfanuméricos sólo (letras, números y _)."
 
-#: templates/base/accounts/register.html:29
-#: templates/base/accounts/register.html:36
+#: templates/base/registration/register.html:29
+#: templates/base/registration/register.html:36
 #: templates/v2010/accounts/register.html:16
 msgid "Password"
 msgstr "Contraseña"
 
-#: templates/base/accounts/register.html:37
+#: templates/base/registration/register.html:37
 #: templates/v2010/accounts/register.html:21
 msgid "Type your password again. Just in case."
 msgstr "Escribe tu contraseña de nuevo. Por si acaso."
 
-#: templates/base/accounts/register.html:43
+#: templates/base/registration/register.html:43
 #: templates/v2010/accounts/register.html:24
 msgid "E-mail"
 msgstr "Correo electrónico"
 
-#: templates/base/accounts/register.html:44
+#: templates/base/registration/register.html:44
 #: templates/v2010/accounts/register.html:25
 msgid "Used to recover your password."
 msgstr "Para recuperar tu contraseña en principio."
 
-#: templates/base/accounts/register.html:50
+#: templates/base/registration/register.html:50
 #: templates/v2010/accounts/register.html:28
 msgid "No Robots!"
 msgstr "¿Eres humano?"
 
-#: templates/base/accounts/register.html:51
+#: templates/base/registration/register.html:51
 #: templates/v2010/accounts/register.html:29
 msgid ""
 "Write here the word \"comic\" (without the quotes). This is to prevent "
@@ -1532,17 +1537,17 @@ msgstr ""
 "Escribe aquí la palabra \"comic\" (sin las comillas). Es para prevenir "
 "registros automatizados."
 
-#: templates/base/accounts/register.html:56
+#: templates/base/registration/register.html:56
 #: templates/v2010/accounts/register.html:31
 msgid "Create account"
 msgstr "Crear cuenta"
 
-#: templates/base/accounts/register_done.html:3
+#: templates/base/registration/register_done.html:3
 #: templates/v2010/accounts/register_done.html:3
 msgid "Account created"
 msgstr "Cuenta creada"
 
-#: templates/base/accounts/register_done.html:6
+#: templates/base/registration/register_done.html:6
 #: templates/v2010/accounts/register_done.html:6
 msgid ""
 "Your account has been created. You can now log in using the username you "
@@ -1572,157 +1577,6 @@ msgstr "comics"
 #: templates/v2010/base.html:48
 msgid "request"
 msgstr "solicita"
-
-#: templates/v2010/agregator/organize_add.html:3
-#: templates/v2010/agregator/organize_add.html:32
-msgid "Add comics"
-msgstr "Añadir comics"
-
-#: templates/v2010/agregator/organize_add.html:36
-msgid "New comic!"
-msgstr "¡Nuevo!"
-
-#: templates/v2010/agregator/organize_add.html:37
-msgid "Score"
-msgstr "Puntuación"
-
-#: templates/v2010/agregator/organize_add.html:37
-msgid "votes"
-msgstr "votos"
-
-#: templates/v2010/agregator/organize_add.html:38
-msgid "Readers"
-msgstr "Lectores"
-
-#: templates/v2010/agregator/organize_add.html:39
-msgid "Link to its website"
-msgstr "Enlace a su web"
-
-#: templates/v2010/agregator/organize_add.html:40
-msgid "Last update:"
-msgstr "Última actualización:"
-
-#: templates/v2010/agregator/organize_add.html:45
-msgid ""
-"<b>Warning!</b> Instead of showing the images of this comic, you will see a "
-"link to its website when the comic updates."
-msgstr ""
-"<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en "
-"lace a su página web cuando se actualice."
-
-#: templates/v2010/agregator/organize_add.html:49
-msgid "Hover over a comic to see details."
-msgstr "Pasa por encima de un comic para ver detalles."
-
-#: templates/v2010/agregator/organize_add.html:58
-#: templates/v2010/agregator/organize_organize.html:38
-msgid "Saving..."
-msgstr "Guardando..."
-
-#: templates/v2010/agregator/organize_add.html:66
-msgid "You won't see the images of this comic"
-msgstr "No verás las imágenes de este comic."
-
-#: templates/v2010/agregator/organize_organize.html:3
-#: templates/v2010/agregator/organize_organize.html:27
-msgid "Organize your comics"
-msgstr "Organiza tus comics"
-
-#: templates/v2010/agregator/organize_organize.html:29
-msgid "Drop comics here<br/>to delete them"
-msgstr "Suelta comics aquí<br/>para borrarlos"
-
-#: templates/v2010/agregator/organize_organize.html:31
-msgid ""
-"Here you can sort your comics. Just select one or some of them (holding the "
-"Ctrl/Meta key) and drag them around."
-msgstr ""
-"Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
-"Ctrl/Meta) y múevelos."
-
-#: templates/v2010/agregator/organize_organize.html:44
-msgid "Sort them:"
-msgstr "Ordenar por:"
-
-#: templates/v2010/agregator/organize_organize.html:45
-msgid "by name"
-msgstr "por nombre"
-
-#: templates/v2010/agregator/organize_organize.html:46
-msgid "by score"
-msgstr "por puntuación"
-
-#: templates/v2010/agregator/organize_organize.html:47
-msgid "how it was saved"
-msgstr "como está guardado"
-
-#: templates/v2010/agregator/read.html:35
-#, python-format
-msgid "There are %(new_blog_count)s new news items"
-msgstr "Hay %(new_blog_count)s nuevas entradas en el blog."
-
-#: templates/v2010/agregator/read.html:39
-#, python-format
-msgid ""
-"You are reading <b id=\"unreadCountersTotal\">%(len)s</b> comics and <b id="
-"\"unreadCountersUnread\">%(unr)s</b> of them have unread strips."
-msgstr ""
-"Estás leyendo <b id=\"unreadCountersTotal\">%(len)s</b> comics y <b id="
-"\"unreadCountersUnread\">%(unr)s</b> de ellos tienen nuevas tiras sin leer."
-
-#: templates/v2010/agregator/read.html:40
-#, python-format
-msgid ""
-"You are reading <b id=\"noUnreadCountersTotal\">%(len)s</b> comics and none "
-"of them have unread strips."
-msgstr ""
-"Estás leyendo <b id=\"noUnreadCountersTotal\">%(len)s</b> comics y ninguno "
-"de ellos tienen nuevas tiras sin leer."
-
-#: templates/v2010/agregator/read.html:41
-msgid ""
-"Showing only <b>unread</b> comics. <a href=\"#\" onclick=\"showAllComics()"
-"\">Click here</a> to show all comics."
-msgstr ""
-"Mostrando comics <b>sin leer</b>. <a href=\"#\" onclick=\"showAllComics()"
-"\">Pulsa aquí</a> para ver todos los comics."
-
-#: templates/v2010/agregator/read.html:42
-msgid ""
-"Showing <b>all</b> comics. <a href=\"#\" onclick=\"showUnreadComics()"
-"\">Click here</a> to show only unread comics."
-msgstr ""
-"Mostrando <b>todos</b> los comics. <a href=\"#\" onclick=\"showUnreadComics()"
-"\">Pulsa aquí</a> para ver sólo los que tienes sin leer."
-
-#: templates/v2010/agregator/read.html:48
-msgid "New strips!"
-msgstr "¡Nuevas tiras!"
-
-#: templates/v2010/agregator/read.html:51
-#, python-format
-msgid ""
-"The comic has been updated. <a href=\"%(url)s\">Click here</a> to go to the "
-"comic's website."
-msgstr ""
-"El cómic ha sido actualizado. <a href=\"%(url)s\">Haz click aquí</a> para ir "
-"a la página del comic."
-
-#: templates/v2010/agregator/read.html:70
-msgid "Reload images"
-msgstr "Recargar"
-
-#: templates/v2010/agregator/read.html:74
-msgid "Vote"
-msgstr "Vota"
-
-#: templates/v2010/agregator/read.html:80
-msgid "Remove this comic"
-msgstr "Quitar este comic"
-
-#: templates/v2010/agregator/read.html:87
-msgid "You haven't selected any comics!"
-msgstr "¡No has seleccionado ningún comic!"
 
 #: templates/v2010/accounts/activate.html:3
 msgid "Activate account"
@@ -1796,6 +1650,193 @@ msgstr "Otra vez"
 msgid "Back to login"
 msgstr "Volver al inicio"
 
+#: templates/v2010/agregator/organize_add.html:3
+msgid "Choose"
+msgstr "Elegir"
+
+#: templates/v2010/agregator/organize_add.html:32
+msgid "Add comics"
+msgstr "Añadir comics"
+
+#: templates/v2010/agregator/organize_add.html:36
+msgid "New comic!"
+msgstr "¡Nuevo!"
+
+#: templates/v2010/agregator/organize_add.html:37
+msgid "Score"
+msgstr "Puntuación"
+
+#: templates/v2010/agregator/organize_add.html:37
+msgid "votes"
+msgstr "votos"
+
+#: templates/v2010/agregator/organize_add.html:38
+msgid "Readers"
+msgstr "Lectores"
+
+#: templates/v2010/agregator/organize_add.html:39
+msgid "Link to its website"
+msgstr "Enlace a su web"
+
+#: templates/v2010/agregator/organize_add.html:40
+msgid "Last update:"
+msgstr "Última actualización:"
+
+#: templates/v2010/agregator/organize_add.html:45
+msgid ""
+"<b>Warning!</b> Instead of showing the images of this comic, you will see a "
+"link to its website when the comic updates."
+msgstr ""
+"<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en "
+"lace a su página web cuando se actualice."
+
+#: templates/v2010/agregator/organize_add.html:49
+msgid "Hover over a comic to see details."
+msgstr "Pasa por encima de un comic para ver detalles."
+
+#: templates/v2010/agregator/organize_add.html:58
+#: templates/v2010/agregator/organize_organize.html:40
+msgid "Saving..."
+msgstr "Guardando..."
+
+#: templates/v2010/agregator/organize_add.html:66
+msgid "You won't see the images of this comic"
+msgstr "No verás las imágenes de este comic."
+
+#: templates/v2010/agregator/organize_organize.html:3
+msgid "Organize"
+msgstr "Organizar"
+
+#: templates/v2010/agregator/organize_organize.html:29
+msgid "Organize your comics"
+msgstr "Organiza tus comics"
+
+#: templates/v2010/agregator/organize_organize.html:31
+msgid "Drop comics here<br/>to delete them"
+msgstr "Suelta comics aquí<br/>para borrarlos"
+
+#: templates/v2010/agregator/organize_organize.html:33
+msgid ""
+"Here you can sort your comics. Just select one or some of them (holding the "
+"Ctrl/Meta key) and drag them around."
+msgstr ""
+"Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
+"Ctrl/Meta) y múevelos."
+
+#: templates/v2010/agregator/organize_organize.html:46
+msgid "Sort them:"
+msgstr "Ordenar por:"
+
+#: templates/v2010/agregator/organize_organize.html:47
+msgid "by name"
+msgstr "por nombre"
+
+#: templates/v2010/agregator/organize_organize.html:48
+msgid "by score"
+msgstr "por puntuación"
+
+#: templates/v2010/agregator/organize_organize.html:49
+msgid "how it was saved"
+msgstr "como está guardado"
+
+#: templates/v2010/agregator/read.html:3
+#: templates/v2010/agregator/read.html:10
+#: templates/v2010/agregator/request_index.html:3
+msgid "Read"
+msgstr "Leer"
+
+#: templates/v2010/agregator/read.html:35
+#, python-format
+msgid "There are %(new_blog_count)s new news items"
+msgstr "Hay %(new_blog_count)s nuevas entradas en el blog."
+
+#: templates/v2010/agregator/read.html:39
+#, python-format
+msgid ""
+"You are reading <b id=\"unreadCountersTotal\">%(len)s</b> comics and <b id="
+"\"unreadCountersUnread\">%(unr)s</b> of them have unread strips."
+msgstr ""
+"Estás leyendo <b id=\"unreadCountersTotal\">%(len)s</b> comics y <b id="
+"\"unreadCountersUnread\">%(unr)s</b> de ellos tienen nuevas tiras sin leer."
+
+#: templates/v2010/agregator/read.html:40
+#, python-format
+msgid ""
+"You are reading <b id=\"noUnreadCountersTotal\">%(len)s</b> comics and none "
+"of them have unread strips."
+msgstr ""
+"Estás leyendo <b id=\"noUnreadCountersTotal\">%(len)s</b> comics y ninguno "
+"de ellos tienen nuevas tiras sin leer."
+
+#: templates/v2010/agregator/read.html:41
+msgid ""
+"Showing only <b>unread</b> comics. <a href=\"#\" onclick=\"showAllComics()"
+"\">Click here</a> to show all comics."
+msgstr ""
+"Mostrando comics <b>sin leer</b>. <a href=\"#\" onclick=\"showAllComics()"
+"\">Pulsa aquí</a> para ver todos los comics."
+
+#: templates/v2010/agregator/read.html:42
+msgid ""
+"Showing <b>all</b> comics. <a href=\"#\" onclick=\"showUnreadComics()"
+"\">Click here</a> to show only unread comics."
+msgstr ""
+"Mostrando <b>todos</b> los comics. <a href=\"#\" onclick=\"showUnreadComics()"
+"\">Pulsa aquí</a> para ver sólo los que tienes sin leer."
+
+#: templates/v2010/agregator/read.html:48
+msgid "New strips!"
+msgstr "¡Nuevas tiras!"
+
+#: templates/v2010/agregator/read.html:51
+#, python-format
+msgid ""
+"The comic has been updated. <a href=\"%(url)s\">Click here</a> to go to the "
+"comic's website."
+msgstr ""
+"El cómic ha sido actualizado. <a href=\"%(url)s\">Haz click aquí</a> para ir "
+"a la página del comic."
+
+#: templates/v2010/agregator/read.html:70
+msgid "Reload images"
+msgstr "Recargar"
+
+#: templates/v2010/agregator/read.html:74
+msgid "Vote"
+msgstr "Vota"
+
+#: templates/v2010/agregator/read.html:80
+msgid "Remove this comic"
+msgstr "Quitar este comic"
+
+#: templates/v2010/agregator/read.html:87
+msgid "You haven't selected any comics!"
+msgstr "¡No has seleccionado ningún comic!"
+
+#: templates/v2010/agregator/request_index.html:12
+msgid "Your request has been saved. Thanks!"
+msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
+
+#: templates/v2010/agregator/request_index.html:27
+msgid "Pending requests"
+msgstr "Solicitudes pendientes"
+
+#: templates/v2010/agregator/request_index.html:31
+msgid "Your comment:"
+msgstr "Tu comentario:"
+
+#: templates/v2010/agregator/request_index.html:34
+msgid "Rejected requests"
+msgstr "Solicitudes rechazadas"
+
+#: templates/v2010/agregator/request_index.html:38
+msgid "Our comment:"
+msgstr "Nuestro comentario:"
+
+#: templates/v2010/agregator/request_index.html:41
+msgid "Accepted requests"
+msgstr "Solicitudes aceptadas"
+
 #, fuzzy
 #~ msgid "There are 0 new comics in the database."
 #~ msgstr "Estos son todos los comics que tenemos"
@@ -1805,9 +1846,6 @@ msgstr "Volver al inicio"
 
 #~ msgid "help"
 #~ msgstr "ayuda"
-
-#~ msgid "organize"
-#~ msgstr "organiza"
 
 #~ msgid "list"
 #~ msgstr "lista"
@@ -1821,6 +1859,3 @@ msgstr "Volver al inicio"
 
 #~ msgid "Sort your comics"
 #~ msgstr "Organiza tus comics"
-
-#~ msgid "choose"
-#~ msgstr "elige"

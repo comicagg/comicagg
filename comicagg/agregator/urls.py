@@ -10,8 +10,9 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^organize/$', 'organize', name='organize'),
 	url(r'^organize/(?P<tag>.*)/', 'organize', name='configure_with_tags'),
 
-	url(r'^request_comic/$', 'request_comic', name='request'),
-	url(r'^done_request/$', 'request_comic', {'done':True}, name='done_request'),
+    url(r'^request/$', 'request_index', name='request_index'),
+	url(r'^request/ok/$', 'request_index', {'ok':True}, name='request_ok'),
+    url(r'^request/save/$', 'request_index', name='request_save'),
 
 	url(r'^list/$', 'comic_list', name='comic_list'),
 	url(r'^list/comic/$', 'comic_list_load', name='comic_list_load'),

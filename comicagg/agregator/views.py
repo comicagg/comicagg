@@ -218,24 +218,27 @@ def save_selection(request):
     return HttpResponse(_('Saved =)'))
 
 @login_required
-def request_comic(request, done=False):
-  context = {}
-  if done:
-    return render(request, 'agregator/request_comic_done.html', {}, 'configure')
-  form = RequestForm()
-  if request.POST:
-    form = RequestForm(request.POST)
-    if form.is_valid():
-      url = form.cleaned_data['url']
-      comment = form.cleaned_data['comment']
-      req = Request(user=request.user, url=url, comment=comment)
-      req.save()
-      message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
-      send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
-      return HttpResponseRedirect(reverse('done_request'))
-  context['form'] = form
-  context['count'] = Request.objects.all().count()
-  return render(request, 'agregator/request_comic.html', context, 'configure')
+def request_index(request, ok=False):
+    if request.POST:
+        form = RequestForm(request.POST)
+        if form.is_valid():
+            url = form.cleaned_data['url']
+            comment = form.cleaned_data['comment']
+            req = Request(user=request.user, url=url, comment=comment)
+            req.save()
+            message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
+            #send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
+            return HttpResponseRedirect(reverse('request_ok'))
+    else:
+        form = RequestForm()
+    context = {}
+    context['form'] = form
+    context['count'] = Request.objects.all().count()
+    context['request_saved'] = ok
+    context['accepted'] = request.user.request_set.filter(done__exact=1).filter(rejected__exact=0)
+    context['rejected'] = request.user.request_set.filter(rejected__exact=1)
+    context['pending'] = request.user.request_set.filter(done__exact=0).filter(rejected__exact=0)
+    return render(request, 'agregator/request_index.html', context)
 
 @login_required
 def get_tags(request):

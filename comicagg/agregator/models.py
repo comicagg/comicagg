@@ -167,7 +167,14 @@ class Subscription(models.Model):
 class Request(models.Model):
     user = models.ForeignKey(User)
     url = models.URLField(verify_exists=False)
-    comment = models.TextField()
+    comment = models.TextField(blank=True, null=True)
+    admin_comment = models.TextField(blank=True, null=True)
+    done = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
+    #alter table agregator_request add rejected boolean default false;
+
+    class Meta:
+        ordering = ['id', '-done']
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.url)
@@ -225,5 +232,5 @@ class NoMatchException(Exception):
     return repr(self.value)
 
 class RequestForm(forms.Form):
-  url = forms.URLField(widget=forms.TextInput(attrs={'size':70}))
-  comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':6, 'cols':50}))
+  url = forms.URLField(widget=forms.TextInput(attrs={'size':50}))
+  comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))

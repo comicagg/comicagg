@@ -404,3 +404,45 @@ input.filter {
 	margin:0;
 	padding:0;
 }
+
+#request_list {
+    width:95%;
+    margin:0;
+    text-align:left;
+}
+#request_list ul {
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+#request_list li {
+    margin:0;
+    margin-left:30px;
+    padding:0;
+    font-weight:bold;
+}
+#request_list li.first_line {
+    margin-left:5px;
+    font-weight:normal;
+}
+#request_list li img {
+    vertical-align:middle;
+}
+#request_new, #request_new form {
+    margin-left:15px;
+}
+#request_list li p {
+    font-weight:normal;
+    margin:0;
+    margin-left:15px;
+    padding:0;
+}
+#thanks {
+    font-weight:bolder;
+    border:1px solid gray;
+    background-color:#BEFFB8;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    padding:3px 6px;
+    width:300px;
+}
