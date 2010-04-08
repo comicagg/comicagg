@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n agregator_tags %}
+<!-- {% block title %}{% trans 'Read' %} -{% endblock %} -->
+{% block extra_head %}
+        <script src="{{ mediaurl }}js/v2010/read.js" type="text/javascript"></script>
+{% endblock%}
+{% block content %}
+{% regroup user.request_set.all by done as request_list %}
+<div id="request_list" class="box">
+    <h4>{% trans "Request a comic" %}</h4>
+    {% if request_saved %}
+    <div id="thanks">{% trans "Your request has been saved. Thanks!" %}</div>
+    <script type="text/javascript">setTimeout('Element.hide("thanks")', 10000);</script>
+    {% endif %}
+    <div id="request_new">
+        <p class="info text_left">{% trans "Write the url of the comic you would like to read here and we will try to add it is as soon as possible (if it's possible, of course)."%}</p>
+        {% if count %}<p class="info text_left">{% blocktrans %}Currently there are {{ count }} requests waiting to be added. We have to add them one by one by hand so, please, be patient. Thanks!{% endblocktrans %}</p>{% endif %}
+        {% if form.url.errors %}
+        <div id="errorContainer">{{ form.url.errors }}</div>
+        {% endif %}
+        <form action="{% url request_save %}" method="post">
+            <div class="form_div"><label>{% trans "The comic's Url"%}</label><br/>{{ form.url }}</div>
+            <div class="form_div"><label>{% trans 'Any comment?'%}</label><br/>{{ form.comment }}</div>
+            <div class="form_div"><input type="submit" value="{% trans 'Send'%}"/></div>
+        </form>
+    </div>
+    <h4>{% trans "Pending requests" %}</h4>
+    <ul>
+    {% for req in pending %}
+        <li class="first_line"><img src="{{ mediaurl }}images/v2010/request_new.png" alt=""/> {{ req.url }}</li>
+        {% if req.comment %}<li>{% trans "Your comment:" %}<p>{{ req.comment }}<p></li>{% endif %}
+    {% endfor %}
+    </ul>
+    <h4>{% trans "Rejected requests" %}</h4>
+    <ul>
+    {% for req in rejected %}
+        <li class="first_line"><img src="{{ mediaurl }}images/v2010/error16.png" alt=""/> {{ req.url }}</li>
+        {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
+    {% endfor %}
+    </ul>
+    <h4>{% trans "Accepted requests" %}</h4>
+    <ul>
+    {% for req in accepted %}
+        <li class="first_line"><img src="{{ mediaurl }}images/ok16.png" alt=""/> {{ req.url }}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
