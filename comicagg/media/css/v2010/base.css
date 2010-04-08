@@ -29,6 +29,9 @@ a:visited {
 .text_center {
 	text-align:center;
 }
+.bolder {
+    font-weight:bolder;
+}
 #content {
 	margin-top:40px;
 	padding:0em 2em;
@@ -325,7 +328,7 @@ button:hover {
 }
 #comic_list {
 	border:1px solid gray;
-	border-width:1px 0px;
+	border-width:1px 0px 1px 1px;
 	list-style-type:none;
 	margin:0;
 	margin-top:8px;
@@ -333,13 +336,14 @@ button:hover {
 	overflow:scroll;
 	overflow-x:hidden;
 	clear:both;
+	background-color:white;
 }
 #comic_list .comic {
 /* 	width:300px; */
 	padding:2px 0px;
 	text-align:center;
 	border-bottom:1px solid gray;
-	border-left:1px solid gray;
+	border-left:0px solid gray;
 	background:white;
 	cursor:pointer;
 }
@@ -407,7 +411,7 @@ input.filter {
 
 #request_list {
     width:95%;
-    margin:0;
+    margin:0px auto 0px auto;
     text-align:left;
 }
 #request_list ul {
@@ -445,4 +449,47 @@ input.filter {
     -webkit-border-radius:5px;
     padding:3px 6px;
     width:300px;
+}
+
+#blog_wrapper {
+    width:95%;
+    margin:0px auto 0px auto;
+    text-align:left;
+}
+#blog {
+    margin-right:200px;
+}
+#blog div.news_info {
+    margin:5px;
+    font-size:smaller;
+    color:gray;
+}
+#blog .post {
+    padding:4px;
+    margin:0px 10px 10px 0px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+}
+#blog .new_post {
+    background-color:#F4F4E9;
+}
+#blog .post h4 {
+    margin:0px 0px 10px 0px;
+}
+#blog .post img {
+    vertical-align:middle;
+}
+#blog .post .text {
+    margin-left:18px;
+}
+#blog_side {
+    float:right;
+    width:200px;
+}
+#blog_side ul {
+    margin:0;
+    padding:0 0 0 20px;
+}
+#blog_side .all_link {
+    text-align:center;
 }

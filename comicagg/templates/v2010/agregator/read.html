@@ -31,10 +31,6 @@
 {% endfor %}    
 </script>
 <div id="read">
-    <div class="extras_div">
-        <p class="info">{% blocktrans %}There are {{ new_blog_count }} new news items{% endblocktrans %}</p>
-        <p class="info">{% blocktrans %}There are {{ new_comic_count }} new comics in the database.{% endblocktrans %}</p>
-    </div>
     <div>
         <p class="info" id="unreadCounters">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="unreadCountersTotal">{{ len }}</b> comics and <b id="unreadCountersUnread">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
         <p class="info" id="noUnreadCounters" style="display:none">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="noUnreadCountersTotal">{{ len }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
@@ -76,6 +72,7 @@
                     <a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a>&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 {% endif %}
+                <a onclick="openurl('{{ comic.url|safe }}')">{% trans "Visit its website" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a onclick="removecomic({{ comic.id }})">{% trans "Remove this comic" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
             </span>

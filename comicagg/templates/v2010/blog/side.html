@@ -1,0 +1,12 @@
+{% load i18n blogtags %}
+<div id="blog_side">
+  <h4>{% trans "Recent posts" %}</h4>
+  <ul>
+{% for item in posts %}
+    <li {% if item|new:user %}class="bolder"{% endif %}><a onclick="Element.scrollToExtra('p{{ item.id }}', -40)">{{ item.title }}</a></li>
+{% endfor %}
+  </ul>
+{% if posts and not archive %}
+  <p class="all_link"><a href="{% url blog_archive %}">{% trans "All posts" %}</a></p>
+{% endif %}
+</div>

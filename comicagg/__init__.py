@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, HttpResponseServerError
 from django.template.loader import render_to_string
-from django.conf import settings
 import os, re
 
 def render(request, template, context, menu=None, xml=False, responseClass=HttpResponse, mime='text/html; charset="utf-8"'):
@@ -10,6 +11,16 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
         user = request.user
     except:
         user = None
+    try:
+        unr = user.unreadcomic_set.filter(comic__activo=True).filter(comic__ended=False).aggregate(Count('comic', distinct=True))
+        context['unread_count'] = unr['comic__count']
+        newc = user.newcomic_set.count()
+        context['newcomic_count'] = newc
+        newsc = user.newblog_set.count()
+        context['newnews_count'] = newsc
+    except:
+        pass
+
     context['user'] = user
     context['menu'] = menu
     context['mediaurl'] = settings.MEDIA_URL
