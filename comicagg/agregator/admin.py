@@ -7,7 +7,7 @@ class TagInline(admin.TabularInline):
 	ordering = ('name', 'comic',)
 
 class ComicAdmin(admin.ModelAdmin):
-	list_display = ('name', 'activo', 'ended', 'rating', 'votes', 'last_check', 'last_image', )
+	list_display = ('name', 'activo', 'ended', 'last_check', )
 	search_fields = ['name']
 	save_on_top = True
 	inlines = [TagInline,]
@@ -29,7 +29,7 @@ class ComicAdmin(admin.ModelAdmin):
 		}),
 		('Opciones avanzadas', {
 			'classes': ('collapse',),
-			'fields' : ('referer', 'fake_user_agent')
+			'fields' : ('referer',)
 		}),
 		('Votos', {
 			'classes': ('collapse',),

@@ -79,8 +79,7 @@ def open_url(comic, _url):
     #limpiar la url (entidades html)
     url = unescape(_url)
     r = urllib2.Request(url)
-    if comic.fake_user_agent:
-        r.add_header('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686; es-ES; rv:1.9.0.7) Gecko/2009030814 Firefox/3.0.5 (Debian-3.0.7-1)')
+    r.add_header('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.7 Safari/533.2')
     #obtener url
     #respuesta = urllib2.urlopen(url)
     #lineas = respuesta.readlines()
