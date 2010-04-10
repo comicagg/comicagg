@@ -26,6 +26,7 @@
     {% for req in pending %}
         <li class="first_line"><img src="{{ mediaurl }}images/v2010/request_new.png" alt=""/> {{ req.url }}</li>
         {% if req.comment %}<li>{% trans "Your comment:" %}<p>{{ req.comment }}<p></li>{% endif %}
+        {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% endfor %}
     </ul>
     <h4>{% trans "Rejected requests" %}</h4>
@@ -39,6 +40,7 @@
     <ul>
     {% for req in accepted %}
         <li class="first_line"><img src="{{ mediaurl }}images/ok16.png" alt=""/> {{ req.url }}</li>
+        {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% endfor %}
     </ul>
 </div>

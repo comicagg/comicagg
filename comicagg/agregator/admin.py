@@ -63,7 +63,7 @@ class NewComicAdmin(admin.ModelAdmin):
 	search_fields = ['user__username', 'comic__name']
 
 class RequestAdmin(admin.ModelAdmin):
-	list_display = ('url', 'user', 'comment', 'done', 'rejected')
+	list_display = ('url', 'user', 'done', 'rejected')
 	ordering = ('done',)
 
 admin.site.register(Comic, ComicAdmin)
