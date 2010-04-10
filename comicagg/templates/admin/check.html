@@ -1,10 +1,11 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 {% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
-{% block breadcrumbs %}<div class="breadcrumbs"><a href="/">Inicio</a> &rsaquo; <a href="/admin">Admin</a></div>{% endblock %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin/">Inicio</a> &rsaquo; <a href="{% url admin_check %}">{% trans "Update comic"%}</a></div>{% endblock %}
 
 {% block content %}
 <div id="content-main">
+<br/>
 {% if last %}
 {% if changed %}
 {{ last.name }} {% trans "was updated." %} {{ last.subscription_set.count }} {% trans "readers notified." %}<br />
@@ -13,8 +14,19 @@
 {% endif %}
 {% endif %}
 <br />
-{% for comic in list %}
-<a href="{% url check comic.id %}">{{ comic.name }}</a><br/>
+<p style="font-size:14pt">
+{% for k,l in list.items %}
+<a href="#{{ k }}">{{ k }}</a>, 
 {% endfor %}
+</p>
+{% for k,l in list.items %}
+<div id="{{ k }}" style="float:left;width:200px;clear:left">
+    <h4>{{ k }}</h4>
+    {% for comic in l %}
+    <a href="{% url check comic.id %}">{{ comic.name }}</a><br/>
+    {% endfor %}
+</div>
+{% endfor %}
+<div style="clear:both"></div>
 </div>
 {% endblock %}
