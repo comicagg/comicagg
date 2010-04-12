@@ -171,7 +171,6 @@ class Request(models.Model):
     admin_comment = models.TextField(blank=True, null=True)
     done = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
-    #alter table agregator_request add rejected boolean default false;
 
     class Meta:
         ordering = ['id', '-done']

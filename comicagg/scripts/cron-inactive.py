@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Si un usuario está inactivo, se le marca como tal y se borran sus unreads.
+45 días
+"""
 import os, sys, time
 from datetime import datetime, timedelta
-sys.path.insert(0, os.path.abspath('..'))
+d=os.path.dirname(os.path.abspath(sys.argv[0]))
+d=os.path.join(d, '..')
+d=os.path.abspath(d)
+sys.path.insert(0, d)
 import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"

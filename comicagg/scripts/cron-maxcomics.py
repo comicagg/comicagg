@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+Limita el número de unreadcomics que puede tener un usuario
+"""
 import os, sys, time
 from datetime import datetime
-
-sys.path.insert(0, os.path.abspath('..'))
+d=os.path.dirname(os.path.abspath(sys.argv[0]))
+d=os.path.join(d, '..')
+d=os.path.abspath(d)
+sys.path.insert(0, d)
 import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"

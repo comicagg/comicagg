@@ -20,7 +20,7 @@
 {% endfor %}
 </p>
 {% for k,l in list.items %}
-<div id="{{ k }}" style="float:left;width:200px;clear:left">
+<div id="{{ k }}">
     <h4>{{ k }}</h4>
     {% for comic in l %}
     <a href="{% url check comic.id %}">{{ comic.name }}</a><br/>

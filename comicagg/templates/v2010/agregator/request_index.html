@@ -27,6 +27,8 @@
         <li class="first_line"><img src="{{ mediaurl }}images/v2010/request_new.png" alt=""/> {{ req.url }}</li>
         {% if req.comment %}<li>{% trans "Your comment:" %}<p>{{ req.comment }}<p></li>{% endif %}
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
+    {% empty %}
+        <li>{% trans "Nothing here." %}<li>
     {% endfor %}
     </ul>
     <h4>{% trans "Rejected requests" %}</h4>
@@ -34,6 +36,8 @@
     {% for req in rejected %}
         <li class="first_line"><img src="{{ mediaurl }}images/v2010/error16.png" alt=""/> {{ req.url }}</li>
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
+    {% empty %}
+        <li>{% trans "Nothing here." %}<li>
     {% endfor %}
     </ul>
     <h4>{% trans "Accepted requests" %}</h4>
@@ -41,6 +45,8 @@
     {% for req in accepted %}
         <li class="first_line"><img src="{{ mediaurl }}images/ok16.png" alt=""/> {{ req.url }}</li>
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
+    {% empty %}
+        <li>{% trans "Nothing here." %}</li>
     {% endfor %}
     </ul>
 </div>

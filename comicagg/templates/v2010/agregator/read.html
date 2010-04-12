@@ -8,7 +8,7 @@
 {% block content %}
 <script language="javascript">
     var titlei18n = "{% trans 'Read' %}";
-    var unreadCounter = {{ unread_list|length }};
+    var unreadCounter = {{ unread_count }};
     var comicCounter = {{ comic_list|length }};
     var unreadComics = new Array();
     var comics = new Array();
@@ -80,9 +80,7 @@
         <h5 id="outc{{ comic.id }}"></h5>
     </div>
     {% endfor %}
-    <div id="noComicsSelected" style="display:none" class="box">
-    {% trans "You haven't selected any comics!" %}
-    </div>
+    <div id="noComicsSelected" style="display:none" class="box">{% trans "You haven't selected any comics!" %}</div>
     </div>
 </div>
 {% endblock %}
