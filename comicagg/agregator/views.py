@@ -15,7 +15,7 @@ from comicagg.agregator.check import check_comic
 from comicagg.blog.models import NewBlog
 from datetime import datetime
 from django.utils.translation import ugettext as _
-import sys, math, random
+import sys, math, random, hashlib, urllib2
 
 from django.views.decorators.cache import cache_page
 
@@ -224,7 +224,7 @@ def request_index(request, ok=False):
             req = Request(user=request.user, url=url, comment=comment)
             req.save()
             message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
-            #send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
+            send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
             return HttpResponseRedirect(reverse('request_ok'))
     else:
         form = RequestForm()
@@ -460,6 +460,47 @@ def stats(request):
     comics.sort(sort_rate)
     return render(request, 'stats.html', {'comics':comics})
 
+def last_image_url(request, cid):
+    """
+    Redirecciona a la url de la ultima imagen de  un comic
+    """
+    comic = get_object_or_404(Comic, pk=cid)
+    url = comic.last_image
+    ref = comic.referer
+    md5 = hashlib.md5(url).hexdigest()
+    f = '%s.jpg' % md5
+    dst = os.path.join(settings.MEDIA_ROOT, 'strips', f)
+    if not os.path.exists(dst):
+        _download_image(url, ref, dst)
+    return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + f)
+
+def history_image_url(request, hid):#TODO
+    """
+    Redirecciona a la url de un objeto comic_history
+    """
+    ch = get_object_or_404(ComicHistory, pk=hid)
+    url = ch.url
+    ref = ch.comic.referer
+    md5 = hashlib.md5(url).hexdigest()
+    f = '%s.jpg' % md5
+    dst = os.path.join(settings.MEDIA_ROOT, 'strips', f)
+    if not os.path.exists(dst):
+        _download_image(url, ref, dst)
+    return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + f)
+
+def _download_image(url, ref, dest):#TODO
+    headers = {
+        'referer':ref,
+        'user-agent':'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.7 Safari/533.2'
+    }
+    r = urllib2.Request(url, None, headers)
+    o = urllib2.urlopen(r)
+
+    f = open(dest, 'w+b')
+    f.writelines(o.readlines())
+    f.close()
+
+#Funciones auxiliares
 def sort_rate(a,b):
     """
     Ordenar únicamente por la puntuación de los comics
@@ -469,7 +510,6 @@ def sort_rate(a,b):
     elif c<0: return -1
     else: return 0
 
-#Funciones auxiliares
 def get_full_tagcloud():
   #build tag cloud
   from django.db import connection

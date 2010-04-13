@@ -151,7 +151,10 @@ class Comic(models.Model):
         return NewComic.objects.filter(comic=self, user=user).count() != 0
 
     def get_url(self):
-        return _get_url(self, self.last_image)
+        url = self.last_image
+        if self.referer:
+            url = reverse('aggregator_last_image_url', kwargs={'cid':self.id})
+        return url
 
 class Subscription(models.Model):
     user = models.ForeignKey(User)
@@ -188,7 +191,10 @@ class ComicHistory(models.Model):
         return u'%s %s' % (self.comic.name, self.date)
 
     def get_url(self):
-        return _get_url(self.comic, self.url)
+        url = self.url
+        if self.comic.referer:
+            url = reverse('aggregator_history_url', kwargs={'hid':self.id})
+        return url
 
     class Meta:
         ordering = ['-id']

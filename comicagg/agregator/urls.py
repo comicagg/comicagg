@@ -41,5 +41,8 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^ajax/mark_read/$', 'mark_read', name='mark_read'),
 	url(r'^ajax/mark_all_read/$', 'mark_all_read', name='mark_all'),
 	url(r'^ajax/rate/$', 'rate_comic', name='rate'),
+
+	url(r'^li/(?P<cid>\d+)/', 'last_image_url', name='aggregator_last_image_url'),
+    url(r'^hi/(?P<hid>\d+)/', 'history_image_url', name='aggregator_history_url'),
 )
 
