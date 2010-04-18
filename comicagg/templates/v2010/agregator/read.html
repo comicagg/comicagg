@@ -22,11 +22,7 @@
     tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});
     {% endfor %}
 {% endif %}
-    c = {"name":"{{ comic.name}}", "id":{{ comic.id }},
-{% if not comic.noimages or perms.agregator.all_images %}
-        "last_url":"{{ comic.get_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp,
-{% endif %}
-        "error":false, "loaded":false,};
+    c = {"name":"{{ comic.name}}", "id":{{ comic.id }}, {% if not comic.noimages or perms.agregator.all_images %}"last_url":"{{ comic.get_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false,};
     comics[{{ comic.id }}] = c;
 {% endfor %}    
 </script>
