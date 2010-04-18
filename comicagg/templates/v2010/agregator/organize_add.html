@@ -7,7 +7,7 @@
 		<script type="text/javascript">
 var usercomics = [
 {% for comic in user_comics %}
-	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:2 }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}", 'readers':{{ comic.readers }}, 'last':"{{ comic.last_image }}"},
+	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:2 }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}", 'readers':{{ comic.readers }}, 'last':"{{ comic.get_url|safe}}"},
 {% endfor %}
 ];
 var newcomics = usercomics.clone();
@@ -15,12 +15,12 @@ var removedcomics = new Array();
 var addedcomics = new Array();
 var availablecomics = [
 {% for comic in all_comics %}
-	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:2 }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}", 'readers':{{ comic.readers }}, 'last':"{{ comic.last_image }}"},
+	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:2 }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages }}, 'url': "{{ comic.url }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}", 'readers':{{ comic.readers }}, 'last':"{{ comic.get_url|safe }}"},
 {% endfor %}
 ];
 var available_new = [
 {% for newcomic in new_comics %}
-	{'id':{{ newcomic.comic.id}}, 'name':"{{ newcomic.comic.name|escape }}", 'slug':"{{ newcomic.comic.name|slugify }}", 'score':{{ newcomic.comic.getRating|perc:2 }}, 'votes':{{ newcomic.comic.votes }}, 'noimages':{{ newcomic.comic.noimages }}, 'url': "{{ newcomic.comic.url }}", 'updated':"{{ newcomic.comic.last_check|date:"j F, Y" }}", 'readers':{{ newcomic.comic.readers }}, 'last':"{{ newcomic.comic.last_image }}"},
+	{'id':{{ newcomic.comic.id}}, 'name':"{{ newcomic.comic.name|escape }}", 'slug':"{{ newcomic.comic.name|slugify }}", 'score':{{ newcomic.comic.getRating|perc:2 }}, 'votes':{{ newcomic.comic.votes }}, 'noimages':{{ newcomic.comic.noimages }}, 'url': "{{ newcomic.comic.url }}", 'updated':"{{ newcomic.comic.last_check|date:"j F, Y" }}", 'readers':{{ newcomic.comic.readers }}, 'last':"{{ newcomic.comic.get_url|safe }}"},
 {% endfor %}
 ];
 dojo.addOnLoad(initAdd);
