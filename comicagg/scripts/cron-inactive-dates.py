@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Si un usuario está inactivo, se le marca como tal y se borran sus unreads.
-45 días
+20 días
 """
 import os, sys, time
 from datetime import datetime, timedelta
@@ -23,7 +23,7 @@ if len(sys.argv) > 1:
     users = User.objects.order_by('id').filter(id__gte = uid).filter(is_active__exact=1)
 else:
     users = User.objects.filter(is_active__exact=1)
-limit = datetime.today() - timedelta(45)
+limit = datetime.today() - timedelta(20)
 for user in users:
     now = datetime.now()-starttime
     if now.seconds > 3000:
@@ -37,4 +37,3 @@ print "Resumen usuarios"
 print len(users), "usuarios en total"
 i = User.objects.filter(is_active__exact=0).count()
 print i, "usuarios inactivos"
-    #time.sleep(0.2)
