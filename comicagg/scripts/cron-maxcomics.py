@@ -35,5 +35,5 @@ for user in allusers:
             print " ", sub.comic, unreads.count()
             sid = unreads[20].id
             deletes = user.unreadcomic_set.filter(comic__exact=sub.comic).order_by('-id').filter(id__lte=sid)
-            #deletes.delete()
-    time.sleep(0.5)
+            deletes.delete()
+    time.sleep(0.1)

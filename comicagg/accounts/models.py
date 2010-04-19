@@ -28,6 +28,12 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return u'%s' % self.user
 
+    def is_active(self):
+        if self.user.is_active:
+            return True
+        return False
+    is_active.boolean = True
+
     class Meta:
         ordering = ['user']
         verbose_name = _('User profile')
