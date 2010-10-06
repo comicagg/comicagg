@@ -218,12 +218,17 @@ button:hover {
 }
 #read .top_info {
 	position:relative;
+	background:white;
+	border:1px solid #eeeeee;
+	padding:2px;
+	-moz-border-radius:4pt;
+	-webkit-border-radius:4pt;
 }
 #read .top_info div {
 	text-align:right;
 	position:absolute;
-	right:0;
-	bottom:0;
+	right:3px;
+	bottom:3px;
 }
 #read .top_info div img {
 	vertical-align:middle;
