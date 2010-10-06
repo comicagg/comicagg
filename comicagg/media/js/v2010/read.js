@@ -197,11 +197,10 @@ function inViewport(cdiv, vmin, vmax) {
 /* AJAX */
 
 function markread(id, vote) {
-    var url = url_mark_as_read;
     var params = {'id': id, 'value':vote };
     Element.show('working' + id);
     Element.hide('workingerror'+id);
-    new Ajax.Request(url, {
+    new Ajax.Request(url_mark_as_read, {
         method: 'post',
         parameters: params,
         onSuccess: function(transport) {
@@ -243,10 +242,9 @@ function markread(id, vote) {
 }
 
 function reportbroken(id) {
-    var url = url_report;
     var params = {'id': id};
     Element.show('working' + id);
-    new Ajax.Request(url, {
+    new Ajax.Request(url_report, {
         method: 'post',
         parameters: params,
         onSuccess: function(transport) {
@@ -286,10 +284,9 @@ function removecomic(id) {
     if(unreadComics[id]) {
         markread(id, 0);
     }
-    var url = url_remove;
     var params = {'id':id}
     Element.show('working' + id);
-    new Ajax.Request(url, {
+    new Ajax.Request(url_remove, {
         method: 'post',
         parameters: params,
         onSuccess: function(transport) {
@@ -345,4 +342,23 @@ function removecomic(id) {
             console.log("Error removing comic: exception: " + exc);
         }
     });
+}
+function mark_all_read(){
+	$("mark_all_read_anim").show();
+	new Ajax.Request(url_mark_all_read, {
+		onSuccess: function() {
+			$("mark_all_read_anim").hide();
+			//update counters and arrays
+			unreadCounter = 0;
+			updateCounters();
+			for(var i = 0;i < unreadComics.length; i++){ unreadComics[i] = false; }
+			//now we hide every comic
+			showUnreadComics();
+			//hide link to mark all read
+			$("mark_all_read").hide();
+		},
+		onFailure: function() {
+			$("mark_all_read_anim").hide();
+		}
+	});
 }

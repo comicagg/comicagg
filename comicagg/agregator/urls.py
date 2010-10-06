@@ -39,7 +39,7 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^ajax/get_tags/$', 'get_tags', name='get_tags'),
 	url(r'^ajax/save_tags/$', 'save_tags', name='save_tags'),
 	url(r'^ajax/mark_read/$', 'mark_read', name='mark_read'),
-	url(r'^ajax/mark_all_read/$', 'mark_all_read', name='mark_all'),
+	url(r'^ajax/mark_all_read/$', 'mark_all_read', name='mark_all_read'),
 	url(r'^ajax/rate/$', 'rate_comic', name='rate'),
 
 	url(r'^li/(?P<cid>\d+)/', 'last_image_url', name='aggregator_last_image_url'),

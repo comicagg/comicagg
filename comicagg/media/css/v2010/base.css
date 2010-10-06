@@ -216,7 +216,18 @@ button:hover {
 	margin:0;
 	padding:0;
 }
-
+#read .top_info {
+	position:relative;
+}
+#read .top_info div {
+	text-align:right;
+	position:absolute;
+	right:0;
+	bottom:0;
+}
+#read .top_info div img {
+	vertical-align:middle;
+}
 /* Configure page */
 
 #organize .comic_list {

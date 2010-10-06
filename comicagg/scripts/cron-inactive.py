@@ -31,11 +31,11 @@ for user in users:
         sys.exit()
     up = user.get_profile()
     if up.last_read_access < limit:
-        #print "setting user", user, "as inactive"
+        print "setting user", user, "as inactive"
         user.is_active = False
         user.save()
         #borrar sus unreads
-        user.unreadcomic_set.delete()
+        user.unreadcomic_set.all().delete()
 print "Resumen usuarios"
 print len(users), "usuarios en total"
 i = User.objects.filter(is_active__exact=0).count()

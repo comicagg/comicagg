@@ -27,7 +27,13 @@
 {% endfor %}
 </script>
 <div id="read">
-	<div>
+	<div class="top_info">
+		{% if unread_count %}
+		<div id="mark_all_read">
+			<a onclick="mark_all_read()">{% trans "Mark all comics as unread" %}</a>
+			<img style="display:none" id="mark_all_read_anim" src="{{ mediaurl }}images/loaderarrows.gif" alt="working"/>
+		</div>
+		{% endif %}
 		<p class="info" id="unreadCounters">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="unreadCountersTotal">{{ len }}</b> comics and <b id="unreadCountersUnread">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
 		<p class="info" id="noUnreadCounters" style="display:none">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="noUnreadCountersTotal">{{ len }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
 		<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a href="#" onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>

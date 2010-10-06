@@ -313,7 +313,7 @@ def report_comic(request):
 def mark_all_read(request):
   un = UnreadComic.objects.filter(user=request.user)
   un.delete()
-  return HttpResponseRedirect(reverse('index'))
+  return HttpResponse("OK")
 
 @login_required
 def admin_check(request, comic_id=None):
@@ -470,8 +470,10 @@ def last_image_url(request, cid):
     md5 = hashlib.md5(url).hexdigest()
     f = '%s.jpg' % md5
     dst = os.path.join(settings.MEDIA_ROOT, 'strips', f)
+    ldst = os.path.join(settings.MEDIA_ROOT, 'strips', md5)
     if not os.path.exists(dst):
         _download_image(url, ref, dst)
+        os.symlink(dst,ldst)
     return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + f)
 
 def history_image_url(request, hid):#TODO
@@ -484,8 +486,10 @@ def history_image_url(request, hid):#TODO
     md5 = hashlib.md5(url).hexdigest()
     f = '%s.jpg' % md5
     dst = os.path.join(settings.MEDIA_ROOT, 'strips', f)
+    ldst = os.path.join(settings.MEDIA_ROOT, 'strips', md5)
     if not os.path.exists(dst):
         _download_image(url, ref, dst)
+        os.symlink(dst,ldst)
     return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + f)
 
 def _download_image(url, ref, dest):#TODO
