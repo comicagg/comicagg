@@ -1,13 +1,13 @@
 // Configure
 function save_organize() {
-    items = $('user_comics').select('.dojoDndItem');
-    items_o = new Array();
-    for (var i = 0, len = items.length; i < len; i++) {
-        id = items[i].getAttribute('comicid');
-        items_o.push(usercomics_id[id]);
-    }
-    newcomics = items_o;
-    save();
+	items = $('user_comics').select('.dojoDndItem');
+	items_o = new Array();
+	for (var i = 0, len = items.length; i < len; i++) {
+		id = items[i].getAttribute('comicid');
+		items_o.push(usercomics_id[id]);
+	}
+	newcomics = items_o;
+	save();
 }
 
 function save() {
@@ -20,7 +20,7 @@ function save() {
 	for (var i = 0, len = removedcomics.length; i < len; i++) {
 		idsr += removedcomics[i].id;
 		if (i < len - 1) { idsr += ","; }
-	}	
+	}
 	$('save_error').hide();
 	$('save_text').hide();
 	$('saving_text').show();
@@ -235,6 +235,26 @@ function mouseOverAction() {
 	if (comic = containsComicId(available_new, id)) {
 		//es un comic nuevo
 		$('comic_new').show();
+		//forget as new comic
+		url = comic.url_forget;
+		new Ajax.Request(url, {
+			onSuccess: function(response) {
+				if (response.status = 200) {
+					//remove green label
+					$('comic_' + id).removeClassName("new");
+					//update the counter in the menu
+					if(parseInt(response.responseText) == 0) {
+						$('menuNewComicCounter').innerHTML = "";
+					} else {
+						$('menuNewComicCounter').innerHTML = " (" + response.responseText + ")";
+					}
+					//remove it from the new comic list
+					if (removeComicId(available_new, currentid)) {
+						available_new = available_new.compact();
+					}
+				}
+			}
+		});
 	} else if (comic = containsComicId(usercomics, id)) {
 		//TODO deselect comic
 		$('comic_new').hide();

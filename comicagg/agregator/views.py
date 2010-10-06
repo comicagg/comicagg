@@ -407,7 +407,7 @@ def hide_new_comics(request):
 def forget_new_comic(request, comic_id=None):
     comic = get_object_or_404(Comic, pk=comic_id)
     NewComic.objects.filter(user=request.user, comic=comic).delete()
-    count = str(NewComic.objects.filter(user=request.user).count())
+    count = str(request.user.newcomic_set.filter(comic__activo=True).filter(comic__ended=False).count())
     return HttpResponse(count)
 
 @login_required
