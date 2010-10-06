@@ -32,6 +32,8 @@ function showUnreadComics() {
         cid = clist[i].id.substring(1);
         if (!unreadComics[cid]) {
             clist[i].hide();
+        } else {
+            clist[i].show();
         }
     }
     $('showingAll').hide();
@@ -45,6 +47,7 @@ var clist = new Array();
 function onReadLoad() {
     clist = $$('.comic');
     updateCounters();
+    showUnreadComics();
     initScrolling();
     if (comicCounter) {
         if (unreadCounter) {
@@ -60,13 +63,13 @@ function onReadLoad() {
 function initLoadImages() {
     updateViewport(false);
     lista = cdivInView;
-    do {
+    while (lista.length > 0) {
         div = lista.shift();
         comic = comics[div.id.substring(1)];
         if(comic.last_url) {
             _loadComic(comic, false);
         }
-    } while (lista.length > 0);
+    }
 }
 var maxwidth = 0;
 // will load the images of this comic if it hasnt been loaded  yet.
@@ -143,7 +146,8 @@ function onScrollHandler(e) {
 function updateViewport(loadImages) {
     if (sync) return;
     sync = true;
-    end = 1;
+    //número de comics extras por debajo
+    end = 2;
     viewp = false;
     vmin = document.viewport.getScrollOffsets()['top'];
     vmax = vmin + document.viewport.getHeight();
@@ -172,6 +176,8 @@ function updateViewport(loadImages) {
         }
     }
     sync = false;
+//     $('branding').innerHTML="";
+//     cdivInView.each(function(item){$('branding').innerHTML+=item.id+" "})
 }
 
 function inViewport(cdiv, vmin, vmax) {

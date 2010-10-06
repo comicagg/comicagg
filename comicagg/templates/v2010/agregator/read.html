@@ -17,14 +17,14 @@
 {% endfor %}
 {% for comic,unreadlist in comic_list %}
     tmp = Array();
-{% if not comic.noimages or perms.agregator.all_images %}
-    {% for unread in unreadlist %}
+    {% if not comic.noimages or perms.agregator.all_images %}
+        {% for unread in unreadlist %}
     tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});
-    {% endfor %}
-{% endif %}
+        {% endfor %}
+    {% endif %}
     c = {"name":"{{ comic.name}}", "id":{{ comic.id }}, {% if not comic.noimages or perms.agregator.all_images %}"last_url":"{{ comic.get_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false,};
     comics[{{ comic.id }}] = c;
-{% endfor %}    
+{% endfor %}
 </script>
 <div id="read">
     <div>
@@ -35,7 +35,7 @@
     </div>
     <div id="comics">
     {% for comic,unreadlist in comic_list %}
-    <div id="c{{ comic.id }}" class="comic" style="{% if not unreadlist %}display:none{% endif %}">
+    <div id="c{{ comic.id }}" class="comic" style="display:none">
         <h3>{{ comic.name }}</h3>
         {% if unreadlist %}<span id="newnotice{{ comic.id }}" class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
         <div class="striplist">
@@ -43,7 +43,7 @@
             {% blocktrans with comic.url as url %}The comic has been updated. <a href="{{ url }}">Click here</a> to go to the comic's website.{% endblocktrans %}
         {% else %}
             {% for unread in unreadlist %}
-            <h5>{{ unread.history.date|date:"d F Y" }}</h5>
+            {%  ifchanged %}<h5>{{ unread.history.date|date:"d F Y" }}</h5>{% endifchanged %}
             <img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/v2010/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
             {% empty %}
             <h5>{{ comic.last_check|date:"d F Y" }}</h5>
@@ -68,7 +68,7 @@
                     <a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a>&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 {% endif %}
-                <a onclick="openurl('{{ comic.url|safe }}')">{% trans "Visit its website" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a onclick="openurl('{{ comic.website|safe }}')">{% trans "Visit its website" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a onclick="reportbroken({{ comic.id }})">{% trans "Report broken image" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a onclick="removecomic({{ comic.id }})">{% trans "Remove this comic" %}</a>&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
