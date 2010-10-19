@@ -45,3 +45,7 @@ TEMPLATE_DIRS = (
     '%scomicagg/templates/%s' % (ROOT, THEME),
 )
 
+EMAIL_HOST = 'smtp.webfaction.com'
+EMAIL_HOST_USER = 'awesome_comicagg'
+EMAIL_HOST_PASSWORD = 'comicaggmb%'
+DEFAULT_FROM_EMAIL = 'Comic Aggregator Robot <robot@comicagg.com>'

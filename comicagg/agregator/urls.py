@@ -22,6 +22,7 @@ urlpatterns = patterns('comicagg.agregator.views',
 
 	url(r'^admin/check/$', 'admin_check', name='admin_check'),
 	url(r'^admin/check/(?P<comic_id>\d+)/$', 'admin_check', name='check'),
+	url(r'^admin/reported/(?P<chids>[\w-]+)/$', 'admin_reported', name='admin_reported'),
 
 	url(r'^ajax/hide_new_comics/$', 'hide_new_comics', name='hide_new_comics'),
 
