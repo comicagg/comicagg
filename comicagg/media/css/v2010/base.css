@@ -410,6 +410,9 @@ button:hover {
 #comic_info_wrap {
 /* 	margin-left:1em; */
 }
+#hover_notice {
+	text-align:center;
+}
 input.filter {
 	background:white;
 	color:#666;

@@ -136,6 +136,10 @@ function dndRemoveComics(nodes) {
 	}
 	newcomics = newcomics.compact();
 }
+function onclick_url(event) {
+	event.stop();
+	openurl($("comic_url").href);
+}
 function initDND() {
 	dojo_usercomics = new dojo.dnd.Source("user_comics", {
 		horizontal:true,
@@ -171,6 +175,7 @@ function initAdd() {
 		comic.observe('mouseover', onMouseOverComic);
 		comic.observe('mouseout', onMouseOutComic);
 	}
+	$("comic_url").observe("click", onclick_url);
 }
 function containsComicId(array, comicid) {
 	var found = false;
@@ -196,8 +201,9 @@ function onClickComic(event) {
 	var id = elem.id.substring(6);
 	//comic is selected? deselect
 	if(comic = containsComicId(newcomics, id)) {
-		removeComicId(newcomics, id);
-		newcomics = newcomics.compact();
+		if (removeComicId(newcomics, id)) {
+			newcomics = newcomics.compact();
+		}
 		if (removeComicId(addedcomics, id)) {
 			addedcomics = addedcomics.compact();
 		}
@@ -229,6 +235,7 @@ function onMouseOverComic(event){
 }
 var currentid = 0;
 function mouseOverAction() {
+	$("hover_notice").hide();
 	var elem = lastevent.element();
 	var id = elem.id.substring(6);
 	currentid = id;
@@ -236,8 +243,7 @@ function mouseOverAction() {
 		//es un comic nuevo
 		$('comic_new').show();
 		//forget as new comic
-		url = comic.url_forget;
-		new Ajax.Request(url, {
+		new Ajax.Request(comic.url_forget, {
 			onSuccess: function(response) {
 				if (response.status = 200) {
 					//remove green label
