@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-19 13:04+0200\n"
-"PO-Revision-Date: 2010-10-19 13:05+0200\n"
+"POT-Creation-Date: 2010-10-19 13:24+0200\n"
+"PO-Revision-Date: 2010-10-19 13:25+0200\n"
 "Last-Translator: Jesús Fernández <jesusfs@gmail.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -1577,8 +1577,12 @@ msgid "read"
 msgstr "lee"
 
 #: templates/v2010/base.html:50
-msgid "comics"
-msgstr "comics"
+msgid "organize"
+msgstr "organiza"
+
+#: templates/v2010/base.html:50
+msgid "choose"
+msgstr "elige"
 
 #: templates/v2010/base.html:50
 msgid "request"
@@ -1860,6 +1864,9 @@ msgstr "Solicitudes aceptadas"
 #: templates/v2010/blog/base.html:3
 msgid "News"
 msgstr "Noticias"
+
+#~ msgid "comics"
+#~ msgstr "comics"
 
 #~ msgid "There is one new news item."
 #~ msgstr "Hay una nueva noticia."

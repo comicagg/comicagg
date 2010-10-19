@@ -47,7 +47,7 @@
 				<i><b>{{ user.username }}</b></i>&nbsp;&nbsp;-&nbsp;&nbsp;<span class=""><a href="{% url blog_index %}">{% trans "news" %}<span id="menuNewNewsCounter">{% if newnews_count %} ({{ newnews_count}}){% endif %}</a></span>&nbsp;&nbsp;{% if user.is_staff %}<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;&nbsp;{% endif %}<span class=""><a href="{% url logout %}">{% trans "logout" %}</a></span>
 			</div>
 			<div id="head_left">
-				Comics:&nbsp;&nbsp;<span class=""><a href="{% url read %}">{% trans "read" %}<span id="menuUnreadCounter">{% if unread_count %} ({{ unread_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url organize %}">{% trans "comics" %}<span id="menuNewComicCounter">{% if newcomic_count %} ({{ newcomic_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url request_index %}">{% trans "request" %}</a></span>
+				Comics:&nbsp;&nbsp;<span class=""><a href="{% url read %}">{% trans "read" %}<span id="menuUnreadCounter">{% if unread_count %} ({{ unread_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url organize %}">{% trans "organize" %}</a>&nbsp;&nbsp;<a href="{% url organize_add %}">{% trans "choose" %}<span id="menuNewComicCounter">{% if newcomic_count %} ({{ newcomic_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url request_index %}">{% trans "request" %}</a></span>
 			</div>
 			{% endif %}
 			<div id="branding">
