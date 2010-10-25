@@ -9,15 +9,6 @@ from django.utils.http import urlquote
 from math import atan, pi, floor, sqrt
 import re, urllib
 
-#Aux functions
-def _get_url(comic, url):
-    if comic.referer:
-        res = '/ref.php?url=' + urlquote(url) + '&ref=' + urlquote(comic.referer)
-    else:
-        res = url
-    return res
-
-# Create your models here.
 class Comic(models.Model):
     name = models.CharField('Nombre del comic', max_length=255)
     website = models.URLField('Página del comic', verify_exists=False)

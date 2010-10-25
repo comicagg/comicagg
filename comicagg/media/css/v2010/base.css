@@ -223,6 +223,7 @@ button:hover {
 	padding:2px;
 	-moz-border-radius:4pt;
 	-webkit-border-radius:4pt;
+	z-index:-10;
 }
 #read .top_info div {
 	text-align:right;
