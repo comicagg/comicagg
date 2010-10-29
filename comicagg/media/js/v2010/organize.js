@@ -353,10 +353,16 @@ function filter(v) {
 }
 function applyFilter(v){
 	l = v.length;
-	for(i=0, len=comics.length; i < len; i++) {
+	for(i = 0, len = comics.length; i < len; i++) {
 		var comic = comics[i];
 		txt = comic.innerHTML.toLowerCase();
-		if(l>0 && txt.indexOf(v) < 0) {
+		classes = comic.className.split(" ");
+		for (j = 0; j < classes.length; j++) {
+			if (classes[j].length > 0) {
+				txt += " @" + classes[j];
+			}
+		}
+		if(l > 0 && txt.indexOf(v) < 0) {
 			comic.hide();
 		} else {
 			comic.show();
