@@ -371,10 +371,10 @@ button:hover {
 	border-bottom:0;
 }
 #comic_list .added {
-	background:#ccddff url(/media/images/ok12.png) right center no-repeat;
+	background:#ccddff /*url(/media/images/ok12.png)*/ right center no-repeat;
 }
 #comic_list .new {
-	background:#ddffcc url(/media/images/flag12.png) right center no-repeat;
+	background:#ddffcc /*url(/media/images/flag12.png)*/ right center no-repeat;
 }
 #comic_list .noimages:after {
 	content: url(/media/images/warning12.png);
