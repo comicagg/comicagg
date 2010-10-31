@@ -390,14 +390,20 @@ button:hover {
 #comic_new {
 	color:orange;
 }
-#comic_info {
+#comic_info_outer {
 	position:absolute;
 	margin-left:360px;
-	top:100px;
+	top:70px;
 	right:10px;
 	left:30px;
 	bottom:10px;
-	padding:3px 8px;
+}
+#comic_info_outer > p {
+    padding:0px 0px 5px 10px;
+    margin:0;
+}
+#comic_info {
+    padding:3px 8px;
 	background:white;
 	border:1px solid gray;
 	-moz-border-radius:8px;
@@ -424,7 +430,7 @@ button:hover {
 input.filter {
 	background:white;
 	color:#666;
-	width:200px;
+	width:180px;
 }
 #comic_image {
 	margin:0;
