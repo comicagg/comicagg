@@ -32,10 +32,8 @@ dojo.addOnLoad(initAdd);
 		<div id="comic_info_wrap" style="display:none">
 			<h3 id="comic_name"></h3>
 			<h4 id="comic_new">{% trans "New comic!" %}</h4>
-			<p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.getRating }}</span>%</b> (<span id="comic_votes">{{ comic.votes }}</span> {% trans "votes" %})</p>
-			<p>{% trans "Readers" %}: <b><span id="comic_readers">{{ comic.readers }}</span></b></p>
+			<p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.getRating }}</span>%</b> (<span id="comic_votes">{{ comic.votes }}</span> {% trans "votes" %}, <span id="comic_readers">{{ comic.readers }}</span> {% trans "readers" %}).</p>
 			<p><a id="comic_url">{% trans "Link to its website"%}</a></p>
-			<p>{% trans "Last update:" %}&nbsp;<b><span id="comic_updated"></span></b></p>
 			<p id="comic_image">
 				<img id="loading" src="{{ mediaurl }}images/loading.gif" alt="" style="display:none"/>
 				<img id="comic_last" src="" alt="" title="" style="display:none"/>
