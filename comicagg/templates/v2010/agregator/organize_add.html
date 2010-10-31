@@ -3,7 +3,7 @@
 {% block title %}{% trans 'Choose' %} - {% endblock %}
 {% block extra_head %}
 		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js" type="text/javascript"></script>
-		<script src="{{ mediaurl}}js/v2010/organize.js" type="text/javascript"></script>
+		<script src="{{ mediaurl}}js/v2010/organize_add.js" type="text/javascript"></script>
 		<script type="text/javascript">
 var usercomics = [
 {% for comic in user_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:2 }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}", 'readers':{{ comic.readers }}, 'last':"{{ comic.get_url|safe}}", 'url_forget':"{% url forget_new_comic comic.id %}"},{% endfor %}
