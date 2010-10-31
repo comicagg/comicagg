@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-19 13:24+0200\n"
-"PO-Revision-Date: 2010-10-19 13:25+0200\n"
+"POT-Creation-Date: 2010-10-31 13:19+0100\n"
+"PO-Revision-Date: 2010-10-31 13:20+0100\n"
 "Last-Translator: Jesús Fernández <jesusfs@gmail.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -197,11 +197,11 @@ msgstr "No encontrado"
 msgid "I can't find what you are looking for."
 msgstr "No encuentro lo que has pedido :/"
 
-#: templates/base/500.html:5
+#: templates/base/500.html:5 templates/v2010/500.html:5
 msgid "Server error"
 msgstr "Error en el servidor"
 
-#: templates/base/500.html:7
+#: templates/base/500.html:7 templates/v2010/500.html:7
 msgid "It seems that server is having issues. Try again in a few minutes."
 msgstr ""
 "Parece que el servidor está teniendo algún problema ahora mismo. Inténtalo "
@@ -378,6 +378,7 @@ msgstr "puntuación"
 #: templates/base/agregator/comic_list.html:21
 #: templates/base/agregator/comic_list.html:33
 #: templates/base/agregator/comic_list_comic.html:15
+#: templates/v2010/agregator/organize_add.html:30
 msgid "readers"
 msgstr "lectores"
 
@@ -619,8 +620,9 @@ msgid "unread"
 msgstr "sin leer"
 
 #: templates/base/agregator/navigation_float.html:58
+#: templates/v2010/agregator/organize_add.html:41
 msgid "all"
-msgstr "todas"
+msgstr "todos"
 
 #: templates/base/agregator/navigation_float.html:60
 msgid "Display all"
@@ -810,7 +812,6 @@ msgstr "Tus etiquetas: "
 #: templates/base/agregator/tagging_form.html:5
 #: templates/base/registration/account.html:27
 #: templates/v2010/accounts/account.html:27
-#: templates/v2010/agregator/organize_add.html:54
 #: templates/v2010/agregator/organize_organize.html:36
 msgid "Save"
 msgstr "Guardar"
@@ -1577,12 +1578,12 @@ msgid "read"
 msgstr "lee"
 
 #: templates/v2010/base.html:50
-msgid "organize"
-msgstr "organiza"
-
-#: templates/v2010/base.html:50
 msgid "choose"
 msgstr "elige"
+
+#: templates/v2010/base.html:50
+msgid "organize"
+msgstr "organiza"
 
 #: templates/v2010/base.html:50
 msgid "request"
@@ -1664,35 +1665,31 @@ msgstr "Volver al inicio"
 msgid "Choose"
 msgstr "Elegir"
 
-#: templates/v2010/agregator/organize_add.html:32
+#: templates/v2010/agregator/organize_add.html:23
 msgid "Add comics"
 msgstr "Añadir comics"
 
-#: templates/v2010/agregator/organize_add.html:36
+#: templates/v2010/agregator/organize_add.html:25
+msgid "Hover over a comic to see details."
+msgstr "Pasa por encima de un comic para ver detalles."
+
+#: templates/v2010/agregator/organize_add.html:29
 msgid "New comic!"
 msgstr "¡Nuevo!"
 
-#: templates/v2010/agregator/organize_add.html:37
+#: templates/v2010/agregator/organize_add.html:30
 msgid "Score"
 msgstr "Puntuación"
 
-#: templates/v2010/agregator/organize_add.html:37
+#: templates/v2010/agregator/organize_add.html:30
 msgid "votes"
 msgstr "votos"
 
-#: templates/v2010/agregator/organize_add.html:38
-msgid "Readers"
-msgstr "Lectores"
-
-#: templates/v2010/agregator/organize_add.html:39
+#: templates/v2010/agregator/organize_add.html:31
 msgid "Link to its website"
 msgstr "Enlace a su web"
 
-#: templates/v2010/agregator/organize_add.html:40
-msgid "Last update:"
-msgstr "Última actualización:"
-
-#: templates/v2010/agregator/organize_add.html:45
+#: templates/v2010/agregator/organize_add.html:36
 msgid ""
 "<b>Warning!</b> Instead of showing the images of this comic, you will see a "
 "link to its website when the comic updates."
@@ -1700,16 +1697,19 @@ msgstr ""
 "<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en "
 "lace a su página web cuando se actualice."
 
-#: templates/v2010/agregator/organize_add.html:49
-msgid "Hover over a comic to see details."
-msgstr "Pasa por encima de un comic para ver detalles."
+#: templates/v2010/agregator/organize_add.html:41
+msgid "Show:"
+msgstr "Ver:"
 
-#: templates/v2010/agregator/organize_add.html:58
-#: templates/v2010/agregator/organize_organize.html:40
-msgid "Saving..."
-msgstr "Guardando..."
+#: templates/v2010/agregator/organize_add.html:41
+msgid "new"
+msgstr "nuevos"
 
-#: templates/v2010/agregator/organize_add.html:66
+#: templates/v2010/agregator/organize_add.html:41
+msgid "added"
+msgstr "añadidos"
+
+#: templates/v2010/agregator/organize_add.html:46
 msgid "You won't see the images of this comic"
 msgstr "No verás las imágenes de este comic."
 
@@ -1732,6 +1732,10 @@ msgid ""
 msgstr ""
 "Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
 "Ctrl/Meta) y múevelos."
+
+#: templates/v2010/agregator/organize_organize.html:40
+msgid "Saving..."
+msgstr "Guardando..."
 
 #: templates/v2010/agregator/organize_organize.html:46
 msgid "Sort them:"
@@ -1864,6 +1868,12 @@ msgstr "Solicitudes aceptadas"
 #: templates/v2010/blog/base.html:3
 msgid "News"
 msgstr "Noticias"
+
+#~ msgid "Readers"
+#~ msgstr "Lectores"
+
+#~ msgid "Last update:"
+#~ msgstr "Última actualización:"
 
 #~ msgid "comics"
 #~ msgstr "comics"

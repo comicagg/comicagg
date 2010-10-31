@@ -338,10 +338,17 @@ button:hover {
 }
 #comic_list_wrap {
 	width:350px;
+    position:relative;
 }
 #comic_list_wrap p {
 	height:24px;
 	margin:0;
+}
+#comic_list_wrap > span {
+    position:absolute;
+    right:0;
+    top:4px;
+    font-size:smaller;
 }
 #comic_list {
 	border:1px solid gray;
@@ -399,8 +406,9 @@ button:hover {
 	bottom:10px;
 }
 #comic_info_outer > p {
-    padding:0px 0px 5px 10px;
+    padding:0px 0px 5px 0px;
     margin:0;
+    text-align:center;
 }
 #comic_info {
     padding:3px 8px;
@@ -431,6 +439,7 @@ input.filter {
 	background:white;
 	color:#666;
 	width:180px;
+    font-size:smaller;
 }
 #comic_image {
 	margin:0;

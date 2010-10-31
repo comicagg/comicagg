@@ -262,7 +262,6 @@ function onMouseOverComic(event){
 }
 var currentid = 0;
 function mouseOverAction() {
-    $("hover_notice").hide();
     var elem = lastevent.element();
     var id = elem.id.substring(6);
     currentid = id;
@@ -394,4 +393,19 @@ function applyFilter(v){
             comic.show();
         }
     }
+}
+function filter_allcomics() {
+    $("filterReal").value = "";
+    switchFilter(true);
+    filter("");
+}
+function filter_newcomics() {
+    $("filterReal").value = "@new";
+    switchFilter(false);
+    filter("@new");
+}
+function filter_addedcomics() {
+    $("filterReal").value = "@added";
+    switchFilter(false);
+    filter("@added");
 }

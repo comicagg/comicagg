@@ -24,7 +24,6 @@ dojo.addOnLoad(initAdd);
 	<div id="comic_info_outer">
         <p><b>{% trans "Hover over a comic to see details." %}</b></p>
         <div id="comic_info">
-            <p id="hover_notice"><b>{% trans "Hover over a comic to see details." %}</b></p>
             <div id="comic_info_wrap" style="display:none">
                 <h3 id="comic_name"></h3>
                 <h4 id="comic_new">{% trans "New comic!" %}</h4>
@@ -39,6 +38,7 @@ dojo.addOnLoad(initAdd);
         </div>
     </div>
 	<div id="comic_list_wrap">
+        <span>{% trans "Show:" %} <a onclick="filter_allcomics()">{% trans "all" %}</a>, <a onclick="filter_newcomics()">{% trans "new"%}</a>, <a onclick="filter_addedcomics()">{% trans "added"%}</a></span>
 		<input id="filter" type="text" value="Escribe aquí para filtrar" class="filter" onclick="switchFilter(false)"/>
 		<input id="filterReal" type="text" value="" class="filter" style="display:none" onblur="switchFilter(true)" onkeyup="filter(this.value)"/>
 		<ul id="comic_list">
