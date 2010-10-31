@@ -10,15 +10,12 @@ var usercomics = [
 	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:2 }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}", 'readers':{{ comic.readers }}, 'last':"{{ comic.get_url|safe}}", 'url_forget':"{% url forget_new_comic comic.id %}"},
 {% endfor %}
 ];
-var newcomics = usercomics.clone();
-var removedcomics = new Array();
-var addedcomics = new Array();
 var availablecomics = [
 {% for comic in all_comics %}
 	{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:2 }}, 'votes':{{ comic.votes }}, 'noimages':{{ comic.noimages|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_check|date:"j F, Y" }}", 'readers':{{ comic.readers }}, 'last':"{{ comic.get_url|safe }}", 'url_forget':"{% url forget_new_comic comic.id %}"},
 {% endfor %}
 ];
-var available_new = [
+var availablecomics_new = [
 {% for newcomic in new_comics %}
 	{'id':{{ newcomic.comic.id}}, 'name':"{{ newcomic.comic.name|escape }}", 'slug':"{{ newcomic.comic.name|slugify }}", 'score':{{ newcomic.comic.getRating|perc:2 }}, 'votes':{{ newcomic.comic.votes }}, 'noimages':{{ newcomic.comic.noimages|lower }}, 'url': "{{ newcomic.comic.website }}", 'updated':"{{ newcomic.comic.last_check|date:"j F, Y" }}", 'readers':{{ newcomic.comic.readers }}, 'last':"{{ newcomic.comic.get_url|safe }}", 'url_forget':"{% url forget_new_comic newcomic.comic.id %}"},
 {% endfor %}
@@ -48,18 +45,6 @@ dojo.addOnLoad(initAdd);
 	</div>
 	<div id="comic_list_wrap">
 		<p><b>{% trans "Hover over a comic to see details." %}</b></p>
-		<div class="save" onclick="save()" style="float:right">
-			<span id="save_text">
-				<img id="saved_ok" style="display:none" src="{{ mediaurl }}images/ok16.png" alt=""/>
-				<img id="save_error" style="display:none" src="{{ mediaurl }}images/remove.png" alt=""/>
-				{% trans "Save" %}&nbsp;
-			</span>
-			<span id="saving_text" style="display:none">
-				<img src="{{ mediaurl }}images/loaderarrows.gif" alt=""/>
-				{% trans "Saving..." %}&nbsp;
-			</span>
-			<img src="{{ mediaurl }}images/save24.png" alt="save"/>
-		</div>
 		<input id="filter" type="text" value="Escribe aquí para filtrar" class="filter" onclick="switchFilter(false)"/>
 		<input id="filterReal" type="text" value="" class="filter" style="display:none" onblur="switchFilter(true)" onkeyup="filter(this.value)"/>
 		<ul id="comic_list">

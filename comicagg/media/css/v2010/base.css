@@ -372,9 +372,16 @@ button:hover {
 }
 #comic_list .added {
 	background:#ccddff /*url(/media/images/ok12.png)*/ right center no-repeat;
+    font-weight:bolder;
+}
+#comic_list .working {
+    background:url(/media/images/loading12.gif) right center no-repeat;
 }
 #comic_list .new {
 	background:#ddffcc /*url(/media/images/flag12.png)*/ right center no-repeat;
+}
+#comic_list .error {
+    background:url(/media/images/error12.png) right center no-repeat;
 }
 #comic_list .noimages:after {
 	content: url(/media/images/warning12.png);
