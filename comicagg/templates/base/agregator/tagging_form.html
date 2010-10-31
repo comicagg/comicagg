@@ -1,6 +1,0 @@
-{% load agregator_tags %}
-{% load i18n %}
-<div id="tags_{{ comic.id }}" style="display:none" class="tagging_form">
-{#% trans 'Tags:'%#}{% tagcloud_comic comic %}
-{% trans 'Your tags: '%}<input type="text" value="{% user_tags comic user %}" id="user_tags_{{ comic.id }}" size="30"/> <input type="button" value="{% trans 'Save' %}" onclick="save_tags({{ comic.id}})"/> <img src="{{ settings.MEDIA_URL }}images/loading.gif" alt="saving" class="saving" style="display:none" id="saving_tags_{{ comic.id }}"/><span id="saved_{{ comic.id }}" style="display:none" class="saved">{% trans 'Saved :)'%}</span>
-</div>

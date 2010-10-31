@@ -34,7 +34,7 @@ ADMIN_MEDIA_PREFIX = 'http://localhost/admin-media/'
 #used for password reset email
 DOMAIN = 'http://localhost:8000'
 
-THEME = 'v2010'
+#THEME = 'v2010'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -42,7 +42,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     '%scomicagg/templates' % ROOT,
 #    '%scomicagg/templates/base' % ROOT,
-    '%scomicagg/templates/%s' % (ROOT, THEME),
+#    '%scomicagg/templates/%s' % (ROOT, THEME),
 )
 
 EMAIL_HOST = 'smtp.webfaction.com'

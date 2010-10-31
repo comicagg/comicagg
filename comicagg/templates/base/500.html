@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-{% load i18n %}
-{% block title %}500{% endblock %}
-{% block content %}
-<br/><code>500 - {% trans "Server error" %}</code>
-<center><img src="{{ mediaurl }}images/errores_http.png" alt="error img" />
-<p>{% trans "It seems that server is having issues. Try again in a few minutes."%}</p></center>
-{% endblock %}

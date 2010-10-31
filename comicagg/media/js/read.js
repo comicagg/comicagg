@@ -1,528 +1,368 @@
-// **************
-// read page init function
-// **************
-
-var last_event = false;
-
-function initRead() {
-	var es = $$('.mark_as_read');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(4)); mark_as_read(id); };
+// updates html counters
+function updateCounters() {
+	if (unreadCounter > 0) {
+		document.title = titlei18n + " (" + unreadCounter + ") - " + titlebase;
+		$('noUnreadCounters').hide();
+		$('unreadCounters').show();
+		$('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
+		$('unreadCountersUnread').innerHTML = unreadCounter;
+		$('unreadCountersTotal').innerHTML = comicCounter;
+	} else {
+		document.title = titlei18n + " - " + titlebase;
+		$('noUnreadCounters').show();
+		$('unreadCounters').hide();
+		$('menuUnreadCounter').innerHTML = '';
+		$('noUnreadCountersTotal').innerHTML = comicCounter;
 	}
-	var es = $$('.tags_link');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); toggle_tagging(id); };
-	}
-	var es = $$('.ratedown');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) {
-			last_event = event;
-			var target = event.target;
-			if(target.nodeName.toLowerCase() == "img") {
-			id = parseInt(event.target.parentNode.id.substring(8));
-			} else {
-			id = parseInt(event.target.id.substring(8));
-			}
-			rate(id, -1);
-		};
-	}
-	var es = $$('.rateup');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) {
-			last_event = event;
-			var target = event.target;
-			if(target.nodeName.toLowerCase() == "img") {
-			id = parseInt(event.target.parentNode.id.substring(6));
-			} else {
-			id = parseInt(event.target.id.substring(6));
-			}
-			rate(id, 1);
-		};
-	}
-	var es = $$('.more');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(4)); menuToggle(id); };
-	}
-	var es = $$('.more_img');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); menuToggle(id); };
-	}
-	var es = $$('.report');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); reportComic(id); };
-	}
-	var es = $$('.remove');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); removeComicLink(id); };
-	}
-	var es = $$('.up');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { $('head').scrollTo(); };
-	}
-	var es = $$('.reloadimgs');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.id.substring(10)); reloadimgs(id); };
-	}
-	var es = $$('.desc');
-	for(var i=0; i < es.length; i++) {
-		es[i].onclick = function(event) { id = parseInt(event.target.parentNode.id.substring(4)); gotoDescription(id); };
-	}
-	loadimages();
+	return 0;
 }
 
-// **************
-// carga de imagenes
-// **************
+// shows all the comics divs
+function showAllComics() {
+	for (i = 0; i < clist.length; i++) {
+		clist[i].show();
+	}
+	$('showingAll').show();
+	$('showingUnread').hide();
+	updateViewport(true);
+}
+// shows only unread comics divs
+function showUnreadComics() {
+	for (i = 0; i < clist.length; i++) {
+		cid = clist[i].id.substring(1);
+		if (!unreadComics[cid]) {
+			clist[i].hide();
+		} else {
+			clist[i].show();
+		}
+	}
+	$('showingAll').hide();
+	$('showingUnread').show();
+	updateViewport(true);
+}
+// comic list. Array of divs
+var clist = new Array();
 
-function loadimages() {
-	_comics = lcomics.clone();
-	while(_comics.length > 0) {
-		while((comic = _comics.shift()) == null && _comics.length > 0);
-		if (comic != null) { loadcomicimages(comic); }
+// function exed when loading of html ends
+function onReadLoad() {
+	clist = $$('.comic');
+	updateCounters();
+	showUnreadComics();
+	initScrolling();
+	if (comicCounter) {
+		if (unreadCounter) {
+			initLoadImages();
+		} else {
+			//TODO mostrar comic aleatorio
+		}
+	} else {
+		$('noComicsSelected').show();
 	}
 }
-
-var max_concurrent = 10;
-var actual_no = 0;
-
-function loadcomicimages(comic) {
-// comics con imagenes nuevas
-	if(comic.list.length > 0) {
-		for (i=0; i<comic.list.length; i++) {
-			item = comic.list[i];
-			window['item' + item.id] = item;
-			loadimage('item' + item.id);
+// first batch load of comic images. will load only those comics in the viewport
+function initLoadImages() {
+	updateViewport(false);
+	lista = cdivInView;
+	while (lista.length > 0) {
+		div = lista.shift();
+		comic = comics[div.id.substring(1)];
+		if(comic.last_url) {
+			_loadComic(comic, false);
 		}
 	}
 }
-
-function loadimage(item_str) {
-	if(max_concurrent <= actual_no) {
-		setTimeout("loadimage('" + item_str + "')", 300);
-	} else {
-		actual_no += 1;
-		item = window[item_str];
-		loadimage2("img_unread" + item.id, item.cid, new Image(), item.url);
+var maxwidth = 0;
+// will load the images of this comic if it hasnt been loaded  yet.
+// if seed is true, it will add a seed in the image url
+function _loadComic(comic, seed) {
+	maxwidth = $('c'+comic.id).select('.comicextra')[0].getDimensions()['width'];
+	if(!comic.loaded) {
+		s = 'reload' + comic.id;
+		$(s).hide();
+		for(i = 0; i < comic.list.length; i++) {
+			unread = comic.list[i];
+			image = $('imgu' + unread.unreadid);
+			url = seed ? _addSeed(unread.url) : unread.url;
+			_loadImage(url, image, comic);
+		}
+		if (comic.list.length == 0) {
+			image = $('imgl' + comic.id);
+			url = seed ? _addSeed(comic.last_url) : comic.last_url;
+			_loadImage(url, image, comic);
+		}
+		comic.loaded = true;
 	}
 }
-
-function loadimage2(id, cid, img, url) {
-	e = $(id);
-	e.src = url_loading;
-	if (comics_width == -1) {
-		comics_width = $('comics').getWidth();
+// add a bit in the url to make it different so browser caching won't happen
+function _addSeed(url) {
+	_date = new Date();
+	if (url.indexOf('?') == -1) {
+		url += "?" + _date.getTime();
+	} else {
+		url += "&" + _date.getTime();
+	}
+	return url;
+}
+// loads an image from url and puts it in elem
+function _loadImage(url, elem, comic) {
+	img = new Image();
+	elem.cid = comic.id;
+	img.onload = function () {
+		elem.src = url;
+		if (this.width > maxwidth) {
+			elem.style.width = "100%";
+		}
+	}
+	img.onerror = function () {
+		elem.alt = "ERROR";
+		elem.src = media_url + 'images/error.png';
+		comics[elem.cid].error = true;
+		$('reload'+elem.cid).show();
 	}
 	img.src = url;
-	img.onload = function(){
-		e = $(id);
-		actual_no -= 1;
-		w = img.width;
-		if (w >= comics_width) {
-			if (e) { e.style.width = "100%"; }
-		}
-		if (e) { e.src = url; }
-	};
-	img.onerror = function(){
-		e = $(id);
-		actual_no -= 1;
-		e.src = url_error;
-		ocultar_opciones(cid);
-	};
-	img.onabort = function(){
-		e = $(id);
-		actual_no -= 1;
-		e.src = url_error;
-	};
+}
+// reloads all the images from a comic that had previously failed loading adding a seed in the url
+function reloadComic(cid) {
+	comic = comics[cid];
+	comic.loaded = false;
+	comic.error = false;
+	_loadComic(comic, true);
 }
 
-function ocultar_opciones(cid) {
-	acc = "#c_" + cid + " .opts_left";
-	acc2 = acc + "_error";
-	$$(acc)[0].hide();
-	$$(acc2)[0].show();
+/* Scrolling things */
+
+var sync = false;
+var cdivInView = new Array();
+var divlist = new Array();
+function initScrolling() {
+	window.onscroll = onScrollHandler;
+	divlist = $$('.comic');
 }
 
-function mostrar_opciones(cid) {
-	acc = "#c_" + cid + " .opts_left";
-	acc2 = acc + "_error";
-	$$(acc)[0].show();
-	$$(acc2)[0].hide();
+function onScrollHandler(e) {
+	setTimeout("updateViewport(true)", 10);
 }
 
-// **************
-// menús de los comics
-// **************
-
-// id del elemento actual mostrado
-var currentMenu = -1;
-// true if the menu was just activated. prevents hide on event bubbling
-var activated = false;
-
-function processClick() {
-  if (!activated && currentMenu > 0) {
-//     Element.hide('menu'+currentMenu);
-    Effect.Fade('menu'+currentMenu, { duration:0.5 });
-    menuToggle(currentMenu);
-    currentMenu = -1;
-  }
-  activated = false;
-}
-
-function menuToggle(id) {
-  if (currentMenu > 0) {
-    //  hay un menú activo distinto del actual, desactivarlo y activar el nuevo
-    if (currentMenu != id) {
-      $('menu_image'+currentMenu).src = media_url + 'images/menu_off.png';
-//       Element.hide('menu'+currentMenu);
-      Effect.Fade('menu'+currentMenu, { duration:0.5 });
-      $('menu_image'+id).src = media_url + 'images/menu_on.png';
-//       Element.show('menu'+id);
-      Effect.Appear('menu'+id, { duration:0.5 });
-      currentMenu = id;
-      activated = true;
-    }
-    //  hay un menu activo y es el actual, desactivarlo
-    else {
-//       Element.hide('menu'+currentMenu);
-      Effect.Fade('menu'+currentMenu, { duration:0.5 });
-      $('menu_image'+currentMenu).src = media_url + 'images/menu_off.png';
-      currentMenu = -1;
-      activated = true;
-    }
-  } else {
-    // no hay menu activo, activar actual
-//     Element.show('menu'+id);
-    Effect.Appear('menu'+id, { duration:0.5 });
-    $('menu_image'+id).src = media_url + 'images/menu_on.png';
-    currentMenu = id;
-    activated = true;
-  }
-}
-
-function reportComic(id) {
-	var url = url_report;
-	Element.show('working'+id);
-	var params = {'id':id}
-	new Ajax.Request(url, {
-		method: 'post',
-		parameters: params,
-		onSuccess: function(response) {
-			Element.hide('working'+id);
-			Element.hide('workingerror'+id);
-			Element.show('tick'+id);
-			setTimeout("Effect.Fade('tick"+id+"')", 10000)
-		},
-		onFailure: function(response) {
-			Element.hide('working'+id);
-			Element.show('workingerror'+id);
-		}
-	});
-}
-
-function removeComicLink(id) {
-	if(unread_list[id]) {
-		mark_as_read(id);
-	}
-	var url = url_remove;
-	var params = {'id':id}
-	new Ajax.Request(url, {
-		method: 'post',
-		parameters: params,
-		onSuccess: function(response) {
-			//quitarlo el comic de la principal
-			e = $('c_'+id);
-			mover_a = e.next();
-			if (mover_a == null) {
-				mover_a = e.previous();
-			}
-			e.hide();
-			e.remove();
-			//quitarlo de las columnas del menu
-			e = $('nav_unread_li_' + id);
-			if(e) { e.remove(); }
-			e = $('nav_all_li_' + id);
-			e.remove();
-			//quitarlo de las listas
-			unread_list[id] = false;
-			read_list[id] = false;
-			if ($('comics').childElements().length == 0) { $('no_comics').show(); }
-			else { mover_a.scrollTo(); }
-			if(count==0) { $("no_unread_notice").show(); }
-		},
-		onFailure: function(response) {
-		}
-	});
-}
-
-// **************
-// menú rápido de comics
-// **************
-
-function ir_a(id, hidden) {
-	e = $('c_' + id);
-	if (!e.visible()) {
-		o = {
-			"id":'img_read' + id,
-			"img":new Image(),
-			"url":comics[id].url,
-			"cb":"$('c_" + id + "').scrollTo()",
-		};
-		loadimgobj(o);
-	}
-	e.show();
-	e.scrollTo();
-	e = $('no_unread_notice');
-	if(e) {
-		e.hide();
-	}
-}
-
-function mark_all() {
-	Element.show('loading_img');
-	for(var i=0; i < unread_list.length; i++)
-	{
-		var item = unread_list[i];
-		if (item) { mark_as_read(item.substring(5)); }
-	}
-	Element.show('mark_all_tick');
-	Element.hide('loading_img');
-}
-
-var jump_status = 'show_unread';
-
-function show_all()
-{
-	Element.show('nav_all');
-	Element.hide('nav_unread');
-	jump_status = 'show_all';
-	Element.hide('showing_unread');
-	Element.show('showing_all');
-}
-
-function show_unread()
-{
-	Element.hide('nav_all');
-	Element.show('nav_unread');
-	jump_status = 'show_unread';
-	Element.show('showing_unread');
-	Element.hide('showing_all');
-}
-
-function balanceColumns(remove_id) {
-//   alert('max='+items_per_column);
-//   alert($('nav_all'));
-	li_to_remove = $('nav_unread_li_' + remove_id );
-	column = li_to_remove.parentNode;
-  //quitar el li a borrar
-	column.removeChild(li_to_remove);
-	balanceColumnsAux(column);
-}
-
-function balanceColumnsAux(column) {
-  //si hay siguiente columna podemos robar
-	if (column.nextSiblings().length > 0) {
-    //siguiente columna
-		next_column = column.nextSiblings()[0];
-    //si hay elementos podemos robar
-		if(next_column.childElements().length > 0) {
-      //primer elemento de la siguiente columna
-			li_to_steal = next_column.childElements()[0];
-      //lo quitamos
-			next_column.removeChild(li_to_steal);
-      //lo metemos al final de nuestra columna
-			column.appendChild(li_to_steal);
-			balanceColumnsAux(next_column);
-		}
-	}
-}
-
-// **************
-// avisos
-// **************
-
-function hide_new_comics()
-{
-	var url = url_hide_new_comics;
-	new Ajax.Request(url, {
-		method: 'post',
-		onSuccess: function(response) {
-			Effect.toggle('new_comics_notice');
-		},
-		onFailure: function(response) {
-		}
-	});
-}
-
-function hide_new_blogs()
-{
-	var url = url_hide_new_blogs;
-	new Ajax.Request(url, {
-		method: 'post',
-		onSuccess: function(response) {
-			Effect.toggle('new_blogs_notice');
-		},
-		onFailure: function(response) {
-		}
-	});
-}
-
-function forget_new_comics()
-{
-	var url = url_forget_new_comics_quick;
-	new Ajax.Request(url, {
-		method: 'post',
-		onSuccess: function(response) {
-			Effect.toggle('new_comics_notice');
-		},
-		onFailure: function(response) {
-		}
-	});
-}
-
-// **************
-// auxiliares
-// **************
-
-function updateTitle() {
-	if(count>0) {
-		document.title = title + ' (' + count + ')';
-	} else {
-		document.title = title;
-	}
-}
-
-function updateNavCount() {
-	if(count>0) {
-		$('navcount').innerHTML = count;
-		Element.show('navunread');
-	} else {
-		$('navcount').innerHTML = "";
-		Element.hide('navunread');
-	}
-}
-
-// **************
-// opciones de cada comic
-// **************
-
-function rate(id, val)
-{
-	Element.show('working'+id);
-	var url = url_rate;
-	var params = {'id': id, 'value':val}
-	new Ajax.Request(url, {
-		method: 'post',
-		parameters: params,
-		onSuccess: function(transport) {
-			if(transport.status == 0) {
-				Element.hide('working'+id);
-				Element.show('workingerror'+id);
+function updateViewport(loadImages) {
+	if (sync) return;
+	sync = true;
+	//número de comics extras por debajo
+	end = 2;
+	viewp = false;
+	vmin = document.viewport.getScrollOffsets()['top'];
+	vmax = vmin + document.viewport.getHeight();
+	cdivInView = new Array();
+	for (var i = 0, len = divlist.length; i < len && end>0; ++i) {
+		cdiv = divlist[i];
+		// solo afecta a elementos visibles
+		if (cdiv.visible()) {
+			if (inViewport(cdiv, vmin, vmax)) {
+				cdivInView.push(cdiv);
+				if (loadImages) {
+					comic = comics[cdiv.id.substring(1)];
+					_loadComic(comic, false);
+				}
+				viewp = true;
 			} else {
-				mark_as_read(id);
-				Element.hide('sel'+id);
-				Element.hide('working'+id);
-				Element.hide('workingerror'+id);
+				if (viewp) {
+					cdivInView.push(cdiv);
+					if (loadImages) {
+						comic = comics[cdiv.id.substring(1)];
+						_loadComic(comic, false);
+					}
+					end -= 1;
+				}
 			}
-		},
-		onFailure: function(transport) {
-			Element.hide('working'+id);
-			Element.show('workingerror'+id);
 		}
-	});
+	}
+	sync = false;
+//	 $('branding').innerHTML="";
+//	 cdivInView.each(function(item){$('branding').innerHTML+=item.id+" "})
 }
 
-function mark_as_read(id)
-{
-	var url = url_mark_as_read;
-	var params = {'id': id}
-	Element.show('working'+id);
-	new Ajax.Request(url, {
+function inViewport(cdiv, vmin, vmax) {
+	emin = cdiv.cumulativeOffset()['top'];
+	h = cdiv.getHeight();
+	emax = emin + h;
+	c1 = emin <= vmin && emax >= vmax; //sobresale del viewport
+	c2 = emin >= vmin && emin <= vmax; //el borde inferior esta dentro
+	c3 = emax >= vmin && emax <= vmax; //el borde superior esta dentro
+	if (c1 || c2 || c3) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/* AJAX */
+
+function markread(id, vote) {
+	var params = {'id': id, 'value':vote };
+	Element.show('working' + id);
+	Element.hide('workingerror'+id);
+	new Ajax.Request(url_mark_as_read, {
 		method: 'post',
 		parameters: params,
 		onSuccess: function(transport) {
 			if(transport.status == 0) {
+				//Error
 				Element.hide('working'+id);
 				Element.show('workingerror'+id);
 			} else {
 				ret = transport.responseText;
-				if (ret==0)
-				{
+				if (ret==0) {
 					Element.hide('working'+id);
 					Element.hide('workingerror'+id);
-					Element.show('mark_'+id); //muestra tick
-					Element.hide('nav_all_no_'+id); //oculta numero en barra navegacion
-					Element.hide('nav_unread_no_'+id); //oculta numero en barra navegacion
-					$('nav_all_no_'+id).parentNode.className = ""; //quita la negrita del nombre del comic en navegacion
-					Element.hide('new_'+id);  //oculta cartel nuevo en titulo del comic
-					Element.show('done_read'+id); //muestra cartel leido
-					Element.hide('mark'+id); //oculta enlace para marcar como leido
-					Element.hide('sel'+id); //oculta votacion
-					read_list[id] = 'read_'+id; //añade el comic a la lista de leidos
-					unread_list[id] = undefined; //quita el comic de la lista de no leidos
-					balanceColumns(id); //quitar el comic de la lista sin leer
-					count--; //restar el contador de comics sin leer
-					updateTitle();
-					updateNavCount();
-					if(count<1) {
-						Element.hide('mark_all');
-					}
+					Element.hide('reading'+id);
+					Element.hide('newnotice'+id);
+					Element.show('ok'+id);
+					setTimeout("Element.hide('ok" + id + "')", 5000);
+					unreadCounter--;
+					unreadComics[id] = false;
+					updateCounters();
 				}
-				else
-				{
+				else {
+					//Error
 					Element.hide('working'+id);
 					Element.show('workingerror'+id);
 				}
 			}
 		},
 		onFailure: function(transport) {
+			//Error
 			Element.hide('working'+id);
 			Element.show('workingerror'+id);
 		},
 		onException: function(req, exc) {
+			//Error
 			Element.hide('working'+id);
 			Element.show('workingerror'+id);
 		}
 	});
 }
 
-function toggle_tagging(id) {
-	Element.toggle('tags_'+id);
-	Element.toggle('showtags'+id);
-	Element.toggle('hidetags'+id);
-}
-
-function save_tags(id) {
-	Element.show('saving_tags_'+id);
-	var url = url_save_tags;
-	var tags = $('user_tags_'+id).value
-	var params = {'id': id, 'tags':tags}
-	new Ajax.Request(url, {
+function reportbroken(id) {
+	var chids = Array();
+	list = comics[id].list
+	list.each(function(item){ chids.push(item.chid); });
+	params = {'id':id, 'chids[]':chids};
+	Element.show('working' + id);
+	Element.hide('workingerror'+id);
+	new Ajax.Request(url_report, {
 		method: 'post',
 		parameters: params,
-		onSuccess: function(response) {
-			ret = response.responseText;
-			$('tagging_'+id).innerHTML = ret;
-			Element.show('saved_'+id);
-			Element.show('tags_'+id);
-			Element.hide('saving_tags_'+id);
+		onSuccess: function(transport) {
+			if(transport.status == 0) {
+				//Error
+				Element.hide('working'+id);
+				Element.show('workingerror'+id);
+			} else {
+				ret = transport.responseText;
+				if (ret==0) {
+					Element.hide('working'+id);
+					Element.hide('workingerror'+id);
+					Element.show('ok'+id);
+					setTimeout("Element.hide('ok" + id + "')", 5000);
+				}
+				else {
+					//Error
+					Element.hide('working'+id);
+					Element.show('workingerror'+id);
+				}
+			}
 		},
-		onFailure: function(response) {
-			$('tagging_'+id).innerHTML = response.responseText;
+		onFailure: function(transport) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+		},
+		onException: function(req, exc) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
 		}
 	});
 }
 
-function reloadimgs(id) {
-	mostrar_opciones(id);
-	list = comics[id].list;
-	if(list.length > 0) {
-		for (i=0; i<list.length; i++) {
-			item = window['item'+list[i].id];
-			actual_no += 1;
-			url = item.url + '?' + (new Date()).getTime();
-			loadimage2('img_unread'+item.id, item.cid, new Image(), url);
-		}
+function removecomic(id) {
+	if(unreadComics[id]) {
+		markread(id, 0);
 	}
+	var params = {'id':id}
+	Element.show('working' + id);
+	new Ajax.Request(url_remove, {
+		method: 'post',
+		parameters: params,
+		onSuccess: function(transport) {
+			if (transport.status == 0) {
+				//Error
+				Element.hide('working'+id);
+				Element.show('workingerror'+id);
+				console.log("Error removing comic: no status 200");
+			} else if (transport.status == 200) {
+				//quitar el comic de la principal
+				cdiv = $('c'+id);
+				//siguiente div hermano
+				mover_a = cdiv.next();
+				//buscamos uno que sea visible ahora mismo
+				while(mover_a != null && !mover_a.visible()) {
+					mover_a = mover_a.next();
+				}
+				if (mover_a == null) {
+					//no hay siguiente, pues anterior
+					mover_a = cdiv.previous();
+					//buscamos uno que sea visible ahora mismo
+					while(mover_a != null && !mover_a.visible()) {
+						mover_a = mover_a.previous();
+					}
+				}
+				//ocultar el div y quitarlo del dom
+				cdiv.hide();
+				cdiv.remove();
+				//quitarlo de las listas
+				comics[id] = null;
+				//no quedan comics en la lista, mostrar aviso
+				if ($('comics').childElements().length == 0) {
+					$('noComicsSelected').show();
+				}
+				else {
+					mover_a.scrollToExtra(-40);
+				}
+				//actualizar contadores
+				comicCounter -= 1;
+				updateCounters();
+			}
+		},
+		onFailure: function(transport) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+			console.log("Error removing comic: failure");
+		},
+		onException: function(req, exc) {
+			//Error
+			Element.hide('working'+id);
+			Element.show('workingerror'+id);
+			console.log("Error removing comic: exception: " + exc);
+		}
+	});
 }
-
-function hidereloading(id) { if (actual_no == 0) { $('reloading' + id).hide(); } }
+function mark_all_read(){
+	$("mark_all_read_anim").show();
+	new Ajax.Request(url_mark_all_read, {
+		onSuccess: function() {
+			$("mark_all_read_anim").hide();
+			//update counters and arrays
+			unreadCounter = 0;
+			updateCounters();
+			for(var i = 0;i < unreadComics.length; i++){ unreadComics[i] = false; }
+			//now we hide every comic
+			showUnreadComics();
+			//hide link to mark all read
+			$("mark_all_read").hide();
+		},
+		onFailure: function() {
+			$("mark_all_read_anim").hide();
+		}
+	});
+}

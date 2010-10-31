@@ -2,7 +2,7 @@
 {% load i18n %}
 <!-- {% block title %}{% trans 'Read' %} -{% endblock %} -->
 {% block extra_head %}
-		<script src="{{ mediaurl }}js/v2010/read.js" type="text/javascript"></script>
+		<script src="{{ mediaurl }}js/read.js" type="text/javascript"></script>
 {% endblock%}
 {% block onload %}onReadLoad();{% endblock %}
 {% block content %}
@@ -50,10 +50,10 @@
 		{% else %}
 			{% for unread in unreadlist %}
 			{%  ifchanged %}<h5>{{ unread.history.date|date:"d F Y" }}</h5>{% endifchanged %}
-			<img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/v2010/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
+			<img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/><br/>
 			{% empty %}
 			<h5>{{ comic.last_check|date:"d F Y" }}</h5>
-			<img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/v2010/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
+			<img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/>
 			{% endfor %}
 		{% endif %}
 		</div>
