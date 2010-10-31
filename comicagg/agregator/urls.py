@@ -6,7 +6,7 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^$', 'read_view', name='read_index'),
 	url(r'^read/$', 'read_view', name='read'),
 	url(r'^organize/forget/$', 'forget_new_comics', name='forget_new_comics'),
-	url(r'^organize/add/$', 'organize', {'add':True}, name='organize_add'),
+	url(r'^add/$', 'organize', {'add':True}, name='organize_add'),
 	url(r'^organize/$', 'organize', name='organize'),
 	url(r'^organize/(?P<tag>.*)/', 'organize', name='configure_with_tags'),
 

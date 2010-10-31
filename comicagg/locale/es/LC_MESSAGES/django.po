@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-31 18:28+0100\n"
-"PO-Revision-Date: 2010-10-31 13:20+0100\n"
+"POT-Creation-Date: 2010-10-31 22:54+0100\n"
+"PO-Revision-Date: 2010-10-31 22:56+0100\n"
 "Last-Translator: Jesús Fernández <jesusfs@gmail.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -78,7 +78,7 @@ msgstr "Guardado =)"
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/views.py:675
+#: agregator/views.py:687
 #, python-format
 msgid "Invalid distribution algorithm specified: %s."
 msgstr "Algoritmo de distribución inválido: %s."
@@ -113,31 +113,31 @@ msgstr ""
 "Parece que el servidor está teniendo algún problema ahora mismo. Inténtalo "
 "de nuevo dentro de un rato."
 
-#: templates/base.html:47
+#: templates/base.html:48
 msgid "news"
 msgstr "noticias"
 
-#: templates/base.html:47
+#: templates/base.html:48
 msgid "admin"
 msgstr "admin"
 
-#: templates/base.html:47
+#: templates/base.html:48
 msgid "logout"
 msgstr "salir"
 
-#: templates/base.html:50
+#: templates/base.html:51
 msgid "read"
 msgstr "lee"
 
-#: templates/base.html:50
+#: templates/base.html:51
 msgid "choose"
 msgstr "elige"
 
-#: templates/base.html:50
+#: templates/base.html:51
 msgid "organize"
 msgstr "organiza"
 
-#: templates/base.html:50
+#: templates/base.html:51
 msgid "request"
 msgstr "solicita"
 
@@ -205,7 +205,6 @@ msgstr ""
 "el número máximo de columnas."
 
 #: templates/accounts/account.html:27
-#: templates/agregator/organize_organize.html:36
 msgid "Save"
 msgstr "Guardar"
 
@@ -650,31 +649,35 @@ msgstr "Elegir"
 msgid "Add comics"
 msgstr "Añadir comics"
 
-#: templates/agregator/organize_add.html:25
+#: templates/agregator/organize_add.html:24
+msgid "Click on a comic to add or remove it."
+msgstr "Haz click en un comic para añadirlo o quitarlo."
+
+#: templates/agregator/organize_add.html:26
 msgid "Hover over a comic to see details."
 msgstr "Pasa por encima de un comic para ver detalles."
 
-#: templates/agregator/organize_add.html:29
+#: templates/agregator/organize_add.html:30
 msgid "New comic!"
 msgstr "¡Nuevo!"
 
-#: templates/agregator/organize_add.html:30
+#: templates/agregator/organize_add.html:31
 msgid "Score"
 msgstr "Puntuación"
 
-#: templates/agregator/organize_add.html:30
+#: templates/agregator/organize_add.html:31
 msgid "votes"
 msgstr "votos"
 
-#: templates/agregator/organize_add.html:30
+#: templates/agregator/organize_add.html:31
 msgid "readers"
 msgstr "lectores"
 
-#: templates/agregator/organize_add.html:31
+#: templates/agregator/organize_add.html:32
 msgid "Link to its website"
 msgstr "Enlace a su web"
 
-#: templates/agregator/organize_add.html:36
+#: templates/agregator/organize_add.html:37
 msgid ""
 "<b>Warning!</b> Instead of showing the images of this comic, you will see a "
 "link to its website when the comic updates."
@@ -682,23 +685,23 @@ msgstr ""
 "<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en "
 "lace a su página web cuando se actualice."
 
-#: templates/agregator/organize_add.html:41
+#: templates/agregator/organize_add.html:42
 msgid "Show:"
 msgstr "Ver:"
 
-#: templates/agregator/organize_add.html:41
+#: templates/agregator/organize_add.html:42
 msgid "all"
 msgstr "todos"
 
-#: templates/agregator/organize_add.html:41
+#: templates/agregator/organize_add.html:42
 msgid "new"
 msgstr "nuevos"
 
-#: templates/agregator/organize_add.html:41
+#: templates/agregator/organize_add.html:42
 msgid "added"
 msgstr "añadidos"
 
-#: templates/agregator/organize_add.html:46
+#: templates/agregator/organize_add.html:47
 msgid "You won't see the images of this comic"
 msgstr "No verás las imágenes de este comic."
 
@@ -722,25 +725,21 @@ msgstr ""
 "Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
 "Ctrl/Meta) y múevelos."
 
-#: templates/agregator/organize_organize.html:40
-msgid "Saving..."
-msgstr "Guardando..."
+#: templates/agregator/organize_organize.html:37
+msgid "retry"
+msgstr "intentar de nuevo"
 
-#: templates/agregator/organize_organize.html:46
+#: templates/agregator/organize_organize.html:41
 msgid "Sort them:"
 msgstr "Ordenar por:"
 
-#: templates/agregator/organize_organize.html:47
+#: templates/agregator/organize_organize.html:42
 msgid "by name"
 msgstr "por nombre"
 
-#: templates/agregator/organize_organize.html:48
+#: templates/agregator/organize_organize.html:43
 msgid "by score"
 msgstr "por puntuación"
-
-#: templates/agregator/organize_organize.html:49
-msgid "how it was saved"
-msgstr "como está guardado"
 
 #: templates/agregator/read.html:3 templates/agregator/read.html.py:10
 msgid "Read"
@@ -913,6 +912,12 @@ msgstr "Todos los posts"
 #: templates/blog/side.html:3
 msgid "Recent posts"
 msgstr "Posts recientes"
+
+#~ msgid "Saving..."
+#~ msgstr "Guardando..."
+
+#~ msgid "how it was saved"
+#~ msgstr "como está guardado"
 
 #~ msgid "Not Found"
 #~ msgstr "No encontrado"

@@ -331,6 +331,10 @@ button:hover {
 	vertical-align:middle;
 }
 
+#organize p, #add > p {
+    margin:0 0 1em 2em;
+}
+
 /************/
 /* Add page */
 /************/
