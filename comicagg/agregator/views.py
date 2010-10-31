@@ -469,6 +469,18 @@ def remove_comic(request):
 		return HttpResponse('0')
 	raise Http404
 
+@login_required
+def remove_comic_list(request):
+    if request.POST:
+        try:
+            ids = request.POST['ids'].split(",")
+        except:
+            raise Http404
+        s = request.user.subscription_set.filter(comic__id__in=ids)
+        s.delete()
+        return HttpResponse('0')
+    raise Http404
+
 def stats(request):
 	"""
 	Genera una página de estadísticas para cada comic ordenada según la puntuación de cada comic

@@ -31,22 +31,16 @@ dojo.addOnLoad(initDND);
         <p>{% trans "Drop comics here<br/>to delete them" %}</p>
     </div>
     <p>{% trans "Here you can sort your comics. Just select one or some of them (holding the Ctrl/Meta key) and drag them around." %}</p>
-    <div class="save" onclick="save_organize()">
-        <img src="{{ mediaurl }}images/save24.png" alt="save"/>
-        <span id="save_text">{% trans "Save" %}&nbsp;
-            <img id="saved_ok" style="display:none" src="{{ mediaurl }}images/ok16.png" alt=""/>
-            <img id="save_error" style="display:none" src="{{ mediaurl }}images/remove.png" alt=""/>
-        </span>
-        <span id="saving_text" style="display:none">{% trans "Saving..." %}&nbsp;
-            <img src="{{ mediaurl }}images/loaderarrows.gif" alt=""/>
-        </span>
+    <div class="save">
+        <span id="saved" style="display:none"><img src="{{ mediaurl }}images/ok16.png" alt=""/></span>
+        <span id="saving_text" style="display:none"><img src="{{ mediaurl }}images/loaderarrows.gif" alt=""/></span>
+        <span id="save_error" style="display:none"><img src="{{ mediaurl }}images/remove.png" alt=""/> <span style="font-size:smaller"><a onclick="save()">({% trans "retry" %})</a></span></span>
     </div>
     <div class="text_center">
     {% spaceless %}
         {% trans "Sort them:" %}&nbsp;
         <a onclick="sort_items(true)">{% trans "by name" %}</a>,&nbsp;
-        <a onclick="sort_items(false)">{% trans "by score" %}</a>,&nbsp;
-        <a onclick="revert()">{% trans "how it was saved" %}</a>.
+        <a onclick="sort_items(false)">{% trans "by score" %}</a>.
     {% endspaceless %}
     </div>
     <div class="comic_list">

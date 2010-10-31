@@ -327,24 +327,8 @@ button:hover {
 	float:left;
 	cursor:pointer;
 }
-#organize .save:hover {
-	color:#6b98b5;
-	background:#efefef;
-}
-#organize .save {
+#organize .save img {
 	vertical-align:middle;
-}
-#organize .save_button {
-	width:auto;
-	background:#96d25a;
-	border:2px solid gray;
-	line-height:16px;
-}
-#organize .save_button:hover {
-	width:auto;
-	background:white;/*#8ec755;*/
-	float:left;
-	cursor:pointer;
 }
 
 /************/

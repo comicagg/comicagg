@@ -31,6 +31,7 @@ urlpatterns = patterns('comicagg.agregator.views',
 
 	url(r'^ajax/add_comic/$', 'add_comic', name='add_comic_ajax'),
 	url(r'^ajax/remove_comic/$', 'remove_comic', name='remove_comic_ajax'),
+    url(r'^ajax/remove_comic_list/$', 'remove_comic_list', name='ajax_remove_comic_list'),
 	url(r'^ajax/report_comic/$', 'report_comic', name='report_comic'),
 
 	url(r'^ajax/organize/quickforget/$', 'forget_new_comics', name='forget_new_comics_quick', kwargs={'quick':True}),

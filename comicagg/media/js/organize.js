@@ -1,66 +1,40 @@
 // Configure
-function save_organize() {
-    items = $('user_comics').select('.dojoDndItem');
-    items_o = new Array();
-    for (var i = 0, len = items.length; i < len; i++) {
-        id = items[i].getAttribute('comicid');
-        items_o.push(usercomics_id[id]);
-    }
-    newcomics = items_o;
-    save();
-}
-
 function save() {
-    var ids = "";
-    for (var i = 0, len = newcomics.length; i < len; i++) {
-        ids += newcomics[i].id;
-        if (i < len - 1) { ids += ","; }
+    items = $('user_comics').select('.dojoDndItem');
+    var ids = items[0].getAttribute('comicid');
+    for (var i = 1, len = items.length; i < len; i++) {
+        ids += "," + items[i].getAttribute('comicid');
     }
-    var idsr = "";
-    for (var i = 0, len = removedcomics.length; i < len; i++) {
-        idsr += removedcomics[i].id;
-        if (i < len - 1) { idsr += ","; }
-    }
-    $('save_error').hide();
-    $('save_text').hide();
     $('saving_text').show();
-    $('saved_ok').hide();
-    var params = {'selected': ids, 'removed':idsr};
-    tmp = params;
+    $('save_error').hide();
+    $('saved').hide();
+    var params = {'selected': ids};
     new Ajax.Request(url_save_selection, {
         method: 'post',
         parameters: params,
         onSuccess: function(response) {
-            if (response.status = 200) {
-                $('save_text').show();
-                $('saved_ok').show();
+            if (response.status == 200) {
+                $('saved').show();
                 $('saving_text').hide();
-                $('save_error').hide();
-                usercomics = newcomics.clone();
-                var i = setTimeout(function(){$('saved_ok').hide();}, 6000);
+                var i = setTimeout(function(){$('saved').hide();}, 6000);
             } else {
-                $('save_text').show();
+                $('saved').hide();
                 $('save_error').show();
                 $('saving_text').hide();
-                $('saved_ok').hide();
             }
         },
         onFailure: function(response) {
-            $('save_text').show();
+            $('saved').hide();
             $('save_error').show();
             $('saving_text').hide();
-            $('saved_ok').hide();
         }
     });
-}
-function revert() {
-    newcomics = usercomics.clone();
-    setNewList(convertNodes());
 }
 function sort_items(az) {
     if (az) { newcomics.sort(_sort_az); }
     else { newcomics.sort(_sort_score); }
     setNewList(convertNodes());
+    save();
 }
 function setNewList(is){
     dojo_usercomics.selectAll();
@@ -99,13 +73,8 @@ function etoString(e) {
     var s = e.name;
     s += " " + e.score + "%";
     s += " " + e.votes + "v";
-//   n = elem.select('.new_comic')[0];
-//   if(n) { s += " @new"; }
     return s.toLowerCase();
 }
-
-//borrar esta variable
-var tmp;
 
 var dojo_usercomics;
 
@@ -121,36 +90,53 @@ function convertNodes() {
     return nodes;
 }
 
-//recibe una lista de nodos a borrar, saca el id del comic de cada nodo
-//elimina los comic de la lista newcomics y compacta la lista
-function dndRemoveComics(nodes) {
-    var tmp = new Array();
-    for (var i = 0; i < nodes.length; i++) {
-        tmp[i] = parseInt(nodes[i].getAttribute('comicid'));
-    }
-    for (var i = 0, len = newcomics.length; i < len; i++) {
-        if (tmp.indexOf(newcomics[i].id) > -1) {
-            removedcomics.push(newcomics[i]);
-            newcomics[i] = null;
-        }
-    }
-    newcomics = newcomics.compact();
-}
 function initDND() {
     dojo_usercomics = new dojo.dnd.Source("user_comics", {
         horizontal:true,
     });
+    //save the list when comics are moved within the list
+    dojo.connect(dojo_usercomics, "onDropInternal", function(nodes, copy) {
+        save();
+    });
     //insert nodes in dojo dnd
     dojo_usercomics.insertNodes(false, convertNodes());
-    //iniciar la papelera
+    //init the trash
     var trash = new dojo.dnd.Target("trash");
+    //do something when comics are dropped in the trash
     dojo.connect(trash, "onDropExternal", function(source, nodes, copy) {
-        dndRemoveComics(nodes);
+        $('saving_text').show();
+        $('save_error').hide();
+        $('saved').hide();
         trash.selectAll();
         trash.deleteSelectedNodes();
         trash.clearItems();
+        ids = nodes[0].getAttribute('comicid');
+        for (var i = 1; i < nodes.length; i++) {
+            ids += "," + nodes[i].getAttribute('comicid');
+        }
+        var params = {'ids': ids};
+        new Ajax.Request(url_remove_list, {
+            method: 'post',
+            parameters: params,
+            onSuccess: function(response) {
+                if (response.status == 200) {
+                    $('saved').show();
+                    $('saving_text').hide();
+                    var i = setTimeout(function(){$('saved').hide();}, 6000);
+                } else {
+                    $('saved').hide();
+                    $('save_error').show();
+                    $('saving_text').hide();
+                }
+            },
+            onFailure: function(response) {
+                $('saved').hide();
+                $('save_error').show();
+                $('saving_text').hide();
+            }
+        });
     });
-    //texto que sale al arrastrar
+    //change the text that appears while dragging
     dojo.dnd.Avatar.prototype._generateText = function(){
         return (this.manager.nodes.length + " comic" +
             (this.manager.nodes.length != 1 ? "s" : ""));
