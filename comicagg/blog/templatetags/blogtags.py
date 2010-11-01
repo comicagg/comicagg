@@ -8,4 +8,6 @@ register = template.Library()
 
 @register.filter()
 def new(value, arg):
-  return is_new_for(value, arg)
+    """Returns whether a news item is new for a user or not.
+    """
+    return is_new_for(value, arg)

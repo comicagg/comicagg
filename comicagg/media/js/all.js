@@ -32,7 +32,11 @@ function removeComicId(array, comicid) {
 function forget_new_posts() {
     startRequest(url_forget_new_blogs, {
         method: 'post',
-        onSuccess: function (response) {},
+        onSuccess: function (response) {
+            if (response.status === 200) {
+                $("menuNewNewsCounter").innerHTML = "";
+            }
+        },
         onFailure: function (response) {}
     });
 }

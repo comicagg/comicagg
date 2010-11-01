@@ -29,8 +29,8 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^add_comic/(?P<comic_id>\d+)/random/$', 'add_comic', {"next":"read"}, name='add_comic_random'),
 	url(r'^random_comic/$', 'random_comic_view', name='random_comic'),
 
-	url(r'^ajax/add_comic/$', 'add_comic', name='add_comic_ajax'),
-	url(r'^ajax/remove_comic/$', 'remove_comic', name='remove_comic_ajax'),
+	url(r'^ajax/add_comic/$', 'add_comic', name='ajax_add_comic'), #checked
+	url(r'^ajax/remove_comic/$', 'remove_comic', name='ajax_remove_comic'), #checked
     url(r'^ajax/remove_comic_list/$', 'remove_comic_list', name='ajax_remove_comic_list'),
 	url(r'^ajax/report_comic/$', 'report_comic', name='report_comic'),
 
@@ -40,8 +40,8 @@ urlpatterns = patterns('comicagg.agregator.views',
 
 	url(r'^ajax/get_tags/$', 'get_tags', name='get_tags'),
 	url(r'^ajax/save_tags/$', 'save_tags', name='save_tags'),
-	url(r'^ajax/mark_read/$', 'mark_read', name='mark_read'),
-	url(r'^ajax/mark_all_read/$', 'mark_all_read', name='mark_all_read'),
+	url(r'^ajax/mark_read/$', 'mark_read', name='ajax_mark_read'), #checked
+	url(r'^ajax/mark_all_read/$', 'mark_all_read', name='ajax_mark_all_read'), #checked
 	url(r'^ajax/rate/$', 'rate_comic', name='rate'),
 
 	url(r'^li/(?P<cid>\d+)/', 'last_image_url', name='aggregator_last_image_url'),

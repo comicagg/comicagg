@@ -2,9 +2,10 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('comicagg.blog.views',
+    #Main view, the last 10 news items
 	url(r'^$', 'index', name='blog_index'),
+	#All the news items
 	url(r'^all/$', 'index', name='blog_archive', kwargs={'archive':True}),
-	url(r'^ajax/hide_new_blogs/$', 'hide_new_blogs', name='hide_new_blogs'),
-	url(r'^ajax/forget_new_blogs/$', 'forget_new_blogs', name='forget_new_blogs'),
-	#url(r'^faq/$', 'view_faq', name='faq'),
+	#Ajax to forget the new news items
+	url(r'^ajax/forget_news/$', 'forget_new_blogs', name='ajax_forget_new_blogs'),
 )

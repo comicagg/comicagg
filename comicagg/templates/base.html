@@ -12,11 +12,11 @@
 		<script src="{{ mediaurl }}js/all.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var titlebase = " Comic Aggregator";
-            var url_add = '{% url add_comic_ajax %}';
-            var url_forget_new_blogs = '{% url forget_new_blogs %}';
-            var url_mark_all_read = '{% url mark_all_read %}';
-            var url_mark_as_read = '{% url mark_read %}';
-            var url_remove = '{% url remove_comic_ajax %}';
+            var url_add = '{% url ajax_add_comic %}';
+            var url_forget_new_blogs = '{% url ajax_forget_new_blogs %}';
+            var url_mark_all_read = '{% url ajax_mark_all_read %}';
+            var url_mark_as_read = '{% url ajax_mark_read %}';
+            var url_remove = '{% url ajax_remove_comic %}';
             var url_remove_list = '{% url ajax_remove_comic_list %}';
             var url_report = '{% url report_comic %}';
             var url_save_selection = '{% url save_selection %}';
