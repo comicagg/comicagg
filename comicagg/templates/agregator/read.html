@@ -10,13 +10,13 @@
 	var titlei18n = "{% trans 'Read' %}";
 	var unreadCounter = {{ unread_count }};
 	var comicCounter = {{ comic_list|length }};
-	var unreadComics = new Array();
-	var comics = new Array();
+	var unreadComics = [];
+	var comics = [];
 {% for comic,unreadlist in unread_list %}
 	unreadComics[{{ comic.id }}] = true;
 {% endfor %}
 {% for comic,unreadlist in comic_list %}
-	tmp = Array();
+	tmp = [];
 	{% if not comic.noimages or perms.agregator.all_images %}
 		{% for unread in unreadlist %}
 	tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.history.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});

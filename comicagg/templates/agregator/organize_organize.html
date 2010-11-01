@@ -6,16 +6,13 @@
         <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.4/dojo/dojo.xd.js" type="text/javascript"></script>
         <script src="{{ mediaurl}}js/organize.js" type="text/javascript"></script>
         <script type="text/javascript">
-var usercomics = new Array();
-var usercomics_id = new Array();
+var usercomics = [];
+var usercomics_id = [];
 {% for comic in user_comics %}
     a = {'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':{{ comic.getRating|perc:8 }}, 'votes':{{ comic.votes }}};
     usercomics.push(a);
     usercomics_id[{{ comic.id }}] = a;
 {% endfor %}
-var newcomics = usercomics.clone();
-var removedcomics = new Array();
-var addedcomics = new Array();
 dojo.require("dojo.dnd.Container");
 dojo.require("dojo.dnd.Manager");
 dojo.require("dojo.dnd.Source");
