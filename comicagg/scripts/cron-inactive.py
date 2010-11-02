@@ -16,6 +16,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
 from comicagg.agregator.models import *
 from django.contrib.auth.models import User
+from django.conf import settings
 
 starttime = datetime.now()
 if len(sys.argv) > 1:
@@ -23,7 +24,7 @@ if len(sys.argv) > 1:
     users = User.objects.order_by('id').filter(id__gte = uid).filter(is_active__exact=1)
 else:
     users = User.objects.filter(is_active__exact=1)
-limit = datetime.today() - timedelta(20)
+limit = datetime.today() - timedelta(settings.INACTIVE_DAYS)
 for user in users:
     now = datetime.now()-starttime
     if now.seconds > 3000:

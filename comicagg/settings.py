@@ -104,6 +104,8 @@ AUTH_PROFILE_MODULE = "accounts.userprofile"
 
 TAG_CLOUD_NUMBER = 1
 
+INACTIVE_DAYS = 20
+
 EMAIL_HOST = 'mail.proyectoanonimo.com'
 EMAIL_HOST_USER = 'robot+comicagg.com'
 EMAIL_HOST_PASSWORD = 'robot%%'

@@ -5,7 +5,7 @@
 {% block onload %}{% endblock %}
 {% block content %}
 <div class="box">
-    <p>{% trans "Your account was inactivated because you didn't read your comics for 45 days. You can reactivate it here." %}</p>
+    <p>{% blocktrans with settings.INACTIVE_DAYS as days %}Your account was inactivated because you didn't read your comics for {{ days }} days. You can reactivate it here.{% endblocktrans %}</p>
     <form method="post" action="{% url accounts_activate %}">
         <input type="hidden" name="activate" value="1"/>
         <input type="submit" value="{% trans "Reactivate" %}"/>
