@@ -17,11 +17,7 @@
 {% endfor %}
 {% for comic,unreadlist in comic_list %}
 	tmp = [];
-	{% if not comic.noimages or perms.agregator.all_images %}
-		{% for unread in unreadlist %}
-	tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.history.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});
-		{% endfor %}
-	{% endif %}
+	{% if not comic.noimages or perms.agregator.all_images %}{% for unread in unreadlist %}tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.history.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});{% endfor %}{% endif %}
 	c = {"name":"{{ comic.name}}", "id":{{ comic.id }}, {% if not comic.noimages or perms.agregator.all_images %}"last_url":"{{ comic.get_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false,};
 	comics[{{ comic.id }}] = c;
 {% endfor %}
@@ -36,8 +32,8 @@
 		{% endif %}
 		<p class="info" id="unreadCounters">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="unreadCountersTotal">{{ len }}</b> comics and <b id="unreadCountersUnread">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
 		<p class="info" id="noUnreadCounters" style="display:none">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="noUnreadCountersTotal">{{ len }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
-		<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a href="#" onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>
-		<p class="info" id="showingAll" style="display:none">{% blocktrans %}Showing <b>all</b> comics. <a href="#" onclick="showUnreadComics()">Click here</a> to show only unread comics.{% endblocktrans %}</p>
+		<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>
+		<p class="info" id="showingAll" style="display:none">{% blocktrans %}Showing <b>all</b> comics. <a onclick="showUnreadComics()">Click here</a> to show only unread comics.{% endblocktrans %}</p>
 	</div>
 	<div id="comics">
 	{% for comic,unreadlist in comic_list %}

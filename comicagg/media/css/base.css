@@ -66,6 +66,7 @@ button:hover {
 	right:0;
 	top:0;
 	text-shadow:#45545D 1px 1px 1px;
+    z-index:100;
 }
 #head a {
 	color:white;
@@ -230,7 +231,7 @@ button:hover {
 	padding:2px;
 	-moz-border-radius:4pt;
 	-webkit-border-radius:4pt;
-	z-index:-10;
+/* 	z-index:-10; */
 }
 #read .top_info div {
 	text-align:right;
