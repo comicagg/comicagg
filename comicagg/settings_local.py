@@ -24,12 +24,12 @@ MEDIA_ROOT = '%scomicagg/media' % ROOT
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://localhost/media/'
+MEDIA_URL = 'http://mizar-lan/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = 'http://localhost/admin-media/'
+ADMIN_MEDIA_PREFIX = 'http://mizar-lan/admin-media/'
 
 #used for password reset email
 DOMAIN = 'http://localhost:8000'
