@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from comicagg import *
@@ -499,42 +499,52 @@ def last_image_url(request, cid):
     comic = get_object_or_404(Comic, pk=cid)
     url = comic.last_image
     ref = comic.referer
-    md5 = hashlib.md5(url).hexdigest()
-    f = '%s.jpg' % md5
-    dst = os.path.join(settings.MEDIA_ROOT, 'strips', f)
-    ldst = os.path.join(settings.MEDIA_ROOT, 'strips', md5)
-    if not os.path.exists(dst):
-        _download_image(url, ref, dst)
-        os.symlink(dst,ldst)
-    return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + f)
+    return image_url(url, ref)
 
-def history_image_url(request, hid):#TODO
+def history_image_url(request, hid):
     """
     Redirecciona a la url de un objeto comic_history
     """
     ch = get_object_or_404(ComicHistory, pk=hid)
     url = ch.url
     ref = ch.comic.referer
-    md5 = hashlib.md5(url).hexdigest()
-    f = '%s.jpg' % md5
-    dst = os.path.join(settings.MEDIA_ROOT, 'strips', f)
-    ldst = os.path.join(settings.MEDIA_ROOT, 'strips', md5)
-    if not os.path.exists(dst):
-        _download_image(url, ref, dst)
-        os.symlink(dst,ldst)
-    return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + f)
+    return image_url(url, ref)
 
-def _download_image(url, ref, dest):#TODO
+def image_url(url, ref):
+    md5 = hashlib.md5(url).hexdigest()
+    ldst = os.path.join(settings.MEDIA_ROOT, 'strips', md5)
+    dst = ldst
+    if not os.path.exists(ldst):
+        #the link doesnt exist, download the image
+        dst = download_image(url, ref, dst)
+        if dst:
+            #the download went ok, we get the filename back
+            os.symlink(dst, ldst)
+        else:
+            #the download returned None? better return a 500
+            return HttpResponseServerError()
+    return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + md5)
+
+def download_image(url, ref, dest):
     headers = {
         'referer':ref,
         'user-agent':'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.7 Safari/533.2'
     }
     r = urllib2.Request(url, None, headers)
     o = urllib2.urlopen(r)
+    ct = o.info()['Content-Type']
+    if ct.startswith("image/"):
+        #we got an image, thats good
+        ext = ct.replace("image/", "")
+        dest += "." + ext
+    else:
+        #no image mime? not cool
+        return None
 
     f = open(dest, 'w+b')
     f.writelines(o.readlines())
     f.close()
+    return dest
 
 #Funciones auxiliares
 def sort_rate(a,b):
