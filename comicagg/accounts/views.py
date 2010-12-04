@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse
 from django.forms.util import ErrorList
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect
@@ -20,7 +19,7 @@ def index(request):
     if request.user.is_authenticated():
         return redirect('read')
     else:
-        return redirect('login')
+        return redirect('accounts_login')
 
 def logout_view(request):
     logout(request)
@@ -224,8 +223,7 @@ def save_profile(request):
             if nmpc > 0:
                 p.navigation_max_per_column = form.cleaned_data['navigation_max_per_column']
             p.save()
-            # Do form processing here...
-    return HttpResponseRedirect(reverse('saved_profile'))
+    return redirect('saved_profile')
 
 @login_required
 def save_color(request):
