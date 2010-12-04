@@ -6,12 +6,22 @@ TEMPLATE_DEBUG = DEBUG
 
 MAINTENANCE = False
 
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'comicagg'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'comicagg'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'comicagg'         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+ADMINS = (
+    ('esú', 'admin@comicagg.com'),
+)
+
+MANAGERS = ADMINS
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': '',
+        'PORT': '',
+        'NAME': 'comicagg',
+        'USER': 'comicagg',
+        'PASSWORD': 'comicagg',
+    }
+}
 
 # Absolute path to the directory that holds the comicagg folder
 # Example: "/home/media/media.lawrence.com/"
@@ -45,7 +55,7 @@ TEMPLATE_DIRS = (
 #    '%scomicagg/templates/%s' % (ROOT, THEME),
 )
 
-EMAIL_HOST = 'smtp.webfaction.com'
-EMAIL_HOST_USER = 'awesome_comicagg'
-EMAIL_HOST_PASSWORD = 'comicaggmb%'
-DEFAULT_FROM_EMAIL = 'Comic Aggregator Robot <robot@comicagg.com>'
+EMAIL_HOST = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = ''
