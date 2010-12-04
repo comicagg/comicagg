@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-from comicagg.accounts.models import *
-from datetime import datetime, timedelta
+from datetime import datetime
 from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.http import urlquote
-from math import atan, pi, floor, sqrt
-import re, urllib
+from math import atan, sqrt
 
 class Comic(models.Model):
     name = models.CharField('Nombre del comic', max_length=255)
@@ -192,41 +189,41 @@ class ComicHistory(models.Model):
 
 
 class UnreadComic(models.Model):
-  user = models.ForeignKey(User)
-  history = models.ForeignKey(ComicHistory)
-  comic = models.ForeignKey(Comic)
-
-  def __unicode__(self):
-    return u'%s %s' % (self.user, self.history)
-
-  class Meta:
-    ordering = ['user', '-history']
+    user = models.ForeignKey(User)
+    history = models.ForeignKey(ComicHistory)
+    comic = models.ForeignKey(Comic)
+    
+    def __unicode__(self):
+        return u'%s %s' % (self.user, self.history)
+    
+    class Meta:
+        ordering = ['user', '-history']
 
 class Tag(models.Model):
-  user = models.ForeignKey(User)
-  comic = models.ForeignKey(Comic)
-  name = models.CharField(max_length=255)
-
-  def __unicode__(self):
-    return u'%s' % (self.name)
-    #return u'%s  - %s - %s' % (self.name, self.comic, self.user)
-
-  class Meta:
-    ordering = ['name', 'comic']
+    user = models.ForeignKey(User)
+    comic = models.ForeignKey(Comic)
+    name = models.CharField(max_length=255)
+    
+    def __unicode__(self):
+        return u'%s' % (self.name)
+        #return u'%s  - %s - %s' % (self.name, self.comic, self.user)
+    
+    class Meta:
+        ordering = ['name', 'comic']
 
 class NewComic(models.Model):
-  user = models.ForeignKey(User)
-  comic = models.ForeignKey(Comic, related_name="new_comics")
-
-  def __unicode__(self):
-    return u'%s - %s' % (self.user, self.comic)
+    user = models.ForeignKey(User)
+    comic = models.ForeignKey(Comic, related_name="new_comics")
+    
+    def __unicode__(self):
+        return u'%s - %s' % (self.user, self.comic)
 
 class NoMatchException(Exception):
-  def __init__(self, value):
-    self.value = value
-  def __str__(self):
-    return repr(self.value)
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 class RequestForm(forms.Form):
-  url = forms.URLField(widget=forms.TextInput(attrs={'size':50}))
-  comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
+    url = forms.URLField(widget=forms.TextInput(attrs={'size':50}))
+    comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))

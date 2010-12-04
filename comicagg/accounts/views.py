@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Create your views here.
-from comicagg.accounts.models import *
-from comicagg.agregator.models import Comic
+from comicagg.accounts.models import LoginForm, EmailChangeForm, PasswordChangeForm, PasswordResetForm, ProfileForm, RegisterForm
 from comicagg import render
 from django.db import IntegrityError
 from django.conf import settings
@@ -12,30 +11,27 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.forms.util import ErrorList
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import redirect
 from django.template import Context, loader
 from django.utils.translation import ugettext as _
 import re
 
 def index(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('read'))
+        return redirect('read')
     else:
-        return HttpResponseRedirect(reverse('login'))
-
-    #last = Comic.objects.filter(activo=True).filter(ended=False).order_by('-id')[:5]
-    #form = LoginForm()
-    #return render(request, 'welcome.html', {'last':last, 'form':form})
+        return redirect('login')
 
 def logout_view(request):
     logout(request)
     # Redirect to a success page.
-    return HttpResponseRedirect(reverse('index'))
+    return redirect('index')
 
 def login_view(request):
     context = {}
     #if user is authenticated redirect him to index
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     #if we get data in post treat as a login attempt
     if request.POST:
         form = LoginForm(request.POST)
@@ -112,8 +108,8 @@ def register(request):
                     form._errors['username'] = ErrorList([msg])
             if not errors:
                 try:
-                    u = User.objects.create_user(username, email, password)
-                    return HttpResponseRedirect(reverse('done', args=['register']))
+                    User.objects.create_user(username, email, password)
+                    return redirect('done', args=['register'])
                 except IntegrityError:
                     msg = _("That username is already taken. Please choose another.")
                     form._errors['username'] = ErrorList([msg])
@@ -125,7 +121,7 @@ def done(request, kind):
     try:
         return render(request, 'accounts/%s_done.html' % kind, {}, 'account')
     except:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
 
 def password_reset(request):
     context = {}
@@ -155,7 +151,7 @@ def password_reset(request):
                             'user': user,
                             }
                     send_mail(_('Password reset on %s') % settings.SITE_NAME, t.render(Context(c)), None, [user.email])
-            return HttpResponseRedirect(reverse('done', args=['password_reset']))
+            return redirect('done', args=['password_reset'])
     context['form'] = form
     return render(request, 'accounts/password_reset_form.html', context, 'account')
 
@@ -177,7 +173,7 @@ def password_change(request):
             if not form.errors:
                 request.user.set_password(new1)
                 request.user.save()
-                return HttpResponseRedirect(reverse('done', args=['password_change']))
+                return redirect('done', args=['password_change'])
     context['form'] = form
     return render(request, 'accounts/password_change_form.html', context, 'account')
 
@@ -195,7 +191,7 @@ def email(request):
             else:
                 request.user.email = email
                 request.user.save()
-                return HttpResponseRedirect(reverse('done', args=['email_change']))
+                return redirect('done', args=['email_change'])
     context['form'] = form
     return render(request, 'accounts/email_change_form.html', context, 'account')
 
@@ -250,5 +246,5 @@ def activate(request):
     if request.method == 'POST':
         request.user.is_active = True
         request.user.save()
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     raise Http404

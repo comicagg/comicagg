@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from comicagg.agregator.models import *
-import re, sys, urllib2, cookielib
+from comicagg.agregator.models import ComicHistory, UnreadComic, NoMatchException
+import re, htmlentitydefs, urllib2, cookielib
+from datetime import datetime
 
 #Funciones para comprobar comics
 
@@ -112,7 +113,7 @@ def match_lines(comic, lineas, regexp, backwards=False):
 
 def getoneurl(comic, _url):
     lineas = open_url(comic, _url)
-    (match, rest) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+    (match, ) = match_lines(comic, lineas, comic.regexp, comic.backwards)
     if not match:
         raise NoMatchException, "%s" % comic.name
     url = comic.base_img % geturl(match)#.decode("utf-8")
@@ -122,7 +123,7 @@ def getoneurl(comic, _url):
 
 def getredirect(comic):
     lineas = open_url(comic, comic.url2)
-    (match, rest) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
+    (match, ) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
     if not match:
         raise NoMatchException, "%s" % comic.name
     next_url = comic.base2 % geturl(match)#.decode("utf-8")
@@ -148,9 +149,7 @@ def notify_subscribers(history):
     subscriptions = history.comic.subscription_set.all()
     for subscription in subscriptions:
         if subscription.user.is_active:
-            unread = UnreadComic.objects.get_or_create(user=subscription.user, history=history, comic=subscription.comic)
-
-import re, htmlentitydefs
+            UnreadComic.objects.get_or_create(user=subscription.user, history=history, comic=subscription.comic)
 
 ##
 # Removes HTML or XML character references and entities from a text string.

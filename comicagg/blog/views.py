@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from comicagg import *
-from comicagg.blog.models import *
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from comicagg import render
+from comicagg.blog.models import Post, NewBlog
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
 
 def index(request, archive=False):
     """It will render either the last 10 news items or all of them, depending on

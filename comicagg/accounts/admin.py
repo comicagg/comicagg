@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from comicagg.accounts.models import *
+from comicagg.accounts.models import UserProfile
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'last_read_access','is_active')

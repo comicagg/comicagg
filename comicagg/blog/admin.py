@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from comicagg.blog.models import *
+from comicagg.blog.models import Post, NewBlog
 
 class PostAdmin(admin.ModelAdmin):
 	list_display = ('title', 'date', 'user',)

@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url
 
 urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^$', 'read_view', name='read_index'),
 	url(r'^read/$', 'read_view', name='read'),
-	url(r'^add/$', 'organize', {'add':True}, name='organize_add'),
+	url(r'^add/$', 'organize', {'add': True}, name='organize_add'),
 	url(r'^organize/$', 'organize', name='organize'),
     #url(r'^organize/forget/$', 'forget_new_comics', name='forget_new_comics'),
 	#url(r'^organize/(?P<tag>.*)/', 'organize', name='configure_with_tags'),
 
     url(r'^request/$', 'request_index', name='request_index'),
-	url(r'^request/ok/$', 'request_index', {'ok':True}, name='request_ok'),
+	url(r'^request/ok/$', 'request_index', {'ok': True}, name='request_ok'),
     url(r'^request/save/$', 'request_index', name='request_save'),
 
 	#url(r'^list/$', 'comic_list', name='comic_list'),

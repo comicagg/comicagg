@@ -1,26 +1,22 @@
 # -*- coding: utf-8 -*-
-from django.db import IntegrityError
+from comicagg import render
+from comicagg.agregator.models import Comic, ComicHistory, NewComic, UnreadComic, Request, RequestForm, Subscription, Tag
+from comicagg.agregator.check import check_comic
+from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.core import serializers
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
+from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden, HttpResponseServerError
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.template import RequestContext
-from comicagg import *
-from comicagg.agregator.models import *
-from comicagg.agregator.check import check_comic
-from comicagg.blog.models import NewBlog
-from datetime import datetime
 from django.utils.translation import ugettext as _
-import sys, math, random, hashlib, urllib2
+import hashlib, math, os, random, sys, urllib2
 
 from django.views.decorators.cache import cache_page
 
-
-# Create your views here.
 
 @login_required
 def read_view(request):
@@ -55,7 +51,7 @@ def read_view(request):
             'has_unread':has_unread,
             'items_per_column':items_per_column,
             'random_comic':random,
-            'new_blog_count':request.user.newblog_set.count(),
+            'new_blog_count':request.user.g_set.count(),
             'new_comic_count':request.user.newcomic_set.count(),
         })
         return render(request, 'agregator/read.html', context, 'read')
@@ -178,7 +174,7 @@ def save_selection(request):
     #quitamos todas las suscripciones primero
     try:
         request.user.subscription_set.all().delete()
-    except Exception, inst:
+    except Exception:
         return HttpResponse('-1')
     #si la seleccion esta vacia salimos
     if len(selection_clean)==0:
@@ -200,9 +196,9 @@ def save_selection(request):
             #borra el objeto newcomic si hubiera
             n = NewComic.objects.get(user=request.user, comic=c)
             n.delete()
-        except IntegrityError, (errno, errstr):
+        except IntegrityError:
             pass
-        except Exception, inst:
+        except Exception:
             pass
         pos += 1
     if NewComic.objects.filter(user=request.user).count() == 0:
@@ -222,7 +218,7 @@ def request_index(request, ok=False):
             req.save()
             message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
             send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
-            return HttpResponseRedirect(reverse('request_ok'))
+            return redirect('request_ok')
     else:
         form = RequestForm()
     context = {}
@@ -237,7 +233,7 @@ def request_index(request, ok=False):
 @login_required
 def get_tags(request):
     if not request.POST:
-        return HttpResponseRedirect(reverse('configure'))
+        return redirect('configure')
     comic_id = request.POST['id']
     comic = Comic.objects.get(pk=comic_id)
     tags = Tag.objects.filter(comic=comic, user=request.user)
@@ -250,22 +246,22 @@ def get_tags(request):
 @login_required
 def save_tags(request):
     if not request.POST:
-        return HttpResponseRedirect(reverse('configure'))
+        return redirect('configure')
     comic_id = request.POST['id']
     tags = request.POST['tags']
     comic = Comic.objects.get(pk=comic_id)
     Tag.objects.filter(comic=comic, user=request.user).delete()
     for tag in tags.split(','):
         tag = tag.strip()
-        if len(tag)>0:
-            t = Tag.objects.get_or_create(comic=comic, user=request.user, name=tag.strip())
-        #t.save()
+        if len(tag) > 0:
+            Tag.objects.get_or_create(comic=comic, user=request.user, name=tag.strip())
+            #t.save()
     return render(request, 'agregator/tagging_form.html', {'tags':tags, 'comic':comic})
 
 @login_required
 def mark_read(request):
     if not request.POST:
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('index')
     comic_id = request.POST['id']
     try:
         value = int(request.POST['value'])
@@ -376,7 +372,6 @@ def comic_list_load(request):
 
 @cache_page(60*10)
 def comic_list(request, sortby='name', tag=None):
-    context = {}
     if tag:
         tags = Tag.objects.filter(name=tag)
         comics = list()
@@ -436,7 +431,7 @@ def forget_new_comics(request, quick=False):
     NewComic.objects.filter(user=request.user).delete()
     if quick:
         return HttpResponse('0')
-    return HttpResponseRedirect(reverse('configure'))
+    return redirect('configure')
 
 @login_required
 def add_comic(request):
@@ -447,9 +442,10 @@ def add_comic(request):
             comic_id = -1
         comic = get_object_or_404(Comic, pk=comic_id)
         try:
-            s = request.user.subscription_set.get(comic=comic)
+            request.user.subscription_set.get(comic=comic)
         except:
-            s = request.user.subscription_set.create(comic=comic, position=9999)
+            next = request.user.subscription_set.aggregate(Max('position')) + 1
+            request.user.subscription_set.create(comic=comic, position=next)
         try:
             history = ComicHistory.objects.filter(comic=comic)[0]
             u = UnreadComic(user=request.user, comic=comic, history=history)
@@ -552,8 +548,8 @@ def sort_rate(a,b):
     Ordenar únicamente por la puntuación de los comics
     """
     c = b.getRating() - a.getRating()
-    if c>0: return 1
-    elif c<0: return -1
+    if c > 0: return 1
+    elif c < 0: return -1
     else: return 0
 
 def get_full_tagcloud():

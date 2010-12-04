@@ -1,18 +1,17 @@
 from comicagg import render
-from comicagg.agregator.models import *
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.db import connection
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
 def unread_user(request, user):
-  if not user:
-    return HttpResponseRedirect(reverse('index'))
-  user = get_object_or_404(User, username=user)
-  context = {}
+    if not user:
+        return HttpResponseRedirect(reverse('index'))
+    user = get_object_or_404(User, username=user)
+    context = {}
 
-  sql = """
+    sql = """
 SELECT agregator_unreadcomic.comic_id, name, count(agregator_unreadcomic.id) as count
 FROM agregator_unreadcomic
   INNER JOIN agregator_comic
@@ -29,12 +28,12 @@ AND
 agregator_subscription.user_id=%s
 GROUP BY agregator_comic.id
 ORDER BY agregator_subscription.position"""
-  cursor = connection.cursor()
-  cursor.execute(sql, [user.id, user.id])
-  rows = cursor.fetchall()
-  count = len(rows)
-  context['unread_list'] = rows
-  context['count'] = count
-  context['username'] = user
-  return render(request, 'ws/unread_user.html', context, xml=True)
+    acursor = connection.cursor()
+    acursor.execute(sql, [user.id, user.id])
+    rows = acursor.fetchall()
+    count = len(rows)
+    context['unread_list'] = rows
+    context['count'] = count
+    context['username'] = user
+    return render(request, 'ws/unread_user.html', context, xml=True)
 
