@@ -28,6 +28,11 @@ urlpatterns = patterns('comicagg.agregator.views',
 	#url(r'^add_comic/(?P<comic_id>\d+)/random/$', 'add_comic', {"next":"read"}, name='add_comic_random'),
 	#url(r'^random_comic/$', 'random_comic_view', name='random_comic'),
 
+	url(r'^li/(?P<cid>\d+)/', 'last_image_url', name='aggregator_last_image_url'),
+    url(r'^hi/(?P<hid>\d+)/', 'history_image_url', name='aggregator_history_url'),
+)
+
+urlpatterns += patterns('comicagg.agregator.ajax',
 	url(r'^ajax/add_comic/$', 'add_comic', name='ajax_add_comic'),
 	url(r'^ajax/remove_comic/$', 'remove_comic', name='ajax_remove_comic'),
     url(r'^ajax/remove_comic_list/$', 'remove_comic_list', name='ajax_remove_comic_list'),
@@ -42,8 +47,4 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^ajax/mark_read/$', 'mark_read', name='ajax_mark_read'),
 	url(r'^ajax/mark_all_read/$', 'mark_all_read', name='ajax_mark_all_read'),
 	#url(r'^ajax/rate/$', 'rate_comic', name='rate'),
-
-	url(r'^li/(?P<cid>\d+)/', 'last_image_url', name='aggregator_last_image_url'),
-    url(r'^hi/(?P<hid>\d+)/', 'history_image_url', name='aggregator_history_url'),
 )
-
