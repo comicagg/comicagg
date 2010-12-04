@@ -23,7 +23,7 @@
 <div id="{{ k }}">
     <h4>{{ k }}</h4>
     {% for comic in l %}
-    <a href="{% url check comic.id %}">{{ comic.name }}</a><br/>
+    <a href="{% url admin_check_id comic.id %}">{{ comic.name }}</a><br/>
     {% endfor %}
 </div>
 {% endfor %}
