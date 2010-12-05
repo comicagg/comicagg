@@ -8,8 +8,14 @@ from django.utils.translation import ugettext as _
 
 @login_required
 def admin_check(request, comic_id=None):
-    context = {}
+    """Check for an update in a comic.
+    If a comic_id is passed as parameter it will check that comic.
+    If no comic_id is passed, it will show the list of comics.
+    """
     if request.user.is_staff:
+        context = {}
+        #create a dict with the initials of the comics.
+        #so {'a':list, 'b':list, ...}
         comic_list = Comic.objects.all().order_by('name')
         comic_dict = dict()
         for c in comic_list:
@@ -20,6 +26,7 @@ def admin_check(request, comic_id=None):
                         comic_dict[l] = [c]
         context['list'] = comic_dict
         if comic_id:
+            #if a comic_id is passed, check that comic
             comic = Comic.objects.get(pk=comic_id)
             context['last'] = comic
             context['changed'] = check_comic(comic)
@@ -28,8 +35,11 @@ def admin_check(request, comic_id=None):
     raise Http404
 
 def admin_reported(request, chids):
-    context = {}
+    """See the strips reported.
+    Present a page with the images of the reported strips.
+    """
     if request.user.is_staff:
+        context = {}
         chids = chids.split('-')
         chs = dict()
         for chid in chids:
