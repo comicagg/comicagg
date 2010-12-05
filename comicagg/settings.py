@@ -92,7 +92,7 @@ INSTALLED_APPS = (
     'comicagg.agregator',
     'comicagg.accounts',
     'comicagg.blog',
-    'comicagg.help',
+    #'comicagg.help',
     'comicagg.todo',
 )
 

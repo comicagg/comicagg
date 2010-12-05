@@ -15,7 +15,7 @@
         {% if form.url.errors %}
         <div id="errorContainer">{{ form.url.errors }}</div>
         {% endif %}
-        <form action="{% url request_save %}" method="post">
+        <form action="{% url aggregator:request_save %}" method="post">
             <div class="form_div"><label>{% trans "The comic's Url"%}</label><br/>{{ form.url }}</div>
             <div class="form_div"><label>{% trans 'Any comment?'%}</label><br/>{{ form.comment }}</div>
             <div class="form_div"><input type="submit" value="{% trans 'Send'%}"/></div>

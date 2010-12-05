@@ -127,7 +127,7 @@ def request_index(request, ok=False):
             req.save()
             message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
             send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
-            return redirect('request_ok')
+            return redirect('aggregator:request_ok')
     else:
         form = RequestForm()
     context = {}

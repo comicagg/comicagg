@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import patterns, url, include
-from django.conf import settings
 from django.contrib import admin
 
 admin.autodiscover()
@@ -12,14 +11,12 @@ urlpatterns = patterns('',
 	url(r'^$', 'comicagg.accounts.views.index', name='index'),
 	url(r'^robots.txt$', 'comicagg.robots_txt', name='robots'),
 	url(r'^stats/$', 'comicagg.agregator.views.stats', name='stats'),
-	(r'^comics/', include('comicagg.agregator.urls')),
-	(r'^accounts/', include('comicagg.accounts.urls')),
-	(r'^news/', include('comicagg.blog.urls')),
-	(r'^help/', include('comicagg.help.urls')),
-	(r'^ws/', include('comicagg.ws.urls')),
+	(r'^accounts/', include('comicagg.accounts.urls', namespace="accounts")),
 	(r'^admin/(.*)', admin.site.root),
-	#comment this for production
-	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes':True}),
+	(r'^comics/', include('comicagg.agregator.urls', namespace="aggregator")),
+#	(r'^help/', include('comicagg.help.urls')),
+	(r'^news/', include('comicagg.blog.urls', namespace="news")),
+	(r'^ws/', include('comicagg.ws.urls')),
 )
 
 urlpatterns += patterns('django.views.generic.simple',

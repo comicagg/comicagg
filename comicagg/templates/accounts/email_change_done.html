@@ -4,5 +4,5 @@
 {% block content %}
 <h3>{% trans 'Change e-mail address'%}</h3>
 <p class="info">{% trans 'Your e-mail address has been changed.'%}</p>
-<div class="text_center"><a href="{% url edit_profile %}">{% trans 'Back to account settings.'%}</a></div>
+<div class="text_center"><a href="{% url accounts:profile_edit %}">{% trans 'Back to account settings.'%}</a></div>
 {% endblock %}

@@ -8,18 +8,14 @@ def index(request, archive=False):
     """It will render either the last 10 news items or all of them, depending on
     the keyword archive.
     """
-    try:
-        user = request.user
-    except:
-        user = None
     context = { 'archive':archive }
     posts = Post.objects.all()
     if not archive:
         posts = posts[:10]
     context['posts'] = posts
-    if user:
+    if request.user.is_authenticated():
         #These are the new news items the logged in user has
-        context['new_posts'] = NewBlog.objects.filter(user=user)
+        context['new_posts'] = NewBlog.objects.filter(user=request.user)
     return render(request, 'blog/index.html', context)
 
 @login_required

@@ -43,7 +43,7 @@
 {% endfor %}
     <div id="other_actions">
       <h1>Otras acciones</h1>
-      <a href="{% url admin_check %}">{% trans 'Update comic' %}</a><br/>
+      <a href="{% url aggregator:admin:check %}">{% trans 'Update comic' %}</a><br/>
     </div>
 {% else %}
     <p>{% trans "You don't have permission to edit anything." %}</p>

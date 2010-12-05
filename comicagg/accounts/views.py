@@ -17,9 +17,9 @@ import re
 
 def index(request):
     if request.user.is_authenticated():
-        return redirect('read')
+        return redirect('aggregator:read')
     else:
-        return redirect('accounts_login')
+        return redirect('accounts:login')
 
 def logout_view(request):
     logout(request)
@@ -37,13 +37,13 @@ def login_view(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            next = form.cleaned_data['next']
+            nexturl = form.cleaned_data['next']
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
                     login(request, user)
                     # Redirect to a success page.
-                    return HttpResponseRedirect(next)
+                    return HttpResponseRedirect(nexturl)
                 else:
                     context['error'] =_('Your have to activate your user first')
                     context['form'] = form
@@ -58,8 +58,8 @@ def login_view(request):
         #received nothing so show login form
         return render(request, 'accounts/login_form.html', context, 'login')
     try:
-        next = request.GET['next']
-        form = LoginForm(initial={'next': next})
+        nexturl = request.GET['next']
+        form = LoginForm(initial={'next': nexturl})
     except:
         form = LoginForm()
     context['form'] = form
@@ -108,7 +108,7 @@ def register(request):
             if not errors:
                 try:
                     User.objects.create_user(username, email, password)
-                    return redirect('done', args=['register'])
+                    return redirect('accounts:done', kind='register')
                 except IntegrityError:
                     msg = _("That username is already taken. Please choose another.")
                     form._errors['username'] = ErrorList([msg])
@@ -134,7 +134,6 @@ def password_reset(request):
             #check if there is a username
             users_username = list(User.objects.filter(username__iexact=data))
             users = users_email + users_username
-            print users
             if users:
                 #create new password and send email
                 for user in users:
@@ -150,7 +149,7 @@ def password_reset(request):
                             'user': user,
                             }
                     send_mail(_('Password reset on %s') % settings.SITE_NAME, t.render(Context(c)), None, [user.email])
-            return redirect('done', args=['password_reset'])
+            return redirect('accounts:done', kind='password_reset')
     context['form'] = form
     return render(request, 'accounts/password_reset_form.html', context, 'account')
 
@@ -172,7 +171,7 @@ def password_change(request):
             if not form.errors:
                 request.user.set_password(new1)
                 request.user.save()
-                return redirect('done', args=['password_change'])
+                return redirect('accounts:done', kind='password_change')
     context['form'] = form
     return render(request, 'accounts/password_change_form.html', context, 'account')
 
@@ -190,7 +189,7 @@ def email(request):
             else:
                 request.user.email = email
                 request.user.save()
-                return redirect('done', args=['email_change'])
+                return redirect('accounts:done', kind='email_change')
     context['form'] = form
     return render(request, 'accounts/email_change_form.html', context, 'account')
 
@@ -223,7 +222,7 @@ def save_profile(request):
             if nmpc > 0:
                 p.navigation_max_per_column = form.cleaned_data['navigation_max_per_column']
             p.save()
-    return redirect('saved_profile')
+    return redirect('accounts:profile_saved')
 
 @login_required
 def save_color(request):

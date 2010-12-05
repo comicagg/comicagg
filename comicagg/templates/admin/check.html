@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 {% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
-{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin/">Inicio</a> &rsaquo; <a href="{% url admin_check %}">{% trans "Update comic"%}</a></div>{% endblock %}
+{% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin/">Inicio</a> &rsaquo; <a href="{% url aggregator:admin:check %}">{% trans "Update comic"%}</a></div>{% endblock %}
 
 {% block content %}
 <div id="content-main">
@@ -23,7 +23,7 @@
 <div id="{{ k }}">
     <h4>{{ k }}</h4>
     {% for comic in l %}
-    <a href="{% url admin_check_id comic.id %}">{{ comic.name }}</a><br/>
+    <a href="{% url aggregator:admin:check_id comic.id %}">{{ comic.name }}</a><br/>
     {% endfor %}
 </div>
 {% endfor %}

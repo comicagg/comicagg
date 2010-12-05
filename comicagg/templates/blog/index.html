@@ -3,19 +3,22 @@
 {% if new_posts %}{% block onload %}forget_new_posts(){% endblock %}{% endif %}
 {% block blog_content %}
 {% for item in posts %}
+{% if new_posts %}
   <div class="post {% if item|new:user %}new_post{% endif %}" id="p{{ item.id }}">
     <h4>{% if item|new:user %}<img src="{{ settings.MEDIA_URL}}images/new.png" alt=""/>{% endif %} {{ item.title }}</h4>
+{% else %}
+  <div class="post" id="p{{ item.id }}">
+    <h4>{{ item.title }}</h4>
+{% endif %}
     <div class="text">{% if item.html %}{{ item.text|safe }}{% else %}{{ item.text|linebreaksbr }}{% endif %}</div>
-    <div class="news_info">
-<!--         <a href="http://netsphere.proyectoanonimo.com/index.php?topic={{ item.id_topic }}">{% trans "Read it in the forum"%}</a> -->
-       {{ item.user }}, {{ item.date|date:"j F Y" }}</div>
+    <div class="news_info">{{ item.user }}, {{ item.date|date:"j F Y" }}</div>
   </div>
 {% endfor %}
 {% if not posts %}
   <p>{% trans 'Nothing here right now' %}</p>
 {% else %}
 {% if not archive %}
-  <p class="all_link"><a href="{% url blog_archive %}">{% trans "All posts" %}</a></p>
+  <p class="all_link"><a href="{% url news:archive %}">{% trans "All posts" %}</a></p>
 {% endif %}
 {% endif %}
 {% endblock %}

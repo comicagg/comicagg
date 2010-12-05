@@ -6,7 +6,7 @@
 <h3>{% trans 'Account settings'%}</h3>
 <p class="info">{% trans 'You can review here your settings. Use this page to change your e-mail address or password.'%}</p>
 <h4>{% trans 'Change settings:'%}</h4>
-<form action="{% url save_profile %}" method="post">
+<form action="{% url accounts:profile_save %}" method="post">
   <p class="info">
     {{ form.alert_new_comics }} {% trans "Alert new comics.<br/>A box will appear in the read page everytime a new comic is added to the database." %}
   </p>
@@ -38,7 +38,7 @@
 </p>
 <h4>{% trans 'Password, e-mail' %}</h4>
 <p class="info">
-  <a href="{% url change_password %}">{% trans 'Change password'%}</a><br/>
-  <a href="{% url change_email %}">{% trans 'Change e-mail'%}</a> <span id="news">({% trans 'current:'%} {{ user.email }})</span><br/><br/>
+  <a href="{% url accounts:password_change %}">{% trans 'Change password'%}</a><br/>
+  <a href="{% url accounts:email_change %}">{% trans 'Change e-mail'%}</a> <span id="news">({% trans 'current:'%} {{ user.email }})</span><br/><br/>
 </p>
 {% endblock %}
