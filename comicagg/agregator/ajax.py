@@ -80,8 +80,8 @@ def report_comic(request):
 def forget_new_comic(request, comic_id=None):
     comic = get_object_or_404(Comic, pk=comic_id)
     NewComic.objects.filter(user=request.user, comic=comic).delete()
-    count = str(request.user.newcomic_set.filter(comic__activo=True).filter(comic__ended=False).count())
-    return HttpResponse(count)
+    count = request.user.newcomic_set.exclude(comic__activo=False).count()
+    return HttpResponse(str(count))
 
 
 @login_required

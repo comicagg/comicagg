@@ -1,37 +1,10 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.template.defaultfilters import stringfilter
-from comicagg.agregator.models import Tag
-from comicagg.agregator.views import TagWrap, calculate_cloud
 from django.utils.translation import ugettext as _
 #import math
 
 register = template.Library()
-
-@register.inclusion_tag('agregator/tag_cloud.html', takes_context=True)
-def tagcloud_comic(context, comic):
-    #hay que devolver un diccionario con el contexto para renderizar la plantilla
-    from django.db import connection
-    cursor = connection.cursor()
-    cursor.execute("SELECT name, COUNT(name) FROM agregator_tag WHERE comic_id=%s GROUP BY name ORDER BY name ASC" % comic.id, [])
-    tags_raw = cursor.fetchall()
-    #tags = perc_func(tags_raw)
-    tags = list()
-    for tag in tags_raw:
-        name, count = tag
-        tags.append(TagWrap(name, count))
-    calculate_cloud(tags)
-    return { 'tags':tags, 'settings':context['settings']}
-    #registramos el tag para que renderice la plantilla que le digamos
-
-@register.simple_tag
-def user_tags(comic, user):
-    tags = Tag.objects.filter(comic=comic, user=user)
-    tag_list = list()
-    for tag in tags:
-        tag_list.append(tag.name)
-    tags = ','.join(tag_list)
-    return tags
 
 @register.simple_tag
 def is_new(comic, user):

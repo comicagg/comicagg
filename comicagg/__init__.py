@@ -12,9 +12,9 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
     except:
         user = None
     try:
-        unr = user.unreadcomic_set.filter(comic__activo=True).filter(comic__ended=False).aggregate(Count('comic', distinct=True))
+        unr = user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).aggregate(Count('comic', distinct=True))
         context['unread_count'] = unr['comic__count']
-        newc = user.newcomic_set.filter(comic__activo=True).filter(comic__ended=False).count()
+        newc = user.newcomic_set.exclude(comic__activo=False).count()
         context['newcomic_count'] = newc
         newsc = user.newblog_set.count()
         context['newnews_count'] = newsc
