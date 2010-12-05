@@ -158,8 +158,8 @@ class Subscription(models.Model):
 class Request(models.Model):
     user = models.ForeignKey(User)
     url = models.URLField(verify_exists=False)
-    comment = models.TextField(blank=True, null=True)
-    admin_comment = models.TextField(blank=True, null=True)
+    comment = models.TextField(blank=True, null=True, default="")
+    admin_comment = models.TextField(blank=True, null=True, default="")
     done = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
 

@@ -2,6 +2,7 @@
 from django.conf import settings
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, HttpResponseServerError
+from django.template import RequestContext
 from django.template.loader import render_to_string
 import os, re
 
@@ -24,6 +25,8 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
     context['user'] = user
     context['menu'] = menu
     context['mediaurl'] = settings.MEDIA_URL
+
+    context = RequestContext(request, context)
 
     resp_text = render_to_string(template, context)
     response = responseClass(resp_text, mimetype=mime)

@@ -481,6 +481,8 @@ input.filter {
 }
 #request_list li img {
     vertical-align:middle;
+    position:relative;
+    top:-1px;
 }
 #request_new, #request_new form {
     margin-left:15px;
@@ -499,6 +501,7 @@ input.filter {
     -webkit-border-radius:5px;
     padding:3px 6px;
     width:300px;
+    margin-top:1em;
 }
 
 /********/

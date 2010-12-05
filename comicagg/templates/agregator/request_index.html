@@ -5,26 +5,29 @@
 {% regroup user.request_set.all by done as request_list %}
 <div id="request_list" class="box">
     <h4>{% trans "Request a comic" %}</h4>
-    {% if request_saved %}
-    <div id="thanks">{% trans "Your request has been saved. Thanks!" %}</div>
-    <script type="text/javascript">setTimeout('Element.hide("thanks")', 10000);</script>
-    {% endif %}
     <div id="request_new">
         <p class="info text_left">{% trans "Write the url of the comic you would like to read here and we will try to add it is as soon as possible (if it's possible, of course)."%}</p>
         {% if count %}<p class="info text_left">{% blocktrans %}Currently there are {{ count }} requests waiting to be added. We have to add them one by one by hand so, please, be patient. Thanks!{% endblocktrans %}</p>{% endif %}
-        {% if form.url.errors %}
-        <div id="errorContainer">{{ form.url.errors }}</div>
-        {% endif %}
-        <form action="{% url aggregator:request_save %}" method="post">
-            <div class="form_div"><label>{% trans "The comic's Url"%}</label><br/>{{ form.url }}</div>
+        <form action="{% url aggregator:requests %}" method="post">
+            <div class="form_div {% if form.url.errors %}error_tr{% endif %}">
+              <label>{% trans "The comic's Url"%}</label><br/>
+              {% if form.url.errors %}{{ form.url.errors }}{% endif %}
+              {{ form.url }}
+            </div>
             <div class="form_div"><label>{% trans 'Any comment?'%}</label><br/>{{ form.comment }}</div>
             <div class="form_div"><input type="submit" value="{% trans 'Send'%}"/></div>
         </form>
+        {% if messages %}
+        {% for message in messages %}
+        <div id="thanks">{{ message }}</div>
+        {% endfor %}
+        <script type="text/javascript">setTimeout('Element.hide("thanks")', 10000);</script>
+        {% endif %}
     </div>
     <h4>{% trans "Pending requests" %}</h4>
     <ul>
     {% for req in pending %}
-        <li class="first_line"><img src="{{ mediaurl }}images/request_new.png" alt=""/> {{ req.url }}</li>
+        <li class="first_line"><img src="{{ mediaurl }}images/request_new12.png" alt=""/> {{ req.url }}</li>
         {% if req.comment %}<li>{% trans "Your comment:" %}<p>{{ req.comment }}<p></li>{% endif %}
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% empty %}
@@ -34,7 +37,7 @@
     <h4>{% trans "Rejected requests" %}</h4>
     <ul>
     {% for req in rejected %}
-        <li class="first_line"><img src="{{ mediaurl }}images/error16.png" alt=""/> {{ req.url }}</li>
+        <li class="first_line"><img src="{{ mediaurl }}images/error12.png" alt=""/> {{ req.url }}</li>
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% empty %}
         <li>{% trans "Nothing here." %}<li>
@@ -43,7 +46,7 @@
     <h4>{% trans "Accepted requests" %}</h4>
     <ul>
     {% for req in accepted %}
-        <li class="first_line"><img src="{{ mediaurl }}images/ok16.png" alt=""/> {{ req.url }}</li>
+        <li class="first_line"><img src="{{ mediaurl }}images/ok12.png" alt=""/> {{ req.url }}</li>
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% empty %}
         <li>{% trans "Nothing here." %}</li>

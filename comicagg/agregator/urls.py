@@ -27,8 +27,6 @@ urlpatterns = patterns('comicagg.agregator.views',
 	url(r'^organize/$', 'organize', name='organize'),
 
     url(r'^request/$', 'request_index', name='requests'),
-	url(r'^request/ok/$', 'request_index', {'ok': True}, name='request_ok'),
-    url(r'^request/save/$', 'request_index', name='request_save'),
 
 	url(r'^li/(?P<cid>\d+)/', 'last_image_url', name='last_image_url'),
     url(r'^hi/(?P<hid>\d+)/', 'history_image_url', name='history_url'),

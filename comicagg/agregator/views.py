@@ -4,11 +4,13 @@ from comicagg.agregator.models import Comic, ComicHistory, NewComic, Request, Re
 from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseServerError
 from django.shortcuts import get_object_or_404, redirect
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
+from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 from hashlib import md5
 import os, random, urllib2
@@ -103,11 +105,11 @@ def comic_sort_name(x, y):
         return 0
     return 1
 
-"""
-Oculta el aviso de nuevos comics
-"""
 @login_required
 def hide_new_comics(request):
+    """
+    Oculta el aviso de nuevos comics
+    """
     up = request.user.get_profile()
     up.new_comics = False;
     up.save()
@@ -117,7 +119,7 @@ def hide_new_comics(request):
 # Request page related
 
 @login_required
-def request_index(request, ok=False):
+def request_index(request):
     if request.POST:
         form = RequestForm(request.POST)
         if form.is_valid():
@@ -127,13 +129,13 @@ def request_index(request, ok=False):
             req.save()
             message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
             send_mail('[CA] Nuevo request', message, 'Comic Aggregator <robot@comicagg.com>', ['admin@comicagg.com', 'korosu.itai@gmail.com'])
-            return redirect('aggregator:request_ok')
+            messages.info(request, _("Your request has been saved. Thanks!"))
+            return redirect('aggregator:requests')
     else:
         form = RequestForm()
     context = {}
     context['form'] = form
     context['count'] = Request.objects.all().count()
-    context['request_saved'] = ok
     context['accepted'] = request.user.request_set.filter(done__exact=1).filter(rejected__exact=0)
     context['rejected'] = request.user.request_set.filter(rejected__exact=1)
     context['pending'] = request.user.request_set.filter(done__exact=0).filter(rejected__exact=0)
