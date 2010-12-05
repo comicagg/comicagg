@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<div id="contact" class="loginbox">
+<p>{% trans "If you would like to contact us, write an email to this address:" %}
+  <img src="{{ mediaurl }}images/email.png" alt="email"/></p>
+<p>{% trans "Problems, suggestions, hate mail, everything is welcome at that address :)" %}</p>
+</div>
+{% endblock %}

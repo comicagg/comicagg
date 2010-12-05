@@ -547,3 +547,14 @@ input.filter {
 #blog_side .all_link {
     text-align:center;
 }
+
+
+/***********/
+/* Contact */
+/***********/
+
+#contact img {
+    vertical-align:middle;
+    position:relative;
+    top:-1px;
+}

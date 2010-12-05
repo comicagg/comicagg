@@ -4,3 +4,4 @@ syntax: glob
 *.pyc
 *~
 *.session
+settings_local.py

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 
@@ -19,6 +20,11 @@ urlpatterns = patterns('',
 	(r'^ws/', include('comicagg.ws.urls')),
 )
 
+extra = {
+	'mediaurl':settings.MEDIA_URL
+}
+
 urlpatterns += patterns('django.views.generic.simple',
 	url(r'^docs/custom_func/$', 'direct_to_template', {'template': 'admin/custom_func.html'}, name="docs_custom"),
+	url(r'^contact/$', 'direct_to_template', {'template': 'contact.html', 'extra_context':extra}, name="contact"),
 )
