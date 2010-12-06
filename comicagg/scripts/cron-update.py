@@ -15,7 +15,7 @@ sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
 from comicagg.agregator.models import *
-from django.core.mail import send_mail
+from django.core.mail import mail_admins
 from comicagg.agregator.check import check_comic
 
 #check all comics
@@ -89,14 +89,20 @@ for t in thread_list:
 
 salida += "Comics activos\n"
 for s in errors_active:
-  salida += s
+	try:
+		salida += s
+	except:
+		salida += s.decode('utf-8')
 
 salida += "-------------------------\n"
 salida += "Comics desactivados\n"
 for s in errors_inactive:
-  salida += s
+	try:
+		salida += s
+	except:
+		salida += s.decode('utf-8')
 
 salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)))
 salida += "Hora fin: %s\n" % datetime.now()
 
-send_mail('[CA] Salida de la tarea de cron', salida, 'robot@comicagg.com', ['esu@kumomi.es'])
+mail_admins('Salida de cron', salida)

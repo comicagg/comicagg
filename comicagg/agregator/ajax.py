@@ -2,7 +2,7 @@
 from comicagg.agregator.models import Comic, ComicHistory, NewComic, UnreadComic, Subscription
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Max
@@ -69,11 +69,7 @@ def report_comic(request):
     message += '%s%s\n\n' % (settings.DOMAIN, url)
     for chid in chids:
         message += 'http://www.comicagg.com/admin/agregator/comichistory/%s/\n' % chid
-    rcpts = [
-        'admin@comicagg.com',
-        'korosu.itai@gmail.com'
-        ]
-    send_mail('[CA] Imagen rota', message, 'Comic Aggregator <robot@comicagg.com>', rcpts)
+    mail_admins('Imagen rota', message)
     return HttpResponse("0")
 
 @login_required
