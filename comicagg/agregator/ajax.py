@@ -64,11 +64,9 @@ def report_comic(request):
     comic_id = int(request.POST['id'])
     chids = request.POST.getlist('chids[]')
     comic = get_object_or_404(Comic, pk=comic_id)
-    message = 'El usuario %s dice que hay una imagen rota en el comic %s en alguna de las siguientes %d actualizaciones:\n' % (request.user, comic.name, len(chids))
+    message = 'El usuario %s dice que hay una imagen rota en el comic %s en alguna de las siguientes actualizaciones:\n' % (request.user, comic.name)
     url = reverse('aggregator:admin:reported', kwargs={'chids':'-'.join(chids)})
-    message += '%s%s\n\n' % (settings.DOMAIN, url)
-    for chid in chids:
-        message += 'http://www.comicagg.com/admin/agregator/comichistory/%s/\n' % chid
+    message += '%s%s' % (settings.DOMAIN, url)
     mail_admins('Imagen rota', message)
     return HttpResponse("0")
 

@@ -11,21 +11,21 @@ var divlist = [];
 
 // updates html counters
 function updateCounters() {
-	if (unreadCounter > 0) {
-		document.title = titlei18n + " (" + unreadCounter + ") - " + titlebase;
-		$('noUnreadCounters').hide();
-		$('unreadCounters').show();
-		$('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
-		$('unreadCountersUnread').innerHTML = unreadCounter;
-		$('unreadCountersTotal').innerHTML = comicCounter;
-	} else {
-		document.title = titlei18n + " - " + titlebase;
-		$('noUnreadCounters').show();
-		$('unreadCounters').hide();
-		$('menuUnreadCounter').innerHTML = '';
-		$('noUnreadCountersTotal').innerHTML = comicCounter;
-	}
-	return 0;
+    if (unreadCounter > 0) {
+        document.title = titlei18n + " (" + unreadCounter + ") - " + titlebase;
+        $('noUnreadCounters').hide();
+        $('unreadCounters').show();
+        $('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
+        $('unreadCountersUnread').innerHTML = unreadCounter;
+        $('unreadCountersTotal').innerHTML = comicCounter;
+    } else {
+        document.title = titlei18n + " - " + titlebase;
+        $('noUnreadCounters').show();
+        $('unreadCounters').hide();
+        $('menuUnreadCounter').innerHTML = '';
+        $('noUnreadCountersTotal').innerHTML = comicCounter;
+    }
+    return 0;
 }
 
 // add a bit in the url to make it different so browser caching won't happen
@@ -180,197 +180,203 @@ function initScrolling() {
 }
 // function exed when loading of html ends
 function onReadLoad() {
-	clist = $$('.comic');
-	updateCounters();
-	showUnreadComics();
-	initScrolling();
-	if (comicCounter) {
-		if (unreadCounter) {
-			initLoadImages();
-		} else {
-			//TODO mostrar comic aleatorio
-			return 0;
-		}
-	} else {
-		$('noComicsSelected').show();
-	}
+    clist = $$('.comic');
+    updateCounters();
+    showUnreadComics();
+    initScrolling();
+    if (comicCounter) {
+        if (unreadCounter) {
+            initLoadImages();
+        } else {
+            //TODO mostrar comic aleatorio
+            return 0;
+        }
+    } else {
+        $('noComicsSelected').show();
+    }
 }
 // reloads all the images from a comic that had previously failed loading adding a seed in the url
 function reloadComic(cid) {
-	var comic = comics[cid];
-	comic.loaded = false;
-	comic.error = false;
-	loadComic(comic, true);
+    var comic = comics[cid];
+    comic.loaded = false;
+    comic.error = false;
+    loadComic(comic, true);
 }
 function markread(id, vote) {
-	var ret, params;
+    var ret, params;
     params = {'id': id, 'value': vote};
-	Element.show('working' + id);
-	Element.hide('workingerror' + id);
-	startRequest(url_mark_as_read, {
-		method: 'post',
-		parameters: params,
-		onSuccess: function (transport) {
-			if (transport.status === 0) {
-				//Error
-				Element.hide('working' + id);
-				Element.show('workingerror' + id);
-			} else {
-				ret = parseInt(transport.responseText, 10);
-				if (ret === 0) {
-					Element.hide('working' + id);
-					Element.hide('workingerror' + id);
-					Element.hide('reading' + id);
-					Element.hide('newnotice' + id);
-					Element.show('ok' + id);
-					setTimeout("Element.hide('ok" + id + "')", 5000);
-					unreadCounter = unreadCounter - 1;
-					unreadComics[id] = false;
-					updateCounters();
-				} else {
-					//Error
-					Element.hide('working' + id);
-					Element.show('workingerror' + id);
-				}
-			}
-		},
-		onFailure: function (transport) {
-			//Error
-			Element.hide('working' + id);
-			Element.show('workingerror' + id);
-		},
-		onException: function (req, exc) {
-			//Error
-			Element.hide('working' + id);
-			Element.show('workingerror' + id);
-		}
-	});
+    Element.show('working' + id);
+    Element.hide('workingerror' + id);
+    startRequest(url_mark_as_read, {
+        method: 'post',
+        parameters: params,
+        onSuccess: function (transport) {
+            if (transport.status === 0) {
+                //Error
+                Element.hide('working' + id);
+                Element.show('workingerror' + id);
+            } else {
+                ret = parseInt(transport.responseText, 10);
+                if (ret === 0) {
+                    Element.hide('working' + id);
+                    Element.hide('workingerror' + id);
+                    Element.hide('reading' + id);
+                    Element.hide('newnotice' + id);
+                    Element.show('ok' + id);
+                    setTimeout("Element.hide('ok" + id + "')", 5000);
+                    unreadCounter = unreadCounter - 1;
+                    unreadComics[id] = false;
+                    updateCounters();
+                } else {
+                    //Error
+                    Element.hide('working' + id);
+                    Element.show('workingerror' + id);
+                }
+            }
+        },
+        onFailure: function (transport) {
+            //Error
+            Element.hide('working' + id);
+            Element.show('workingerror' + id);
+        },
+        onException: function (req, exc) {
+            //Error
+            Element.hide('working' + id);
+            Element.show('workingerror' + id);
+        }
+    });
 }
 
 function reportbroken(id) {
-	var list, chids, params, ret;
+    var list, chids, params, ret;
     chids = [];
-	list = comics[id].list;
-	list.each(function (item) {
-        chids.push(item.chid);
+    list = comics[id].list;
+    if (list.length === 0) {
+        //for a read comic
+        chids.push(comics[id].last_ch);
+    } else {
+        //for an unread comic
+        list.each(function (item) {
+            chids.push(item.chid);
+        });
+    }
+    params = {'id': id, 'chids[]': chids};
+    Element.show('working' + id);
+    Element.hide('workingerror' + id);
+    startRequest(url_report, {
+        method: 'post',
+        parameters: params,
+        onSuccess: function (transport) {
+            if (transport.status === 0) {
+                //Error
+                Element.hide('working' + id);
+                Element.show('workingerror' + id);
+            } else {
+                ret = parseInt(transport.responseText, 10);
+                if (ret === 0) {
+                    Element.hide('working' + id);
+                    Element.hide('workingerror' + id);
+                    Element.show('ok' + id);
+                    setTimeout("Element.hide('ok" + id + "')", 5000);
+                } else {
+                    //Error
+                    Element.hide('working' + id);
+                    Element.show('workingerror' + id);
+                }
+            }
+        },
+        onFailure: function (transport) {
+            //Error
+            Element.hide('working' + id);
+            Element.show('workingerror' + id);
+        },
+        onException: function (req, exc) {
+            //Error
+            Element.hide('working' + id);
+            Element.show('workingerror' + id);
+        }
     });
-	params = {'id': id, 'chids[]': chids};
-	Element.show('working' + id);
-	Element.hide('workingerror' + id);
-	startRequest(url_report, {
-		method: 'post',
-		parameters: params,
-		onSuccess: function (transport) {
-			if (transport.status === 0) {
-				//Error
-				Element.hide('working' + id);
-				Element.show('workingerror' + id);
-			} else {
-				ret = parseInt(transport.responseText, 10);
-				if (ret === 0) {
-					Element.hide('working' + id);
-					Element.hide('workingerror' + id);
-					Element.show('ok' + id);
-					setTimeout("Element.hide('ok" + id + "')", 5000);
-				} else {
-					//Error
-					Element.hide('working' + id);
-					Element.show('workingerror' + id);
-				}
-			}
-		},
-		onFailure: function (transport) {
-			//Error
-			Element.hide('working' + id);
-			Element.show('workingerror' + id);
-		},
-		onException: function (req, exc) {
-			//Error
-			Element.hide('working' + id);
-			Element.show('workingerror' + id);
-		}
-	});
 }
 
 function removecomic(id) {
     var params, cdiv, mover_a;
-	if (unreadComics[id]) {
-		markread(id, 0);
-	}
-	params = {'id': id};
-	Element.show('working' + id);
-	startRequest(url_remove, {
-		method: 'post',
-		parameters: params,
-		onSuccess: function (transport) {
+    if (unreadComics[id]) {
+        markread(id, 0);
+    }
+    params = {'id': id};
+    Element.show('working' + id);
+    startRequest(url_remove, {
+        method: 'post',
+        parameters: params,
+        onSuccess: function (transport) {
             if (transport.status === 200) {
-				//quitar el comic de la principal
-				cdiv = $('c' + id);
-				//siguiente div hermano
-				mover_a = cdiv.next();
-				//buscamos uno que sea visible ahora mismo
-				while (mover_a !== null && !mover_a.visible()) {
-					mover_a = mover_a.next();
-				}
-				if (mover_a === null) {
-					//no hay siguiente, pues anterior
-					mover_a = cdiv.previous();
-					//buscamos uno que sea visible ahora mismo
-					while (mover_a !== null && !mover_a.visible()) {
-						mover_a = mover_a.previous();
-					}
-				}
-				//ocultar el div y quitarlo del dom
-				cdiv.hide();
-				cdiv.remove();
-				//quitarlo de las listas
-				comics[id] = null;
-				//no quedan comics en la lista, mostrar aviso
-				if ($('comics').childElements().length === 0) {
-					$('noComicsSelected').show();
-				} else {
-					mover_a.scrollToExtra(-40);
-				}
-				//actualizar contadores
-				comicCounter = comicCounter - 1;
-				updateCounters();
-			} else {
+                //quitar el comic de la principal
+                cdiv = $('c' + id);
+                //siguiente div hermano
+                mover_a = cdiv.next();
+                //buscamos uno que sea visible ahora mismo
+                while (mover_a !== null && !mover_a.visible()) {
+                    mover_a = mover_a.next();
+                }
+                if (mover_a === null) {
+                    //no hay siguiente, pues anterior
+                    mover_a = cdiv.previous();
+                    //buscamos uno que sea visible ahora mismo
+                    while (mover_a !== null && !mover_a.visible()) {
+                        mover_a = mover_a.previous();
+                    }
+                }
+                //ocultar el div y quitarlo del dom
+                cdiv.hide();
+                cdiv.remove();
+                //quitarlo de las listas
+                comics[id] = null;
+                //no quedan comics en la lista, mostrar aviso
+                if ($('comics').childElements().length === 0) {
+                    $('noComicsSelected').show();
+                } else {
+                    mover_a.scrollToExtra(-40);
+                }
+                //actualizar contadores
+                comicCounter = comicCounter - 1;
+                updateCounters();
+            } else {
                 //Error
                 Element.hide('working' + id);
                 Element.show('workingerror' + id);
             }
-		},
-		onFailure: function (transport) {
-			//Error
-			Element.hide('working' + id);
-			Element.show('workingerror' + id);
-		},
-		onException: function (req, exc) {
-			//Error
-			Element.hide('working' + id);
-			Element.show('workingerror' + id);
-		}
-	});
+        },
+        onFailure: function (transport) {
+            //Error
+            Element.hide('working' + id);
+            Element.show('workingerror' + id);
+        },
+        onException: function (req, exc) {
+            //Error
+            Element.hide('working' + id);
+            Element.show('workingerror' + id);
+        }
+    });
 }
 function mark_all_read() {
     var i;
-	$("mark_all_read_anim").show();
-	startRequest(url_mark_all_read, {
-		onSuccess: function () {
-			$("mark_all_read_anim").hide();
-			//update counters and arrays
-			unreadCounter = 0;
-			updateCounters();
-			for (i = 0; i < unreadComics.length; i = i + 1) {
+    $("mark_all_read_anim").show();
+    startRequest(url_mark_all_read, {
+        onSuccess: function () {
+            $("mark_all_read_anim").hide();
+            //update counters and arrays
+            unreadCounter = 0;
+            updateCounters();
+            for (i = 0; i < unreadComics.length; i = i + 1) {
                 unreadComics[i] = false; 
             }
-			//now we hide every comic
-			showUnreadComics();
-			//hide link to mark all read
-			$("mark_all_read").hide();
-		},
-		onFailure: function () {
-			$("mark_all_read_anim").hide();
-		}
-	});
+            //now we hide every comic
+            showUnreadComics();
+            //hide link to mark all read
+            $("mark_all_read").hide();
+        },
+        onFailure: function () {
+            $("mark_all_read_anim").hide();
+        }
+    });
 }
