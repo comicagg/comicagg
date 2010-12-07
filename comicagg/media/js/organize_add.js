@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global $, $$, setTimeout, clearTimeout, Image, Ajax, Element, openurl, startRequest, removeComicId, media_url, url_add, url_forget, url_remove, usercomics: true, availablecomics, availablecomics_new: true */
+/*global $, $$, setTimeout, clearTimeout, Image, Ajax, Element, openurl, startRequest, removeComicId, media_url, url_add, url_forget_new_comic, url_remove, usercomics: true, availablecomics, availablecomics_new: true */
 "use strict";
 var comics;
 var lastevent;
@@ -77,7 +77,7 @@ function onClickComic(event) {
     }
 }
 function mouseOverAction() {
-    var elem, id, img, comic;
+    var elem, id, img, comic, params;
     elem = lastevent.element();
     id = parseInt(elem.id.substring(6), 10);
     currentid = id;
@@ -85,7 +85,10 @@ function mouseOverAction() {
         //es un comic nuevo
         $('comic_new').show();
         //forget as new comic
-        startRequest(comic.url_forget, {
+        params = {'id': id};
+        startRequest(url_forget_new_comic, {
+            method: 'post',
+            parameters: params,
             onSuccess: function (response) {
                 if (response.status === 200) {
                     //remove green label
@@ -104,10 +107,8 @@ function mouseOverAction() {
             }
         });
     } else if ((comic = containsComicId(usercomics, id))) {
-        //TODO deselect comic
         $('comic_new').hide();
     } else if ((comic = containsComicId(availablecomics, id))) {
-        //TODO select comic
         $('comic_new').hide();
     }
     $('comic_info_wrap').show();
