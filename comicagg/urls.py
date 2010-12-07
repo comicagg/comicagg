@@ -17,7 +17,7 @@ urlpatterns = patterns('',
 	(r'^comics/', include('comicagg.agregator.urls', namespace="aggregator")),
 #	(r'^help/', include('comicagg.help.urls')),
 	(r'^news/', include('comicagg.blog.urls', namespace="news")),
-	(r'^ws/', include('comicagg.ws.urls')),
+	(r'^ws/', include('comicagg.ws.urls', namespace="ws")),
 )
 
 extra = {
