@@ -66,9 +66,14 @@ TEMPLATE_DIRS = (
     '%scomicagg/templates' % ROOT,
 )
 
+#For SMTP email sending
 EMAIL_HOST = ''
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
+
 DEFAULT_FROM_EMAIL = ''
+
+#From address, for admin emails
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
+#Prefix for email sent to the admins
 EMAIL_SUBJECT_PREFIX=''
