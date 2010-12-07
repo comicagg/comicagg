@@ -59,9 +59,10 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.messages.context_processors.messages',
-)
+#TEMPLATE_CONTEXT_PROCESSORS = (
+#    'django.contrib.messages.context_processors.messages',
+#    'django.contrib.auth.context_processors.auth',
+#)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
