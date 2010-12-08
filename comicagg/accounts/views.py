@@ -148,7 +148,8 @@ def password_reset(request):
                             'site_name': settings.SITE_NAME,
                             'user': user,
                             }
-                    send_mail(_('Password reset on %s') % settings.SITE_NAME, t.render(Context(c)), None, [user.email])
+                    subject = _('Password reset on %(site)s') % { 'site':settings.SITE_NAME }
+                    send_mail(subject, t.render(Context(c)), None, [user.email])
             return redirect('accounts:done', kind='password_reset')
     context['form'] = form
     return render(request, 'accounts/password_reset_form.html', context, 'account')

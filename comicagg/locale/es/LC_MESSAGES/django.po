@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-08 21:28+0100\n"
-"PO-Revision-Date: 2010-12-08 21:30+0100\n"
+"POT-Creation-Date: 2010-12-08 21:38+0100\n"
+"PO-Revision-Date: 2010-12-08 21:39+0100\n"
 "Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -65,8 +65,8 @@ msgstr "El usuario que has elegido ya está siendo usado. Por favor, elige otro.
 
 #: accounts/views.py:151
 #, python-format
-msgid "Password reset on %s"
-msgstr "Cambio de contraseña en %s"
+msgid "Password reset on %(site)s"
+msgstr "Cambio de contraseña en %(site)s"
 
 #: agregator/adminviews.py:33
 #: templates/admin/check.html:6
