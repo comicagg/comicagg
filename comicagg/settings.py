@@ -59,23 +59,17 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.load_template_source',
 )
 
-#TEMPLATE_CONTEXT_PROCESSORS = (
-#    'django.contrib.messages.context_processors.messages',
-#    'django.contrib.auth.context_processors.auth',
-#)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware', #
+    'django.contrib.sessions.middleware.SessionMiddleware', #
     'django.middleware.locale.LocaleMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.middleware.doc.XViewMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware', #
     'comicagg.middleware.UserBasedExceptionMiddleware',
     'comicagg.middleware.MaintenanceMiddleware',
     'comicagg.middleware.ActiveUserMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware', #
+    'django.middleware.doc.XViewMiddleware',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
