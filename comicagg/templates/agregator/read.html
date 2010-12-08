@@ -8,8 +8,6 @@
 {% block content %}
 <script language="javascript">
 	var titlei18n = "{% trans 'Read' %}";
-	var unreadCounter = {{ unread_count }};
-	var comicCounter = {{ comic_list|length }};
 	var unreadComics = [];
 	var comics = [];
 {% for comic,unreadlist in unread_list %}
@@ -30,8 +28,8 @@
 			<img style="display:none" id="mark_all_read_anim" src="{{ mediaurl }}images/loaderarrows.gif" alt="working"/>
 		</div>
 		{% endif %}
-		<p class="info" id="unreadCounters">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="unreadCountersTotal">{{ len }}</b> comics and <b id="unreadCountersUnread">{{ unr }}</b> of them have unread strips.{% endblocktrans %}</p>
-		<p class="info" id="noUnreadCounters" style="display:none">{% blocktrans with comic_list|length as len with unread_list|length as unr %}You are reading <b id="noUnreadCountersTotal">{{ len }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
+		<p class="info" id="unreadCounters">{% blocktrans %}You are reading <b id="unreadCountersTotal">{{ comic_count }}</b> comics and <b id="unreadCountersUnread">{{ unread_count }}</b> of them have unread strips.{% endblocktrans %}</p>
+		<p class="info" id="noUnreadCounters" style="display:none">{% blocktrans %}You are reading <b id="noUnreadCountersTotal">{{ comic_count }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
 		<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>
 		<p class="info" id="showingAll" style="display:none">{% blocktrans %}Showing <b>all</b> comics. <a onclick="showUnreadComics()">Click here</a> to show only unread comics.{% endblocktrans %}</p>
 	</div>

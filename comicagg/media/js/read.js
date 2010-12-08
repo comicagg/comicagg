@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global window, document, setTimeout, $, $$, Date, Image, Ajax, Element, media_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, titlei18n, titlebase, unreadCounter: true, comicCounter: true, unreadComics, comics */
+/*global window, document, setTimeout, $, $$, Date, Image, Ajax, Element, media_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, comicCounter, unreadCounter, updateCounters, unreadComics, comics */
 "use strict";
 // comic list. Array of divs
 var clist = [];
@@ -8,25 +8,6 @@ var maxwidth = 0;
 var alreadyUpdating = false;
 var cdivInView = [];
 var divlist = [];
-
-// updates html counters
-function updateCounters() {
-    if (unreadCounter > 0) {
-        document.title = titlei18n + " (" + unreadCounter + ") - " + titlebase;
-        $('noUnreadCounters').hide();
-        $('unreadCounters').show();
-        $('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
-        $('unreadCountersUnread').innerHTML = unreadCounter;
-        $('unreadCountersTotal').innerHTML = comicCounter;
-    } else {
-        document.title = titlei18n + " - " + titlebase;
-        $('noUnreadCounters').show();
-        $('unreadCounters').hide();
-        $('menuUnreadCounter').innerHTML = '';
-        $('noUnreadCountersTotal').innerHTML = comicCounter;
-    }
-    return 0;
-}
 
 // add a bit in the url to make it different so browser caching won't happen
 function addSeed(url) {
@@ -210,31 +191,23 @@ function markread(id, vote) {
     startRequest(url_mark_as_read, {
         method: 'post',
         parameters: params,
-        onSuccess: function (transport) {
-            if (transport.status === 0) {
+        onSuccess: function (response) {
+            if (response.status === 200) {
+                Element.hide('working' + id);
+                Element.hide('workingerror' + id);
+                Element.hide('reading' + id);
+                Element.hide('newnotice' + id);
+                Element.show('ok' + id);
+                setTimeout("Element.hide('ok" + id + "')", 5000);
+                unreadComics[id] = false;
+                updateCounters(response.responseJSON);
+            } else {
                 //Error
                 Element.hide('working' + id);
                 Element.show('workingerror' + id);
-            } else {
-                ret = parseInt(transport.responseText, 10);
-                if (ret === 0) {
-                    Element.hide('working' + id);
-                    Element.hide('workingerror' + id);
-                    Element.hide('reading' + id);
-                    Element.hide('newnotice' + id);
-                    Element.show('ok' + id);
-                    setTimeout("Element.hide('ok" + id + "')", 5000);
-                    unreadCounter = unreadCounter - 1;
-                    unreadComics[id] = false;
-                    updateCounters();
-                } else {
-                    //Error
-                    Element.hide('working' + id);
-                    Element.show('workingerror' + id);
-                }
             }
         },
-        onFailure: function (transport) {
+        onFailure: function (response) {
             //Error
             Element.hide('working' + id);
             Element.show('workingerror' + id);
@@ -266,26 +239,19 @@ function reportbroken(id) {
     startRequest(url_report, {
         method: 'post',
         parameters: params,
-        onSuccess: function (transport) {
-            if (transport.status === 0) {
+        onSuccess: function (response) {
+            if (response.status === 200) {
+                Element.hide('working' + id);
+                Element.hide('workingerror' + id);
+                Element.show('ok' + id);
+                setTimeout("Element.hide('ok" + id + "')", 5000);
+            } else {
                 //Error
                 Element.hide('working' + id);
                 Element.show('workingerror' + id);
-            } else {
-                ret = parseInt(transport.responseText, 10);
-                if (ret === 0) {
-                    Element.hide('working' + id);
-                    Element.hide('workingerror' + id);
-                    Element.show('ok' + id);
-                    setTimeout("Element.hide('ok" + id + "')", 5000);
-                } else {
-                    //Error
-                    Element.hide('working' + id);
-                    Element.show('workingerror' + id);
-                }
             }
         },
-        onFailure: function (transport) {
+        onFailure: function (response) {
             //Error
             Element.hide('working' + id);
             Element.show('workingerror' + id);
@@ -305,8 +271,9 @@ function removecomic(id) {
     startRequest(url_remove, {
         method: 'post',
         parameters: params,
-        onSuccess: function (transport) {
-            if (transport.status === 200) {
+        onSuccess: function (response) {
+            if (response.status === 200) {
+                updateCounters(response.responseJSON);
                 //quitar el comic de la principal
                 cdiv = $('c' + id);
                 //siguiente div hermano
@@ -334,16 +301,13 @@ function removecomic(id) {
                 } else {
                     mover_a.scrollToExtra(-40);
                 }
-                //actualizar contadores
-                comicCounter = comicCounter - 1;
-                updateCounters();
             } else {
                 //Error
                 Element.hide('working' + id);
                 Element.show('workingerror' + id);
             }
         },
-        onFailure: function (transport) {
+        onFailure: function (response) {
             //Error
             Element.hide('working' + id);
             Element.show('workingerror' + id);
@@ -355,22 +319,26 @@ function removecomic(id) {
         }
     });
 }
-function mark_all_read() {
+function mark_all_read() { //TODO
     var i;
     $("mark_all_read_anim").show();
     startRequest(url_mark_all_read, {
-        onSuccess: function () {
-            $("mark_all_read_anim").hide();
-            //update counters and arrays
-            unreadCounter = 0;
-            updateCounters();
-            for (i = 0; i < unreadComics.length; i = i + 1) {
-                unreadComics[i] = false; 
+        onSuccess: function (response) {
+            if (response.status === 200) {
+                $("mark_all_read_anim").hide();
+                //update counters and arrays
+                updateCounters(response.responseJSON);
+                for (i = 0; i < unreadComics.length; i = i + 1) {
+                    unreadComics[i] = false; 
+                }
+                //now we hide every comic
+                showUnreadComics();
+                //hide link to mark all read
+                $("mark_all_read").hide();
+            } else {
+                //error
+                $("mark_all_read_anim").hide();
             }
-            //now we hide every comic
-            showUnreadComics();
-            //hide link to mark all read
-            $("mark_all_read").hide();
         },
         onFailure: function () {
             $("mark_all_read_anim").hide();

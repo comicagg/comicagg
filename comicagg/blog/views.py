@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from comicagg import render
+from comicagg.agregator.ajax import ok_response
 from comicagg.blog.models import Post, NewBlog
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -28,7 +29,7 @@ def forget_new_blogs(request):
         user = None
     if user:
         NewBlog.objects.filter(user=user).delete()
-    return HttpResponse('0')
+    return ok_response(request)
 
 def is_new_for(post, user):
     """Returns the NewBlog object for a user and a news item.

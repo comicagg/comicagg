@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: false, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global $, $$, startRequest, removeComicId, url_save_selection, url_remove_list, usercomics: true, Ajax, Element, dojo, setTimeout */
+/*global $, $$, startRequest, removeComicId, url_save_selection, url_remove_list, usercomics: true, Ajax, Element, dojo, setTimeout, updateCounters */
 "use strict";
 function save() {
     var params, items, ids, i, len;
@@ -24,6 +24,7 @@ function save() {
                     function () {
                         $('saved').hide();
                     }, 6000);
+                updateCounters(response.responseJSON);
             } else {
                 $('saved').hide();
                 $('save_error').show();
@@ -97,6 +98,7 @@ function initDND() {
                     if (removed) {
                         usercomics = usercomics.compact();
                     }
+                    updateCounters(response.responseJSON);
                 } else {
                     $('saved').hide();
                     $('save_error').show();

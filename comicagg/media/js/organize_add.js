@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global $, $$, setTimeout, clearTimeout, Image, Ajax, Element, openurl, startRequest, removeComicId, media_url, url_add, url_forget_new_comic, url_remove, usercomics: true, availablecomics, availablecomics_new: true */
+/*global $, $$, setTimeout, clearTimeout, Image, Ajax, Element, openurl, startRequest, removeComicId, media_url, url_add, url_forget_new_comic, url_remove, updateCounters, usercomics: true, availablecomics, availablecomics_new: true */
 "use strict";
 var comics;
 var lastevent;
@@ -30,16 +30,17 @@ function onClickComic(event) {
             method: 'post',
             parameters: params,
             onSuccess: function (response) {
+                elem.removeClassName('working');
                 if (response.status === 200) {
                     elem.removeClassName('added');
                     //remove it from the users comic list
                     if (removeComicId(usercomics, id)) {
                         usercomics = usercomics.compact();
                     }
+                    updateCounters(response.responseJSON);
                 } else {
                     elem.addClassName('error');
                 }
-                elem.removeClassName('working');
             },
             onFailure: function (response) {
                 elem.addClassName('error');
@@ -55,6 +56,7 @@ function onClickComic(event) {
             method: 'post',
             parameters: params,
             onSuccess: function (response) {
+                elem.removeClassName('working');
                 if (response.status === 200) {
                     elem.removeClassName('new');
                     elem.addClassName('added');
@@ -64,10 +66,10 @@ function onClickComic(event) {
                     }
                     //add it to the user comics list
                     usercomics.push(comic);
+                    updateCounters(response.responseJSON);
                 } else {
                     elem.addClassName('error');
                 }
-                elem.removeClassName('working');
             },
             onFailure: function (response) {
                 elem.addClassName('error');
@@ -103,6 +105,7 @@ function mouseOverAction() {
                     if (removeComicId(availablecomics_new, currentid)) {
                         availablecomics_new = availablecomics_new.compact();
                     }
+                    updateCounters(response.responseJSON);
                 }
             }
         });

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
-from django.db.models import Max
+from django.db.models import Count, Max
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 
@@ -12,10 +12,18 @@ from django.shortcuts import get_object_or_404
 These are views for ajax requests.
 If they need any parameters, they always have to be sent via POST.
 Response status:
-- Everything OK: 200 (of course)
+- Everything OK: 200 (of course). Response is JSON with several counters
 - Bad parameters: 400
 - Not found or no POST: 404
 """
+
+def ok_response(request):
+    comics = request.user.subscription_set.exclude(comic__activo=False, comic__ended=False).count()
+    unread = request.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).aggregate(Count('comic', distinct=True))['comic__count']
+    new_comics = request.user.newcomic_set.exclude(comic__activo=False).count()
+    news = request.user.newblog_set.count()
+    response ='{"comics":%d, "new_comics":%d, "unreads":%d, "news":%d}' % (comics, new_comics, unread, news)
+    return HttpResponse(response, mimetype="application/json")
 
 @login_required
 def add_comic(request):
@@ -29,7 +37,7 @@ def add_comic(request):
     s = request.user.subscription_set.filter(comic=comic)
     if s:
         #the comic is already added, finish here
-        return HttpResponse("0")
+        return ok_response(request)
     #continue adding the comic
     #calculate position for the comic, it'll be the last 
     next = request.user.subscription_set.aggregate(pos=Max('position'))['pos'] + 1
@@ -38,7 +46,7 @@ def add_comic(request):
     history = ComicHistory.objects.filter(comic=comic)
     if history:
         UnreadComic.objects.create(user=request.user, comic=comic, history=history[0])
-    return HttpResponse('0')
+    return ok_response(request)
 
 @login_required
 def forget_new_comic(request):
@@ -66,12 +74,12 @@ def mark_read(request):
         rate_comic(request)
     comic = get_object_or_404(Comic, pk=comic_id)
     UnreadComic.objects.filter(user=request.user, comic=comic).delete()
-    return HttpResponse('0')
+    return ok_response(request)
 
 @login_required
 def mark_all_read(request):
     UnreadComic.objects.filter(user=request.user).delete()
-    return HttpResponse("0")
+    return ok_response(request)
 
 @login_required
 def remove_comic(request):
@@ -84,7 +92,7 @@ def remove_comic(request):
     comic = get_object_or_404(Comic, pk=comic_id)
     request.user.subscription_set.filter(comic=comic).delete()
     request.user.unreadcomic_set.filter(comic=comic).delete()
-    return HttpResponse('0')
+    return ok_response(request)
 
 @login_required
 def remove_comic_list(request):
@@ -96,7 +104,7 @@ def remove_comic_list(request):
         return HttpResponseBadRequest("Check the parameters")
     request.user.subscription_set.filter(comic__id__in=ids).delete()
     request.user.unreadcomic_set.filter(comic__id__in=ids).delete()
-    return HttpResponse('0')
+    return ok_response(request)
 
 @login_required
 def report_comic(request):
@@ -112,7 +120,7 @@ def report_comic(request):
     url = reverse('aggregator:admin:reported', kwargs={'chids':'-'.join(chids)})
     message += '%s%s' % (settings.DOMAIN, url)
     mail_admins('Imagen rota', message)
-    return HttpResponse("0")
+    return ok_response(request)
 
 @login_required
 def save_selection(request):
@@ -137,7 +145,7 @@ def save_selection(request):
 
     #if there's nothing selected, we're finished
     if len(selection_clean) == 0:
-        return HttpResponse("0")
+        return ok_response(request)
 
     #subsc_dict is a dictionary, key=comic.id value=subscription.id
     subsc_dict = {s.comic.id:s.id for s in request.user.subscription_set.all()}
@@ -168,7 +176,7 @@ def save_selection(request):
         ss[sid].position = pos
         ss[sid].save()
         pos += 1
-    return HttpResponse("0")
+    return ok_response(request)
 
 @login_required
 def rate_comic(request):
@@ -189,4 +197,4 @@ def rate_comic(request):
     comic.rating += value
     comic.votes += 1
     comic.save()
-    return HttpResponse("0")
+    return ok_response(request)

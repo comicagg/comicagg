@@ -14,11 +14,13 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
         user = None
     try:
         unr = user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).aggregate(Count('comic', distinct=True))
-        context['unread_count'] = unr['comic__count']
         newc = user.newcomic_set.exclude(comic__activo=False).count()
-        context['newcomic_count'] = newc
         newsc = user.newblog_set.count()
-        context['newnews_count'] = newsc
+        comics = request.user.subscription_set.exclude(comic__activo=False, comic__ended=False).count()
+        context['unread_count'] = unr['comic__count']
+        context['newcomic_count'] = newc
+        context['news_count'] = newsc
+        context['comic_count'] = comics
     except:
         pass
 

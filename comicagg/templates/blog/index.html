@@ -1,6 +1,6 @@
 {% extends 'blog/base.html' %}
 {% load i18n blogtags%}
-{% if new_posts %}{% block onload %}forget_new_posts(){% endblock %}{% endif %}
+{% if news_count %}{% block onload %}forget_news(){% endblock %}{% endif %}
 {% block blog_content %}
 {% for item in posts %}
 {% if new_posts %}
