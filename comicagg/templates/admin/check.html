@@ -1,6 +1,8 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
-{% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />{% endblock %}
+
 {% block breadcrumbs %}<div class="breadcrumbs"><a href="/admin/">Inicio</a> &rsaquo; <a href="{% url aggregator:admin:check %}">{% trans "Update comic"%}</a></div>{% endblock %}
 
 {% block content %}

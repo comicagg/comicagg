@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-05 20:18+0100\n"
-"PO-Revision-Date: 2010-12-05 20:31+0100\n"
+"POT-Creation-Date: 2010-12-08 11:33+0100\n"
+"PO-Revision-Date: 2010-12-08 11:34+0100\n"
 "Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -69,15 +69,18 @@ msgid "Password reset on %s"
 msgstr "Cambio de contraseña en %s"
 
 #: agregator/adminviews.py:33
-#: templates/admin/check.html:4
-#: templates/admin/index.html:46
+#: templates/admin/check.html:6
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: agregator/ajax.py:124
-#: agregator/ajax.py:151
+#: agregator/ajax.py:121
+#: agregator/ajax.py:148
 msgid "Saved =)"
 msgstr "Guardado =)"
+
+#: agregator/views.py:132
+msgid "Your request has been saved. Thanks!"
+msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
 #: agregator/templatetags/agregator_tags.py:13
 msgid "NEW!"
@@ -100,41 +103,41 @@ msgstr "Título"
 msgid "Text"
 msgstr "Texto"
 
-#: templates/base.html:31
-#: templates/base.html.py:38
+#: templates/base.html:32
+#: templates/base.html.py:39
 msgid "news"
 msgstr "noticias"
 
-#: templates/base.html:31
+#: templates/base.html:32
 msgid "admin"
 msgstr "admin"
 
-#: templates/base.html:31
-#: templates/base.html.py:38
+#: templates/base.html:32
+#: templates/base.html.py:39
 msgid "contact"
 msgstr "contacto"
 
-#: templates/base.html:31
+#: templates/base.html:32
 msgid "logout"
 msgstr "salir"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "read"
 msgstr "lee"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "choose"
 msgstr "elige"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "organize"
 msgstr "organiza"
 
-#: templates/base.html:34
+#: templates/base.html:35
 msgid "request"
 msgstr "solicita"
 
-#: templates/base.html:38
+#: templates/base.html:39
 msgid "login"
 msgstr "entrar"
 
@@ -201,7 +204,6 @@ msgstr "Contraseña, correo electrónico"
 
 #: templates/accounts/account.html:41
 #: templates/accounts/password_change_done.html:6
-#: templates/admin/base.html:28
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
@@ -500,26 +502,6 @@ msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
 msgid "Back to login"
 msgstr "Volver al inicio"
 
-#: templates/admin/base.html:28
-msgid "Welcome,"
-msgstr "Bienvenido,"
-
-#: templates/admin/base.html:28
-msgid "Documentation"
-msgstr "Documentación"
-
-#: templates/admin/base.html:28
-msgid "Log out"
-msgstr "Desconectar"
-
-#: templates/admin/base.html:28
-msgid "Back to website"
-msgstr "Volver a la web"
-
-#: templates/admin/base.html:33
-msgid "Home"
-msgstr "Inicio"
-
 #: templates/admin/base_site.html:4
 msgid "Comic Aggregator site admin"
 msgstr "Sitio de administración de Comic Aggregator"
@@ -528,15 +510,15 @@ msgstr "Sitio de administración de Comic Aggregator"
 msgid "Comic Aggregator administration"
 msgstr "Administración de Comic Aggregator"
 
-#: templates/admin/check.html:11
+#: templates/admin/check.html:13
 msgid "was updated."
 msgstr "fue actualizado."
 
-#: templates/admin/check.html:11
+#: templates/admin/check.html:13
 msgid "readers notified."
 msgstr "lectores notificados."
 
-#: templates/admin/check.html:13
+#: templates/admin/check.html:15
 msgid "was not modified."
 msgstr "no fue modificado."
 
@@ -558,6 +540,14 @@ msgstr "Añadir"
 msgid "Change"
 msgstr "Cambiar"
 
+#: templates/admin/index.html:45
+msgid "Other actions"
+msgstr "Otras acciones"
+
+#: templates/admin/index.html:46
+msgid "Update a comic"
+msgstr "Actualizar un comic"
+
 #: templates/admin/index.html:49
 msgid "You don't have permission to edit anything."
 msgstr "No tienes permiso para editar nada."
@@ -574,7 +564,11 @@ msgstr "Mis acciones"
 msgid "None available"
 msgstr "Ninguna disponible"
 
-#: templates/admin/reported.html:4
+#: templates/admin/index.html:76
+msgid "Unknown content"
+msgstr "Contenido desconocido"
+
+#: templates/admin/reported.html:6
 msgid "Reported broken images"
 msgstr "Imágenes rotas"
 
@@ -743,55 +737,51 @@ msgid "Request a comic"
 msgstr "Solicitar un comic"
 
 #: templates/agregator/request_index.html:9
-msgid "Your request has been saved. Thanks!"
-msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
-
-#: templates/agregator/request_index.html:13
 msgid "Write the url of the comic you would like to read here and we will try to add it is as soon as possible (if it's possible, of course)."
 msgstr "Escribe aquí la dirección web del comic que te gustaría leer e intentaremos añadirlo lo antes posible (si es posible)."
 
-#: templates/agregator/request_index.html:14
+#: templates/agregator/request_index.html:10
 #, python-format
 msgid "Currently there are %(count)s requests waiting to be added. We have to add them one by one by hand so, please, be patient. Thanks!"
 msgstr "Ahora mismo hay %(count)s peticiones esperando. Tenemos que añadirlas a mano una a una, así que ten un poco de paciencia. ¡Gracias!"
 
-#: templates/agregator/request_index.html:19
+#: templates/agregator/request_index.html:13
 msgid "The comic's Url"
 msgstr "La dirección del comic"
 
-#: templates/agregator/request_index.html:20
+#: templates/agregator/request_index.html:17
 msgid "Any comment?"
 msgstr "¿Algún comentario?"
 
-#: templates/agregator/request_index.html:21
+#: templates/agregator/request_index.html:18
 msgid "Send"
 msgstr "Enviar"
 
-#: templates/agregator/request_index.html:24
+#: templates/agregator/request_index.html:27
 msgid "Pending requests"
 msgstr "Solicitudes pendientes"
 
-#: templates/agregator/request_index.html:28
+#: templates/agregator/request_index.html:31
 msgid "Your comment:"
 msgstr "Tu comentario:"
 
-#: templates/agregator/request_index.html:29
-#: templates/agregator/request_index.html:38
-#: templates/agregator/request_index.html:47
+#: templates/agregator/request_index.html:32
+#: templates/agregator/request_index.html:41
+#: templates/agregator/request_index.html:50
 msgid "Our comment:"
 msgstr "Nuestro comentario:"
 
-#: templates/agregator/request_index.html:31
-#: templates/agregator/request_index.html:40
-#: templates/agregator/request_index.html:49
+#: templates/agregator/request_index.html:34
+#: templates/agregator/request_index.html:43
+#: templates/agregator/request_index.html:52
 msgid "Nothing here."
 msgstr "No hay nada aquí."
 
-#: templates/agregator/request_index.html:34
+#: templates/agregator/request_index.html:37
 msgid "Rejected requests"
 msgstr "Solicitudes rechazadas"
 
-#: templates/agregator/request_index.html:43
+#: templates/agregator/request_index.html:46
 msgid "Accepted requests"
 msgstr "Solicitudes aceptadas"
 
@@ -811,6 +801,21 @@ msgstr "Todos los posts"
 #: templates/blog/side.html:3
 msgid "Recent posts"
 msgstr "Posts recientes"
+
+#~ msgid "Welcome,"
+#~ msgstr "Bienvenido,"
+
+#~ msgid "Documentation"
+#~ msgstr "Documentación"
+
+#~ msgid "Log out"
+#~ msgstr "Desconectar"
+
+#~ msgid "Back to website"
+#~ msgstr "Volver a la web"
+
+#~ msgid "Home"
+#~ msgstr "Inicio"
 
 #~ msgid "Invalid distribution algorithm specified: %s."
 #~ msgstr "Algoritmo de distribución inválido: %s."
@@ -1080,9 +1085,6 @@ msgstr "Posts recientes"
 
 #~ msgid "Selected strips "
 #~ msgstr "Tiras seleccionadas "
-
-#~ msgid "Extra actions"
-#~ msgstr "Más acciones"
 
 #~ msgid "Working..."
 #~ msgstr "Trabajando..."
