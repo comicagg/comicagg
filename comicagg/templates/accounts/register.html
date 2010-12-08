@@ -6,7 +6,7 @@
 	<h3>{% trans 'Register new account'%}</h3>
 	<p class="info">{% trans 'Please fill in the following fields to create your account. Once you have finished you will be able to log in.'%}</p>
 	<br/>
-	<form method="post" action="{% url accounts:register %}" enctype="application/x-www-form-urlencoded">
+	<form method="post" action="{% url accounts:register %}" enctype="application/x-www-form-urlencoded">{% csrf_token %}
 	<table id="register_table">
 		<tr {% if form.username.errors %}class="error_tr"{% endif %}>
 		<td id="username_label"><label>{% trans 'Username'%}</label></td>
