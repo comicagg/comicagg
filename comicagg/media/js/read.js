@@ -300,9 +300,6 @@ function reportbroken(id) {
 
 function removecomic(id) {
     var params, cdiv, mover_a;
-    if (unreadComics[id]) {
-        markread(id, 0);
-    }
     params = {'id': id};
     Element.show('working' + id);
     startRequest(url_remove, {
