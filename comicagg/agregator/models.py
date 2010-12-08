@@ -57,13 +57,13 @@ class Comic(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
-    def save(self):
+    def save(self, *args, **kwargs):
         notify = False
         #si es nuevo y es activo
         if self.notify: #or (not self.id and self.activo):
             notify = True
             self.notify = False
-        super(Comic, self).save()
+        super(Comic, self).save(*args, **kwargs)
         #avisar de que hay nuevos comics
         if notify:
             users = User.objects.all()
@@ -149,11 +149,16 @@ class Subscription(models.Model):
     comic = models.ForeignKey(Comic)
     position = models.PositiveIntegerField(blank=True, default=0)
 
-    class Meta:
-        ordering = ['user', 'position']
-
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.comic)
+
+    def delete(self, *args, **kwargs):
+        #delete related unreadcomics
+        UnreadComic.objects.filter(user=self.user, comic=self.comic).delete()
+        super(Subscription, self).delete(*args, **kwargs)
+
+    class Meta:
+        ordering = ['user', 'position']
 
 class Request(models.Model):
     user = models.ForeignKey(User)
