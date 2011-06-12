@@ -1,6 +1,44 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global document, window, $, $$, url_forget_new_blogs, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true, Ajax, Element, dojo*/
+/*global document, window, $, $$, url_forget_new_blogs, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true, Ajax, Element, dojo, $j*/
 "use strict";
+
+$j(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+
 function focusOnLogin() {
     $('id_username').focus();
 }
@@ -11,7 +49,14 @@ function openurl(url) {
 }
 
 function startRequest(url, options) {
-    return new Ajax.Request(url, options);
+    return jQuery.ajax(
+        url, {
+            type: options.method,
+            data: options.parameters, //array, key-value
+            success: function (data, textStatus, jqXHR){ options.onSuccess(jqXHR) }, //success(data, textStatus, jqXHR)
+            error: function (jqXHR, textStatus, errorThrown) { options.onFailure(jqXHR) }, //error(jqXHR, textStatus, errorThrown)
+    });
+    //return new Ajax.Request(url, options);
 }
 
 function removeComicId(array, comicid) {

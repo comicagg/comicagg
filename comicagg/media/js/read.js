@@ -279,6 +279,7 @@ function removecomic(id) {
                 //siguiente div hermano
                 mover_a = cdiv.next();
                 //buscamos uno que sea visible ahora mismo
+                //TODO BUG falla al llamar visible() cuando se esta quitando el ultimo
                 while (mover_a !== null && !mover_a.visible()) {
                     mover_a = mover_a.next();
                 }

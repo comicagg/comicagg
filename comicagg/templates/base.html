@@ -8,8 +8,11 @@
 		<link rel="stylesheet" href="{{ mediaurl }}css/base.css" type="text/css"/>
 		<link rel="shortcut icon" href="{{ mediaurl }}images/favicon.png" type="image/png" />
 		<script src="{{ mediaurl }}js/lib/prototype.js" type="text/javascript"></script>
-		<script src="{{ mediaurl }}js/lib/scriptaculous.js" type="text/javascript"></script>
-		<script src="{{ mediaurl }}js/all.min.js" type="text/javascript"></script>
+		<script src="{{ mediaurl }}js/lib/jquery-1.6.1.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+		</script>
+		<script src="{{ mediaurl }}js/all.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var titlebase = " Comic Aggregator";
       var url_add = '{% url aggregator:ajax:add_comic %}';
