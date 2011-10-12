@@ -111,4 +111,6 @@ EMAIL_HOST_PASSWORD = ''
 
 CACHE_BACKEND = 'db://cachet1'
 
+SESSION_COOKIE_NAME = 'comicagg_session'
+
 from settings_local import *
