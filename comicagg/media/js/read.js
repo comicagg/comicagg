@@ -279,15 +279,14 @@ function removecomic(id) {
                 //siguiente div hermano
                 mover_a = cdiv.next();
                 //buscamos uno que sea visible ahora mismo
-                //TODO BUG falla al llamar visible() cuando se esta quitando el ultimo
-                while (mover_a !== null && !mover_a.visible()) {
+                while (mover_a !== null && mover_a !== undefined && !mover_a.visible()) {
                     mover_a = mover_a.next();
                 }
-                if (mover_a === null) {
+                if (mover_a === null || mover_a === undefined) {
                     //no hay siguiente, pues anterior
                     mover_a = cdiv.previous();
                     //buscamos uno que sea visible ahora mismo
-                    while (mover_a !== null && !mover_a.visible()) {
+                    while (mover_a !== null && mover_a !== undefined && !mover_a.visible()) {
                         mover_a = mover_a.previous();
                     }
                 }
@@ -296,10 +295,14 @@ function removecomic(id) {
                 cdiv.remove();
                 //quitarlo de las listas
                 comics[id] = null;
+                unreadComics[id] = null;
+                unreadCounter -= 1;
+                comicCounter -= 1;
+                updateCounters();
                 //no quedan comics en la lista, mostrar aviso
                 if ($('comics').childElements().length === 0) {
                     $('noComicsSelected').show();
-                } else {
+                } else if (mover_a !== null && mover_a !== undefined) {
                     mover_a.scrollToExtra(-40);
                 }
             } else {

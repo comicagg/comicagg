@@ -2,6 +2,16 @@
 /*global document, window, $, $$, url_forget_new_blogs, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true, Ajax, Element, dojo, $j*/
 "use strict";
 
+var newMethods = {
+    scrollToExtra:function(element, n) {
+        element = $(element);
+        var pos = Element.cumulativeOffset(element);
+        window.scrollTo(pos[0], pos[1] + n);
+        return element; }
+    };
+
+Element.addMethods(newMethods);
+
 $j(document).ajaxSend(function(event, xhr, settings) {
     function getCookie(name) {
         var cookieValue = null;
@@ -84,6 +94,7 @@ function updateCounters(counters) {
         $('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
     } else {
         $('menuUnreadCounter').hide();
+        $('mark_all_read').hide();
     }
     if (newComicCounter > 0) {
         $('menuNewComicCounter').innerHTML = ' (' + newComicCounter + ')';

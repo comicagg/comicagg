@@ -66,6 +66,7 @@ function onClickComic(event) {
                     }
                     //add it to the user comics list
                     usercomics.push(comic);
+                    //FIXME not always working?
                     updateCounters(response.responseJSON);
                 } else {
                     elem.addClassName('error');
