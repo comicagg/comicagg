@@ -191,21 +191,16 @@ function markread(id, vote) {
     startRequest(url_mark_as_read, {
         method: 'post',
         parameters: params,
-        onSuccess: function (response) {
-            if (response.status === 200) {
-                Element.hide('working' + id);
-                Element.hide('workingerror' + id);
-                Element.hide('reading' + id);
-                Element.hide('newnotice' + id);
-                Element.show('ok' + id);
-                setTimeout("Element.hide('ok" + id + "')", 5000);
-                unreadComics[id] = false;
-                updateCounters(response.responseJSON);
-            } else {
-                //Error
-                Element.hide('working' + id);
-                Element.show('workingerror' + id);
-            }
+        dataType: "json",
+        onSuccess: function (counters) {
+            Element.hide('working' + id);
+            Element.hide('workingerror' + id);
+            Element.hide('reading' + id);
+            Element.hide('newnotice' + id);
+            Element.show('ok' + id);
+            setTimeout("Element.hide('ok" + id + "')", 5000);
+            unreadComics[id] = false;
+            updateCounters(counters);
         },
         onFailure: function (response) {
             //Error
@@ -240,16 +235,10 @@ function reportbroken(id) {
         method: 'post',
         parameters: params,
         onSuccess: function (response) {
-            if (response.status === 200) {
-                Element.hide('working' + id);
-                Element.hide('workingerror' + id);
-                Element.show('ok' + id);
-                setTimeout("Element.hide('ok" + id + "')", 5000);
-            } else {
-                //Error
-                Element.hide('working' + id);
-                Element.show('workingerror' + id);
-            }
+            Element.hide('working' + id);
+            Element.hide('workingerror' + id);
+            Element.show('ok' + id);
+            setTimeout("Element.hide('ok" + id + "')", 5000);
         },
         onFailure: function (response) {
             //Error
@@ -271,44 +260,37 @@ function removecomic(id) {
     startRequest(url_remove, {
         method: 'post',
         parameters: params,
-        onSuccess: function (response) {
-            if (response.status === 200) {
-                updateCounters(response.responseJSON);
-                //quitar el comic de la principal
-                cdiv = $('c' + id);
-                //siguiente div hermano
-                mover_a = cdiv.next();
+        dataType: "json",
+        onSuccess: function (counters) {
+            //update counters
+            updateCounters(counters);
+            //quitar el comic de la principal
+            cdiv = $('c' + id);
+            //siguiente div hermano
+            mover_a = cdiv.next();
+            //buscamos uno que sea visible ahora mismo
+            while (mover_a !== null && mover_a !== undefined && !mover_a.visible()) {
+                mover_a = mover_a.next();
+            }
+            if (mover_a === null || mover_a === undefined) {
+                //no hay siguiente, pues anterior
+                mover_a = cdiv.previous();
                 //buscamos uno que sea visible ahora mismo
                 while (mover_a !== null && mover_a !== undefined && !mover_a.visible()) {
-                    mover_a = mover_a.next();
+                    mover_a = mover_a.previous();
                 }
-                if (mover_a === null || mover_a === undefined) {
-                    //no hay siguiente, pues anterior
-                    mover_a = cdiv.previous();
-                    //buscamos uno que sea visible ahora mismo
-                    while (mover_a !== null && mover_a !== undefined && !mover_a.visible()) {
-                        mover_a = mover_a.previous();
-                    }
-                }
-                //ocultar el div y quitarlo del dom
-                cdiv.hide();
-                cdiv.remove();
-                //quitarlo de las listas
-                comics[id] = null;
-                unreadComics[id] = null;
-                unreadCounter -= 1;
-                comicCounter -= 1;
-                updateCounters();
-                //no quedan comics en la lista, mostrar aviso
-                if ($('comics').childElements().length === 0) {
-                    $('noComicsSelected').show();
-                } else if (mover_a !== null && mover_a !== undefined) {
-                    mover_a.scrollToExtra(-40);
-                }
-            } else {
-                //Error
-                Element.hide('working' + id);
-                Element.show('workingerror' + id);
+            }
+            //ocultar el div y quitarlo del dom
+            cdiv.hide();
+            cdiv.remove();
+            //quitarlo de las listas
+            comics[id] = null;
+            unreadComics[id] = null;
+            //no quedan comics en la lista, mostrar aviso
+            if ($('comics').childElements().length === 0) {
+                $('noComicsSelected').show();
+            } else if (mover_a !== null && mover_a !== undefined) {
+                mover_a.scrollToExtra(-40);
             }
         },
         onFailure: function (response) {
@@ -327,22 +309,18 @@ function mark_all_read() { //TODO
     var i;
     $("mark_all_read_anim").show();
     startRequest(url_mark_all_read, {
-        onSuccess: function (response) {
-            if (response.status === 200) {
-                $("mark_all_read_anim").hide();
-                //update counters and arrays
-                updateCounters(response.responseJSON);
-                for (i = 0; i < unreadComics.length; i = i + 1) {
-                    unreadComics[i] = false; 
-                }
-                //now we hide every comic
-                showUnreadComics();
-                //hide link to mark all read
-                $("mark_all_read").hide();
-            } else {
-                //error
-                $("mark_all_read_anim").hide();
+        dataType: "json",
+        onSuccess: function (counters) {
+            $("mark_all_read_anim").hide();
+            //update counters and arrays
+            updateCounters(response.responseJSON);
+            for (i = 0; i < unreadComics.length; i = i + 1) {
+                unreadComics[i] = false; 
             }
+            //now we hide every comic
+            showUnreadComics();
+            //hide link to mark all read
+            $("mark_all_read").hide();
         },
         onFailure: function () {
             $("mark_all_read_anim").hide();
