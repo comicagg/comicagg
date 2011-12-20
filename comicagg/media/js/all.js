@@ -59,9 +59,9 @@ function openurl(url) {
 }
 
 function startRequest(url, options) {
-    // set as default data type "text"
+    // set as default data type "json"
     var dataType = options.dataType ?
-        options.dataType : "text";
+        options.dataType : "json";
     return jQuery.ajax(
         url, {
             type: options.method,
@@ -137,10 +137,8 @@ function updateCounters(counters) {
 function forget_news() {
     startRequest(url_forget_new_blogs, {
         method: 'post',
-        onSuccess: function (response) {
-            if (response.status === 200) {
-                updateCounters(response.responseJSON);
-            }
+        onSuccess: function (counters) {
+            updateCounters(counters);
         },
         onFailure: function (response) {}
     });
