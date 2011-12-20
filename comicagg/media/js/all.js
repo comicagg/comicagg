@@ -59,11 +59,15 @@ function openurl(url) {
 }
 
 function startRequest(url, options) {
+    // set as default data type "text"
+    var dataType = options.dataType ?
+        options.dataType : "text";
     return jQuery.ajax(
         url, {
             type: options.method,
             data: options.parameters, //array, key-value
-            success: function (data, textStatus, jqXHR){ options.onSuccess(jqXHR) }, //success(data, textStatus, jqXHR)
+            dataType: dataType,
+            success: function (data, textStatus, jqXHR){ options.onSuccess(data) }, //success(data, textStatus, jqXHR)
             error: function (jqXHR, textStatus, errorThrown) { options.onFailure(jqXHR) }, //error(jqXHR, textStatus, errorThrown)
     });
     //return new Ajax.Request(url, options);
@@ -94,7 +98,9 @@ function updateCounters(counters) {
         $('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
     } else {
         $('menuUnreadCounter').hide();
-        $('mark_all_read').hide();
+        if($('mark_all_read')) {
+            $('mark_all_read').hide();
+        }
     }
     if (newComicCounter > 0) {
         $('menuNewComicCounter').innerHTML = ' (' + newComicCounter + ')';

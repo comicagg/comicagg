@@ -40,8 +40,8 @@ def add_comic(request):
         return ok_response(request)
     #continue adding the comic
     #calculate position for the comic, it'll be the last 
-    next = request.user.subscription_set.aggregate(pos=Max('position'))['pos'] + 1
-    request.user.subscription_set.create(comic=comic, position=next)
+    next_pos = request.user.subscription_set.aggregate(pos=Max('position'))['pos'] + 1
+    request.user.subscription_set.create(comic=comic, position=next_pos)
     #add the last strip to the user's unread list
     history = ComicHistory.objects.filter(comic=comic)
     if history:
