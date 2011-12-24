@@ -2,7 +2,7 @@
 {% load i18n %}
 <!-- {% block title %}{% trans 'Read' %} -{% endblock %} -->
 {% block extra_head %}
-		<script src="{{ mediaurl }}js/read.min.js" type="text/javascript"></script>
+		<script src="{{ mediaurl }}js/read.js" type="text/javascript"></script>
 {% endblock%}
 {% block onload %}onReadLoad();{% endblock %}
 {% block content %}
@@ -22,12 +22,12 @@
 </script>
 <div id="read">
 	<div class="top_info">
-		{% if unread_count %}
 		<div id="mark_all_read">
-			<a onclick="mark_all_read()">{% trans "Mark all comics as unread" %}</a>
+        {% if unread_count %}
+			<a onclick="mark_all_read()">{% trans "Mark all comics as read" %}</a>
 			<img style="display:none" id="mark_all_read_anim" src="{{ mediaurl }}images/loaderarrows.gif" alt="working"/>
+        {% endif %}
 		</div>
-		{% endif %}
 		<p class="info" id="unreadCounters">{% blocktrans %}You are reading <b id="unreadCountersTotal">{{ comic_count }}</b> comics and <b id="unreadCountersUnread">{{ unread_count }}</b> of them have unread strips.{% endblocktrans %}</p>
 		<p class="info" id="noUnreadCounters" style="display:none">{% blocktrans %}You are reading <b id="noUnreadCountersTotal">{{ comic_count }}</b> comics and none of them have unread strips.{% endblocktrans %}</p>
 		<p class="info" id="showingUnread">{% blocktrans %}Showing only <b>unread</b> comics. <a onclick="showAllComics()">Click here</a> to show all comics.{% endblocktrans %}</p>

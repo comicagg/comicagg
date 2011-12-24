@@ -506,7 +506,16 @@ input.filter {
     width:300px;
     margin-top:1em;
 }
-
+#no_request_list {
+	position:relative;
+	padding:5px;
+}
+#no_request_list li {
+	float:left;
+	font-weight: normal;
+	min-width:220px;
+	margin-top:5px;
+}
 /********/
 /* Blog */
 /********/

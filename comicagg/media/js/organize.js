@@ -15,21 +15,15 @@ function save() {
     startRequest(url_save_selection, {
         method: 'post',
         parameters: params,
-        onSuccess: function (response) {
+        onSuccess: function (counters) {
             var i;
-            if (response.status === 200) {
-                $('saved').show();
-                $('saving_text').hide();
-                i = setTimeout(
-                    function () {
-                        $('saved').hide();
-                    }, 6000);
-                updateCounters(response.responseJSON);
-            } else {
-                $('saved').hide();
-                $('save_error').show();
-                $('saving_text').hide();
-            }
+            $('saved').show();
+            $('saving_text').hide();
+            i = setTimeout(
+                function () {
+                    $('saved').hide();
+                }, 6000);
+            updateCounters(counters);
         },
         onFailure: function (response) {
             $('saved').hide();
@@ -81,29 +75,23 @@ function initDND() {
         startRequest(url_remove_list, {
             method: 'post',
             parameters: params,
-            onSuccess: function (response) {
+            onSuccess: function (counters) {
                 var i, id, removed;
-                if (response.status === 200) {
-                    $('saved').show();
-                    $('saving_text').hide();
-                    i = setTimeout(
-                        function () {
-                            $('saved').hide();
-                        }, 6000);
-                    removed = false;
-                    for (i = 0; i < nodes.length; i = i + 1) {
-                        id = parseInt(nodes[i].getAttribute('comicid'), 10);
-                        removed = removed || removeComicId(usercomics, id);
-                    }
-                    if (removed) {
-                        usercomics = usercomics.compact();
-                    }
-                    updateCounters(response.responseJSON);
-                } else {
-                    $('saved').hide();
-                    $('save_error').show();
-                    $('saving_text').hide();
+                $('saved').show();
+                $('saving_text').hide();
+                i = setTimeout(
+                    function () {
+                        $('saved').hide();
+                    }, 6000);
+                removed = false;
+                for (i = 0; i < nodes.length; i = i + 1) {
+                    id = parseInt(nodes[i].getAttribute('comicid'), 10);
+                    removed = removed || removeComicId(usercomics, id);
                 }
+                if (removed) {
+                    usercomics = usercomics.compact();
+                }
+                updateCounters(counters);
             },
             onFailure: function (response) {
                 $('saved').hide();
