@@ -7,20 +7,20 @@
 # Jesus Fernandez <esu@proyectoanonimo.com>, 2009.
 # Jesús Fernández <esu@kumomi.es>, 2009.
 # Jesus Fernandez <esu@kumomi.es>, 2009, 2010.
-# Jesús Fernández <jesusfs@gmail.com>, 2010.
+# Jesús Fernández <jesusfs@gmail.com>, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-11 23:32+0200\n"
-"PO-Revision-Date: 2010-12-08 21:39+0100\n"
-"Last-Translator: Jesús Fernández <esu@kumomi.es>\n"
-"Language-Team: Spanish <admin@comicagg.com>\n"
+"POT-Creation-Date: 2011-12-24 22:17+0100\n"
+"PO-Revision-Date: 2011-12-24 22:19+0100\n"
+"Last-Translator: Jesús Fernández <admin@comicagg.com>\n"
+"Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: accounts/models.py:39
@@ -97,39 +97,39 @@ msgstr "Título"
 msgid "Text"
 msgstr "Texto"
 
-#: templates/base.html:38 templates/base.html.py:45
+#: templates/base.html:41 templates/base.html.py:48
 msgid "news"
 msgstr "noticias"
 
-#: templates/base.html:38
+#: templates/base.html:41
 msgid "admin"
 msgstr "admin"
 
-#: templates/base.html:38 templates/base.html.py:45
+#: templates/base.html:41 templates/base.html.py:48
 msgid "contact"
 msgstr "contacto"
 
-#: templates/base.html:38
+#: templates/base.html:41
 msgid "logout"
 msgstr "salir"
 
-#: templates/base.html:41
+#: templates/base.html:44
 msgid "read"
 msgstr "lee"
 
-#: templates/base.html:41
+#: templates/base.html:44
 msgid "choose"
 msgstr "elige"
 
-#: templates/base.html:41
+#: templates/base.html:44
 msgid "organize"
 msgstr "organiza"
 
-#: templates/base.html:41
+#: templates/base.html:44
 msgid "request"
 msgstr "solicita"
 
-#: templates/base.html:45
+#: templates/base.html:48
 msgid "login"
 msgstr "entrar"
 
@@ -878,31 +878,41 @@ msgstr "¿Algún comentario?"
 msgid "Send"
 msgstr "Enviar"
 
-#: templates/agregator/request_index.html:27
+#: templates/agregator/request_index.html:29
+msgid ""
+"There are a number of authors that don't want their comics in this website "
+"so please don't ask for the following comics as we won't add the to the "
+"list. Thanks!"
+msgstr ""
+"Hay una serie de autores que no quieren sus comics en este sitio así que por "
+"favor no pids los siguientes comics ya que no los añadiremos a la lista. "
+"¡Gracias!"
+
+#: templates/agregator/request_index.html:91
 msgid "Pending requests"
 msgstr "Solicitudes pendientes"
 
-#: templates/agregator/request_index.html:31
+#: templates/agregator/request_index.html:95
 msgid "Your comment:"
 msgstr "Tu comentario:"
 
-#: templates/agregator/request_index.html:32
-#: templates/agregator/request_index.html:41
-#: templates/agregator/request_index.html:50
+#: templates/agregator/request_index.html:96
+#: templates/agregator/request_index.html:105
+#: templates/agregator/request_index.html:114
 msgid "Our comment:"
 msgstr "Nuestro comentario:"
 
-#: templates/agregator/request_index.html:34
-#: templates/agregator/request_index.html:43
-#: templates/agregator/request_index.html:52
+#: templates/agregator/request_index.html:98
+#: templates/agregator/request_index.html:107
+#: templates/agregator/request_index.html:116
 msgid "Nothing here."
 msgstr "No hay nada aquí."
 
-#: templates/agregator/request_index.html:37
+#: templates/agregator/request_index.html:101
 msgid "Rejected requests"
 msgstr "Solicitudes rechazadas"
 
-#: templates/agregator/request_index.html:46
+#: templates/agregator/request_index.html:110
 msgid "Accepted requests"
 msgstr "Solicitudes aceptadas"
 
