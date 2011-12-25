@@ -10,6 +10,10 @@ d=os.path.dirname(os.path.abspath(sys.argv[0]))
 d=os.path.join(d, '..')
 d=os.path.abspath(d)
 sys.path.insert(0, d)
+
+from scripts import is_running
+is_running()
+
 import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
