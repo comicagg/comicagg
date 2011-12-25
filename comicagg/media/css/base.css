@@ -194,6 +194,9 @@ button:hover {
 	margin:5px auto 5px auto;
 	text-align:center;
 }
+#read .comic .striplist .alttext {
+    margin:3px auto 10px auto;
+}
 #read .comic .comicextra {
 	border-top:1px dashed gray;
 }
