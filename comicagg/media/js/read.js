@@ -6,7 +6,9 @@ var clist = [];
 var maxwidth = 0;
 // to avoid concurrent uses of updateViewport
 var alreadyUpdating = false;
+//list of comic <div> currently in the viewport + extra(s)
 var cdivInView = [];
+//list of comic <div> that will be checked for the viewport 
 var divlist = [];
 
 // add a bit in the url to make it different so browser caching won't happen
@@ -60,55 +62,85 @@ function loadComic(comic, seed) {
         comic.loaded = true;
     }
 }
+/* Checks that the passed <div> is inside the viewport
+ */
 function inViewport(cdiv, vmin, vmax) {
     var emin, h, emax, c1, c2, c3;
+    //top of the element
     emin = cdiv.cumulativeOffset().top;
     h = cdiv.getHeight();
+    //bottom of the element
     emax = emin + h;
-    c1 = emin <= vmin && emax >= vmax; //sobresale del viewport
-    c2 = emin >= vmin && emin <= vmax; //el borde inferior esta dentro
-    c3 = emax >= vmin && emax <= vmax; //el borde superior esta dentro
+    //all the element occupies the viewport. top and bottom are beyond the viewport
+    c1 = emin <= vmin && emax >= vmax;
+    //top border is inside the viewport
+    c2 = emin >= vmin && emin <= vmax;
+    //bottom border is inside the vieport
+    c3 = emax >= vmin && emax <= vmax;
     if (c1 || c2 || c3) {
         return true;
     } else {
         return false;
     }
 }
+/* Updates viewport information (ie. which comics are currently in the viewport).
+ * When loadImages is true it will load the comics currently in the viewport (and those extra below it)
+ */
 function updateViewport(loadImages) {
     var end, viewp, vmin, vmax, i, len, cdiv, comic;
+    //semaphore so we don't run this function more than once at a time' 
     if (alreadyUpdating) {
         return 0;
     }
     alreadyUpdating = true;
-    //número de comics extras por debajo
-    end = 2;
+    //end is the number of extra comics below the viewport.
+    //we always want at least one so when the user scrolls down the next comic
+    //should always be already loaded
+    end = 1;
+    //controls that we have reached the viewport
     viewp = false;
-    vmin = document.viewport.getScrollOffsets().top;
+    //vertical position of the viewport: top + top bar
+    vmin = document.viewport.getScrollOffsets().top + 40;
+    //vertical position of the viewport: bottom
     vmax = vmin + document.viewport.getHeight();
+    //<div> in the viewport
     cdivInView = [];
+    //iterate the list of divs to control
+    //we will iterate until we have checked all the items in the list
+    //OR we have reached the last item in the viewport and the extra items below it
+    //FIXME if we don't want extra comics (end == 0) we need to modify the condition 
     for (i = 0, len = divlist.length; i < len && end > 0; i = i + 1) {
         cdiv = divlist[i];
-        // solo afecta a elementos visibles
+        //we don't like hidden items
         if (cdiv.visible()) {
+            //check that the item is inside the viewport
             if (inViewport(cdiv, vmin, vmax)) {
+                //it is!
                 cdivInView.push(cdiv);
+                //load the images of this comics?
                 if (loadImages) {
                     comic = comics[cdiv.id.substring(1)];
                     loadComic(comic, false);
                 }
+                //we are in the viewport
                 viewp = true;
             } else {
-                if (viewp) {
+                //this item is not in the viewport
+                //check if we just left the viewport, ie. this is the next item to be shown if we scrolled down
+                //and if we did, check that we allow extra comics
+                if (viewp && end > 0) {
                     cdivInView.push(cdiv);
                     if (loadImages) {
                         comic = comics[cdiv.id.substring(1)];
                         loadComic(comic, false);
                     }
+                    //one extra comic less
                     end -= 1;
                 }
             }
         }
     }
+    //free the semaphore
     alreadyUpdating = false;
 }
 // first batch load of comic images. will load only those comics in the viewport
@@ -150,13 +182,19 @@ function showUnreadComics() {
     $('showingUnread').show();
     updateViewport(true);
 }
+/* Function to handle the scroll event.
+ * 10 ms after the event has been launched it will update the viewport information 
+ */
 function onScrollHandler(e) {
     setTimeout(function () {
         updateViewport(true);
     }, 10);
 }
+/* Inits the scrolling handler.
+ */
 function initScrolling() {
     window.onscroll = onScrollHandler;
+    //Sets the list of divs to control to all the comic divs
     divlist = $$('.comic');
 }
 // function exed when loading of html ends
