@@ -1,18 +1,19 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global document, window, $, $$, url_forget_new_blogs, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true, Ajax, Element, dojo, $j*/
+/*global document, window, $, $$, url_forget_new_blogs, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true, Ajax, Element, dojo, $j, jQuery*/
 "use strict";
 
 var newMethods = {
-    scrollToExtra:function(element, n) {
+    scrollToExtra: function (element, n) {
         element = $(element);
         var pos = Element.cumulativeOffset(element);
         window.scrollTo(pos[0], pos[1] + n);
-        return element; }
-    };
+        return element;
+    }
+};
 
 Element.addMethods(newMethods);
 
-$j(document).ajaxSend(function(event, xhr, settings) {
+$j(document).ajaxSend(function (event, xhr, settings) {
     function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie != '') {
@@ -60,15 +61,14 @@ function openurl(url) {
 
 function startRequest(url, options) {
     // set as default data type "json"
-    var dataType = options.dataType ?
-        options.dataType : "json";
+    var dataType = options.dataType ? options.dataType : "json";
     return jQuery.ajax(
         url, {
             type: options.method,
             data: options.parameters, //array, key-value
             dataType: dataType,
-            success: function (data, textStatus, jqXHR){ options.onSuccess(data) }, //success(data, textStatus, jqXHR)
-            error: function (jqXHR, textStatus, errorThrown) { options.onFailure(jqXHR) }, //error(jqXHR, textStatus, errorThrown)
+            success: function (data, textStatus, jqXHR) { options.onSuccess(data); },
+            error: function (jqXHR, textStatus, errorThrown) { options.onFailure(jqXHR); }
     });
     //return new Ajax.Request(url, options);
 }
@@ -98,7 +98,7 @@ function updateCounters(counters) {
         $('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
     } else {
         $('menuUnreadCounter').hide();
-        if($('mark_all_read')) {
+        if ($('mark_all_read')) {
             $('mark_all_read').hide();
         }
     }

@@ -38,7 +38,7 @@ function loadImage(url, elem, comic) {
     };
     img.src = url;
 }
-// will load the images of this comic if it hasnt been loaded  yet.
+// will load the images of this comic if it hasnt been loaded yet.
 // if seed is true, it will add a seed in the image url
 function loadComic(comic, seed) {
     var s, i, unread, image, url;
