@@ -343,7 +343,7 @@ function removecomic(id) {
         }
     });
 }
-function mark_all_read() { //TODO
+function mark_all_read() {
     var i;
     $("mark_all_read_anim").show();
     startRequest(url_mark_all_read, {
@@ -351,7 +351,7 @@ function mark_all_read() { //TODO
         onSuccess: function (counters) {
             $("mark_all_read_anim").hide();
             //update counters and arrays
-            updateCounters(response.responseJSON);
+            updateCounters(counters);
             for (i = 0; i < unreadComics.length; i = i + 1) {
                 unreadComics[i] = false; 
             }
