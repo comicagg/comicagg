@@ -149,10 +149,8 @@ function updateViewport(loadImages) {
         try {
             cdiv = cdivInView[cdivInViewCount];
             comic = comics[cdiv.id.substring(1)];
-            var el = new Element("a", {'href': '#c' + comic.id });
-            el.innerHTML = comic.name;
-            $('next_comic_bar').innerHTML = "";
-            $('next_comic_bar').appendChild(el);
+            var el = new Element("a", {'href': '#c' + comic.id }).update(comic.name);
+            $('next_comic_bar').update(el);
             $('next_comic_bar').show();
         } catch (e) {
             $('next_comic_bar').hide();            
