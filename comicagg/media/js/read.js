@@ -8,6 +8,8 @@ var maxwidth = 0;
 var alreadyUpdating = false;
 //list of comic <div> currently in the viewport + extra(s)
 var cdivInView = [];
+//real number of current comics in the viewport
+var cdivInViewCount = 0;
 //list of comic <div> that will be checked for the viewport 
 var divlist = [];
 
@@ -105,6 +107,7 @@ function updateViewport(loadImages) {
     vmax = vmin + document.viewport.getHeight();
     //<div> in the viewport
     cdivInView = [];
+    cdivInViewCount = 0;
     //iterate the list of divs to control
     //we will iterate until we have checked all the items in the list
     //OR we have reached the last item in the viewport and the extra items below it
@@ -117,6 +120,7 @@ function updateViewport(loadImages) {
             if (inViewport(cdiv, vmin, vmax)) {
                 //it is!
                 cdivInView.push(cdiv);
+                cdivInViewCount += 1;
                 //load the images of this comics?
                 if (loadImages) {
                     comic = comics[cdiv.id.substring(1)];
@@ -139,6 +143,22 @@ function updateViewport(loadImages) {
                 }
             }
         }
+    }
+    //when the length of the array is the same as the counter we are at the bottom
+    if (cdivInView.length > cdivInViewCount) {
+        try {
+            cdiv = cdivInView[cdivInViewCount];
+            comic = comics[cdiv.id.substring(1)];
+            var el = new Element("a", {'href': '#c' + comic.id });
+            el.innerHTML = comic.name;
+            $('next_comic_bar').innerHTML = "";
+            $('next_comic_bar').appendChild(el);
+            $('next_comic_bar').show();
+        } catch (e) {
+            $('next_comic_bar').hide();            
+        }
+    } else {
+        $('next_comic_bar').hide();
     }
     //free the semaphore
     alreadyUpdating = false;
