@@ -89,7 +89,7 @@ function inViewport(cdiv, vmin, vmax) {
  * When loadImages is true it will load the comics currently in the viewport (and those extra below it)
  */
 function updateViewport(loadImages) {
-    var end, viewp, vmin, vmax, i, len, cdiv, comic;
+    var extras, viewp, vmin, vmax, i, len, cdiv, comic;
     //semaphore so we don't run this function more than once at a time' 
     if (alreadyUpdating) {
         return 0;
@@ -98,9 +98,12 @@ function updateViewport(loadImages) {
     //end is the number of extra comics below the viewport.
     //we always want at least one so when the user scrolls down the next comic
     //should always be already loaded
-    end = 1;
+    extras = 1;
     //controls that we have reached the viewport
-    viewp = false;
+    // viewp == 0: havent reached the viewport yet
+    // viewp == 1: inside the viewport
+    // viewp == 2: passed the viewport
+    viewp = 0;
     //vertical position of the viewport: top + top bar
     vmin = document.viewport.getScrollOffsets().top + 40;
     //vertical position of the viewport: bottom
@@ -111,8 +114,7 @@ function updateViewport(loadImages) {
     //iterate the list of divs to control
     //we will iterate until we have checked all the items in the list
     //OR we have reached the last item in the viewport and the extra items below it
-    //FIXME if we don't want extra comics (end == 0) we need to modify the condition 
-    for (i = 0, len = divlist.length; i < len && end > 0; i = i + 1) {
+    for (i = 0, len = divlist.length; i < len && (viewp < 2 || extras > 0); i = i + 1) {
         cdiv = divlist[i];
         //we don't like hidden items
         if (cdiv.visible()) {
@@ -127,19 +129,20 @@ function updateViewport(loadImages) {
                     loadComic(comic, false);
                 }
                 //we are in the viewport
-                viewp = true;
+                viewp = 1;
             } else {
                 //this item is not in the viewport
                 //check if we just left the viewport, ie. this is the next item to be shown if we scrolled down
                 //and if we did, check that we allow extra comics
-                if (viewp && end > 0) {
+                if (viewp > 0 && extras > 0) {
                     cdivInView.push(cdiv);
                     if (loadImages) {
                         comic = comics[cdiv.id.substring(1)];
                         loadComic(comic, false);
                     }
                     //one extra comic less
-                    end -= 1;
+                    extras -= 1;
+                    viewp = 2;
                 }
             }
         }
