@@ -58,8 +58,7 @@ def forget_new_comic(request):
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
     NewComic.objects.filter(user=request.user, comic=comic).delete()
-    count = request.user.newcomic_set.exclude(comic__activo=False).count()
-    return HttpResponse(str(count))
+    return ok_response(request)
 
 @login_required
 def mark_read(request):
