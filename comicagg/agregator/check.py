@@ -142,6 +142,16 @@ def getalt(match):
         alt = match.group("alt")
     except IndexError:
         alt = None
+    if alt:
+        try:
+            alt = unicode(alt, 'utf-8')
+        except UnicodeDecodeError:
+            try:
+                alt = unicode(alt, 'iso-8859-1')
+            except UnicodeDecodeError:
+                pass
+	except:
+	    pass
     return alt
 
 def notify_subscribers(history):

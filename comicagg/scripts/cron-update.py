@@ -104,7 +104,7 @@ for s in errors_inactive:
 	try:
 		salida += s
 	except:
-		salida += s.decode('utf-8')
+		salida += unicode(s, 'utf-8')
 
 salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)))
 salida += "Hora fin: %s\n" % datetime.now()
