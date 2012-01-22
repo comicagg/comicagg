@@ -27,8 +27,11 @@ all = list(Comic.objects.all())
 new = 0
 no_change = 0
 errors = 0
+updated_comics = list()
 errors_active = list()
 errors_inactive = list()
+errors_unexpected = list()
+inactive_updated = list()
 
 class CheckThread(threading.Thread):
 	def __init__(self, all, errors_active, errors_inactive):
@@ -36,6 +39,9 @@ class CheckThread(threading.Thread):
 		self.all = all
 		self.errors_active = errors_active
 		self.errors_inactive = errors_inactive
+		self.errors_unexpected = errors_unexpected
+		self.inactive_updated = inactive_updated
+		self.updated_comics = updated_comics
 
 	def run(self):
 		global new
@@ -61,7 +67,7 @@ class CheckThread(threading.Thread):
 				#print_exc()
 				s = '   Error inesperado %s: %s\n' % (comic.name.encode('utf-8'), sys.exc_info()[1])
 				if comic.activo:
-					self.errors_active.append(s)
+					self.errors_unexpected.append(s)
 				else:
 					self.errors_inactive.append(s)
 				errors += 1
@@ -71,8 +77,11 @@ class CheckThread(threading.Thread):
 				new += 1
 				#si es un comic desactivado o terminado y se actualiza notificar posible activacion
 				if not comic.activo or comic.ended:
-					s = '  El desactivado o terminado %s se ha actualizado.\n' % (comic.name,)
-					self.errors_inactive.append(s)
+					s = '   El desactivado o terminado %s se ha actualizado.\n' % (comic.name,)
+					self.inactive_updated.append(s)
+				else:
+					s = '   Actualizado %s\n' % comic.name.encode('utf-8')
+					updated_comics.append(s)
 			else:
 				no_change += 1
 			comic = self.next()
@@ -94,22 +103,43 @@ for i in xrange(6):
 for t in thread_list:
 	t.join()
 
-salida += "Comics activos\n"
+salida += "Comics actualizadosi\n"
+for s in updated_comics:
+	try:
+		salida += s
+	except:
+		salida += unicode(s, 'utf-8')
+salida += "-------------------------\n"
+salida += "Errores en comics activos\n"
 for s in errors_active:
 	try:
 		salida += s
 	except:
-		salida += s.decode('utf-8')
-
+		salida += unicode(s, 'utf-8')
 salida += "-------------------------\n"
-salida += "Comics desactivados\n"
+salida += "Errores inesperados en comics activos\n"
+for s in errors_unexpected:
+	try:
+		salida += s
+	except:
+		salida += unicode(s, 'utf-8')
+salida += "-------------------------\n"
+salida += "Comics desactivados actualizados"
+for s in inactive_updated:
+        try:
+		salida += s
+        except:
+		salida += unicode(s, 'utf-8')
+salida += "-------------------------\n"
+salida += "Errores en comics desactivados\n"
 for s in errors_inactive:
 	try:
 		salida += s
 	except:
 		salida += unicode(s, 'utf-8')
 
-salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)))
+salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)+len(inactive_updated)))
 salida += "Hora fin: %s\n" % datetime.now()
 
+print salida
 mail_admins('Salida de cron', salida)
