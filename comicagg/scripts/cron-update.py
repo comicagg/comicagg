@@ -26,6 +26,7 @@ from comicagg.agregator.check import check_comic
 all = list(Comic.objects.all())
 new = 0
 no_change = 0
+errors = 0
 errors_active = list()
 errors_inactive = list()
 
@@ -39,6 +40,7 @@ class CheckThread(threading.Thread):
 	def run(self):
 		global new
 		global no_change
+		global errors
 
 		comic = self.next()
 		while comic:
@@ -62,6 +64,7 @@ class CheckThread(threading.Thread):
 					self.errors_active.append(s)
 				else:
 					self.errors_inactive.append(s)
+				errors += 1
 				#raise
 				#continue
 			if changed:
@@ -75,7 +78,7 @@ class CheckThread(threading.Thread):
 			comic = self.next()
 
 	def next(self):
-		print "%s: %d left" % (self.getName(), len(self.all))
+		print "%s: %d left, %d errors" % (self.getName(), len(self.all), errors)
 		if len(self.all):
 			return self.all.pop(0)
 
