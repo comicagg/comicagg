@@ -113,7 +113,7 @@ def match_lines(comic, lineas, regexp, backwards=False):
 
 def getoneurl(comic, _url):
     lineas = open_url(comic, _url)
-    (match, ) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+    (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
     if not match:
         raise NoMatchException, "%s" % comic.name
     url = comic.base_img % geturl(match)#.decode("utf-8")
@@ -123,7 +123,7 @@ def getoneurl(comic, _url):
 
 def getredirect(comic):
     lineas = open_url(comic, comic.url2)
-    (match, ) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
+    (match, lineas) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
     if not match:
         raise NoMatchException, "%s" % comic.name
     next_url = comic.base2 % geturl(match)#.decode("utf-8")
