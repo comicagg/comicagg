@@ -62,6 +62,7 @@ class CheckThread(threading.Thread):
 					self.errors_active.append(s)
 				else:
 					self.errors_inactive.append(s)
+				errors += 1
 				#continue
 			except:
 				#print_exc()
@@ -103,13 +104,6 @@ for i in xrange(5):
 for t in thread_list:
 	t.join()
 
-salida += "Comics actualizadosi\n"
-for s in updated_comics:
-	try:
-		salida += s
-	except:
-		salida += unicode(s, 'utf-8')
-salida += "-------------------------\n"
 salida += "Errores en comics activos\n"
 for s in errors_active:
 	try:
@@ -124,11 +118,11 @@ for s in errors_unexpected:
 	except:
 		salida += unicode(s, 'utf-8')
 salida += "-------------------------\n"
-salida += "Comics desactivados actualizados"
+salida += "Comics desactivados actualizados\n"
 for s in inactive_updated:
-        try:
+    try:
 		salida += s
-        except:
+    except:
 		salida += unicode(s, 'utf-8')
 salida += "-------------------------\n"
 salida += "Errores en comics desactivados\n"
@@ -138,7 +132,15 @@ for s in errors_inactive:
 	except:
 		salida += unicode(s, 'utf-8')
 
-salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)+len(inactive_updated)))
+salida += "Comics actualizados\n"
+for s in updated_comics:
+	try:
+		salida += s
+	except:
+		salida += unicode(s, 'utf-8')
+salida += "-------------------------\n"
+
+salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)))
 salida += "Hora fin: %s\n" % datetime.now()
 
 print salida
