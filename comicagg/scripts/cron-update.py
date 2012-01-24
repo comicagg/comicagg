@@ -95,7 +95,7 @@ print '\n*** Ejecución de cronjob.py (%s) ***' % datetime.now()
 
 salida = "Hora comienzo: %s\n" % datetime.now()
 thread_list = list()
-for i in xrange(6):
+for i in xrange(5):
 	t = CheckThread(all, errors_active, errors_inactive)
 	thread_list.append(t)
 	t.start()
