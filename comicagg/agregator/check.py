@@ -86,7 +86,7 @@ def open_url(comic, _url):
     #lineas = respuesta.readlines()
     cj = cookielib.LWPCookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    respuesta = opener.open(r)
+    respuesta = opener.open(r, None, 20)
     lineas = respuesta.readlines()
     return lineas
 
@@ -150,8 +150,8 @@ def getalt(match):
                 alt = unicode(alt, 'iso-8859-1')
             except UnicodeDecodeError:
                 pass
-	except:
-	    pass
+            except:
+                pass
     return alt
 
 def notify_subscribers(history):
