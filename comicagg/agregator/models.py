@@ -4,10 +4,13 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
+from fields import ComicNameField, AltTextField
 from math import atan, sqrt
 
+
 class Comic(models.Model):
-    name = models.CharField('Nombre del comic', max_length=255)
+    
+    name = ComicNameField('Nombre del comic', max_length=255)
     website = models.URLField('Página del comic', verify_exists=False)
     activo = models.BooleanField('Comic activo', default=False, help_text='')
     notify = models.BooleanField('Notificar comic nuevo a los usuarios', default=False, help_text='Siempre va a aparecer como desactivado aquí. Si se activa, se notifica y se deja la opción desactivada')
@@ -41,7 +44,7 @@ class Comic(models.Model):
 
     last_check = models.DateTimeField('Última actualización', blank=True)
     last_image = models.URLField('Última imagen', blank=True, verify_exists=False)
-    last_image_alt_text = models.TextField('Texto alternativo', blank=True, null=True) 
+    last_image_alt_text = AltTextField('Texto alternativo', blank=True, null=True) 
 
     rating = models.IntegerField('Votos positivos', default=0)
     votes = models.IntegerField('Votos totales', default=0)
@@ -178,7 +181,7 @@ class ComicHistory(models.Model):
     comic = models.ForeignKey(Comic)
     date = models.DateTimeField(default=datetime.now())
     url = models.CharField(max_length=255)
-    alt_text = models.TextField('Texto alternativo', blank=True, null=True)
+    alt_text = AltTextField('Texto alternativo', blank=True, null=True)
 
     def __unicode__(self):
         return u'%s %s' % (self.comic.name, self.date)
