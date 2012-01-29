@@ -54,10 +54,10 @@ class CheckThread(threading.Thread):
 			try:
 				changed = check_comic(comic)
 			except KeyboardInterrupt:
-				print '*** Matado %s ***' % (datetime.now())
+				print '*** Matado %s ***' % datetime.now()
 				sys.exit()
 			except NoMatchException:
-				s = '   Error comprobando %s\n' % comic.name.encode('utf-8')
+				s = '   Error comprobando %s\n' % comic.name
 				if comic.activo:
 					self.errors_active.append(s)
 				else:
@@ -66,7 +66,7 @@ class CheckThread(threading.Thread):
 				#continue
 			except:
 				#print_exc()
-				s = '   Error inesperado %s: %s\n' % (comic.name.encode('utf-8'), sys.exc_info()[1])
+				s = '   Error inesperado %s: %s\n' % (comic.name, sys.exc_info()[1])
 				if comic.activo:
 					self.errors_unexpected.append(s)
 				else:
@@ -78,10 +78,10 @@ class CheckThread(threading.Thread):
 				new += 1
 				#si es un comic desactivado o terminado y se actualiza notificar posible activacion
 				if not comic.activo or comic.ended:
-					s = '   El desactivado o terminado %s se ha actualizado.\n' % (comic.name,)
+					s = '   El desactivado o terminado %s se ha actualizado.\n' % comic.name
 					self.inactive_updated.append(s)
 				else:
-					s = '   Actualizado %s\n' % comic.name.encode('utf-8')
+					s = '   Actualizado %s\n' % comic.name
 					updated_comics.append(s)
 			else:
 				no_change += 1
@@ -106,38 +106,23 @@ for t in thread_list:
 
 salida += "Errores en comics activos\n"
 for s in errors_active:
-	try:
-		salida += s
-	except:
-		salida += unicode(s, 'utf-8')
+	salida += s
 salida += "-------------------------\n"
 salida += "Errores inesperados en comics activos\n"
 for s in errors_unexpected:
-	try:
-		salida += s
-	except:
-		salida += unicode(s, 'utf-8')
+	salida += s
 salida += "-------------------------\n"
 salida += "Comics desactivados actualizados\n"
 for s in inactive_updated:
-    try:
-		salida += s
-    except:
-		salida += unicode(s, 'utf-8')
+	salida += s
 salida += "-------------------------\n"
 salida += "Errores en comics desactivados\n"
 for s in errors_inactive:
-	try:
-		salida += s
-	except:
-		salida += unicode(s, 'utf-8')
+	salida += s
 
 salida += "Comics actualizados\n"
 for s in updated_comics:
-	try:
-		salida += s
-	except:
-		salida += unicode(s, 'utf-8')
+	salida += s
 salida += "-------------------------\n"
 
 salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)))
