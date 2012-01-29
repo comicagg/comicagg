@@ -11,7 +11,7 @@ d=os.path.join(d, '..')
 d=os.path.abspath(d)
 sys.path.insert(0, d)
 
-from scripts import is_running
+from scripts import is_running, not_running_anymore
 is_running()
 
 import settings_local
@@ -129,4 +129,10 @@ salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(erro
 salida += "Hora fin: %s\n" % datetime.now()
 
 print salida
-mail_admins('Salida de cron', salida)
+try:
+	mail_admins('Salida de cron', salida)
+except:
+	print "Got error sending email"
+	print_exc()
+	
+not_running_anymore()
