@@ -145,10 +145,10 @@ def getalt(match):
     if alt:
         try:
             alt = unicode(alt, 'utf-8')
-        except UnicodeDecodeError:
+        except:
             try:
                 alt = unicode(alt, 'iso-8859-1')
-            except UnicodeDecodeError:
+            except:
                 pass
             except:
                 pass
