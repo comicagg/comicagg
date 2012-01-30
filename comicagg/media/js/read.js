@@ -153,7 +153,7 @@ function updateViewport(loadImages) {
         try {
             cdiv = cdivInView[cdivInViewCount];
             comic = comics[cdiv.id.substring(1)];
-            var el = new Element("a", {'href': '#c' + comic.id }).update(comic.name);
+            var el = new Element("a", {'onclick': '$("c'+comic.id+'").scrollToExtra(-40)'}).update(comic.name);
             $('next_comic_bar').update(el);
             $('next_comic_bar').show();
         } catch (e) {
