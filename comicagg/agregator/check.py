@@ -150,8 +150,6 @@ def getalt(match):
                 alt = unicode(alt, 'iso-8859-1')
             except:
                 pass
-            except:
-                pass
     return alt
 
 def notify_subscribers(history):
