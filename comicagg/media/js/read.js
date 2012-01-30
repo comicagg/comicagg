@@ -12,7 +12,8 @@ var cdivInView = [];
 var cdivInViewCount = 0;
 //list of comic <div> that will be checked for the viewport 
 var divlist = [];
-
+//controls whether to show the next comic bar or not
+var showNextComicBar = false;
 // add a bit in the url to make it different so browser caching won't happen
 function addSeed(url) {
     var date = new Date();
@@ -148,7 +149,7 @@ function updateViewport(loadImages) {
         }
     }
     //when the length of the array is the same as the counter we are at the bottom
-    if (cdivInView.length > cdivInViewCount) {
+    if (cdivInView.length > cdivInViewCount && showNextComicBar) {
         try {
             cdiv = cdivInView[cdivInViewCount];
             comic = comics[cdiv.id.substring(1)];
