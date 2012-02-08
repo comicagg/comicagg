@@ -26,7 +26,7 @@
 		</tr>
 		<tr {% if form.captcha.errors %}class="error_tr"{% endif %}>
 		<td id="captcha_label"><label>{% trans 'No Robots!'%}</label></td>
-		<td>{{ form.captcha }}<br/><span class="small_text">{% trans 'Write here the word "comic" (without the quotes). This is to prevent automated registrations.'%}</span>{% if form.captcha.errors %}{{ form.captcha.errors }}{% endif %}</td>
+		<td>{{ form.captcha }}<br/><span class="small_text">{% trans 'Write here the word "comic" (without the quotes).'%}</span>{% if form.captcha.errors %}{{ form.captcha.errors }}{% endif %}</td>
 		</tr>
 		<tr><td colspan="2" style="text-align:center;"><input type="submit" value="{% trans 'Create account'%}"/>, <a href="{% url index %}">{% trans 'or go back'%}</a></td></tr>
 	</table>

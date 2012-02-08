@@ -13,6 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect
 from django.template import Context, loader
 from django.utils.translation import ugettext as _
+from django.views.decorators.csrf import csrf_exempt
 import re
 
 def index(request):
@@ -40,15 +41,14 @@ def login_view(request):
             nexturl = form.cleaned_data['next']
             user = authenticate(username=username, password=password)
             if user is not None:
+            #From now on the user is logged in
+                login(request, user)
                 if user.is_active:
-                    login(request, user)
-                    # Redirect to a success page.
+                    # Redirect to the page he was requesting.
                     return HttpResponseRedirect(nexturl)
                 else:
-                    context['error'] =_('Your have to activate your user first')
-                    context['form'] = form
-                    return render(request, 'accounts/login_form.html', context, 'login')
-                    # Return a 'disabled account' error message
+                    #User was inactive, redirect to activate page
+                    return redirect('accounts:activate')
             else:
                 # Return an 'invalid login' error message.
                 context['error'] = _('Username or password not valid!')
@@ -240,9 +240,10 @@ def save_color(request):
     raise Http404
 
 @login_required
+@csrf_exempt
 def activate(request):
     if request.method == 'POST':
         request.user.is_active = True
         request.user.save()
         return redirect('index')
-    raise Http404
+    return render(request, 'accounts/activate.html', {}, 'account')

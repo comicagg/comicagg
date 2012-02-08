@@ -7,13 +7,13 @@
 # Jesus Fernandez <esu@proyectoanonimo.com>, 2009.
 # Jesús Fernández <esu@kumomi.es>, 2009.
 # Jesus Fernandez <esu@kumomi.es>, 2009, 2010.
-# Jesús Fernández <jesusfs@gmail.com>, 2010, 2011.
+# Jesús Fernández <jesusfs@gmail.com>, 2010, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-24 22:17+0100\n"
-"PO-Revision-Date: 2011-12-24 22:19+0100\n"
+"POT-Creation-Date: 2012-02-08 22:40+0100\n"
+"PO-Revision-Date: 2012-02-08 22:43+0100\n"
 "Last-Translator: Jesús Fernández <admin@comicagg.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -31,40 +31,36 @@ msgstr "Perfil de usuario"
 msgid "User profiles"
 msgstr "Perfiles de usuario"
 
-#: accounts/views.py:48
-msgid "Your have to activate your user first"
-msgstr "Tienes que activar tu usuario primero"
-
-#: accounts/views.py:54
+#: accounts/views.py:53
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: accounts/views.py:84
+#: accounts/views.py:83
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: accounts/views.py:88
+#: accounts/views.py:87
 msgid "Wrong word!"
 msgstr "¡Palabra errónea!"
 
-#: accounts/views.py:92
+#: accounts/views.py:91
 msgid "Some letters are not valid."
 msgstr "Algunas letras no valen."
 
-#: accounts/views.py:96
+#: accounts/views.py:95
 msgid "Too short."
 msgstr "Muy corto."
 
-#: accounts/views.py:103
+#: accounts/views.py:102
 msgid "That long? Really?"
 msgstr "¿Tan largo? ¿De verdad?"
 
-#: accounts/views.py:113
+#: accounts/views.py:112
 msgid "That username is already taken. Please choose another."
 msgstr ""
 "El usuario que has elegido ya está siendo usado. Por favor, elige otro."
 
-#: accounts/views.py:151
+#: accounts/views.py:150
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
@@ -241,10 +237,11 @@ msgstr "Activar cuenta"
 #: templates/accounts/activate.html:8
 #, python-format
 msgid ""
-"Your account was inactivated because you didn't read your comics for "
-"%(days)s days. You can reactivate it here."
+"Your account was inactivated because you didn't read your comics for, at "
+"least, %(days)s days. You can reactivate it here."
 msgstr ""
-"Tu cuenta ha sido desactivada porque no has leído tus comics en %(days)s "
+"Tu cuenta ha sido desactivada porque no has leído tus comics en, al menos, %"
+"(days)s "
 "días. La puedes reactivar aquí."
 
 #: templates/accounts/activate.html:11
@@ -541,12 +538,8 @@ msgid "No Robots!"
 msgstr "¿Eres humano?"
 
 #: templates/accounts/register.html:29
-msgid ""
-"Write here the word \"comic\" (without the quotes). This is to prevent "
-"automated registrations."
-msgstr ""
-"Escribe aquí la palabra \"comic\" (sin las comillas). Es para prevenir "
-"registros automatizados."
+msgid "Write here the word \"comic\" (without the quotes)."
+msgstr "Escribe aquí la palabra \"comic\" (sin las comillas)."
 
 #: templates/accounts/register.html:31
 msgid "Create account"
@@ -760,11 +753,11 @@ msgstr "por puntuación"
 msgid "Read"
 msgstr "Leer"
 
-#: templates/agregator/read.html:27
+#: templates/agregator/read.html:28
 msgid "Mark all comics as read"
 msgstr "Marcar todos como leídos"
 
-#: templates/agregator/read.html:31
+#: templates/agregator/read.html:32
 #, python-format
 msgid ""
 "You are reading <b id=\"unreadCountersTotal\">%(comic_count)s</b> comics and "
@@ -775,7 +768,7 @@ msgstr ""
 "id=\"unreadCountersUnread\">%(unread_count)s</b> de ellos tienen nuevas "
 "tiras sin leer."
 
-#: templates/agregator/read.html:32
+#: templates/agregator/read.html:33
 #, python-format
 msgid ""
 "You are reading <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics "
@@ -784,7 +777,7 @@ msgstr ""
 "Estás leyendo <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics y "
 "ninguno de ellos tienen nuevas tiras sin leer."
 
-#: templates/agregator/read.html:33
+#: templates/agregator/read.html:34
 msgid ""
 "Showing only <b>unread</b> comics. <a onclick=\"showAllComics()\">Click "
 "here</a> to show all comics."
@@ -792,7 +785,7 @@ msgstr ""
 "Mostrando sólo comics <b>sin leer</b>. <a onclick=\"showAllComics()\">Pulsa "
 "aquí</a> para ver todos los comics."
 
-#: templates/agregator/read.html:34
+#: templates/agregator/read.html:35
 msgid ""
 "Showing <b>all</b> comics. <a onclick=\"showUnreadComics()\">Click here</a> "
 "to show only unread comics."
@@ -800,11 +793,11 @@ msgstr ""
 "Mostrando <b>todos</b> los comics. <a onclick=\"showUnreadComics()\">Pulsa "
 "aquí</a> para ver sólo los que tienes sin leer."
 
-#: templates/agregator/read.html:40
+#: templates/agregator/read.html:41
 msgid "New strips!"
 msgstr "¡Nuevas tiras!"
 
-#: templates/agregator/read.html:43
+#: templates/agregator/read.html:44
 #, python-format
 msgid ""
 "The comic has been updated. <a href=\"%(url)s\">Click here</a> to go to the "
@@ -813,33 +806,34 @@ msgstr ""
 "El cómic ha sido actualizado. <a href=\"%(url)s\">Haz click aquí</a> para ir "
 "a la página del comic."
 
-#: templates/agregator/read.html:63
+#: templates/agregator/read.html:66
 msgid "Reload images"
 msgstr "Recargar"
 
-#: templates/agregator/read.html:66
+#: templates/agregator/read.html:69
 msgid "Mark as read"
 msgstr "Marcar como leída"
 
-#: templates/agregator/read.html:67
+#: templates/agregator/read.html:70
 msgid "Vote"
 msgstr "Vota"
 
-#: templates/agregator/read.html:74
+#: templates/agregator/read.html:77
 msgid "Visit its website"
 msgstr "Visitar su web"
 
-#: templates/agregator/read.html:75
+#: templates/agregator/read.html:78
 msgid "Report broken image"
 msgstr "Avisar imagen rota"
 
-#: templates/agregator/read.html:76
+#: templates/agregator/read.html:79
 msgid "Remove this comic"
 msgstr "Quitar este comic"
 
-#: templates/agregator/read.html:83
-msgid "You haven't selected any comics!"
-msgstr "¡No has seleccionado ningún comic!"
+#: templates/agregator/read.html:86
+msgid "No comics to show here. Use the menu in the top to add comics."
+msgstr ""
+"No hay comics que mostrar aquí. Usa el menú superior para añadir comics."
 
 #: templates/agregator/request_index.html:3
 msgid "Requests"
@@ -931,6 +925,12 @@ msgstr "Todos los posts"
 #: templates/blog/side.html:3
 msgid "Recent posts"
 msgstr "Posts recientes"
+
+#~ msgid "Your have to activate your user first"
+#~ msgstr "Tienes que activar tu usuario primero"
+
+#~ msgid "You haven't selected any comics!"
+#~ msgstr "¡No has seleccionado ningún comic!"
 
 #~ msgid "Mark all comics as unread"
 #~ msgstr "Marcar todos como leídos"
