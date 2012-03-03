@@ -152,6 +152,7 @@ button:hover {
 	-webkit-border-radius:4px;
 	background-color:#ffcccc;
 	padding:5px;
+	text-align:left;
 }
 .error_tr input {
 	border-color:red;

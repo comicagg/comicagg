@@ -1,44 +1,15 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans 'Account settings'%}{% endblock %}
-{% block head %}<script src="{{ settings.MEDIA_URL }}js/profile.js" type="text/javascript"></script>{% endblock %}
+{% block title %}{% trans 'Account settings'%} -{% endblock %}
+{% block extra_head %}{% endblock%}
+{% block onload %}{% endblock %}
 {% block content %}
-<h3>{% trans 'Account settings'%}</h3>
-<p class="info">{% trans 'You can review here your settings. Use this page to change your e-mail address or password.'%}</p>
-<h4>{% trans 'Change settings:'%}</h4>
-<form action="{% url accounts:profile_save %}" method="post">{% csrf_token %}
-  <p class="info">
-    {{ form.alert_new_comics }} {% trans "Alert new comics.<br/>A box will appear in the read page everytime a new comic is added to the database." %}
-  </p>
-  <div style="margin-left:10px;">
-    <h5>{% trans 'Reading comics' %}</h5>
-    <p class="info">
-      {{ form.hide_read }} {% trans "Hide read comics.<br/>Up-to-date comics will be hidden so the page will load faster. If you click in the name of the comic in the navigation box, the comic will show up in the read page. Also, if you have no new comics a random strip will be shown." %}
+<div class="box">
+    <h3>{% trans "Account settings" %}</h3>
+    <p>{% trans "Here you can change your password or your e-mail address." %}</p>
+    <p class="text_left">
+      <a href="{% url accounts:password_change %}">{% trans 'Change password'%}</a><br/>
+      <a href="{% url accounts:email_change %}">{% trans 'Change e-mail'%}</a> <span id="news">({% trans 'current:'%} {{ user.email }})</span><br/><br/>
     </p>
-    <h5>{% trans 'Navigation box' %}</h5>
-    <p class="info">
-      {{ form.navigation_max_columns }} {% trans "Max number of columns.<br/>This is the maximum number of columns to display the list. It's got preference over the maximum number of elements per column." %}
-    </p>
-    <p class="info">
-      {{ form.navigation_max_per_column }} {% trans "Max number of elements per column.<br/>This is the maximum number of elements a column can have. It may be increased to fit the max number of columns." %}
-    </p>
-  </div>
-  <p class="info">
-    <input type="submit" value="{% trans 'Save' %}"/>
-  </p>
-</form>
-{% if saved %}<p class="info"><span class="accounts_saved">{% trans "Saved." %}</span></p>{% endif %}
-<h4>{% trans "Web colors" %} <img id="working" src="{{ settings.MEDIA_URL }}images/loading12.gif" alt="" style="display:none"/></h4>
-<script type="text/javascript">current_color = "{{ user.get_profile.css_color }}";</script>
-<p id="web_colors">
-  <a id="color_blue" class="color" onclick="change_color('blue_white')">&nbsp;</a>
-  <a id="color_green" class="color" onclick="change_color('green_white')">&nbsp;</a>
-  <a id="color_gray" class="color" onclick="change_color('gray_white')">&nbsp;</a>
-  <a id="color_red" class="color" onclick="change_color('red_white')">&nbsp;</a>
-</p>
-<h4>{% trans 'Password, e-mail' %}</h4>
-<p class="info">
-  <a href="{% url accounts:password_change %}">{% trans 'Change password'%}</a><br/>
-  <a href="{% url accounts:email_change %}">{% trans 'Change e-mail'%}</a> <span id="news">({% trans 'current:'%} {{ user.email }})</span><br/><br/>
-</p>
+</div>
 {% endblock %}

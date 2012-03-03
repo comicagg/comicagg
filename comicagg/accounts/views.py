@@ -196,16 +196,7 @@ def email(request):
 
 @login_required
 def edit_profile(request, saved=False):
-    p = request.user.get_profile()
-    data = {
-        'hide_read': p.hide_read,
-#        'sort_by_points': p.sort_by_points,
-        'alert_new_comics': p.alert_new_comics,
-        'navigation_max_columns':p.navigation_max_columns,
-        'navigation_max_per_column':p.navigation_max_per_column,
-    }
-    form = ProfileForm(data)
-    return render(request, 'accounts/account.html', {'form':form, 'saved':saved}, 'account')
+    return render(request, 'accounts/account.html', {}, 'account')
 
 @login_required
 def save_profile(request):

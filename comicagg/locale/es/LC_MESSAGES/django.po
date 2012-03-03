@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-08 22:40+0100\n"
-"PO-Revision-Date: 2012-02-08 22:43+0100\n"
+"POT-Creation-Date: 2012-03-03 19:37+0100\n"
+"PO-Revision-Date: 2012-03-03 19:41+0100\n"
 "Last-Translator: Jesús Fernández <admin@comicagg.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -31,36 +31,36 @@ msgstr "Perfil de usuario"
 msgid "User profiles"
 msgstr "Perfiles de usuario"
 
-#: accounts/views.py:53
+#: accounts/views.py:54
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: accounts/views.py:83
+#: accounts/views.py:84
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: accounts/views.py:87
+#: accounts/views.py:88
 msgid "Wrong word!"
 msgstr "¡Palabra errónea!"
 
-#: accounts/views.py:91
+#: accounts/views.py:92
 msgid "Some letters are not valid."
 msgstr "Algunas letras no valen."
 
-#: accounts/views.py:95
+#: accounts/views.py:96
 msgid "Too short."
 msgstr "Muy corto."
 
-#: accounts/views.py:102
+#: accounts/views.py:103
 msgid "That long? Really?"
 msgstr "¿Tan largo? ¿De verdad?"
 
-#: accounts/views.py:112
+#: accounts/views.py:113
 msgid "That username is already taken. Please choose another."
 msgstr ""
 "El usuario que has elegido ya está siendo usado. Por favor, elige otro."
 
-#: accounts/views.py:150
+#: accounts/views.py:151
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
@@ -138,95 +138,24 @@ msgid ""
 "Problems, suggestions, hate mail, everything is welcome at that address :)"
 msgstr "Problemas, sugerencias, hate mail, todo es bienvenido ahí :)"
 
-#: templates/accounts/account.html:3 templates/accounts/account.html.py:6
+#: templates/accounts/account.html:3 templates/accounts/account.html.py:8
 msgid "Account settings"
 msgstr "Configuración de la cuenta"
 
-#: templates/accounts/account.html:7
-msgid ""
-"You can review here your settings. Use this page to change your e-mail "
-"address or password."
-msgstr ""
-"Aquí puedes revisar la configuración de tu cuenta. Úsala para cambiar tu "
-"dirección de correo electrónico o tu contraseña."
-
-#: templates/accounts/account.html:8
-msgid "Change settings:"
-msgstr "Cambiar configuración:"
+#: templates/accounts/account.html:9
+msgid "Here you can change your password or your e-mail address."
+msgstr "Aquí puedes cambiar tu contraseña o tu correo electrónico."
 
 #: templates/accounts/account.html:11
-msgid ""
-"Alert new comics.<br/>A box will appear in the read page everytime a new "
-"comic is added to the database."
-msgstr ""
-"Avisar sobre nuevos comics añadidos.<br/>Un mensaje aparecerá en la sección "
-"de lectura cuando un nuevo comic sea añadido a la base de datos."
-
-#: templates/accounts/account.html:14
-msgid "Reading comics"
-msgstr "Leyendo comics"
-
-#: templates/accounts/account.html:16
-msgid ""
-"Hide read comics.<br/>Up-to-date comics will be hidden so the page will load "
-"faster. If you click in the name of the comic in the navigation box, the "
-"comic will show up in the read page. Also, if you have no new comics a "
-"random strip will be shown."
-msgstr ""
-"Ocultar los comics ya leídos.<br/>De este modo los comics leídos no se "
-"mostrarán y la página cargará más rápido. Si en la barra de navegación "
-"eliges un comic oculto, éste se mostrará de nuevo. Además, si no tienes "
-"ningún comic nuevo se mostrará una tira aleatoria."
-
-#: templates/accounts/account.html:18
-msgid "Navigation box"
-msgstr "Caja de navegación"
-
-#: templates/accounts/account.html:20
-msgid ""
-"Max number of columns.<br/>This is the maximum number of columns to display "
-"the list. It's got preference over the maximum number of elements per column."
-msgstr ""
-"Número máximo de columnas.<br/>Este es el máximo número de columnas que "
-"puede tener la lista. Tiene preferencia sobre el número máximo de elementos "
-"por columna."
-
-#: templates/accounts/account.html:23
-msgid ""
-"Max number of elements per column.<br/>This is the maximum number of "
-"elements a column can have. It may be increased to fit the max number of "
-"columns."
-msgstr ""
-"Número máximo de elementos por columna.<br/>Es el número máximo de elementos "
-"que puede tener cada columna de la lista. Puede ser aumentado para ajustar "
-"el número máximo de columnas."
-
-#: templates/accounts/account.html:27
-msgid "Save"
-msgstr "Guardar"
-
-#: templates/accounts/account.html:30
-msgid "Saved."
-msgstr "Guardado."
-
-#: templates/accounts/account.html:31
-msgid "Web colors"
-msgstr "Colores de la web"
-
-#: templates/accounts/account.html:39
-msgid "Password, e-mail"
-msgstr "Contraseña, correo electrónico"
-
-#: templates/accounts/account.html:41
 #: templates/accounts/password_change_done.html:6 templates/admin/base.html:41
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
-#: templates/accounts/account.html:42
+#: templates/accounts/account.html:12
 msgid "Change e-mail"
 msgstr "Cambiar correo electrónico"
 
-#: templates/accounts/account.html:42
+#: templates/accounts/account.html:12
 msgid "current:"
 msgstr "actual:"
 
@@ -240,9 +169,8 @@ msgid ""
 "Your account was inactivated because you didn't read your comics for, at "
 "least, %(days)s days. You can reactivate it here."
 msgstr ""
-"Tu cuenta ha sido desactivada porque no has leído tus comics en, al menos, %"
-"(days)s "
-"días. La puedes reactivar aquí."
+"Tu cuenta ha sido desactivada porque no has leído tus comics en, al menos, "
+"%(days)s días. La puedes reactivar aquí."
 
 #: templates/accounts/activate.html:11
 msgid "Reactivate"
@@ -253,7 +181,7 @@ msgid "E-mail updated"
 msgstr "Correo electrónico actualizado"
 
 #: templates/accounts/email_change_done.html:5
-#: templates/accounts/email_change_form.html:5
+#: templates/accounts/email_change_form.html:8
 msgid "Change e-mail address"
 msgstr "Cambiar correo electrónico"
 
@@ -269,7 +197,7 @@ msgstr "Volver a la configuración de la cuenta."
 msgid "E-mail change"
 msgstr "Cambiar correo electrónico"
 
-#: templates/accounts/email_change_form.html:6
+#: templates/accounts/email_change_form.html:9
 msgid ""
 "Here you can change the e-mail of your account. Type your current password, "
 "and the new e-mail address."
@@ -277,24 +205,25 @@ msgstr ""
 "Aquí puedes cambiar el correo electrónico asociado a tu cuenta. Escribe tu "
 "contraseña actual y la nueva dirección de correo."
 
-#: templates/accounts/email_change_form.html:10
+#: templates/accounts/email_change_form.html:13
 msgid "The password is not valid."
 msgstr "La contraseña no es válida."
 
-#: templates/accounts/email_change_form.html:17
-msgid "Current password."
-msgstr "Contraseña actual."
+#: templates/accounts/email_change_form.html:20
+#: templates/accounts/password_change_form.html:20
+msgid "Current password"
+msgstr "Contraseña actual"
 
-#: templates/accounts/email_change_form.html:24
-msgid "New e-mail address."
-msgstr "Nuevo correo."
+#: templates/accounts/email_change_form.html:27
+msgid "New e-mail address"
+msgstr "Nueva dirección"
 
-#: templates/accounts/email_change_form.html:31
+#: templates/accounts/email_change_form.html:34
 #: templates/accounts/password_change_form.html:41
 msgid "Change it"
 msgstr "Cámbialo"
 
-#: templates/accounts/email_change_form.html:34
+#: templates/accounts/email_change_form.html:37
 msgid "Go back."
 msgstr "Volver."
 
@@ -377,10 +306,6 @@ msgstr "¡Las contraseñas no coinciden!"
 #: templates/accounts/password_change_form.html:13
 msgid "The new password cannot be blank!"
 msgstr "La contraseña no puede estar vacía."
-
-#: templates/accounts/password_change_form.html:20
-msgid "Current password"
-msgstr "Contraseña actual"
 
 #: templates/accounts/password_change_form.html:27
 msgid "New password"
@@ -925,6 +850,73 @@ msgstr "Todos los posts"
 #: templates/blog/side.html:3
 msgid "Recent posts"
 msgstr "Posts recientes"
+
+#~ msgid ""
+#~ "You can review here your settings. Use this page to change your e-mail "
+#~ "address or password."
+#~ msgstr ""
+#~ "Aquí puedes revisar la configuración de tu cuenta. Úsala para cambiar tu "
+#~ "dirección de correo electrónico o tu contraseña."
+
+#~ msgid "Change settings:"
+#~ msgstr "Cambiar configuración:"
+
+#~ msgid ""
+#~ "Alert new comics.<br/>A box will appear in the read page everytime a new "
+#~ "comic is added to the database."
+#~ msgstr ""
+#~ "Avisar sobre nuevos comics añadidos.<br/>Un mensaje aparecerá en la "
+#~ "sección de lectura cuando un nuevo comic sea añadido a la base de datos."
+
+#~ msgid "Reading comics"
+#~ msgstr "Leyendo comics"
+
+#~ msgid ""
+#~ "Hide read comics.<br/>Up-to-date comics will be hidden so the page will "
+#~ "load faster. If you click in the name of the comic in the navigation box, "
+#~ "the comic will show up in the read page. Also, if you have no new comics "
+#~ "a random strip will be shown."
+#~ msgstr ""
+#~ "Ocultar los comics ya leídos.<br/>De este modo los comics leídos no se "
+#~ "mostrarán y la página cargará más rápido. Si en la barra de navegación "
+#~ "eliges un comic oculto, éste se mostrará de nuevo. Además, si no tienes "
+#~ "ningún comic nuevo se mostrará una tira aleatoria."
+
+#~ msgid "Navigation box"
+#~ msgstr "Caja de navegación"
+
+#~ msgid ""
+#~ "Max number of columns.<br/>This is the maximum number of columns to "
+#~ "display the list. It's got preference over the maximum number of elements "
+#~ "per column."
+#~ msgstr ""
+#~ "Número máximo de columnas.<br/>Este es el máximo número de columnas que "
+#~ "puede tener la lista. Tiene preferencia sobre el número máximo de "
+#~ "elementos por columna."
+
+#~ msgid ""
+#~ "Max number of elements per column.<br/>This is the maximum number of "
+#~ "elements a column can have. It may be increased to fit the max number of "
+#~ "columns."
+#~ msgstr ""
+#~ "Número máximo de elementos por columna.<br/>Es el número máximo de "
+#~ "elementos que puede tener cada columna de la lista. Puede ser aumentado "
+#~ "para ajustar el número máximo de columnas."
+
+#~ msgid "Save"
+#~ msgstr "Guardar"
+
+#~ msgid "Saved."
+#~ msgstr "Guardado."
+
+#~ msgid "Web colors"
+#~ msgstr "Colores de la web"
+
+#~ msgid "Password, e-mail"
+#~ msgstr "Contraseña, correo electrónico"
+
+#~ msgid "Current password."
+#~ msgstr "Contraseña actual."
 
 #~ msgid "Your have to activate your user first"
 #~ msgstr "Tienes que activar tu usuario primero"
