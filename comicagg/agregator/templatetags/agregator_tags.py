@@ -96,3 +96,12 @@ def do_is_new_for_user(parser, token):
     return IsNewForUserNode(bits[1], bits[2], bits[4])
 
 register.tag('is_new_for_user', do_is_new_for_user)
+
+@register.filter()
+def unreads(value, arg):
+    """"
+    value is a comic
+    arg is an user id
+    """
+    return value.unreadcomic_set.filter(user=arg)
+

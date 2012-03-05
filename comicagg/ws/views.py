@@ -1,5 +1,6 @@
 from comicagg import render
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import connection
 from django.http import HttpResponseRedirect
@@ -37,3 +38,12 @@ ORDER BY agregator_subscription.position"""
     context['username'] = user
     return render(request, 'ws/unread_user.html', context, xml=True)
 
+@login_required
+def user_subscriptions(request, simple=False):
+    context = {}
+    context['subscriptions'] = request.user.subscription_set.order_by('position')
+    if simple:
+        template = 'ws/user_subscriptions_simple.html'
+    else:
+        template = 'ws/user_subscriptions.html'
+    return render(request, template, context, xml=True)

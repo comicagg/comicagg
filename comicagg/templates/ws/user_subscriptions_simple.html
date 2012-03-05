@@ -1,0 +1,10 @@
+{% extends 'ws/base_xml.html' %}
+{% block content %}
+{% spaceless %}
+<subscriptions user="{{ user }}">
+{% for subscription in subscriptions %}
+<comic comic_id="{{ subscription.comic.id }}" name="{{ subscription.comic.name }}" />
+{% endfor %}
+</subscriptions>
+{% endspaceless %}
+{% endblock %}
