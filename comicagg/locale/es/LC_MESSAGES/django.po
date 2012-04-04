@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-03 19:37+0100\n"
-"PO-Revision-Date: 2012-03-03 19:41+0100\n"
+"POT-Creation-Date: 2012-04-04 21:23+0200\n"
+"PO-Revision-Date: 2012-04-04 21:24+0200\n"
 "Last-Translator: Jesús Fernández <admin@comicagg.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -678,7 +678,7 @@ msgstr "por puntuación"
 msgid "Read"
 msgstr "Leer"
 
-#: templates/agregator/read.html:28
+#: templates/agregator/read.html:28 templates/agregator/read.html.py:90
 msgid "Mark all comics as read"
 msgstr "Marcar todos como leídos"
 
@@ -850,6 +850,23 @@ msgstr "Todos los posts"
 #: templates/blog/side.html:3
 msgid "Recent posts"
 msgstr "Posts recientes"
+
+#: templates/ws/index.html:6
+msgid "Index of services"
+msgstr "Índice de servicios"
+
+#: templates/ws/index.html:10
+msgid "Export user subscriptions"
+msgstr "Exportar suscripciones"
+
+#: templates/ws/index.html:14
+msgid "Export user subscriptions with unread comics"
+msgstr "Exportar suscripciones con comics sin leer"
+
+#: templates/ws/index.html:19
+#, fuzzy
+msgid "Unread counters"
+msgstr "lectores"
 
 #~ msgid ""
 #~ "You can review here your settings. Use this page to change your e-mail "
@@ -1228,9 +1245,6 @@ msgstr "Posts recientes"
 
 #~ msgid "Go to comic's website"
 #~ msgstr "Ir a la web del comic"
-
-#~ msgid "Go to description"
-#~ msgstr "Ir a la descripción"
 
 #~ msgid "Drag and drop a comic here"
 #~ msgstr "Arrastra y suelta un comic aquí"

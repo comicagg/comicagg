@@ -6,6 +6,9 @@ from django.db import connection
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
+def index(request):
+    return render(request, 'ws/index.html', {})
+
 def unread_user(request, user):
     if not user:
         return HttpResponseRedirect(reverse('index'))
