@@ -5,7 +5,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import mail_admins, send_mail
+from django.core.mail import mail_admins
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseServerError
 from django.shortcuts import get_object_or_404, redirect
 from django.template import RequestContext
@@ -198,7 +198,7 @@ def image_url(url, ref):
 def download_image(url, ref, dest):
     headers = {
         'referer':ref,
-        'user-agent':'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.7 Safari/533.2'
+        'user-agent':settings.USER_AGENT
     }
     r = urllib2.Request(url, None, headers)
     o = urllib2.urlopen(r)

@@ -113,4 +113,6 @@ CACHE_BACKEND = 'db://cachet1'
 
 SESSION_COOKIE_NAME = 'comicagg_session'
 
+USER_AGENT = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)'
+
 from settings_local import *

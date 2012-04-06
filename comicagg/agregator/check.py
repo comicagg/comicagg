@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from comicagg.agregator.models import ComicHistory, UnreadComic, NoMatchException
 import re, htmlentitydefs, urllib2, cookielib
+from comicagg.agregator.models import ComicHistory, UnreadComic, NoMatchException
 from datetime import datetime
+from django.conf import settings
 
 #Funciones para comprobar comics
 
@@ -80,7 +81,7 @@ def open_url(comic, _url):
     #limpiar la url (entidades html)
     url = unescape(_url)
     r = urllib2.Request(url)
-    r.add_header('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.2 (KHTML, like Gecko) Chrome/5.0.342.7 Safari/533.2')
+    r.add_header('User-Agent', settings.USER_AGENT)
     #obtener url
     #respuesta = urllib2.urlopen(url)
     #lineas = respuesta.readlines()
