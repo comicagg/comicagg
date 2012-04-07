@@ -42,10 +42,10 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
     return response
 
 def error404(request):
-    return render(request, '404.html', {}, responseClass=HttpResponseNotFound)
+    return render(request, 'errors/404.html', {}, responseClass=HttpResponseNotFound)
 
 def error500(request):
-    return render(request, '500.html', {}, responseClass=HttpResponseServerError)
+    return render(request, 'errors/500.html', {}, responseClass=HttpResponseServerError)
 
 def robots_txt(request):
     return render(request, 'robots.txt', {}, mime='text/plain; charset="utf-8"')
