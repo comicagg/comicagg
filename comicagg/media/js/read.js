@@ -381,6 +381,7 @@ function mark_all_read() {
             showUnreadComics();
             //hide link to mark all read
             $("mark_all_read").hide();
+            $("mark_all_read_bottom").hide();
         },
         onFailure: function () {
             $("mark_all_read_anim").hide();
