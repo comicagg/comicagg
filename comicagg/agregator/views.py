@@ -5,7 +5,7 @@ from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import mail_admins
+from django.core.mail import mail_managers
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.template import RequestContext
@@ -128,7 +128,7 @@ def request_index(request):
             req = Request(user=request.user, url=url, comment=comment)
             req.save()
             message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
-            mail_admins('Nuevo request', message)
+            mail_managers('Nuevo request', message)
             messages.info(request, _("Your request has been saved. Thanks!"))
             return redirect('aggregator:requests')
     else:

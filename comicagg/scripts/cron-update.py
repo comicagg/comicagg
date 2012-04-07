@@ -19,7 +19,7 @@ sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
 from comicagg.agregator.models import *
-from django.core.mail import mail_admins
+from django.core.mail import mail_managers
 from comicagg.agregator.check import check_comic
 
 #check all comics
@@ -130,7 +130,7 @@ salida += "Hora fin: %s\n" % datetime.now()
 
 print salida
 try:
-	mail_admins('Salida de cron', salida)
+	mail_managers('Salida de cron', salida)
 except:
 	print "Got error sending email"
 	print_exc()

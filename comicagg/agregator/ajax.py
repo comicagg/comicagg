@@ -2,7 +2,7 @@
 from comicagg.agregator.models import Comic, ComicHistory, NewComic, UnreadComic, Subscription
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.core.mail import mail_admins
+from django.core.mail import mail_managers
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Max
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
@@ -121,7 +121,7 @@ def report_comic(request):
     message = 'El usuario %s dice que hay una imagen rota en el comic %s en alguna de las siguientes actualizaciones:\n' % (request.user, comic.name)
     url = reverse('aggregator:admin:reported', kwargs={'chids':'-'.join(chids)})
     message += '%s%s' % (settings.DOMAIN, url)
-    mail_admins('Imagen rota', message)
+    mail_managers('Imagen rota', message)
     return ok_response(request)
 
 @login_required

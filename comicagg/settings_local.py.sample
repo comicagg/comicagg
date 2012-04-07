@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 # Django settings for comicagg project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 MAINTENANCE = False
 
+#Will receive error emails when DEBUG = False
 ADMINS = (
     ('name', 'email'),
 )
 
+#Will receive error emails for other errors
 MANAGERS = ADMINS
 
 DATABASES = {
