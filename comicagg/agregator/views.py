@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import mail_admins
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
@@ -192,7 +192,7 @@ def image_url(url, ref):
             os.symlink(dst, ldst)
         else:
             #the download returned None? better return a 500
-            return HttpResponseServerError()
+            raise Http404
     return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + hash)
 
 def download_image(url, ref, dest):
@@ -200,18 +200,20 @@ def download_image(url, ref, dest):
         'referer':ref,
         'user-agent':settings.USER_AGENT
     }
-    r = urllib2.Request(url, None, headers)
-    o = urllib2.urlopen(r)
-    ct = o.info()['Content-Type']
-    if ct.startswith("image/"):
-        #we got an image, thats good
-        ext = ct.replace("image/", "")
-        dest += "." + ext
-    else:
-        #no image mime? not cool
-        return None
-
-    f = open(dest, 'w+b')
-    f.writelines(o.readlines())
-    f.close()
+    try:
+        r = urllib2.Request(url, None, headers)
+        o = urllib2.urlopen(r)
+        ct = o.info()['Content-Type']
+        if ct.startswith("image/"):
+            #we got an image, thats good
+            ext = ct.replace("image/", "")
+            dest += "." + ext
+            f = open(dest, 'w+b')
+            f.writelines(o.readlines())
+            f.close()
+        else:
+            #no image mime? not cool
+            dest = None
+    except urllib2.HTTPError:
+        dest = None
     return dest
