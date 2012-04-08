@@ -92,39 +92,40 @@ function updateCounters(counters) {
         comicCounter = counters.comics;
         newComicCounter = counters.new_comics;
         newsCounter = counters.news;
-    }
+    } else
+        return;
     //first update the counters in the menu
-    if (unreadCounter > 0) {
-        $('menuUnreadCounter').innerHTML = ' (' + unreadCounter + ')';
+    if (counters.unreads > 0) {
+        $('menuUnreadCounter').innerHTML = ' (' + counters.unreads + ')';
     } else {
         $('menuUnreadCounter').hide();
         if ($('mark_all_read')) {
             $('mark_all_read').hide();
         }
     }
-    if (newComicCounter > 0) {
-        $('menuNewComicCounter').innerHTML = ' (' + newComicCounter + ')';
+    if (counters.new_comics > 0) {
+        $('menuNewComicCounter').innerHTML = ' (' + counters.new_comics + ')';
     } else {
         $('menuNewComicCounter').hide();
     }
-    if (newsCounter > 0) {
-        $('menuNewsCounter').innerHTML = ' (' + newsCounter + ')';
+    if (counters.news > 0) {
+        $('menuNewsCounter').innerHTML = ' (' + counters.news + ')';
     } else {
         $('menuNewsCounter').hide();
     }
     //if we're in the read page
     if (typeof titlei18n === "string") {
-        if (unreadCounter > 0) {
-            document.title = titlei18n + " (" + unreadCounter + ") - " + titlebase;
+        if (counters.unreads > 0) {
+            document.title = titlei18n + " (" + counters.unreads + ") - " + titlebase;
             $('noUnreadCounters').hide();
             $('unreadCounters').show();
-            $('unreadCountersUnread').innerHTML = unreadCounter;
-            $('unreadCountersTotal').innerHTML = comicCounter;
+            $('unreadCountersUnread').innerHTML = counters.unreads;
+            $('unreadCountersTotal').innerHTML = counters.comics;
         } else {
             document.title = titlei18n + " - " + titlebase;
             $('noUnreadCounters').show();
             $('unreadCounters').hide();
-            $('noUnreadCountersTotal').innerHTML = comicCounter;
+            $('noUnreadCountersTotal').innerHTML = counters.comics;
         }        
     }
     return 0;
