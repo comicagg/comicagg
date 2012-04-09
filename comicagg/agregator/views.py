@@ -191,7 +191,7 @@ def image_url(url, ref):
             #the download went ok, we get the filename back
             os.symlink(dst, ldst)
         else:
-            #the download returned None? better return a 500
+            #the download returned None? return an error
             raise Http404
     return HttpResponseRedirect(settings.MEDIA_URL + 'strips/' + hash)
 

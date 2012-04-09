@@ -73,7 +73,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware', #
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware', #
-    'comicagg.middleware.UserBasedExceptionMiddleware',
+#    'comicagg.middleware.UserBasedExceptionMiddleware',
     'comicagg.middleware.MaintenanceMiddleware',
     'comicagg.middleware.ActiveUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware', #
@@ -114,5 +114,56 @@ CACHE_BACKEND = 'db://cachet1'
 SESSION_COOKIE_NAME = 'comicagg_session'
 
 USER_AGENT = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(message)s'
+        },
+    },
+    'filters': {},
+    'handlers': {
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+        'console': {
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+        },
+        'file': {
+            'level':'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'logs/comicagg.log',
+            'when': 'midnight',
+            'backupCount': 30,
+            'encoding': 'utf-8',
+            'delay': True,
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file', 'mail_admins'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'comicagg': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG'
+        },
+    }
+}
 
 from settings_local import *
