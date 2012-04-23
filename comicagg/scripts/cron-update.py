@@ -128,11 +128,11 @@ salida += "-------------------------\n"
 salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)))
 salida += "Hora fin: %s\n" % datetime.now()
 
-print salida
 try:
 	mail_managers('Salida de cron', salida)
 except:
 	print "Got error sending email"
 	print_exc()
 	
+print salida.encode("utf-8")
 not_running_anymore()
