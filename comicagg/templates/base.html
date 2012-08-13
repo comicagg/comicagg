@@ -15,6 +15,9 @@
 		<script src="{{ mediaurl }}js/all.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var titlebase = " Comic Aggregator";
+			var media_url = '{{ mediaurl }}';
+			{% if user.is_authenticated %}
+      var unreadCounter = {{ unread_count }};
       var url_add = '{% url aggregator:ajax:add_comic %}';
       var url_forget_new_blogs = '{% url news:ajax:forget_new_blogs %}';
       var url_forget_new_comic = '{% url aggregator:ajax:forget_new_comic %}';
@@ -24,9 +27,6 @@
       var url_remove_list = '{% url aggregator:ajax:remove_comic_list %}';
       var url_report = '{% url aggregator:ajax:report_comic %}';
       var url_save_selection = '{% url aggregator:ajax:save %}';
-			var media_url = '{{ mediaurl }}';
-			{% if user.is_authenticated %}
-      var unreadCounter = {{ unread_count }};
       var comicCounter = {{ comic_count }};
       var newComicCounter = {{ newcomic_count }};			
       var newsCounter = {{ news_count }};     
