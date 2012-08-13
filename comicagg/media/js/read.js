@@ -80,6 +80,7 @@ function inViewport(cdiv, vmin, vmax) {
     c2 = emin >= vmin && emin <= vmax;
     //bottom border is inside the vieport
     c3 = emax >= vmin && emax <= vmax;
+    console.log("comic id " + cdiv.id + (c1 ? " full" : "") + (c2 ? " top" : "") + (c3 ? " bottom" : ""));
     if (c1 || c2 || c3) {
         return true;
     } else {
@@ -164,6 +165,12 @@ function updateViewport(loadImages) {
     }
     //free the semaphore
     alreadyUpdating = false;
+    var s = "";
+    for (i = 0; i < cdivInView.length; i = i + 1) {
+        var div = cdivInView[i];
+        s += div.id + " "
+    }
+    console.log("divs in view: " + s + " real: " + cdivInViewCount);
 }
 // first batch load of comic images. will load only those comics in the viewport
 function initLoadImages() {
@@ -202,6 +209,13 @@ function showUnreadComics() {
     }
     $('showingAll').hide();
     $('showingUnread').show();
+    if (unreadCounter === 0) {
+        $('noUnreadCounters').show();
+	$('unreadCounters').hide();
+    } else {
+        $('noUnreadCounters').hide();
+        $('unreadCounters').show();
+    }
     updateViewport(true);
 }
 /* Function to handle the scroll event.
