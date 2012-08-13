@@ -150,7 +150,10 @@ def save_selection(request):
         return ok_response(request)
 
     #subsc_dict is a dictionary, key=comic.id value=subscription.id
-    subsc_dict = {s.comic.id:s.id for s in request.user.subscription_set.all()}
+    #python2.7+
+    #subsc_dict = {s.comic.id:s.id for s in request.user.subscription_set.all()}
+    #python2.6-
+    subsc_dict = dict([(s.comic.id,s.id) for s in request.user.subscription_set.all()])
     #subscriptions is the list of comic ids already added
     subscriptions = subsc_dict.keys()
 
