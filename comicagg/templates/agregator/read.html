@@ -86,7 +86,7 @@
 	<div id="noComicsSelected" style="display:none" class="box">{% trans "No comics to show here. Use the menu in the top to add comics." %}</div>
 	</div>
     {% if unread_count %}
-    <div id="mark_all_read_bottom" class="top_info text_center">
+    <div id="mark_all_read_bottom" class="top_info text_right" style="line-height:30px">
             <a onclick="mark_all_read()">{% trans "Mark all comics as read" %}</a>
             <img style="display:none" id="mark_all_read_anim" src="{{ mediaurl }}images/loaderarrows.gif" alt="working"/>
     </div>
