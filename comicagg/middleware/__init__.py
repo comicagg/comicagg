@@ -19,9 +19,10 @@ class MaintenanceMiddleware(object):
             user = request.user
         except:
             user = None
-        if settings.MAINTENANCE:
-            if not(user and user.is_superuser):
+        if user.is_authenticated():
+            if settings.MAINTENANCE and not(user.is_superuser):
                 return render(request, "maintenance.html", {})
+        return None
 
 class ActiveUserMiddleware(object):
     def process_request(self, request):
