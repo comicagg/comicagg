@@ -53,6 +53,7 @@
 			{% endif %}
 			<div id="branding">
 				<a href="/">Comic Aggregator</a>
+{% if settings.MAINTENANCE and user.is_superuser %}&nbsp;DB: {{ settings.DATABASES.default.NAME }}{% endif %}
 			</div>
 		</div>
 		<div id="content">
