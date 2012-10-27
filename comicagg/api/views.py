@@ -6,9 +6,10 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
+from provider import constants
 import datetime, sys
 
-def OAuth2UserFromAuthorizationToken(f):
+def OAuth2AccessToken(f):
     def authenticate(request):
         u = AnonymousUser()
         try:
@@ -28,12 +29,12 @@ def OAuth2UserFromAuthorizationToken(f):
                   raise OAuthValidationError({
                       "error": "invalid_grant", 
                       "error_description": "Your token has expired."})
-             u = access_token.user
-        return u
+        return access_token
 
     def new_f(klass, request, *args, **kwargs):
         try:
-            request.user = authenticate(request)
+            request.access_token = authenticate(request)
+            request.user = request.access_token.user
             if request.user == AnonymousUser:
                 return HttpResponse()
         except OAuthValidationError:
@@ -45,27 +46,30 @@ def OAuth2UserFromAuthorizationToken(f):
 class IndexView(TemplateView):
     template_name = "api/index.html"
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def get(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
+        context["access_token"] = request.access_token
+        scopes = dict(getattr(constants, 'SCOPES'))
+        context["scope"] = scopes[request.access_token.scope]
         return self.render_to_response(context)
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def post(self, request, *args, **kwargs):
         return HttpResponse("POST received, user: " + str(request.user))
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def put(self, request, *args, **kwargs):
         return HttpResponse("PUT received, user: " + str(request.user))
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("DELETE received, user: " + str(request.user))
 
 class ComicView(TemplateView):
     template_name = "api/comic.xml"
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if "comicid" in context["params"].keys():
@@ -80,25 +84,25 @@ class ComicView(TemplateView):
 class SubscriptionView(TemplateView):
     template_name = "api/subscription.xml"
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         subscriptions = request.user.subscription_set.all()
         context["subscriptions"] = subscriptions
         return self.render_to_response(context)
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def put(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
 class UnreadView(TemplateView):
     template_name = "api/unread.xml"
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if "comicid" in context["params"].keys():
@@ -109,14 +113,14 @@ class UnreadView(TemplateView):
         context["subscriptions"] = subscriptions
         return self.render_to_response(context)
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
 class StripView(TemplateView):
     template_name = "api/strip.xml"
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if not "historyid" in context["params"].keys():
@@ -126,11 +130,11 @@ class StripView(TemplateView):
         context["history"] = history
         return self.render_to_response(context)
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def put(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
-    @OAuth2UserFromAuthorizationToken
+    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
