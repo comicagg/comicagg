@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # Django settings for comicagg project.
 
+import os
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -142,7 +144,7 @@ LOGGING = {
         'file': {
             'level':'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'logs/comicagg.log',
+            'filename': os.path.dirname(os.path.abspath(__file__)) + '/logs/comicagg.log',
             'when': 'midnight',
             'backupCount': 30,
             'encoding': 'utf-8',
