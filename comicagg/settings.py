@@ -95,6 +95,8 @@ INSTALLED_APPS = (
     'comicagg.blog',
     #'comicagg.help',
     'comicagg.todo',
+    'provider',
+    'provider.oauth2',
 )
 
 SITE_NAME = 'Comic Aggregator'

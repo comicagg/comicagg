@@ -17,6 +17,10 @@ urlpatterns = patterns('',
 	(r'^comics/', include('comicagg.agregator.urls', namespace="aggregator")),
 #	(r'^help/', include('comicagg.help.urls')),
 	(r'^news/', include('comicagg.blog.urls', namespace="news")),
+
+	url(r'^oauth2/', include('provider.oauth2.urls', namespace = 'oauth2')),
+	(r'^api/', include('comicagg.api.urls', namespace="api")),
+
 	(r'^ws/', include('comicagg.ws.urls', namespace="ws")),
 )
 
