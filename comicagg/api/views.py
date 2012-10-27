@@ -4,23 +4,23 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
-from provider.forms import OAuthValidationError
-from provider.oauth2.models import AccessToken
-from provider import constants
+from comicagg.provider.forms import OAuthValidationError
+from comicagg.provider.oauth2.models import AccessToken
+from comicagg.provider import constants
 import datetime, sys
 
 def OAuth2AccessToken(f):
     def authenticate(request):
-        u = AnonymousUser()
         try:
             access_token_str = request.META["HTTP_AUTHORIZATION"]
         except KeyError:
-            return u
+            return None
+
         access_token = None
         try:
             access_token = AccessToken.objects.get(token=access_token_str)
         except:
-            print "There was an error: ", sys.exc_info()
+            return None
         
         if access_token:
              td = access_token.expires - datetime.datetime.now()
@@ -34,9 +34,10 @@ def OAuth2AccessToken(f):
     def new_f(klass, request, *args, **kwargs):
         try:
             request.access_token = authenticate(request)
-            request.user = request.access_token.user
-            if request.user == AnonymousUser:
-                return HttpResponse()
+            if request.access_token:
+                request.user = request.access_token.user
+            else:
+                return HttpResponseForbidden()
         except OAuthValidationError:
             return HttpResponse(sys.exc_info(), status=400, content_type="application/json;charset=UTF-8")
         return f(klass, request, *args, **kwargs)
