@@ -7,6 +7,8 @@
 </comics>
 {% else %}
 <comic id="{{ comic.id }}" website="{{ comic.website }}" name="{{ comic }}" votes="{{ comic.votes }}" rating="{{ comic.getRating }}">
+{% if comic.comichistory_set.latest %}
 	<strip id="{{ comic.comichistory_set.latest.id }}" imageurl="{{ comic.comichistory_set.latest.url }}" imagetext="{{ comic.comichistory_set.latest.alt_text|default:"" }}" date="{{ comic.comichistory_set.latest.date|date:"r" }}" timestamp="{{ comic.comichistory_set.latest.date|date:"U" }}"/>
+{% endif %}
 </comic>
 {% endif %}
