@@ -194,6 +194,8 @@ class ComicHistory(models.Model):
 
     class Meta:
         ordering = ['-id']
+        get_latest_by = "date"
+
 
 
 class UnreadComic(models.Model):
