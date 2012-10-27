@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-04 21:23+0200\n"
+"POT-Creation-Date: 2012-10-27 09:53+0200\n"
 "PO-Revision-Date: 2012-04-04 21:24+0200\n"
 "Last-Translator: Jesús Fernández <admin@comicagg.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
@@ -93,39 +93,39 @@ msgstr "Título"
 msgid "Text"
 msgstr "Texto"
 
-#: templates/base.html:41 templates/base.html.py:48
+#: templates/base.html:42 templates/base.html.py:49
 msgid "news"
 msgstr "noticias"
 
-#: templates/base.html:41
+#: templates/base.html:42
 msgid "admin"
 msgstr "admin"
 
-#: templates/base.html:41 templates/base.html.py:48
+#: templates/base.html:42 templates/base.html.py:49
 msgid "contact"
 msgstr "contacto"
 
-#: templates/base.html:41
+#: templates/base.html:42
 msgid "logout"
 msgstr "salir"
 
-#: templates/base.html:44
+#: templates/base.html:45
 msgid "read"
 msgstr "lee"
 
-#: templates/base.html:44
+#: templates/base.html:45
 msgid "choose"
 msgstr "elige"
 
-#: templates/base.html:44
+#: templates/base.html:45
 msgid "organize"
 msgstr "organiza"
 
-#: templates/base.html:44
+#: templates/base.html:45
 msgid "request"
 msgstr "solicita"
 
-#: templates/base.html:48
+#: templates/base.html:49
 msgid "login"
 msgstr "entrar"
 
@@ -137,6 +137,10 @@ msgstr "Si quieres contactar con nosotros, escribe a este email:"
 msgid ""
 "Problems, suggestions, hate mail, everything is welcome at that address :)"
 msgstr "Problemas, sugerencias, hate mail, todo es bienvenido ahí :)"
+
+#: templates/maintenance.html:5
+msgid "Site is under maintenance."
+msgstr "Sitio en mantenimiento"
 
 #: templates/accounts/account.html:3 templates/accounts/account.html.py:8
 msgid "Account settings"
@@ -1021,9 +1025,6 @@ msgstr "lectores"
 
 #~ msgid "Blog"
 #~ msgstr "Blog"
-
-#~ msgid "Down for maintenance"
-#~ msgstr "En mantenimiento"
 
 #~ msgid "Welcome"
 #~ msgstr "Bienvenido"
