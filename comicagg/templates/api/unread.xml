@@ -3,7 +3,7 @@
 {% for s in subscriptions %}
 	{% if s.comic|unreads:user %}
 		{% if params.withstrips %}
-			<comic id="{{ s.comic.id }}" name="{{ s.comic }}">
+			<comic id="{{ s.comic.id }}" name="{{ s.comic }}" website="{{ s.comic.website }}">
 				<unreads>
 				{% for unread in s.comic|unreads:user %}
 					<strip id="{{ unread.history.id }}" imageurl="{{ unread.history.url }}" imagetext="{{ unread.history.alt_text|default:"" }}"  date="{{ unread.history.date|date:"r" }}" timestamp="{{ unread.history.date|date:"U" }}"/>
@@ -11,7 +11,7 @@
 				</unreads>
 			</comic>
 		{% else %}
-			<comic id="{{ s.comic.id }}" name="{{ s.comic }}" unreadcount="{{ s.comic|unreads:user|length }}"/>
+			<comic id="{{ s.comic.id }}" name="{{ s.comic }}" website="{{ s.comic.website }}" unreadcount="{{ s.comic|unreads:user|length }}"/>
 		{% endif %}
 	{% endif %}
 {% endfor %}
