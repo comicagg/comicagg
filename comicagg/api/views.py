@@ -112,6 +112,9 @@ class ComicView(BaseTemplateView):
 
     @OAuth2AccessToken
     def post(self, request, *args, **kwargs):
+        if not request.access_token.scope == constants.READ_WRITE:
+            return HttpResponseBadRequest()
+
         context = self.get_context_data(**kwargs)
 	if not context["params"]["form"].is_valid():
             return HttpResponseBadRequest()
