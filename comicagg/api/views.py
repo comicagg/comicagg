@@ -1,13 +1,19 @@
 # Create your views here.
 from comicagg.agregator.models import Comic, ComicHistory
+from django import forms
 from django.contrib.auth.models import AnonymousUser
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormMixin
 from comicagg.provider.forms import OAuthValidationError
 from comicagg.provider.oauth2.models import AccessToken
 from comicagg.provider import constants
 import datetime, sys
+
+# Will set request.user and request.access_token according to the Authorization header
+# If the access_token is not present in headers or does not exist in server it will return 403
+# If access_token is not valid, it will return 400
 
 def OAuth2AccessToken(f):
     def authenticate(request):
@@ -39,12 +45,26 @@ def OAuth2AccessToken(f):
             else:
                 return HttpResponseForbidden()
         except OAuthValidationError:
-            return HttpResponse(sys.exc_info(), status=400, content_type="application/json;charset=UTF-8")
+            return HttpResponse(sys.exc_info()[1], status=400, content_type="application/json;charset=UTF-8")
         return f(klass, request, *args, **kwargs)
     
     return new_f
 
-class IndexView(TemplateView):
+class BaseTemplateView(TemplateView, FormMixin):
+    form_class = None
+
+    def get_context_data(self, **kwargs):
+        context = {}
+	if self.form_class:
+	    form_class = self.get_form_class()
+            form = self.get_form(form_class)
+            context = {
+                'form': form
+            }
+        context.update(kwargs)
+        return super(BaseTemplateView, self).get_context_data(**context)
+
+class IndexView(BaseTemplateView):
     template_name = "api/index.html"
 
     @OAuth2AccessToken
@@ -67,8 +87,16 @@ class IndexView(TemplateView):
     def delete(self, request, *args, **kwargs):
         return HttpResponse("DELETE received, user: " + str(request.user))
 
-class ComicView(TemplateView):
+class ComicForm(forms.Form):
+    def vote_validator(value):
+        if value < -1 or value > 1:
+	    raise forms.ValidationError("Value not valid")
+
+    vote = forms.IntegerField(validators=[vote_validator])
+
+class ComicView(BaseTemplateView):
     template_name = "api/comic.xml"
+    form_class = ComicForm
 
     @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
@@ -81,6 +109,40 @@ class ComicView(TemplateView):
             comics = Comic.objects.all()
             context["comics"] = comics
         return self.render_to_response(context)
+
+    @OAuth2AccessToken
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+	if not context["params"]["form"].is_valid():
+            return HttpResponseBadRequest()
+        vote = context["params"]["form"].cleaned_data["vote"]
+	
+	if "comicid" in context["params"].keys():
+            comicid = context["params"]["comicid"]
+            comic = get_object_or_404(Comic, pk=comicid)
+	else:
+            return HttpResponseBadRequest()
+
+	s = request.user.subscription_set.filter(comic=comic)
+        if s.count() == 0:
+            return HttpResponseBadRequest()
+
+	if request.user.unreadcomic_set.filter(comic=comic).count():
+            if vote == -1:
+                votes = 1
+                value = 0
+            elif vote == 0:
+                votes = 0
+                value = 0
+            else:
+                votes = 1
+                value = 1
+            comic.votes += votes
+            comic.rating += value
+            comic.save()
+            request.user.unreadcomic_set.filter(comic=comic).delete()
+        return HttpResponse()
+
 
 class SubscriptionView(TemplateView):
     template_name = "api/subscription.xml"
