@@ -2,6 +2,7 @@
 from comicagg.agregator.models import Comic, ComicHistory
 from django import forms
 from django.contrib.auth.models import AnonymousUser
+from django.db import connection
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
@@ -55,8 +56,8 @@ class BaseTemplateView(TemplateView, FormMixin):
 
     def get_context_data(self, **kwargs):
         context = {}
-	if self.form_class:
-	    form_class = self.get_form_class()
+        if self.form_class:
+            form_class = self.get_form_class()
             form = self.get_form(form_class)
             context = {
                 'form': form
@@ -90,7 +91,7 @@ class IndexView(BaseTemplateView):
 class ComicForm(forms.Form):
     def vote_validator(value):
         if value < -1 or value > 1:
-	    raise forms.ValidationError("Value not valid")
+            raise forms.ValidationError("Value not valid")
 
     vote = forms.IntegerField(validators=[vote_validator])
 
@@ -116,21 +117,21 @@ class ComicView(BaseTemplateView):
             return HttpResponseBadRequest()
 
         context = self.get_context_data(**kwargs)
-	if not context["params"]["form"].is_valid():
+        if not context["params"]["form"].is_valid():
             return HttpResponseBadRequest()
         vote = context["params"]["form"].cleaned_data["vote"]
-	
-	if "comicid" in context["params"].keys():
+
+        if "comicid" in context["params"].keys():
             comicid = context["params"]["comicid"]
             comic = get_object_or_404(Comic, pk=comicid)
-	else:
+        else:
             return HttpResponseBadRequest()
 
-	s = request.user.subscription_set.filter(comic=comic)
+        s = request.user.subscription_set.filter(comic=comic)
         if s.count() == 0:
             return HttpResponseBadRequest()
 
-	if request.user.unreadcomic_set.filter(comic=comic).count():
+        if request.user.unreadcomic_set.filter(comic=comic).count():
             if vote == -1:
                 votes = 1
                 value = 0
@@ -203,4 +204,42 @@ class StripView(TemplateView):
     @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
+
+class UserView(TemplateView):
+    template_name = "api/user.xml"
+
+    @OAuth2AccessToken
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        #TODO Really need to change how to get this...
+        sql = """
+SELECT agregator_unreadcomic.comic_id, name, count(agregator_unreadcomic.id) as count
+FROM agregator_unreadcomic
+  INNER JOIN agregator_comic
+    ON agregator_unreadcomic.comic_id=agregator_comic.id
+  INNER JOIN agregator_subscription
+    ON agregator_unreadcomic.comic_id=agregator_subscription.comic_id
+WHERE
+activo=1
+AND
+ended=0
+AND
+agregator_unreadcomic.user_id=%s
+AND
+agregator_subscription.user_id=%s
+GROUP BY agregator_comic.id
+ORDER BY agregator_subscription.position"""
+        acursor = connection.cursor()
+        acursor.execute(sql, [request.user.id, request.user.id])
+        rows = acursor.fetchall()
+        context["unreadcount"] = len(rows)
+        return self.render_to_response(context)
+
+    @OAuth2AccessToken
+    def put(self, request, *args, **kwargs):
+        return HttpResponse(status=400)
+
+    @OAuth2AccessToken
+    def delete(self, request, *args, **kwargs):
+        return HttpResponse(status=400)
 
