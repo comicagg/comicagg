@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+{% load i18n %}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>{% block title %}{% endblock %} Comic Aggregator</title>
+		<link rel="stylesheet" href="{{ mediaurl }}css/base.css" type="text/css"/>
+		<link rel="shortcut icon" href="{{ mediaurl }}images/favicon.png" type="image/png" />
+		<script src="{{ mediaurl }}js/lib/prototype.js" type="text/javascript"></script>
+		<script src="{{ mediaurl }}js/lib/jquery-1.6.1.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+		</script>
+		<script src="{{ mediaurl }}js/all.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			var media_url = '{{ mediaurl }}';
+		</script>
+{% block extra_head %}{% endblock %}
+	</head>
+	<body onload="{% block onload %}{% endblock %}" class="oauth2_box">
+		<div id="head">
+			{% if user.is_superuser or not settings.MAINTENANCE %}
+			{% endif %}
+			<div id="branding">
+				<a href="/">Comic Aggregator</a>
+{% if settings.MAINTENANCE and user.is_superuser %}&nbsp;DB: {{ settings.DATABASES.default.NAME }}{% endif %}
+			</div>
+		</div>
+		<div id="content">
+{% block content %}
+{% endblock %}
+		</div>
+	</body>
+</html>

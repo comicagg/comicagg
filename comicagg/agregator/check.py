@@ -67,6 +67,8 @@ def default_check(comic):
 
 def severalinpage(comic, history_set):
     lineas = open_url(comic, comic.url)
+    #for check comic debugging
+    lineas_o = list(lineas)
     (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
     while match:
         url = comic.base_img % geturl(match)
@@ -114,6 +116,8 @@ def match_lines(comic, lineas, regexp, backwards=False):
 
 def getoneurl(comic, _url):
     lineas = open_url(comic, _url)
+    #for check comic debugging
+    lineas_o = list(lineas)
     (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
     if not match:
         raise NoMatchException, "%s" % comic.name
@@ -124,6 +128,8 @@ def getoneurl(comic, _url):
 
 def getredirect(comic):
     lineas = open_url(comic, comic.url2)
+    #for check comic debugging
+    lineas_o = list(lineas)
     (match, lineas) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
     if not match:
         raise NoMatchException, "%s" % comic.name

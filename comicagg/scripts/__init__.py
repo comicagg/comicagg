@@ -3,9 +3,9 @@ import sys, os, signal
 def is_running():
     path = os.path.abspath(sys.argv[0]) + ".pid"
     if os.path.exists(path):
-        pid = int(open(path).read())
-        print "Already running on pid", pid
         try:
+            pid = int(open(path).read())
+            print "Already running on pid", pid
             os.kill(pid, signal.SIGTERM)
             print "Killed pid", pid
         except:
