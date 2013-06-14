@@ -29,6 +29,7 @@ def logout_view(request):
 
 def login_view(request):
     context = {}
+    context["parent_template"] = "base.html"
     #if user is authenticated redirect him to index
     if request.user.is_authenticated():
         return redirect('index')
@@ -39,6 +40,7 @@ def login_view(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             nexturl = form.cleaned_data['next']
+            oauth2 = form.cleaned_data['oauth2']
             user = authenticate(username=username, password=password)
             if user is not None:
             #From now on the user is logged in
@@ -50,9 +52,11 @@ def login_view(request):
                     #User was inactive, redirect to activate page
                     return redirect('accounts:activate')
             else:
+                if oauth2:
+                    context['parent_template'] = 'simple_base.html'
                 # Return an 'invalid login' error message.
                 context['error'] = _('Username or password not valid!')
-                context['form'] = LoginForm(initial={'username': username})
+                context['form'] = LoginForm(initial={'username': username, 'next': nexturl, 'oauth2': oauth2})
                 return render(request, 'accounts/login_form.html', context, 'login')
         context['form'] = form
         #received nothing so show login form
@@ -60,8 +64,12 @@ def login_view(request):
     try:
         nexturl = request.GET['next']
         form = LoginForm(initial={'next': nexturl})
+        if  nexturl.count('/oauth2/'):
+            context['parent_template'] = 'simple_base.html'
+            form = LoginForm(initial={'next': nexturl, 'oauth2': True})
     except:
         form = LoginForm()
+    print form
     context['form'] = form
     #received nothing so show login form
     return render(request, 'accounts/login_form.html', context, 'login')

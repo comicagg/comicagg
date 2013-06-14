@@ -51,6 +51,7 @@ class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
+    oauth2 = forms.BooleanField(widget=forms.HiddenInput(), required=False)
 
 class EmailChangeForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'size':'25'}))

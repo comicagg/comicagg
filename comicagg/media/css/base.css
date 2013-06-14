@@ -115,6 +115,10 @@ button:hover {
 	border-color: #7cb9ff;
 	border-color: #8baec1;
 }
+.oauth2_box {
+	min-width:450px;
+	width: auto;
+}
 #login_wrap {
 	margin-top:20px;
 }
