@@ -4,7 +4,7 @@
 {% block onload %}focusOnLogin(){% endblock %}
 {% block content %}
 {% block done-content %}{% endblock %}
-{% if form.oauth2 %}
+{% if oauth2 %}
 <div id="login_wrap" class="loginbox oauth2_box">
         <h3>{% trans 'Login into your account'%}</h3>
         <p>{% trans 'Write your username and passwod to get you logged in.'%}</p>

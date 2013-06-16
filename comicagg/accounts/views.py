@@ -54,6 +54,7 @@ def login_view(request):
             else:
                 if oauth2:
                     context['parent_template'] = 'simple_base.html'
+                    context['oauth2'] = True
                 # Return an 'invalid login' error message.
                 context['error'] = _('Username or password not valid!')
                 context['form'] = LoginForm(initial={'username': username, 'next': nexturl, 'oauth2': oauth2})
@@ -66,10 +67,10 @@ def login_view(request):
         form = LoginForm(initial={'next': nexturl})
         if  nexturl.count('/oauth2/'):
             context['parent_template'] = 'simple_base.html'
+            context['oauth2'] = True
             form = LoginForm(initial={'next': nexturl, 'oauth2': True})
     except:
         form = LoginForm()
-    print form
     context['form'] = form
     #received nothing so show login form
     return render(request, 'accounts/login_form.html', context, 'login')
