@@ -33,9 +33,7 @@ def OAuth2AccessToken(f):
              td = access_token.expires - datetime.datetime.now()
              tds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
              if tds < 0:
-                  raise OAuthValidationError({
-                      "error": "invalid_grant", 
-                      "error_description": "Your token has expired."})
+                  raise OAuthValidationError("""{"error": "invalid_grant", "error_description": "Your token has expired."}""")
         return access_token
 
     def new_f(klass, request, *args, **kwargs):
