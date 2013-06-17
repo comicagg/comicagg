@@ -105,7 +105,7 @@ class ComicView(BaseTemplateView):
             comic = get_object_or_404(Comic, pk=comicid)
             context["comic"] = comic
         else:
-            comics = Comic.objects.all()
+            comics = Comic.objects.exclude(activo=False,ended=True)
             context["comics"] = comics
         return self.render_to_response(context)
 
