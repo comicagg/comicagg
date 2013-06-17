@@ -194,6 +194,7 @@ function showAllComics() {
     }
     $('showingAll').show();
     $('showingUnread').hide();
+    $('no_unread_comics').hide();
     updateViewport(true);
 }
 // shows only unread comics divs
@@ -212,6 +213,7 @@ function showUnreadComics() {
     if (unreadCounter === 0) {
         $('noUnreadCounters').show();
 	$('unreadCounters').hide();
+	$('no_unread_comics').show();
     } else {
         $('noUnreadCounters').hide();
         $('unreadCounters').show();
@@ -244,6 +246,7 @@ function onReadLoad() {
             initLoadImages();
         } else {
             //TODO mostrar comic aleatorio
+	    $("no_unread_comics").show();
             return 0;
         }
     } else {
@@ -396,6 +399,7 @@ function mark_all_read() {
             //hide link to mark all read
             $("mark_all_read").hide();
             $("mark_all_read_bottom").hide();
+	    $("no_unread_comics").show();
         },
         onFailure: function () {
             $("mark_all_read_anim").hide();
