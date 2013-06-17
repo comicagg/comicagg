@@ -1,8 +1,10 @@
+{% extends 'simple_base.html' %}
 {% load scope %}
 {% block content %}
+<div class="box">
     {% if not error %}
 	<p>OAuth2 authorization page</p>
-        <p>{{ client.name }} would like to access your data with the following permissions:</p>
+        <p><b>{{ client.name }}</b> would like to access your data with the following permissions:</p>
         <ul>
             {% for permission in oauth_data.scope|scopes %}
                 <li>
@@ -34,4 +36,5 @@
         {{ error }}
         {{ error_description }}
     {% endif %}
+</div>
 {% endblock %}

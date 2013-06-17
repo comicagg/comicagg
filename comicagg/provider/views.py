@@ -1,4 +1,5 @@
 # Create your views here.
+from django.conf import settings
 from django.http import HttpResponseBadRequest, HttpResponse, \
     HttpResponseRedirect, HttpResponseForbidden, QueryDict
 from django.utils.translation import ugettext as _
@@ -39,6 +40,10 @@ class OAuthView(TemplateView):
         response['Cache-Control'] = 'no-store'
         response['Pragma'] = 'no-cache'
         return response
+
+    def render_to_response(self, context, **response_kwargs):
+	context.update(mediaurl=settings.MEDIA_URL)
+        return super(TemplateView, self).render_to_response(context, **response_kwargs)
 
 class Mixin(object):
     """
