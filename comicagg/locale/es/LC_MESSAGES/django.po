@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-27 09:53+0200\n"
+"POT-Creation-Date: 2013-06-17 22:25+0200\n"
 "PO-Revision-Date: 2012-04-04 21:24+0200\n"
 "Last-Translator: Jesús Fernández <admin@comicagg.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
@@ -31,36 +31,36 @@ msgstr "Perfil de usuario"
 msgid "User profiles"
 msgstr "Perfiles de usuario"
 
-#: accounts/views.py:54
+#: accounts/views.py:59
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: accounts/views.py:84
+#: accounts/views.py:93
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: accounts/views.py:88
+#: accounts/views.py:97
 msgid "Wrong word!"
 msgstr "¡Palabra errónea!"
 
-#: accounts/views.py:92
+#: accounts/views.py:101
 msgid "Some letters are not valid."
 msgstr "Algunas letras no valen."
 
-#: accounts/views.py:96
+#: accounts/views.py:105
 msgid "Too short."
 msgstr "Muy corto."
 
-#: accounts/views.py:103
+#: accounts/views.py:112
 msgid "That long? Really?"
 msgstr "¿Tan largo? ¿De verdad?"
 
-#: accounts/views.py:113
+#: accounts/views.py:122
 msgid "That username is already taken. Please choose another."
 msgstr ""
 "El usuario que has elegido ya está siendo usado. Por favor, elige otro."
 
-#: accounts/views.py:151
+#: accounts/views.py:160
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
@@ -92,6 +92,35 @@ msgstr "Título"
 #: help/models.py:61 help/models.py:64
 msgid "Text"
 msgstr "Texto"
+
+#: provider/views.py:121 provider/views.py:520
+msgid "A secure connection is required."
+msgstr ""
+
+#: provider/views.py:212
+msgid "An unauthorized client tried to access your resources."
+msgstr ""
+
+#: provider/views.py:512
+msgid "Only POST requests allowed."
+msgstr ""
+
+#: provider/views.py:524
+msgid "No 'grant_type' included in the request."
+msgstr ""
+
+#: provider/oauth2/forms.py:40
+msgid "Client could not be validated with key pair."
+msgstr ""
+
+#: provider/oauth2/forms.py:73
+#, python-format
+msgid "'%s' is not a valid scope."
+msgstr "'%s' no es un scope válido."
+
+#: provider/oauth2/forms.py:157
+msgid "The requested redirect didn't match the client settings."
+msgstr ""
 
 #: templates/base.html:42 templates/base.html.py:49
 msgid "news"
@@ -235,48 +264,48 @@ msgstr "Volver."
 msgid "Login"
 msgstr "Entrar"
 
-#: templates/accounts/login_form.html:7
+#: templates/accounts/login_form.html:9 templates/accounts/login_form.html:38
+msgid "Login into your account"
+msgstr "Entrar en tu cuenta"
+
+#: templates/accounts/login_form.html:10 templates/accounts/login_form.html:39
+msgid "Write your username and passwod to get you logged in."
+msgstr "Escribe tu usuario y contraseña para conectarte."
+
+#: templates/accounts/login_form.html:19 templates/accounts/login_form.html:48
+msgid "User "
+msgstr "Usuario "
+
+#: templates/accounts/login_form.html:23 templates/accounts/login_form.html:52
+msgid "Password "
+msgstr "Contraseña "
+
+#: templates/accounts/login_form.html:27 templates/accounts/login_form.html:56
+msgid "Log in"
+msgstr "Entrar"
+
+#: templates/accounts/login_form.html:32 templates/accounts/login_form.html:61
+msgid "Don't you have an account?"
+msgstr "¿No tienes una cuenta?"
+
+#: templates/accounts/login_form.html:32 templates/accounts/login_form.html:61
+msgid "Create one"
+msgstr "Créate una"
+
+#: templates/accounts/login_form.html:33 templates/accounts/login_form.html:62
+msgid "Can't remember your password?"
+msgstr "¿No recuerdas tu contraseña?"
+
+#: templates/accounts/login_form.html:33 templates/accounts/login_form.html:62
+msgid "Send me a new password"
+msgstr "Envíame una nueva contraseña"
+
+#: templates/accounts/login_form.html:36
 msgid ""
 "Comic Aggregator allows you to read lots and lots of webcomics in the same "
 "page."
 msgstr ""
 "Comic Aggregator te permite leer un montón de webcomics en la misma página."
-
-#: templates/accounts/login_form.html:9
-msgid "Login into your account"
-msgstr "Entrar en tu cuenta"
-
-#: templates/accounts/login_form.html:10
-msgid "Write your username and passwod to get you logged in."
-msgstr "Escribe tu usuario y contraseña para conectarte."
-
-#: templates/accounts/login_form.html:19
-msgid "User "
-msgstr "Usuario "
-
-#: templates/accounts/login_form.html:23
-msgid "Password "
-msgstr "Contraseña "
-
-#: templates/accounts/login_form.html:27
-msgid "Log in"
-msgstr "Entrar"
-
-#: templates/accounts/login_form.html:32
-msgid "Don't you have an account?"
-msgstr "¿No tienes una cuenta?"
-
-#: templates/accounts/login_form.html:32
-msgid "Create one"
-msgstr "Créate una"
-
-#: templates/accounts/login_form.html:33
-msgid "Can't remember your password?"
-msgstr "¿No recuerdas tu contraseña?"
-
-#: templates/accounts/login_form.html:33
-msgid "Send me a new password"
-msgstr "Envíame una nueva contraseña"
 
 #: templates/accounts/password_change_done.html:3
 msgid "Password changed"
@@ -764,6 +793,10 @@ msgid "No comics to show here. Use the menu in the top to add comics."
 msgstr ""
 "No hay comics que mostrar aquí. Usa el menú superior para añadir comics."
 
+#: templates/agregator/read.html:95
+msgid "You don't have any new unread comics"
+msgstr "No tienes nuevos comics sin leer"
+
 #: templates/agregator/request_index.html:3
 msgid "Requests"
 msgstr "Solicitudes"
@@ -868,9 +901,8 @@ msgid "Export user subscriptions with unread comics"
 msgstr "Exportar suscripciones con comics sin leer"
 
 #: templates/ws/index.html:19
-#, fuzzy
 msgid "Unread counters"
-msgstr "lectores"
+msgstr "Contador de comics sin leer"
 
 #~ msgid ""
 #~ "You can review here your settings. Use this page to change your e-mail "
@@ -968,7 +1000,6 @@ msgstr "lectores"
 #~ msgid "Read it in the forum"
 #~ msgstr "Leerlo en el foro"
 
-#, fuzzy
 #~ msgid ""
 #~ "Showing only <b>unread</b> comics. <a href=\"http://google.com\">Click "
 #~ "here</a> to show all comics."
@@ -1608,9 +1639,6 @@ msgstr "lectores"
 #~ msgid "There were some errors:"
 #~ msgstr "Hubo algún error:"
 
-#~ msgid "Username is not valid."
-#~ msgstr "Usuario no válido."
-
 #~ msgid "Passwords do not match"
 #~ msgstr "Las contraseñas no coinciden"
 
@@ -1646,7 +1674,6 @@ msgstr "lectores"
 #~ msgid "There is one new comic in the database."
 #~ msgstr "Hay un nuevo comic en la base de datos."
 
-#, fuzzy
 #~ msgid "There is %(new_comic_count)s new comic in the database."
 #~ msgstr "Hay %(new_comic_count)s nuevos comics en la base de datos."
 
@@ -1662,9 +1689,8 @@ msgstr "lectores"
 #~ msgid "More options"
 #~ msgstr "Más acciones"
 
-#, fuzzy
 #~ msgid "votos"
-#~ msgstr "voto"
+#~ msgstr "votos"
 
 #~ msgid "Sort your comics"
 #~ msgstr "Organiza tus comics"
