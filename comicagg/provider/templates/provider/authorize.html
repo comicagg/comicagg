@@ -1,17 +1,17 @@
 {% extends 'simple_base.html' %}
-{% load scope %}
+{% load scope i18n %}
 {% block content %}
-<div class="box">
+<div class="text_left box oauth2_box">
     {% if not error %}
-	<p>OAuth2 authorization page</p>
-        <p><b>{{ client.name }}</b> would like to access your data with the following permissions:</p>
-        <ul>
+	<h2>{% trans "Comic Aggregator authorization page" %}</h2>
+        <p>{% blocktrans with client__name=client.name%}<b>{{ client__name }}</b> would like to access your data with the following permissions:{% endblocktrans %}</p>
+        <ul class="text_left">
             {% for permission in oauth_data.scope|scopes %}
                 <li>
                     {% if permission == "read" %}
-                    Read your data
+                    {% trans "Read your data" %}
                     {% else %}
-                    Write your data 
+                    {% trans "Write your data" %}
                     {% endif %}
                 </li>
             {% endfor %}
@@ -28,13 +28,14 @@
                     {% endfor %}
                     </select>
                 </div>
-                <input type="submit" class="btn login large danger" value="Cancel" />
-                <input type="submit" class="btn login large primary" name="authorize" value="Authorize" />  
+                <input type="submit" class="btn login large danger" value="{% trans "Cancel" %}" />
+                <input type="submit" class="btn login large primary" name="authorize" value="{% trans "Authorize"%}" />  
             </fieldset>
         </form>
     {% else %}
-        {{ error }}
-        {{ error_description }}
+        <h2>{% trans "An error has occurred" %}</h1>
+	<p class="text_left"><b>{% trans "Error code:" %} </b>{{ error }}<br/>
+        {% if error_description %}<b>{% trans "Message:" %} </b>{{ error_description }}</p>{% endif %}
     {% endif %}
 </div>
 {% endblock %}
