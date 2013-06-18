@@ -237,8 +237,7 @@ class Authorize(OAuthView, Mixin):
         # If we got a malicious redirec_uri or client_id, remove all the cached 
         # data and tell the resource owner. We will *not* redirect back to the 
         # URL.
-        
-        if error['error'] in ['redirect_uri', 'unauthorized_client']:
+        if 'error' in error.keys() and error['error'] and error['error'] in ['redirect_uri', 'unauthorized_client']:
             ctx.update(next='/')
             return self.render_to_response(ctx, **kwargs)
         
@@ -250,7 +249,7 @@ class Authorize(OAuthView, Mixin):
         data = self.get_data(request)
         
         if data is None:
-            return self.error_response(request, {'expired_authorization': True})
+            return self.error_response(request, {'error':'expired_authorization', 'expired_authorization': True})
         
         try:
             client, data = self._validate_client(request, data)
@@ -298,6 +297,9 @@ class Redirect(OAuthView, Mixin):
         code = self.get_data(request, "code")
         error = self.get_data(request, "error")
         client = self.get_data(request, "client")
+
+        if not client:
+            return HttpResponseBadRequest("""{'error':'invalid_request','error_description':'Invalid client.'}""", mimetype='application/json')
 
         redirect_uri = data.get('redirect_uri', None) or client.redirect_uri
 
