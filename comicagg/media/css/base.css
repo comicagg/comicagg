@@ -167,11 +167,11 @@ button:hover {
 .errorlist li {
 }
 
-.box fieldset {
+.oauth2_box fieldset {
 	border:0;
 }
 
-.box ul {
+.oauth2_box ul {
 	padding:5px;
 	text-align: left;
     	width: 100px;
