@@ -18,7 +18,7 @@
 		</script>
 {% block extra_head %}{% endblock %}
 	</head>
-	<body onload="{% block onload %}{% endblock %}" class="oauth2_box">
+	<body onload="{% block onload %}{% endblock %}" class="oauth2_page">
 		<div id="head">
 			{% if user.is_superuser or not settings.MAINTENANCE %}
 			{% endif %}

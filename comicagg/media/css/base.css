@@ -163,6 +163,9 @@ button:hover {
 .errorlist li {
 }
 
+.oauth2_page {
+	min-width:450px;
+}
 .oauth2_box {
 	width:450px;
 	margin:15px auto;
