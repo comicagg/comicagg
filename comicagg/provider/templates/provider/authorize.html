@@ -1,7 +1,9 @@
 {% extends 'simple_base.html' %}
 {% load scope i18n %}
 {% block content %}
-<div class="text_left box oauth2_box">
+<div class="text_left oauth2_box">
+	<h1>Comic Aggregator</h1>
+	<br/>
     {% if not error %}
 	<h2>{% trans "Authorize an application" %}</h2>
         <p>{% blocktrans with client__name=client.name%}<b>{{ client__name }}</b> would like to access your data with the following permissions:{% endblocktrans %}</p>
