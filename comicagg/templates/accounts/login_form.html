@@ -5,8 +5,8 @@
 {% block content %}
 {% block done-content %}{% endblock %}
 {% if oauth2 %}
-<div id="login_wrap" class="loginbox oauth2_box">
-        <h3>{% trans 'Login into your account'%}</h3>
+<div id="login_wrap" class="oauth2_box">
+        <h3>{% trans 'Login into your account to authorize an application'%}</h3>
         <p>{% trans 'Write your username and passwod to get you logged in.'%}</p>
         {% if error %}
         <p><span id="errorContainer">{{ error }}</p>

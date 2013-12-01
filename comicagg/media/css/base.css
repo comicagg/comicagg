@@ -165,10 +165,12 @@ button:hover {
 
 .oauth2_page {
 	min-width:450px;
+	background: white;
 }
 .oauth2_box {
 	width:450px;
 	margin:15px auto;
+	text-align: center;
 }
 .oauth2_box fieldset {
 	border:0;

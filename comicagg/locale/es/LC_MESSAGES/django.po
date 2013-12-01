@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-18 08:52+0200\n"
-"PO-Revision-Date: 2013-06-18 08:52+0100\n"
+"POT-Creation-Date: 2013-12-01 21:46+0100\n"
+"PO-Revision-Date: 2013-12-01 21:46+0100\n"
 "Last-Translator: Jesus Fernandez <esu@kumomi.es>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -95,7 +95,7 @@ msgid "Text"
 msgstr "Texto"
 
 #: provider/views.py:121
-#: provider/views.py:520
+#: provider/views.py:522
 msgid "A secure connection is required."
 msgstr "Se requiere una conexión segura."
 
@@ -103,11 +103,11 @@ msgstr "Se requiere una conexión segura."
 msgid "An unauthorized client tried to access your resources."
 msgstr "Un cliente no autorizado ha intentado acceder a tus datos."
 
-#: provider/views.py:512
+#: provider/views.py:514
 msgid "Only POST requests allowed."
 msgstr "Solo se permiten peticiones POST."
 
-#: provider/views.py:524
+#: provider/views.py:526
 msgid "No 'grant_type' included in the request."
 msgstr "No se ha incluído 'grant_type' en la petición."
 
@@ -125,8 +125,8 @@ msgid "The requested redirect didn't match the client settings."
 msgstr "La dirección de redirección no se corresponde con la configurada."
 
 #: provider/templates/provider/authorize.html:6
-msgid "Comic Aggregator authorization page"
-msgstr "Página de autorización de Comic Aggregator"
+msgid "Authorize an application"
+msgstr "Autorizar una aplicación"
 
 #: provider/templates/provider/authorize.html:7
 #, python-format
@@ -299,9 +299,8 @@ msgid "Login"
 msgstr "Entrar"
 
 #: templates/accounts/login_form.html:9
-#: templates/accounts/login_form.html:38
-msgid "Login into your account"
-msgstr "Entrar en tu cuenta"
+msgid "Login into your account to authorize an application"
+msgstr "Entrar en tu cuenta para autorizar una aplicación"
 
 #: templates/accounts/login_form.html:10
 #: templates/accounts/login_form.html:39
@@ -346,6 +345,10 @@ msgstr "Envíame una nueva contraseña"
 #: templates/accounts/login_form.html:36
 msgid "Comic Aggregator allows you to read lots and lots of webcomics in the same page."
 msgstr "Comic Aggregator te permite leer un montón de webcomics en la misma página."
+
+#: templates/accounts/login_form.html:38
+msgid "Login into your account"
+msgstr "Entrar en tu cuenta"
 
 #: templates/accounts/password_change_done.html:3
 msgid "Password changed"
@@ -871,6 +874,9 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
+
+#~ msgid "Comic Aggregator authorization page"
+#~ msgstr "Página de autorización de Comic Aggregator"
 
 #~ msgid ""
 #~ "You can review here your settings. Use this page to change your e-mail "

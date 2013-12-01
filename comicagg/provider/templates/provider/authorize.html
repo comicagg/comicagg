@@ -3,7 +3,7 @@
 {% block content %}
 <div class="text_left box oauth2_box">
     {% if not error %}
-	<h2>{% trans "Comic Aggregator authorization page" %}</h2>
+	<h2>{% trans "Authorize an application" %}</h2>
         <p>{% blocktrans with client__name=client.name%}<b>{{ client__name }}</b> would like to access your data with the following permissions:{% endblocktrans %}</p>
         <ul class="text_left">
             {% for permission in oauth_data.scope|scopes %}
