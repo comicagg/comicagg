@@ -1,4 +1,3 @@
-# Create your views here.
 from comicagg.agregator.models import Comic, ComicHistory
 from django import forms
 from django.contrib.auth.models import AnonymousUser
@@ -7,9 +6,9 @@ from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequ
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormMixin
-from comicagg.provider.forms import OAuthValidationError
-from comicagg.provider.oauth2.models import AccessToken
-from comicagg.provider import constants
+from provider import constants
+from provider.forms import OAuthValidationError
+from provider.oauth2.models import AccessToken
 import datetime, sys
 
 # Will set request.user and request.access_token according to the Authorization header
