@@ -1,4 +1,4 @@
-from comicagg.agregator.models import Comic, ComicHistory
+from comicagg.comics.models import Comic, ComicHistory
 from django import forms
 from django.contrib.auth.models import AnonymousUser
 from django.db import connection
@@ -9,7 +9,9 @@ from django.views.generic.edit import FormMixin
 from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
-import datetime, sys
+import datetime, sys, logging
+
+logger = logging.getLogger(__name__)
 
 # Will set request.user and request.access_token according to the Authorization header
 # If the access_token is not present in headers or does not exist in server it will return 403
@@ -20,19 +22,23 @@ def OAuth2AccessToken(f):
         try:
             access_token_str = request.META["HTTP_AUTHORIZATION"]
         except KeyError:
+            logger.debug("API-0 API call without Authorization header.")
             return None
 
         access_token = None
         try:
             access_token = AccessToken.objects.get(token=access_token_str)
         except:
+            logger.warning("API-1 Got Authorization header but no access token was found in the database.")
             return None
         
         if access_token:
              td = access_token.expires - datetime.datetime.now()
              tds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
              if tds < 0:
-                  raise OAuthValidationError("""{"error": "invalid_grant", "error_description": "Your token has expired."}""")
+                 logger.debug("API-2 The access token has expired")
+                 raise OAuthValidationError("""{"error": "invalid_grant", "error_description": "Your token has expired."}""")
+        logger.debug("API-3 API call successfully authenticated.")
         return access_token
 
     def new_f(klass, request, *args, **kwargs):
@@ -41,7 +47,7 @@ def OAuth2AccessToken(f):
             if request.access_token:
                 request.user = request.access_token.user
             else:
-                return HttpResponseForbidden()
+                return HttpResponseForbidden("No access token has been received or not a valid one. Check you Authorization header.")
         except OAuthValidationError:
             return HttpResponse(sys.exc_info()[1], status=400, content_type="application/json;charset=UTF-8")
         return f(klass, request, *args, **kwargs)
@@ -111,6 +117,7 @@ class ComicView(BaseTemplateView):
     @OAuth2AccessToken
     def post(self, request, *args, **kwargs):
         if not request.access_token.scope == constants.READ_WRITE:
+            logger.warning("API-4 The current access token does not have enough permissions for this operation.")
             return HttpResponseBadRequest()
 
         context = self.get_context_data(**kwargs)
