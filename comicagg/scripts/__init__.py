@@ -1,7 +1,7 @@
 import sys, os, signal
 
 def is_running():
-    path = os.path.abspath(sys.argv[0]) + ".pid"
+    path = os.path.join('/tmp', os.path.basename(sys.argv[0]) + ".pid")
     if os.path.exists(path):
         try:
             pid = int(open(path).read())
@@ -17,7 +17,7 @@ def is_running():
     f.close()
 
 def not_running_anymore():
-    path = os.path.abspath(sys.argv[0]) + ".pid"
+    path = os.path.join('/tmp', os.path.basename(sys.argv[0]) + ".pid")
     if os.path.exists(path):
         os.remove(path)
         print "Deleted pid file"
