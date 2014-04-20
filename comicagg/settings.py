@@ -124,7 +124,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
-            'format': '%(asctime)s %(levelname)s %(module)s %(process)d %(message)s'
+            'format': '%(asctime)s %(process)d %(name)s %(levelname)s %(message)s'
         },
     },
     'filters': {},
@@ -144,7 +144,8 @@ LOGGING = {
         'file': {
             'level':'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.dirname(os.path.abspath(__file__)) + '/logs/comicagg.log',
+            # The user that runs the django process will need to have permissions in this folder
+            'filename': os.path.join('/var/log/comicagg', 'comicagg.log'),
             'when': 'midnight',
             'backupCount': 30,
             'encoding': 'utf-8',
@@ -155,7 +156,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'propagate': True,
         },
         'django.request': {
