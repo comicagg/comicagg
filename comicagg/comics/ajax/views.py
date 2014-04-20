@@ -119,7 +119,7 @@ def report_comic(request):
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
     message = 'El usuario %s dice que hay una imagen rota en el comic %s en alguna de las siguientes actualizaciones:\n' % (request.user, comic.name)
-    url = reverse('aggregator:admin:reported', kwargs={'chids':'-'.join(chids)})
+    url = reverse('comics:admin:reported', kwargs={'chids':'-'.join(chids)})
     message += '%s%s' % (settings.DOMAIN, url)
     mail_managers('Imagen rota: ' + comic.name, message)
     return ok_response(request)

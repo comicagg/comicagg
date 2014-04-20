@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-01 22:26+0100\n"
-"PO-Revision-Date: 2013-12-01 21:46+0100\n"
-"Last-Translator: Jesus Fernandez <esu@kumomi.es>\n"
+"POT-Creation-Date: 2014-04-20 17:13+0200\n"
+"PO-Revision-Date: 2014-04-20 17:24+0100\n"
+"Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -31,139 +31,71 @@ msgstr "Perfil de usuario"
 msgid "User profiles"
 msgstr "Perfiles de usuario"
 
-#: accounts/views.py:59
+#: accounts/views.py:58
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: accounts/views.py:93
+#: accounts/views.py:92
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: accounts/views.py:97
+#: accounts/views.py:96
 msgid "Wrong word!"
 msgstr "¡Palabra errónea!"
 
-#: accounts/views.py:101
+#: accounts/views.py:100
 msgid "Some letters are not valid."
 msgstr "Algunas letras no valen."
 
-#: accounts/views.py:105
+#: accounts/views.py:104
 msgid "Too short."
 msgstr "Muy corto."
 
-#: accounts/views.py:112
+#: accounts/views.py:111
 msgid "That long? Really?"
 msgstr "¿Tan largo? ¿De verdad?"
 
-#: accounts/views.py:122
+#: accounts/views.py:121
 msgid "That username is already taken. Please choose another."
-msgstr ""
-"El usuario que has elegido ya está siendo usado. Por favor, elige otro."
+msgstr "El usuario que has elegido ya está siendo usado. Por favor, elige otro."
 
-#: accounts/views.py:160
+#: accounts/views.py:159
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
 
-#: agregator/adminviews.py:33 templates/admin/check.html:6
-msgid "Update comic"
-msgstr "Actualizar comic"
-
-#: agregator/views.py:132
+#: comics/views.py:132
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
-#: agregator/templatetags/agregator_tags.py:13
+#: comics/admin/views.py:33
+#: templates/admin/check.html:6
+msgid "Update comic"
+msgstr "Actualizar comic"
+
+#: comics/templatetags/comics_tags.py:13
 msgid "NEW!"
 msgstr "¡NUEVO!"
 
-#: help/models.py:19
+#: help/models.py:18
 msgid "Open"
 msgstr "Abierto"
 
-#: help/models.py:20
+#: help/models.py:19
 msgid "Closed"
 msgstr "Cerrado"
 
-#: help/models.py:60
+#: help/models.py:59
 msgid "Title"
 msgstr "Título"
 
-#: help/models.py:61 help/models.py:64
+#: help/models.py:60
+#: help/models.py:63
 msgid "Text"
 msgstr "Texto"
 
-#: provider/views.py:121 provider/views.py:522
-msgid "A secure connection is required."
-msgstr "Se requiere una conexión segura."
-
-#: provider/views.py:212
-msgid "An unauthorized client tried to access your resources."
-msgstr "Un cliente no autorizado ha intentado acceder a tus datos."
-
-#: provider/views.py:514
-msgid "Only POST requests allowed."
-msgstr "Solo se permiten peticiones POST."
-
-#: provider/views.py:526
-msgid "No 'grant_type' included in the request."
-msgstr "No se ha incluído 'grant_type' en la petición."
-
-#: provider/oauth2/forms.py:40
-msgid "Client could not be validated with key pair."
-msgstr "El cliente no pudo ser validado con la pareja de claves."
-
-#: provider/oauth2/forms.py:73
-#, python-format
-msgid "'%s' is not a valid scope."
-msgstr "'%s' no es un scope válido."
-
-#: provider/oauth2/forms.py:157
-msgid "The requested redirect didn't match the client settings."
-msgstr "La dirección de redirección no se corresponde con la configurada."
-
-#: provider/templates/provider/authorize.html:8
-msgid "Authorize an application"
-msgstr "Autorizar una aplicación"
-
-#: provider/templates/provider/authorize.html:9
-#, python-format
-msgid ""
-"<b>%(client__name)s</b> would like to access your data with the following "
-"permissions:"
-msgstr ""
-"La aplicación <b>%(client__name)s</b> quiere acceder a tus datos con los "
-"siguientes permisos:"
-
-#: provider/templates/provider/authorize.html:14
-msgid "Read your data"
-msgstr "Leer tus datos"
-
-#: provider/templates/provider/authorize.html:16
-msgid "Write your data"
-msgstr "Escribir en tus datos"
-
-#: provider/templates/provider/authorize.html:33
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: provider/templates/provider/authorize.html:34
-msgid "Authorize"
-msgstr "Permitir"
-
-#: provider/templates/provider/authorize.html:38
-msgid "An error has occurred"
-msgstr "Un error ha ocurrido"
-
-#: provider/templates/provider/authorize.html:39
-msgid "Error code:"
-msgstr "Código de error:"
-
-#: provider/templates/provider/authorize.html:40
-msgid "Message:"
-msgstr "Mensaje:"
-
-#: templates/base.html:42 templates/base.html.py:49
+#: templates/base.html:42
+#: templates/base.html.py:49
 msgid "news"
 msgstr "noticias"
 
@@ -171,7 +103,8 @@ msgstr "noticias"
 msgid "admin"
 msgstr "admin"
 
-#: templates/base.html:42 templates/base.html.py:49
+#: templates/base.html:42
+#: templates/base.html.py:49
 msgid "contact"
 msgstr "contacto"
 
@@ -204,15 +137,15 @@ msgid "If you would like to contact us, write an email to this address:"
 msgstr "Si quieres contactar con nosotros, escribe a este email:"
 
 #: templates/contact.html:7
-msgid ""
-"Problems, suggestions, hate mail, everything is welcome at that address :)"
+msgid "Problems, suggestions, hate mail, everything is welcome at that address :)"
 msgstr "Problemas, sugerencias, hate mail, todo es bienvenido ahí :)"
 
 #: templates/maintenance.html:5
 msgid "Site is under maintenance."
 msgstr "Sitio en mantenimiento"
 
-#: templates/accounts/account.html:3 templates/accounts/account.html.py:8
+#: templates/accounts/account.html:3
+#: templates/accounts/account.html.py:8
 msgid "Account settings"
 msgstr "Configuración de la cuenta"
 
@@ -221,7 +154,8 @@ msgid "Here you can change your password or your e-mail address."
 msgstr "Aquí puedes cambiar tu contraseña o tu correo electrónico."
 
 #: templates/accounts/account.html:11
-#: templates/accounts/password_change_done.html:6 templates/admin/base.html:41
+#: templates/accounts/password_change_done.html:6
+#: templates/admin/base.html:41
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
@@ -239,12 +173,8 @@ msgstr "Activar cuenta"
 
 #: templates/accounts/activate.html:8
 #, python-format
-msgid ""
-"Your account was inactivated because you didn't read your comics for, at "
-"least, %(days)s days. You can reactivate it here."
-msgstr ""
-"Tu cuenta ha sido desactivada porque no has leído tus comics en, al menos, "
-"%(days)s días. La puedes reactivar aquí."
+msgid "Your account was inactivated because you didn't read your comics for, at least, %(days)s days. You can reactivate it here."
+msgstr "Tu cuenta ha sido desactivada porque no has leído tus comics en, al menos, %(days)s días. La puedes reactivar aquí."
 
 #: templates/accounts/activate.html:11
 msgid "Reactivate"
@@ -272,12 +202,8 @@ msgid "E-mail change"
 msgstr "Cambiar correo electrónico"
 
 #: templates/accounts/email_change_form.html:9
-msgid ""
-"Here you can change the e-mail of your account. Type your current password, "
-"and the new e-mail address."
-msgstr ""
-"Aquí puedes cambiar el correo electrónico asociado a tu cuenta. Escribe tu "
-"contraseña actual y la nueva dirección de correo."
+msgid "Here you can change the e-mail of your account. Type your current password, and the new e-mail address."
+msgstr "Aquí puedes cambiar el correo electrónico asociado a tu cuenta. Escribe tu contraseña actual y la nueva dirección de correo."
 
 #: templates/accounts/email_change_form.html:13
 msgid "The password is not valid."
@@ -309,44 +235,49 @@ msgstr "Entrar"
 msgid "Login into your account to authorize an application"
 msgstr "Entrar en tu cuenta para autorizar una aplicación"
 
-#: templates/accounts/login_form.html:12 templates/accounts/login_form.html:41
+#: templates/accounts/login_form.html:12
+#: templates/accounts/login_form.html:41
 msgid "Write your username and passwod to get you logged in."
 msgstr "Escribe tu usuario y contraseña para conectarte."
 
-#: templates/accounts/login_form.html:21 templates/accounts/login_form.html:50
+#: templates/accounts/login_form.html:21
+#: templates/accounts/login_form.html:50
 msgid "User "
 msgstr "Usuario "
 
-#: templates/accounts/login_form.html:25 templates/accounts/login_form.html:54
+#: templates/accounts/login_form.html:25
+#: templates/accounts/login_form.html:54
 msgid "Password "
 msgstr "Contraseña "
 
-#: templates/accounts/login_form.html:29 templates/accounts/login_form.html:58
+#: templates/accounts/login_form.html:29
+#: templates/accounts/login_form.html:58
 msgid "Log in"
 msgstr "Entrar"
 
-#: templates/accounts/login_form.html:34 templates/accounts/login_form.html:63
+#: templates/accounts/login_form.html:34
+#: templates/accounts/login_form.html:63
 msgid "Don't you have an account?"
 msgstr "¿No tienes una cuenta?"
 
-#: templates/accounts/login_form.html:34 templates/accounts/login_form.html:63
+#: templates/accounts/login_form.html:34
+#: templates/accounts/login_form.html:63
 msgid "Create one"
 msgstr "Créate una"
 
-#: templates/accounts/login_form.html:35 templates/accounts/login_form.html:64
+#: templates/accounts/login_form.html:35
+#: templates/accounts/login_form.html:64
 msgid "Can't remember your password?"
 msgstr "¿No recuerdas tu contraseña?"
 
-#: templates/accounts/login_form.html:35 templates/accounts/login_form.html:64
+#: templates/accounts/login_form.html:35
+#: templates/accounts/login_form.html:64
 msgid "Send me a new password"
 msgstr "Envíame una nueva contraseña"
 
 #: templates/accounts/login_form.html:38
-msgid ""
-"Comic Aggregator allows you to read lots and lots of webcomics in the same "
-"page."
-msgstr ""
-"Comic Aggregator te permite leer un montón de webcomics en la misma página."
+msgid "Comic Aggregator allows you to read lots and lots of webcomics in the same page."
+msgstr "Comic Aggregator te permite leer un montón de webcomics en la misma página."
 
 #: templates/accounts/login_form.html:40
 msgid "Login into your account"
@@ -366,12 +297,8 @@ msgid "Password change"
 msgstr "Cambio de contraseña"
 
 #: templates/accounts/password_change_form.html:7
-msgid ""
-"Here you can change the password for your account.<br/>Type your current "
-"password, and the new one twice."
-msgstr ""
-"Aquí puedes cambiar la contraseña de tu cuenta.<br/>Escribe tu contraseña "
-"actual y la nueva dos veces."
+msgid "Here you can change the password for your account.<br/>Type your current password, and the new one twice."
+msgstr "Aquí puedes cambiar la contraseña de tu cuenta.<br/>Escribe tu contraseña actual y la nueva dos veces."
 
 #: templates/accounts/password_change_form.html:11
 msgid "The current password is not valid."
@@ -394,10 +321,8 @@ msgid "New password again"
 msgstr "Otra vez"
 
 #: templates/accounts/password_change_form.html:44
-msgid ""
-"If you can't remember your current password, use the password reset page"
-msgstr ""
-"Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
+msgid "If you can't remember your current password, use the password reset page"
+msgstr "Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
 
 #: templates/accounts/password_change_form.html:44
 msgid "here"
@@ -418,27 +343,16 @@ msgid "Password reset"
 msgstr "Reseteo de contraseña"
 
 #: templates/accounts/password_reset_done.html:7
-msgid ""
-"If you provided a correct username or e-mail, an e-mail has been sent to the "
-"associated e-mail address.<br/>You will find your new password in it."
-msgstr ""
-"Si has introducido un usuario o una dirección de correo electrónico "
-"correctos, un correo electrónico ha sido enviado a la dirección de correo."
-"<br/>Encontrarás la nueva contraseña en él."
+msgid "If you provided a correct username or e-mail, an e-mail has been sent to the associated e-mail address.<br/>You will find your new password in it."
+msgstr "Si has introducido un usuario o una dirección de correo electrónico correctos, un correo electrónico ha sido enviado a la dirección de correo.<br/>Encontrarás la nueva contraseña en él."
 
 #: templates/accounts/password_reset_done.html:8
-msgid ""
-"If you don't receive any e-mail in the next minutes, try again reseting the "
-"password."
-msgstr ""
-"Si no recibes ningún correo en los próximos minutos, prueba de nuevo a "
-"restablecer la contraseña."
+msgid "If you don't receive any e-mail in the next minutes, try again reseting the password."
+msgstr "Si no recibes ningún correo en los próximos minutos, prueba de nuevo a restablecer la contraseña."
 
 #: templates/accounts/password_reset_email.html:2
 msgid "You're receiving this e-mail because you requested a password reset"
-msgstr ""
-"Estás recibiendo este correo electrónico porque has solicitado una nueva "
-"contraseña"
+msgstr "Estás recibiendo este correo electrónico porque has solicitado una nueva contraseña"
 
 #: templates/accounts/password_reset_email.html:3
 #, python-format
@@ -468,12 +382,8 @@ msgid "The %(site_name)s team"
 msgstr "El equipo de %(site_name)s"
 
 #: templates/accounts/password_reset_form.html:7
-msgid ""
-"Please enter your username or e-mail address and we will send you a new "
-"password via e-mail."
-msgstr ""
-"Por favor escribe tu usuario o correo electrónico y te enviaremos una nueva "
-"contraseña por correo electrónico."
+msgid "Please enter your username or e-mail address and we will send you a new password via e-mail."
+msgstr "Por favor escribe tu usuario o correo electrónico y te enviaremos una nueva contraseña por correo electrónico."
 
 #: templates/accounts/password_reset_form.html:12
 msgid "Your username or email"
@@ -492,29 +402,22 @@ msgstr "o volver atrás"
 msgid "New account"
 msgstr "Nueva cuenta"
 
-#: templates/accounts/register.html:6 templates/accounts/register_done.html:5
+#: templates/accounts/register.html:6
+#: templates/accounts/register_done.html:5
 msgid "Register new account"
 msgstr "Crear una nueva cuenta"
 
 #: templates/accounts/register.html:7
-msgid ""
-"Please fill in the following fields to create your account. Once you have "
-"finished you will be able to log in."
-msgstr ""
-"Por favor rellena el formulario para crear tu cuenta. Una vez que lo hayas "
-"completado y enviado podrás conectarte."
+msgid "Please fill in the following fields to create your account. Once you have finished you will be able to log in."
+msgstr "Por favor rellena el formulario para crear tu cuenta. Una vez que lo hayas completado y enviado podrás conectarte."
 
 #: templates/accounts/register.html:12
 msgid "Username"
 msgstr "Usuario"
 
 #: templates/accounts/register.html:13
-msgid ""
-"3 chars min, 30 chars max. The following chars are valid: letters, digits, _ "
-"and ."
-msgstr ""
-"3 letras mínimo, 30 máximo. Sólo se permiten los siguientes: letras, "
-"números, _ y ."
+msgid "3 chars min, 30 chars max. The following chars are valid: letters, digits, _ and ."
+msgstr "3 letras mínimo, 30 máximo. Sólo se permiten los siguientes: letras, números, _ y ."
 
 #: templates/accounts/register.html:16
 msgid "Password"
@@ -553,9 +456,7 @@ msgid "Account created"
 msgstr "Cuenta creada"
 
 #: templates/accounts/register_done.html:6
-msgid ""
-"Your account has been created. You can now log in using the username you "
-"selected."
+msgid "Your account has been created. You can now log in using the username you selected."
 msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
 
 #: templates/accounts/register_done.html:7
@@ -652,271 +553,6 @@ msgstr "Contenido desconocido"
 msgid "Reported broken images"
 msgstr "Imágenes rotas"
 
-#: templates/agregator/organize_add.html:3
-msgid "Choose"
-msgstr "Elegir"
-
-#: templates/agregator/organize_add.html:23
-msgid "Add comics"
-msgstr "Añadir comics"
-
-#: templates/agregator/organize_add.html:24
-msgid "Click on a comic to add or remove it."
-msgstr "Haz click en un comic para añadirlo o quitarlo."
-
-#: templates/agregator/organize_add.html:26
-msgid "Hover over a comic to see details."
-msgstr "Pasa por encima de un comic para ver detalles."
-
-#: templates/agregator/organize_add.html:30
-msgid "New comic!"
-msgstr "¡Nuevo!"
-
-#: templates/agregator/organize_add.html:31
-msgid "Score"
-msgstr "Puntuación"
-
-#: templates/agregator/organize_add.html:31
-msgid "votes"
-msgstr "votos"
-
-#: templates/agregator/organize_add.html:31
-msgid "readers"
-msgstr "lectores"
-
-#: templates/agregator/organize_add.html:32
-msgid "Link to its website"
-msgstr "Enlace a su web"
-
-#: templates/agregator/organize_add.html:37
-msgid ""
-"<b>Warning!</b> Instead of showing the images of this comic, you will see a "
-"link to its website when the comic updates."
-msgstr ""
-"<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en "
-"lace a su página web cuando se actualice."
-
-#: templates/agregator/organize_add.html:42
-msgid "Show:"
-msgstr "Ver:"
-
-#: templates/agregator/organize_add.html:42
-msgid "all"
-msgstr "todos"
-
-#: templates/agregator/organize_add.html:42
-msgid "new"
-msgstr "nuevos"
-
-#: templates/agregator/organize_add.html:42
-msgid "added"
-msgstr "añadidos"
-
-#: templates/agregator/organize_add.html:47
-msgid "You won't see the images of this comic"
-msgstr "No verás las imágenes de este comic."
-
-#: templates/agregator/organize_organize.html:3
-msgid "Organize"
-msgstr "Organizar"
-
-#: templates/agregator/organize_organize.html:26
-msgid "Organize your comics"
-msgstr "Organiza tus comics"
-
-#: templates/agregator/organize_organize.html:28
-msgid "Drop comics here<br/>to delete them"
-msgstr "Suelta comics aquí<br/>para borrarlos"
-
-#: templates/agregator/organize_organize.html:30
-msgid ""
-"Here you can sort your comics. Just select one or some of them (holding the "
-"Ctrl/Meta key) and drag them around."
-msgstr ""
-"Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
-"Ctrl/Meta) y múevelos."
-
-#: templates/agregator/organize_organize.html:34
-msgid "retry"
-msgstr "intentar de nuevo"
-
-#: templates/agregator/organize_organize.html:38
-msgid "Sort them:"
-msgstr "Ordenar por:"
-
-#: templates/agregator/organize_organize.html:39
-msgid "by name"
-msgstr "por nombre"
-
-#: templates/agregator/organize_organize.html:40
-msgid "by score"
-msgstr "por puntuación"
-
-#: templates/agregator/read.html:3 templates/agregator/read.html.py:10
-msgid "Read"
-msgstr "Leer"
-
-#: templates/agregator/read.html:28 templates/agregator/read.html.py:90
-msgid "Mark all comics as read"
-msgstr "Marcar todos como leídos"
-
-#: templates/agregator/read.html:32
-#, python-format
-msgid ""
-"You are reading <b id=\"unreadCountersTotal\">%(comic_count)s</b> comics and "
-"<b id=\"unreadCountersUnread\">%(unread_count)s</b> of them have unread "
-"strips."
-msgstr ""
-"Estás leyendo <b id=\"unreadCountersTotal\">%(comic_count)s</b> comics y <b "
-"id=\"unreadCountersUnread\">%(unread_count)s</b> de ellos tienen nuevas "
-"tiras sin leer."
-
-#: templates/agregator/read.html:33
-#, python-format
-msgid ""
-"You are reading <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics "
-"and none of them have unread strips."
-msgstr ""
-"Estás leyendo <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics y "
-"ninguno de ellos tienen nuevas tiras sin leer."
-
-#: templates/agregator/read.html:34
-msgid ""
-"Showing only <b>unread</b> comics. <a onclick=\"showAllComics()\">Click "
-"here</a> to show all comics."
-msgstr ""
-"Mostrando sólo comics <b>sin leer</b>. <a onclick=\"showAllComics()\">Pulsa "
-"aquí</a> para ver todos los comics."
-
-#: templates/agregator/read.html:35
-msgid ""
-"Showing <b>all</b> comics. <a onclick=\"showUnreadComics()\">Click here</a> "
-"to show only unread comics."
-msgstr ""
-"Mostrando <b>todos</b> los comics. <a onclick=\"showUnreadComics()\">Pulsa "
-"aquí</a> para ver sólo los que tienes sin leer."
-
-#: templates/agregator/read.html:41
-msgid "New strips!"
-msgstr "¡Nuevas tiras!"
-
-#: templates/agregator/read.html:44
-#, python-format
-msgid ""
-"The comic has been updated. <a href=\"%(url)s\">Click here</a> to go to the "
-"comic's website."
-msgstr ""
-"El cómic ha sido actualizado. <a href=\"%(url)s\">Haz click aquí</a> para ir "
-"a la página del comic."
-
-#: templates/agregator/read.html:66
-msgid "Reload images"
-msgstr "Recargar"
-
-#: templates/agregator/read.html:69
-msgid "Mark as read"
-msgstr "Marcar como leída"
-
-#: templates/agregator/read.html:70
-msgid "Vote"
-msgstr "Vota"
-
-#: templates/agregator/read.html:77
-msgid "Visit its website"
-msgstr "Visitar su web"
-
-#: templates/agregator/read.html:78
-msgid "Report broken image"
-msgstr "Avisar imagen rota"
-
-#: templates/agregator/read.html:79
-msgid "Remove this comic"
-msgstr "Quitar este comic"
-
-#: templates/agregator/read.html:86
-msgid "No comics to show here. Use the menu in the top to add comics."
-msgstr ""
-"No hay comics que mostrar aquí. Usa el menú superior para añadir comics."
-
-#: templates/agregator/read.html:95
-msgid "You don't have any new unread comics"
-msgstr "No tienes nuevos comics sin leer"
-
-#: templates/agregator/request_index.html:3
-msgid "Requests"
-msgstr "Solicitudes"
-
-#: templates/agregator/request_index.html:7
-msgid "Request a comic"
-msgstr "Solicitar un comic"
-
-#: templates/agregator/request_index.html:9
-msgid ""
-"Write the url of the comic you would like to read here and we will try to "
-"add it is as soon as possible (if it's possible, of course)."
-msgstr ""
-"Escribe aquí la dirección web del comic que te gustaría leer e intentaremos "
-"añadirlo lo antes posible (si es posible)."
-
-#: templates/agregator/request_index.html:10
-#, python-format
-msgid ""
-"Currently there are %(count)s requests waiting to be added. We have to add "
-"them one by one by hand so, please, be patient. Thanks!"
-msgstr ""
-"Ahora mismo hay %(count)s peticiones esperando. Tenemos que añadirlas a mano "
-"una a una, así que ten un poco de paciencia. ¡Gracias!"
-
-#: templates/agregator/request_index.html:13
-msgid "The comic's Url"
-msgstr "La dirección del comic"
-
-#: templates/agregator/request_index.html:17
-msgid "Any comment?"
-msgstr "¿Algún comentario?"
-
-#: templates/agregator/request_index.html:18
-msgid "Send"
-msgstr "Enviar"
-
-#: templates/agregator/request_index.html:29
-msgid ""
-"There are a number of authors that don't want their comics in this website "
-"so please don't ask for the following comics as we won't add the to the "
-"list. Thanks!"
-msgstr ""
-"Hay una serie de autores que no quieren sus comics en este sitio así que por "
-"favor no pids los siguientes comics ya que no los añadiremos a la lista. "
-"¡Gracias!"
-
-#: templates/agregator/request_index.html:91
-msgid "Pending requests"
-msgstr "Solicitudes pendientes"
-
-#: templates/agregator/request_index.html:95
-msgid "Your comment:"
-msgstr "Tu comentario:"
-
-#: templates/agregator/request_index.html:96
-#: templates/agregator/request_index.html:105
-#: templates/agregator/request_index.html:114
-msgid "Our comment:"
-msgstr "Nuestro comentario:"
-
-#: templates/agregator/request_index.html:98
-#: templates/agregator/request_index.html:107
-#: templates/agregator/request_index.html:116
-msgid "Nothing here."
-msgstr "No hay nada aquí."
-
-#: templates/agregator/request_index.html:101
-msgid "Rejected requests"
-msgstr "Solicitudes rechazadas"
-
-#: templates/agregator/request_index.html:110
-msgid "Accepted requests"
-msgstr "Solicitudes aceptadas"
-
 #: templates/blog/base.html:3
 msgid "News"
 msgstr "Noticias"
@@ -925,13 +561,236 @@ msgstr "Noticias"
 msgid "Nothing here right now"
 msgstr "Nada aquí ahora mismo"
 
-#: templates/blog/index.html:21 templates/blog/side.html:14
+#: templates/blog/index.html:21
+#: templates/blog/side.html:14
 msgid "All posts"
 msgstr "Todos los posts"
 
 #: templates/blog/side.html:3
 msgid "Recent posts"
 msgstr "Posts recientes"
+
+#: templates/comics/organize_add.html:3
+msgid "Choose"
+msgstr "Elegir"
+
+#: templates/comics/organize_add.html:23
+msgid "Add comics"
+msgstr "Añadir comics"
+
+#: templates/comics/organize_add.html:24
+msgid "Click on a comic to add or remove it."
+msgstr "Haz click en un comic para añadirlo o quitarlo."
+
+#: templates/comics/organize_add.html:26
+msgid "Hover over a comic to see details."
+msgstr "Pasa por encima de un comic para ver detalles."
+
+#: templates/comics/organize_add.html:30
+msgid "New comic!"
+msgstr "¡Nuevo!"
+
+#: templates/comics/organize_add.html:31
+msgid "Score"
+msgstr "Puntuación"
+
+#: templates/comics/organize_add.html:31
+msgid "votes"
+msgstr "votos"
+
+#: templates/comics/organize_add.html:31
+msgid "readers"
+msgstr "lectores"
+
+#: templates/comics/organize_add.html:32
+msgid "Link to its website"
+msgstr "Enlace a su web"
+
+#: templates/comics/organize_add.html:37
+msgid "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates."
+msgstr "<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en lace a su página web cuando se actualice."
+
+#: templates/comics/organize_add.html:42
+msgid "Show:"
+msgstr "Ver:"
+
+#: templates/comics/organize_add.html:42
+msgid "all"
+msgstr "todos"
+
+#: templates/comics/organize_add.html:42
+msgid "new"
+msgstr "nuevos"
+
+#: templates/comics/organize_add.html:42
+msgid "added"
+msgstr "añadidos"
+
+#: templates/comics/organize_add.html:47
+msgid "You won't see the images of this comic"
+msgstr "No verás las imágenes de este comic."
+
+#: templates/comics/organize_organize.html:3
+msgid "Organize"
+msgstr "Organizar"
+
+#: templates/comics/organize_organize.html:26
+msgid "Organize your comics"
+msgstr "Organiza tus comics"
+
+#: templates/comics/organize_organize.html:28
+msgid "Drop comics here<br/>to delete them"
+msgstr "Suelta comics aquí<br/>para borrarlos"
+
+#: templates/comics/organize_organize.html:30
+msgid "Here you can sort your comics. Just select one or some of them (holding the Ctrl/Meta key) and drag them around."
+msgstr "Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla Ctrl/Meta) y múevelos."
+
+#: templates/comics/organize_organize.html:34
+msgid "retry"
+msgstr "intentar de nuevo"
+
+#: templates/comics/organize_organize.html:38
+msgid "Sort them:"
+msgstr "Ordenar por:"
+
+#: templates/comics/organize_organize.html:39
+msgid "by name"
+msgstr "por nombre"
+
+#: templates/comics/organize_organize.html:40
+msgid "by score"
+msgstr "por puntuación"
+
+#: templates/comics/read.html:3
+#: templates/comics/read.html.py:10
+msgid "Read"
+msgstr "Leer"
+
+#: templates/comics/read.html:28
+#: templates/comics/read.html.py:90
+msgid "Mark all comics as read"
+msgstr "Marcar todos como leídos"
+
+#: templates/comics/read.html:32
+#, python-format
+msgid "You are reading <b id=\"unreadCountersTotal\">%(comic_count)s</b> comics and <b id=\"unreadCountersUnread\">%(unread_count)s</b> of them have unread strips."
+msgstr "Estás leyendo <b id=\"unreadCountersTotal\">%(comic_count)s</b> comics y <b id=\"unreadCountersUnread\">%(unread_count)s</b> de ellos tienen nuevas tiras sin leer."
+
+#: templates/comics/read.html:33
+#, python-format
+msgid "You are reading <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics and none of them have unread strips."
+msgstr "Estás leyendo <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics y ninguno de ellos tienen nuevas tiras sin leer."
+
+#: templates/comics/read.html:34
+msgid "Showing only <b>unread</b> comics. <a onclick=\"showAllComics()\">Click here</a> to show all comics."
+msgstr "Mostrando sólo comics <b>sin leer</b>. <a onclick=\"showAllComics()\">Pulsa aquí</a> para ver todos los comics."
+
+#: templates/comics/read.html:35
+msgid "Showing <b>all</b> comics. <a onclick=\"showUnreadComics()\">Click here</a> to show only unread comics."
+msgstr "Mostrando <b>todos</b> los comics. <a onclick=\"showUnreadComics()\">Pulsa aquí</a> para ver sólo los que tienes sin leer."
+
+#: templates/comics/read.html:41
+msgid "New strips!"
+msgstr "¡Nuevas tiras!"
+
+#: templates/comics/read.html:44
+#, python-format
+msgid "The comic has been updated. <a href=\"%(url)s\">Click here</a> to go to the comic's website."
+msgstr "El cómic ha sido actualizado. <a href=\"%(url)s\">Haz click aquí</a> para ir a la página del comic."
+
+#: templates/comics/read.html:66
+msgid "Reload images"
+msgstr "Recargar"
+
+#: templates/comics/read.html:69
+msgid "Mark as read"
+msgstr "Marcar como leída"
+
+#: templates/comics/read.html:70
+msgid "Vote"
+msgstr "Vota"
+
+#: templates/comics/read.html:77
+msgid "Visit its website"
+msgstr "Visitar su web"
+
+#: templates/comics/read.html:78
+msgid "Report broken image"
+msgstr "Avisar imagen rota"
+
+#: templates/comics/read.html:79
+msgid "Remove this comic"
+msgstr "Quitar este comic"
+
+#: templates/comics/read.html:86
+msgid "No comics to show here. Use the menu in the top to add comics."
+msgstr "No hay comics que mostrar aquí. Usa el menú superior para añadir comics."
+
+#: templates/comics/read.html:95
+msgid "You don't have any new unread comics"
+msgstr "No tienes nuevos comics sin leer"
+
+#: templates/comics/request_index.html:3
+msgid "Requests"
+msgstr "Solicitudes"
+
+#: templates/comics/request_index.html:7
+msgid "Request a comic"
+msgstr "Solicitar un comic"
+
+#: templates/comics/request_index.html:9
+msgid "Write the url of the comic you would like to read here and we will try to add it is as soon as possible (if it's possible, of course)."
+msgstr "Escribe aquí la dirección web del comic que te gustaría leer e intentaremos añadirlo lo antes posible (si es posible)."
+
+#: templates/comics/request_index.html:10
+#, python-format
+msgid "Currently there are %(count)s requests waiting to be added. We have to add them one by one by hand so, please, be patient. Thanks!"
+msgstr "Ahora mismo hay %(count)s peticiones esperando. Tenemos que añadirlas a mano una a una, así que ten un poco de paciencia. ¡Gracias!"
+
+#: templates/comics/request_index.html:13
+msgid "The comic's Url"
+msgstr "La dirección del comic"
+
+#: templates/comics/request_index.html:17
+msgid "Any comment?"
+msgstr "¿Algún comentario?"
+
+#: templates/comics/request_index.html:18
+msgid "Send"
+msgstr "Enviar"
+
+#: templates/comics/request_index.html:29
+msgid "There are a number of authors that don't want their comics in this website so please don't ask for the following comics as we won't add the to the list. Thanks!"
+msgstr "Hay una serie de autores que no quieren sus comics en este sitio así que por favor no pids los siguientes comics ya que no los añadiremos a la lista. ¡Gracias!"
+
+#: templates/comics/request_index.html:91
+msgid "Pending requests"
+msgstr "Solicitudes pendientes"
+
+#: templates/comics/request_index.html:95
+msgid "Your comment:"
+msgstr "Tu comentario:"
+
+#: templates/comics/request_index.html:96
+#: templates/comics/request_index.html:105
+#: templates/comics/request_index.html:114
+msgid "Our comment:"
+msgstr "Nuestro comentario:"
+
+#: templates/comics/request_index.html:98
+#: templates/comics/request_index.html:107
+#: templates/comics/request_index.html:116
+msgid "Nothing here."
+msgstr "No hay nada aquí."
+
+#: templates/comics/request_index.html:101
+msgid "Rejected requests"
+msgstr "Solicitudes rechazadas"
+
+#: templates/comics/request_index.html:110
+msgid "Accepted requests"
+msgstr "Solicitudes aceptadas"
 
 #: templates/ws/index.html:6
 msgid "Index of services"
@@ -948,6 +807,58 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
+
+#~ msgid "A secure connection is required."
+#~ msgstr "Se requiere una conexión segura."
+
+#~ msgid "An unauthorized client tried to access your resources."
+#~ msgstr "Un cliente no autorizado ha intentado acceder a tus datos."
+
+#~ msgid "Only POST requests allowed."
+#~ msgstr "Solo se permiten peticiones POST."
+
+#~ msgid "No 'grant_type' included in the request."
+#~ msgstr "No se ha incluído 'grant_type' en la petición."
+
+#~ msgid "Client could not be validated with key pair."
+#~ msgstr "El cliente no pudo ser validado con la pareja de claves."
+
+#~ msgid "'%s' is not a valid scope."
+#~ msgstr "'%s' no es un scope válido."
+
+#~ msgid "The requested redirect didn't match the client settings."
+#~ msgstr "La dirección de redirección no se corresponde con la configurada."
+
+#~ msgid "Authorize an application"
+#~ msgstr "Autorizar una aplicación"
+
+#~ msgid ""
+#~ "<b>%(client__name)s</b> would like to access your data with the following "
+#~ "permissions:"
+#~ msgstr ""
+#~ "La aplicación <b>%(client__name)s</b> quiere acceder a tus datos con los "
+#~ "siguientes permisos:"
+
+#~ msgid "Read your data"
+#~ msgstr "Leer tus datos"
+
+#~ msgid "Write your data"
+#~ msgstr "Escribir en tus datos"
+
+#~ msgid "Cancel"
+#~ msgstr "Cancelar"
+
+#~ msgid "Authorize"
+#~ msgstr "Permitir"
+
+#~ msgid "An error has occurred"
+#~ msgstr "Un error ha ocurrido"
+
+#~ msgid "Error code:"
+#~ msgstr "Código de error:"
+
+#~ msgid "Message:"
+#~ msgstr "Mensaje:"
 
 #~ msgid "Comic Aggregator authorization page"
 #~ msgstr "Página de autorización de Comic Aggregator"

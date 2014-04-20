@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from comicagg.agregator.models import Comic, ComicHistory, NewComic, Request, Subscription, Tag, UnreadComic
+from comicagg.comics.models import Comic, ComicHistory, NewComic, Request, Subscription, Tag, UnreadComic
 from django.contrib import admin
 
 class TagInline(admin.TabularInline):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from comicagg import render
-from comicagg.agregator.models import Comic, ComicHistory
-from comicagg.agregator.check import check_comic
+from comicagg.comics.models import Comic, ComicHistory
+from comicagg.comics.check import check_comic
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.utils.translation import ugettext as _

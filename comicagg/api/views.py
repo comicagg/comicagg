@@ -217,16 +217,16 @@ class UserView(TemplateView):
         context = self.get_context_data(**kwargs)
         #TODO Really need to change how to get this...
         sql = """
-SELECT agregator_unreadcomic.comic_id, name, count(agregator_unreadcomic.id) as count
-FROM agregator_unreadcomic
-  INNER JOIN agregator_comic ON agregator_unreadcomic.comic_id=agregator_comic.id
-  INNER JOIN agregator_subscription ON agregator_unreadcomic.comic_id=agregator_subscription.comic_id
+SELECT comics_unreadcomic.comic_id, name, count(comics_unreadcomic.id) as count
+FROM comics_unreadcomic
+  INNER JOIN comics_comic ON comics_unreadcomic.comic_id=comics_comic.id
+  INNER JOIN comics_subscription ON comics_unreadcomic.comic_id=comics_subscription.comic_id
 WHERE activo=TRUE
   AND ended=FALSE
-  AND agregator_unreadcomic.user_id=%s
-  AND agregator_subscription.user_id=%s
-GROUP BY agregator_comic.id, agregator_unreadcomic.comic_id, name, agregator_subscription.position
-ORDER BY agregator_subscription.position"""
+  AND comics_unreadcomic.user_id=%s
+  AND comics_subscription.user_id=%s
+GROUP BY comics_comic.id, comics_unreadcomic.comic_id, name, comics_subscription.position
+ORDER BY comics_subscription.position"""
         acursor = connection.cursor()
         acursor.execute(sql, [request.user.id, request.user.id])
         rows = acursor.fetchall()

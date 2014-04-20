@@ -144,7 +144,7 @@ class Comic(models.Model):
     def get_url(self):
         url = self.last_image
         if self.referer:
-            url = reverse('aggregator:last_image_url', kwargs={'cid':self.id})
+            url = reverse('comics:last_image_url', kwargs={'cid':self.id})
         return url
 
 class Subscription(models.Model):
@@ -189,7 +189,7 @@ class ComicHistory(models.Model):
     def get_url(self):
         url = self.url
         if self.comic.referer:
-            url = reverse('aggregator:history_url', kwargs={'hid':self.id})
+            url = reverse('comics:history_url', kwargs={'hid':self.id})
         return url
 
     class Meta:

@@ -17,7 +17,7 @@ import re
 
 def index(request):
     if request.user.is_authenticated():
-        return redirect('aggregator:read')
+        return redirect('comics:read')
     else:
         return redirect('accounts:login')
 
