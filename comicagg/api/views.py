@@ -105,6 +105,7 @@ class ComicView(BaseTemplateView):
     @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
+        # Do you want all the comics or just one?
         if "comicid" in context["params"].keys():
             comicid = context["params"]["comicid"]
             comic = get_object_or_404(Comic, pk=comicid)

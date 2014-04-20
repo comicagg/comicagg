@@ -93,6 +93,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.messages',
     'comicagg.accounts',
+    'comicagg.api',
     'comicagg.blog',
     'comicagg.comics',
     #'comicagg.help',

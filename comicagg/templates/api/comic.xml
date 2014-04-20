@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+{% load api %}<?xml version="1.0" encoding="UTF-8" ?>
+{% spaceless %}
 {% if comics %}
-<comics>
+{# We will render the whole list of comics #}
+	<comics>
 	{% for comic in comics %}
-		<comic id="{{ comic.id }}" website="{{ comic.website }}" name="{{ comic }}" votes="{{ comic.votes }}" rating="{{ comic.getRating }}"/>
+	{{ comic|xml|safe }}
 	{% endfor %}
-</comics>
+	</comics>
 {% else %}
-<comic id="{{ comic.id }}" website="{{ comic.website }}" name="{{ comic }}" votes="{{ comic.votes }}" rating="{{ comic.getRating }}">
-{% if comic.comichistory_set.latest %}
-	<strip id="{{ comic.comichistory_set.latest.id }}" imageurl="{{ comic.comichistory_set.latest.url }}" imagetext="{{ comic.comichistory_set.latest.alt_text|default:"" }}" date="{{ comic.comichistory_set.latest.date|date:"r" }}" timestamp="{{ comic.comichistory_set.latest.date|date:"U" }}"/>
+	{{ comic|xml:"True"|safe }}
 {% endif %}
-</comic>
-{% endif %}
+{% endspaceless %}
