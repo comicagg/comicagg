@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls.defaults import include, patterns, url
 
-ajaxpatterns = patterns('comicagg.agregator.ajax',
+ajaxpatterns = patterns('comicagg.comics.ajax.views',
     url(r'^add_comic/$', 'add_comic', name='add_comic'),
     url(r'^remove_comic/$', 'remove_comic', name='remove_comic'),
     url(r'^remove_comic_list/$', 'remove_comic_list', name='remove_comic_list'),
@@ -14,13 +14,13 @@ ajaxpatterns = patterns('comicagg.agregator.ajax',
     url(r'^mark_all_read/$', 'mark_all_read', name='mark_all_read'),
 )
 
-adminpatterns = patterns('comicagg.agregator.adminviews',
+adminpatterns = patterns('comicagg.comics.admin.views',
     url(r'^check/$', 'admin_check', name='check'),
     url(r'^check/(?P<comic_id>\d+)/$', 'admin_check', name='check_id'),
     url(r'^reported/(?P<chids>[\w-]+)/$', 'admin_reported', name='reported'),                    
 )
 
-urlpatterns = patterns('comicagg.agregator.views',
+urlpatterns = patterns('comicagg.comics.views',
     url(r'^$', 'read_view', name='index'),
     url(r'^read/$', 'read_view', name='read'),
     url(r'^add/$', 'organize', {'add': True}, name='add'),

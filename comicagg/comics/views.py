@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from comicagg import render
-from comicagg.agregator.models import Comic, ComicHistory, NewComic, Request, RequestForm, Subscription
+from comicagg.comics.models import Comic, ComicHistory, NewComic, Request, RequestForm, Subscription
 from datetime import datetime
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -43,7 +43,7 @@ def read_view(request):
             'unread_list': unread_list,
             'random': random
         })
-        return render(request, 'agregator/read.html', context, 'read')
+        return render(request, 'comics/read.html', context, 'read')
 
 def random_comic(user, xhtml=False, request=None):
     not_in_list = Comic.objects.exclude(activo=False).exclude(id__in=[s.comic.id for s in Subscription.objects.filter(user=user)])
@@ -55,7 +55,7 @@ def random_comic(user, xhtml=False, request=None):
         except:
             history = None
         if xhtml and history:
-            return render(request, 'agregator/read_random.html', {'random_comic':history})
+            return render(request, 'comics/read_random.html', {'random_comic':history})
         return history
     return None
 
@@ -90,9 +90,9 @@ def organize(request, add=False):
         context['all_comics'] = all_comics
         #quitar aviso de nuevos comics
         hide_new_comics(request)
-        template = 'agregator/organize_add.html'
+        template = 'comics/organize_add.html'
     else:
-        template = 'agregator/organize_organize.html'
+        template = 'comics/organize_organize.html'
     return render(request, template, context)
 
 #ascendente
@@ -130,7 +130,7 @@ def request_index(request):
             message = '%s\n%s\n%s' %(req.user, req.url, req.comment)
             mail_managers('Nuevo request', message)
             messages.info(request, _("Your request has been saved. Thanks!"))
-            return redirect('aggregator:requests')
+            return redirect('comics:requests')
     else:
         form = RequestForm()
     context = {}
@@ -139,7 +139,7 @@ def request_index(request):
     context['accepted'] = request.user.request_set.filter(done__exact=1).filter(rejected__exact=0)
     context['rejected'] = request.user.request_set.filter(rejected__exact=1)
     context['pending'] = request.user.request_set.filter(done__exact=0).filter(rejected__exact=0)
-    return render(request, 'agregator/request_index.html', context)
+    return render(request, 'comics/request_index.html', context)
 
 ########
 # Others
@@ -217,3 +217,4 @@ def download_image(url, ref, dest):
     except urllib2.HTTPError:
         dest = None
     return dest
+

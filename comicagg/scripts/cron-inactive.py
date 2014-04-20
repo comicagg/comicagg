@@ -14,7 +14,7 @@ import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
-from comicagg.agregator.models import *
+from comicagg.comics.models import *
 from django.contrib.auth.models import User
 from django.conf import settings
 

@@ -18,15 +18,15 @@
 			var media_url = '{{ mediaurl }}';
 			{% if user.is_authenticated %}
       var unreadCounter = {{ unread_count }};
-      var url_add = '{% url aggregator:ajax:add_comic %}';
+      var url_add = '{% url comics:ajax:add_comic %}';
       var url_forget_new_blogs = '{% url news:ajax:forget_new_blogs %}';
-      var url_forget_new_comic = '{% url aggregator:ajax:forget_new_comic %}';
-      var url_mark_all_read = '{% url aggregator:ajax:mark_all_read %}';
-      var url_mark_as_read = '{% url aggregator:ajax:mark_read %}';
-      var url_remove = '{% url aggregator:ajax:remove_comic %}';
-      var url_remove_list = '{% url aggregator:ajax:remove_comic_list %}';
-      var url_report = '{% url aggregator:ajax:report_comic %}';
-      var url_save_selection = '{% url aggregator:ajax:save %}';
+      var url_forget_new_comic = '{% url comics:ajax:forget_new_comic %}';
+      var url_mark_all_read = '{% url comics:ajax:mark_all_read %}';
+      var url_mark_as_read = '{% url comics:ajax:mark_read %}';
+      var url_remove = '{% url comics:ajax:remove_comic %}';
+      var url_remove_list = '{% url comics:ajax:remove_comic_list %}';
+      var url_report = '{% url comics:ajax:report_comic %}';
+      var url_save_selection = '{% url comics:ajax:save %}';
       var comicCounter = {{ comic_count }};
       var newComicCounter = {{ newcomic_count }};			
       var newsCounter = {{ news_count }};     
@@ -42,7 +42,7 @@
 				<a href="{% url accounts:profile %}"><i><b>{{ user.username }}</b></i></a>&nbsp;&nbsp;-&nbsp;&nbsp;<span class=""><a href="{% url news:index %}">{% trans "news" %}<span id="menuNewsCounter">{% if news_count %} ({{ news_count}}){% endif %}</a></span>&nbsp;&nbsp;{% if user.is_staff %}<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;&nbsp;{% endif %}<span class=""><a href="{% url contact %}">{% trans "contact" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url accounts:logout %}">{% trans "logout" %}</a></span>
 			</div>
 			<div id="head_left">
-				Comics:&nbsp;&nbsp;<span class=""><a href="{% url aggregator:read %}">{% trans "read" %}<span id="menuUnreadCounter">{% if unread_count %} ({{ unread_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<a href="{% url aggregator:add %}">{% trans "choose" %}<span id="menuNewComicCounter">{% if newcomic_count %} ({{ newcomic_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url aggregator:organize %}">{% trans "organize" %}</a>&nbsp;&nbsp;<span class=""><a href="{% url aggregator:requests %}">{% trans "request" %}</a></span>
+				Comics:&nbsp;&nbsp;<span class=""><a href="{% url comics:read %}">{% trans "read" %}<span id="menuUnreadCounter">{% if unread_count %} ({{ unread_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<a href="{% url comics:add %}">{% trans "choose" %}<span id="menuNewComicCounter">{% if newcomic_count %} ({{ newcomic_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url comics:organize %}">{% trans "organize" %}</a>&nbsp;&nbsp;<span class=""><a href="{% url comics:requests %}">{% trans "request" %}</a></span>
 			</div>
 			{% else %}
       <div id="head_right">

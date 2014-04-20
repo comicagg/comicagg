@@ -9,7 +9,7 @@
 <div id="content-main">
 {% for k,ch in chs.items %}
 {% if ch %}
-<a href="/admin/agregator/comichistory/{{ ch.id }}/">comic history id={{ ch.id }}</a><br/>
+<a href="/admin/comics/comichistory/{{ ch.id }}/">comic history id={{ ch.id }}</a><br/>
 <img src="{{ ch.get_url }}" style="width:500px" title="{{ ch.alt_text }}"/><br/>
 {% else %}
 history id:{{ k }} no existe

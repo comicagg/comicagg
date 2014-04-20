@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import re, htmlentitydefs, urllib2, cookielib
-from comicagg.agregator.models import ComicHistory, UnreadComic, NoMatchException
+from comicagg.comics.models import ComicHistory, UnreadComic, NoMatchException
 from datetime import datetime
 from django.conf import settings
+import re, htmlentitydefs, urllib2, cookielib
 
 #Funciones para comprobar comics
 

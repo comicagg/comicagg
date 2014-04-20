@@ -11,10 +11,10 @@ handler500 = 'comicagg.error500'
 urlpatterns = patterns('',
 	url(r'^$', 'comicagg.accounts.views.index', name='index'),
 	url(r'^robots.txt$', 'comicagg.robots_txt', name='robots'),
-	url(r'^stats/$', 'comicagg.agregator.views.stats', name='stats'),
+	url(r'^stats/$', 'comicagg.comics.views.stats', name='stats'),
 	(r'^accounts/', include('comicagg.accounts.urls', namespace="accounts")),
 	(r'^admin/', include(admin.site.urls)),
-	(r'^comics/', include('comicagg.agregator.urls', namespace="aggregator")),
+	(r'^comics/', include('comicagg.comics.urls', namespace="comics")),
 #	(r'^help/', include('comicagg.help.urls')),
 	(r'^news/', include('comicagg.blog.urls', namespace="news")),
 

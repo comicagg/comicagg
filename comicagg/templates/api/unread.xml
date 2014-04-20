@@ -1,4 +1,4 @@
-{% load agregator_tags %}<?xml version="1.0" encoding="UTF-8" ?>
+{% load comics_tags %}<?xml version="1.0" encoding="UTF-8" ?>
 <unreadcomics>
 {% for s in subscriptions %}
 	{% if s.comic|unreads:user %}

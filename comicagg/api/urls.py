@@ -1,5 +1,5 @@
-from django.conf.urls.defaults import patterns, url
 from comicagg.api.views import *
+from django.conf.urls.defaults import patterns, url
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = patterns('comicagg.api.views',

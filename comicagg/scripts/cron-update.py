@@ -18,9 +18,9 @@ import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
-from comicagg.agregator.models import *
+from comicagg.comics.check import check_comic
+from comicagg.comics.models import *
 from django.core.mail import mail_managers
-from comicagg.agregator.check import check_comic
 
 #check all comics
 all = list(Comic.objects.all())

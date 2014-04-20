@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from comicagg.agregator.models import Comic, ComicHistory, NewComic, UnreadComic, Subscription
+from comicagg.comics.models import Comic, ComicHistory, NewComic, UnreadComic, Subscription
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers

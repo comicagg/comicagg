@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# Create your views here.
 from comicagg.accounts.models import LoginForm, EmailChangeForm, PasswordChangeForm, PasswordResetForm, ProfileForm, RegisterForm
 from comicagg import render
 from django.db import IntegrityError
