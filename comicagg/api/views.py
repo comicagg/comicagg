@@ -9,7 +9,7 @@ from django.views.generic.edit import FormMixin
 from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
-import datetime, sys, logging
+import datetime, sys, re, logging
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +25,12 @@ def OAuth2AccessToken(f):
             logger.debug("API-0 API call without Authorization header.")
             return None
 
+        # Check the format of the authorization header, must be Bearer
+        if not re.match('Bearer \w{40}', access_token_str):
+            logger.error("API- Format of the Authorization header is not valid.")
+            return None
+
+        access_token_str = access_token_str.replace("Bearer ", "")
         access_token = None
         try:
             access_token = AccessToken.objects.get(token=access_token_str)
