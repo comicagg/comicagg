@@ -47,7 +47,7 @@ def OAuth2AccessToken(f):
         logger.debug("API-3 API call successfully authenticated.")
         return access_token
 
-    def new_f(klass, request, *args, **kwargs):
+    def wrapper(klass, request, *args, **kwargs):
         try:
             request.access_token = authenticate(request)
             if request.access_token:
@@ -58,10 +58,14 @@ def OAuth2AccessToken(f):
             return HttpResponse(sys.exc_info()[1], status=400, content_type="application/json;charset=UTF-8")
         return f(klass, request, *args, **kwargs)
     
-    return new_f
+    return wrapper
 
-class BaseTemplateView(TemplateView, FormMixin):
+class OAuth2TemplateView(TemplateView, FormMixin):
     form_class = None
+
+    @OAuth2AccessToken
+    def dispatch(self, *args, **kwargs):
+        return super(OAuth2TemplateView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -72,28 +76,25 @@ class BaseTemplateView(TemplateView, FormMixin):
                 'form': form
             }
         context.update(kwargs)
-        return super(BaseTemplateView, self).get_context_data(**context)
+        return super(OAuth2TemplateView, self).get_context_data(**context)
 
-class IndexView(BaseTemplateView):
+class IndexView(OAuth2TemplateView):
     template_name = "api/index.html"
 
-    @OAuth2AccessToken
     def get(self, request, **kwargs):
+        logger.debug("API call Index")
         context = self.get_context_data(**kwargs)
         context["access_token"] = request.access_token
         scopes = dict(getattr(constants, 'SCOPES'))
         context["scope"] = scopes[request.access_token.scope]
         return self.render_to_response(context)
 
-    @OAuth2AccessToken
     def post(self, request, *args, **kwargs):
         return HttpResponse("POST received, user: " + str(request.user))
 
-    @OAuth2AccessToken
     def put(self, request, *args, **kwargs):
         return HttpResponse("PUT received, user: " + str(request.user))
 
-    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("DELETE received, user: " + str(request.user))
 
@@ -104,11 +105,10 @@ class ComicForm(forms.Form):
 
     vote = forms.IntegerField(validators=[vote_validator])
 
-class ComicView(BaseTemplateView):
+class ComicView(OAuth2TemplateView):
     template_name = "api/comic.xml"
     form_class = ComicForm
 
-    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         # Do you want all the comics or just one?
@@ -121,7 +121,6 @@ class ComicView(BaseTemplateView):
             context["comics"] = comics
         return self.render_to_response(context)
 
-    @OAuth2AccessToken
     def post(self, request, *args, **kwargs):
         if not request.access_token.scope == constants.READ_WRITE:
             logger.warning("API-4 The current access token does not have enough permissions for this operation.")
@@ -159,28 +158,24 @@ class ComicView(BaseTemplateView):
         return HttpResponse()
 
 
-class SubscriptionView(TemplateView):
+class SubscriptionView(OAuth2TemplateView):
     template_name = "api/subscription.xml"
 
-    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         subscriptions = request.user.subscription_set.all()
         context["subscriptions"] = subscriptions
         return self.render_to_response(context)
 
-    @OAuth2AccessToken
     def put(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
-    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
-class UnreadView(TemplateView):
+class UnreadView(OAuth2TemplateView):
     template_name = "api/unread.xml"
 
-    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if "comicid" in context["params"].keys():
@@ -191,14 +186,12 @@ class UnreadView(TemplateView):
         context["subscriptions"] = subscriptions
         return self.render_to_response(context)
 
-    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
-class StripView(TemplateView):
+class StripView(OAuth2TemplateView):
     template_name = "api/strip.xml"
 
-    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         if not "historyid" in context["params"].keys():
@@ -208,18 +201,15 @@ class StripView(TemplateView):
         context["history"] = history
         return self.render_to_response(context)
 
-    @OAuth2AccessToken
     def put(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
-    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse("TODO, user: " + str(request.user))
 
-class UserView(TemplateView):
+class UserView(OAuth2TemplateView):
     template_name = "api/user.xml"
 
-    @OAuth2AccessToken
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         #TODO Really need to change how to get this...
@@ -240,11 +230,8 @@ ORDER BY comics_subscription.position"""
         context["unreadcount"] = len(rows)
         return self.render_to_response(context)
 
-    @OAuth2AccessToken
     def put(self, request, *args, **kwargs):
         return HttpResponse(status=400)
 
-    @OAuth2AccessToken
     def delete(self, request, *args, **kwargs):
         return HttpResponse(status=400)
-
