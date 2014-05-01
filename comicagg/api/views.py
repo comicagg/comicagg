@@ -1,4 +1,5 @@
 from comicagg.comics.models import Comic, ComicHistory
+from comicagg.logging import logmsg
 from django import forms
 from django.contrib.auth.models import AnonymousUser
 from django.db import connection
@@ -9,6 +10,7 @@ from django.views.generic.edit import FormMixin
 from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
+import comicagg.logging.tags as logtags
 import datetime, sys, re, logging
 
 logger = logging.getLogger(__name__)
@@ -22,12 +24,12 @@ def OAuth2AccessToken(f):
         try:
             access_token_str = request.META["HTTP_AUTHORIZATION"]
         except KeyError:
-            logger.debug("API-0 API call without Authorization header.")
+            logger.debug(logmsg(logtags.API_NO_AUTH_HEADER, "API call without Authorization header."))
             return None
 
         # Check the format of the authorization header, must be Bearer
         if not re.match('Bearer \w{40}', access_token_str):
-            logger.error("API- Format of the Authorization header is not valid.")
+            logger.error(logmsg(logtags.API_BAD_AUTH_HEADER_FORMAT, "Format of the Authorization header is not valid."))
             return None
 
         access_token_str = access_token_str.replace("Bearer ", "")
@@ -35,16 +37,16 @@ def OAuth2AccessToken(f):
         try:
             access_token = AccessToken.objects.get(token=access_token_str)
         except:
-            logger.warning("API-1 Got Authorization header but no access token was found in the database.")
+            logger.warning(logmsg(logtags.API_TOKEN_INVALID, "Got Authorization header but no access token was found in the database."))
             return None
         
         if access_token:
              td = access_token.expires - datetime.datetime.now()
              tds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
              if tds < 0:
-                 logger.debug("API-2 The access token has expired")
+                 logger.warning(logmsg(logtags.API_TOKEN_EXPIRED, "The access token has expired"))
                  raise OAuthValidationError("""{"error": "invalid_grant", "error_description": "Your token has expired."}""")
-        logger.debug("API-3 API call successfully authenticated.")
+        logger.debug(logmsg(logtags.API_AUTH_OK, "API call successfully authenticated. Username=" + access_token.user.username))
         return access_token
 
     def wrapper(klass, request, *args, **kwargs):
