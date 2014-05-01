@@ -2,7 +2,7 @@
 from comicagg import render
 from django.conf import settings
 from django.views.debug import technical_500_response
-import sys
+import re, sys
 
 class UserBasedExceptionMiddleware(object):
     def process_exception(self, request, exception):
@@ -35,3 +35,13 @@ class ActiveUserMiddleware(object):
                 request.POST['activate']
             except:
                 return render(request, "accounts/activate.html", {})
+
+mime_valid = re.compile('[\w]+/[\w.\-+]+')
+
+class AcceptHeaderProcessingMiddleware(object):
+    def process_request(self, request):
+        request.accept_list = list()
+        if 'HTTP_ACCEPT' in request.META.keys():
+            accept_str = request.META["HTTP_ACCEPT"]
+            l = accept_str.split(',')
+            request.accept_list = [ct.strip() for ct in l if mime_valid.match(ct.strip())]

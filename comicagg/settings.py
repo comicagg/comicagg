@@ -80,6 +80,7 @@ MIDDLEWARE_CLASSES = (
     'comicagg.middleware.ActiveUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware', #
     'django.middleware.doc.XViewMiddleware',
+    'comicagg.middleware.AcceptHeaderProcessingMiddleware'
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
