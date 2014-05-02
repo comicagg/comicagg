@@ -1,24 +1,20 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
 
-from provider.compat import user_model_label
-
 
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
-        # Adding field 'Client.name'
-        db.add_column('oauth2_client', 'name', self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True), keep_default=False)
+        # Adding index on 'AccessToken', fields ['token']
+        db.create_index('oauth2_accesstoken', ['token'])
 
 
     def backwards(self, orm):
-        
-        # Deleting field 'Client.name'
-        db.delete_column('oauth2_client', 'name')
+        # Removing index on 'AccessToken', fields ['token']
+        db.delete_index('oauth2_accesstoken', ['token'])
 
 
     models = {
@@ -35,8 +31,8 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        user_model_label: {
-            'Meta': {'object_name': user_model_label.split('.')[-1]},
+        'auth.user': {
+            'Meta': {'object_name': 'User'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
@@ -61,32 +57,32 @@ class Migration(SchemaMigration):
         'oauth2.accesstoken': {
             'Meta': {'object_name': 'AccessToken'},
             'client': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['oauth2.Client']"}),
-            'expires': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 2, 7, 10, 40, 0, 790902)'}),
+            'expires': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 8, 8, 0, 0)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'scope': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'token': ('django.db.models.fields.CharField', [], {'default': "'d9373f4d09149181e1c5'", 'max_length': '255'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['%s']" % user_model_label})
+            'scope': ('django.db.models.fields.IntegerField', [], {'default': '2'}),
+            'token': ('django.db.models.fields.CharField', [], {'default': "'ab8c8bcd91e8750462b631516b60b0b95dffe1f4'", 'max_length': '255', 'db_index': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'oauth2.client': {
             'Meta': {'object_name': 'Client'},
-            'client_id': ('django.db.models.fields.CharField', [], {'default': "'00385d74e0b239deac42'", 'max_length': '255'}),
-            'client_secret': ('django.db.models.fields.CharField', [], {'default': "'460de077126ccc746473f8b2afab6a8aef9f542a'", 'max_length': '255'}),
+            'client_id': ('django.db.models.fields.CharField', [], {'default': "'0a8e54e38c024606ba0a'", 'max_length': '255'}),
+            'client_secret': ('django.db.models.fields.CharField', [], {'default': "'e53ddb9736f9eea65100885a1b20fb5f2bb0fb4d'", 'max_length': '255'}),
             'client_type': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'redirect_uri': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
             'url': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['%s']" % user_model_label, 'null': 'True', 'blank': 'True'})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'oauth2_client'", 'null': 'True', 'to': "orm['auth.User']"})
         },
         'oauth2.grant': {
             'Meta': {'object_name': 'Grant'},
             'client': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['oauth2.Client']"}),
-            'code': ('django.db.models.fields.CharField', [], {'default': "'ae889a1d0fc0c8569b47a7037c3d2da5cb7d0d43'", 'max_length': '255'}),
-            'expires': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 2, 8, 10, 50, 0, 788579)'}),
+            'code': ('django.db.models.fields.CharField', [], {'default': "'5e0ca84e98678a3b55b8901e85a20f995672aea2'", 'max_length': '255'}),
+            'expires': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 8, 8, 0, 0)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'redirect_uri': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'scope': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['%s']" % user_model_label})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'oauth2.refreshtoken': {
             'Meta': {'object_name': 'RefreshToken'},
@@ -94,8 +90,8 @@ class Migration(SchemaMigration):
             'client': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['oauth2.Client']"}),
             'expired': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'token': ('django.db.models.fields.CharField', [], {'default': "'50d5f3e805e02073364c4ebfc55a94328afe25bd'", 'max_length': '255'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['%s']" % user_model_label})
+            'token': ('django.db.models.fields.CharField', [], {'default': "'32e9eb7edda764ba8f752ae49223d42acea7cb88'", 'max_length': '255'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }
 
