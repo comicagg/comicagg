@@ -11,7 +11,7 @@ from math import atan, sqrt
 class Comic(models.Model):
     
     name = ComicNameField('Nombre del comic', max_length=255)
-    website = models.URLField('Página del comic', verify_exists=False)
+    website = models.URLField('Página del comic')
     activo = models.BooleanField('Comic activo', default=False, help_text='')
     notify = models.BooleanField('Notificar comic nuevo a los usuarios', default=False, help_text='Siempre va a aparecer como desactivado aquí. Si se activa, se notifica y se deja la opción desactivada')
     ended = models.BooleanField('Comic terminado', default=False, help_text='Si un comic termina marcar esta opción y desactivarlo también')
@@ -22,7 +22,7 @@ class Comic(models.Model):
     custom_func = models.TextField('Función personalizada', null=True, blank=True, help_text=help_text)
 
     #url that points to the web page with the last strip
-    url = models.URLField('Url donde se encuentra la imagen', verify_exists=False, null=True, blank=True, help_text='Si hay redirección no se utiliza')
+    url = models.URLField('Url donde se encuentra la imagen', null=True, blank=True, help_text='Si hay redirección no se utiliza')
     #base adress for the image
     base_img = models.CharField('Url base de la imagen', max_length=255, null=True, blank=True, help_text='Debe contener %s que es donde se pondrá lo capturado por la expresión regular')
     #regexp for the image
@@ -31,7 +31,7 @@ class Comic(models.Model):
     backwards = models.BooleanField('Empezar desde el final', default=False)
 
     #url donde esta la direccion a la pagina de la ultima tira
-    url2 = models.URLField('Url donde se encuentra la dirección que contiene la imagen', null=True, blank=True, verify_exists=False, help_text='Si se pone algo aquí se usa redirección')
+    url2 = models.URLField('Url donde se encuentra la dirección que contiene la imagen', null=True, blank=True, help_text='Si se pone algo aquí se usa redirección')
     #base address for redirections
     base2 = models.CharField('Url base', max_length=255, null=True, blank=True, help_text='Debe contener %s que es donde se pondrá lo capturado por la expresión regular')
     #regexp para encontrar la url de la pagina de la ultima tira
@@ -39,11 +39,11 @@ class Comic(models.Model):
     #start searching from the end
     backwards2 = models.BooleanField('Empezar desde el final', default=False)
 
-    referer = models.URLField('Referer', null=True, blank=True, verify_exists=False, help_text='Si la web del comic comprueba el referer poner aquí alguno para que no dé error')
+    referer = models.URLField('Referer', null=True, blank=True, help_text='Si la web del comic comprueba el referer poner aquí alguno para que no dé error')
     fake_user_agent = models.BooleanField('Cambiar User-Agent', default=False, help_text='Si además la web comprueba el User-Agent marcar para conectarse a la web usando otro User-Agent')
 
     last_check = models.DateTimeField('Última actualización', blank=True)
-    last_image = models.URLField('Última imagen', blank=True, verify_exists=False)
+    last_image = models.URLField('Última imagen', blank=True)
     last_image_alt_text = AltTextField('Texto alternativo', blank=True, null=True) 
 
     rating = models.IntegerField('Votos positivos', default=0)
@@ -165,7 +165,7 @@ class Subscription(models.Model):
 
 class Request(models.Model):
     user = models.ForeignKey(User)
-    url = models.URLField(verify_exists=False)
+    url = models.URLField()
     comment = models.TextField(blank=True, null=True, default="")
     admin_comment = models.TextField(blank=True, null=True, default="")
     done = models.BooleanField(default=False)
