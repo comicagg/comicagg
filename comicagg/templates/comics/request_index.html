@@ -8,7 +8,7 @@
     <div id="request_new">
         <p class="info text_left">{% trans "Write the url of the comic you would like to read here and we will try to add it is as soon as possible (if it's possible, of course)."%}</p>
         {% if count %}<p class="info text_left">{% blocktrans %}Currently there are {{ count }} requests waiting to be added. We have to add them one by one by hand so, please, be patient. Thanks!{% endblocktrans %}</p>{% endif %}
-        <form action="{% url comics:requests %}" method="post">{% csrf_token %}
+        <form action="{% url 'comics:requests' %}" method="post">{% csrf_token %}
             <div class="form_div {% if form.url.errors %}error_tr{% endif %}">
               <label>{% trans "The comic's Url"%}</label><br/>
               {% if form.url.errors %}{{ form.url.errors }}{% endif %}

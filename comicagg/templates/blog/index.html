@@ -18,7 +18,7 @@
   <p>{% trans 'Nothing here right now' %}</p>
 {% else %}
 {% if not archive %}
-  <p class="all_link"><a href="{% url news:archive %}">{% trans "All posts" %}</a></p>
+  <p class="all_link"><a href="{% url 'news:archive' %}">{% trans "All posts" %}</a></p>
 {% endif %}
 {% endif %}
 {% endblock %}

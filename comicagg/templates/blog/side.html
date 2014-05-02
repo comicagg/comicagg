@@ -11,6 +11,6 @@
 {% endfor %}
   </ul>
 {% if posts and not archive %}
-  <p class="all_link"><a href="{% url news:archive %}">{% trans "All posts" %}</a></p>
+  <p class="all_link"><a href="{% url 'news:archive' %}">{% trans "All posts" %}</a></p>
 {% endif %}
 </div>

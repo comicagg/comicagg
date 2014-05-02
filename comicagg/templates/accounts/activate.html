@@ -6,7 +6,7 @@
 {% block content %}
 <div class="box">
     <p>{% blocktrans with settings.INACTIVE_DAYS as days %}Your account was inactivated because you didn't read your comics for, at least, {{ days }} days. You can reactivate it here.{% endblocktrans %}</p>
-    <form method="post" action="{% url accounts:activate %}" enctype="application/x-www-form-urlencoded">{% csrf_token %}
+    <form method="post" action="{% url 'accounts:activate' %}" enctype="application/x-www-form-urlencoded">{% csrf_token %}
         <input type="hidden" name="activate" value="1"/>
         <input type="submit" value="{% trans "Reactivate" %}"/>
     </form>

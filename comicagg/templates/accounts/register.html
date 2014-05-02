@@ -6,7 +6,7 @@
 	<h3>{% trans 'Register new account'%}</h3>
 	<p class="info">{% trans 'Please fill in the following fields to create your account. Once you have finished you will be able to log in.'%}</p>
 	<br/>
-	<form method="post" action="{% url accounts:register %}" enctype="application/x-www-form-urlencoded">{% csrf_token %}
+	<form method="post" action="{% url 'accounts:register' %}" enctype="application/x-www-form-urlencoded">{% csrf_token %}
 	<table id="register_table">
 		<tr {% if form.username.errors %}class="error_tr"{% endif %}>
 		<td id="username_label"><label>{% trans 'Username'%}</label></td>
@@ -28,7 +28,7 @@
 		<td id="captcha_label"><label>{% trans 'No Robots!'%}</label></td>
 		<td>{{ form.captcha }}<br/><span class="small_text">{% trans 'Write here the word "comic" (without the quotes).'%}</span>{% if form.captcha.errors %}{{ form.captcha.errors }}{% endif %}</td>
 		</tr>
-		<tr><td colspan="2" style="text-align:center;"><input type="submit" value="{% trans 'Create account'%}"/>, <a href="{% url index %}">{% trans 'or go back'%}</a></td></tr>
+		<tr><td colspan="2" style="text-align:center;"><input type="submit" value="{% trans 'Create account'%}"/>, <a href="{% url 'index' %}">{% trans 'or go back'%}</a></td></tr>
 	</table>
 	</form>
 </div>

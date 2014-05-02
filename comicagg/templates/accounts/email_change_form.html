@@ -14,7 +14,7 @@
       </ul>
     </div>
     {% endif %}
-    <form action="{% url accounts:email_change %}" method="post" class="text_left">{% csrf_token %}
+    <form action="{% url 'accounts:email_change' %}" method="post" class="text_left">{% csrf_token %}
       <table style="margin-left:auto;margin-right:auto">
         <tr {% if form.password.errors %}class="error_tr"{% endif %}>
           <td><label>{% trans 'Current password'%}</label></td>
@@ -34,6 +34,6 @@
       <div class="text_center"><input type="submit" value="{% trans 'Change it'%}" /></div>
     </form>
     <br />
-    <a href="{% url accounts:profile %}">{% trans 'Go back.'%}</a>
+    <a href="{% url 'accounts:profile' %}">{% trans 'Go back.'%}</a>
 </div>
 {% endblock %}
