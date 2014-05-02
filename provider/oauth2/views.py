@@ -10,6 +10,8 @@ from .forms import AuthorizationCodeGrantForm
 from .models import Client, RefreshToken, AccessToken
 from .backends import BasicClientBackend, RequestParamsClientBackend, PublicPasswordBackend
 
+import logging
+logger = logging.getLogger(__name__)
 
 class Capture(Capture):
     """
@@ -75,24 +77,29 @@ class AccessTokenView(AccessTokenView):
     )
 
     def get_authorization_code_grant(self, request, data, client):
+        logger.debug("AccessTokenView.get_authorization_code_grant enter")
         form = AuthorizationCodeGrantForm(data, client=client)
         if not form.is_valid():
+            logger.error("AccessTokenView.get_authorization_code_grant Form is not valid")
             raise OAuthError(form.errors)
         return form.cleaned_data.get('grant')
 
     def get_refresh_token_grant(self, request, data, client):
+        logger.debug("AccessTokenView.get_refresh_token_grant enter")
         form = RefreshTokenGrantForm(data, client=client)
         if not form.is_valid():
             raise OAuthError(form.errors)
         return form.cleaned_data.get('refresh_token')
 
     def get_password_grant(self, request, data, client):
+        logger.debug("AccessTokenView.get_password_grant enter")
         form = PasswordGrantForm(data, client=client)
         if not form.is_valid():
             raise OAuthError(form.errors)
         return form.cleaned_data
 
     def get_access_token(self, request, user, scope, client):
+        logger.debug("AccessTokenView.get_access_token enter")
         try:
             # Attempt to fetch an existing access token.
             at = AccessToken.objects.get(user=user, client=client,
@@ -104,6 +111,7 @@ class AccessTokenView(AccessTokenView):
         return at
 
     def create_access_token(self, request, user, scope, client):
+        logger.debug("AccessTokenView.create_access_token enter")
         return AccessToken.objects.create(
             user=user,
             client=client,
@@ -111,6 +119,7 @@ class AccessTokenView(AccessTokenView):
         )
 
     def create_refresh_token(self, request, user, scope, access_token, client):
+        logger.debug("AccessTokenView.create_refresh_token enter")
         return RefreshToken.objects.create(
             user=user,
             access_token=access_token,

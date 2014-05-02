@@ -9,6 +9,8 @@ from ..scope import SCOPE_NAMES
 from ..utils import now
 from .models import Client, Grant, RefreshToken
 
+import logging
+logger = logging.getLogger(__name__)
 
 class ClientForm(forms.ModelForm):
     """
@@ -243,12 +245,14 @@ class AuthorizationCodeGrantForm(ScopeMixin, OAuthForm):
         code = self.cleaned_data.get('code')
 
         if not code:
+            logger.error("AuthorizationCodeGrantForm.clean_code Code not found")
             raise OAuthValidationError({'error': 'invalid_request'})
 
         try:
             self.cleaned_data['grant'] = Grant.objects.get(
                 code=code, client=self.client, expires__gt=now())
         except Grant.DoesNotExist:
+            logger.error("AuthorizationCodeGrantForm.clean_code Grant does not exist")
             raise OAuthValidationError({'error': 'invalid_grant'})
 
         return code

@@ -8,6 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from oauth2.models import Client
 from . import constants, scope
 
+import logging
+logger = logging.getLogger(__name__)
 
 class OAuthError(Exception):
     """
@@ -496,6 +498,7 @@ class AccessToken(OAuthView, Mixin):
         Handle ``grant_type=authorization_code`` requests as defined in
         :rfc:`4.1.3`.
         """
+        logger.debug("provider.AccessToken.authorization_code enter")
         grant = self.get_authorization_code_grant(request, request.POST,
                 client)
         if constants.SINGLE_ACCESS_TOKEN:
@@ -550,6 +553,7 @@ class AccessToken(OAuthView, Mixin):
         requested by the client or return ``None`` to indicate that this type
         of grant type is not supported, resulting in an error response.
         """
+        logger.debug("provider.AccessToken.get_handler enter")
         if grant_type == 'authorization_code':
             return self.authorization_code
         elif grant_type == 'refresh_token':
