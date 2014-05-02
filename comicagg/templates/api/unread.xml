@@ -1,8 +1,9 @@
 {% load comics_tags %}<?xml version="1.0" encoding="UTF-8" ?>
+{% spaceless %}
 <unreadcomics>
 {% for s in subscriptions %}
 	{% if s.comic|unreads:user %}
-		{% if params.withstrips %}
+		{% if withstrips %}
 			<comic id="{{ s.comic.id }}" name="{{ s.comic }}" website="{{ s.comic.website }}">
 				<unreads>
 				{% for unread in s.comic|unreads:user %}
@@ -16,3 +17,4 @@
 	{% endif %}
 {% endfor %}
 </unreadcomics>
+{% endspaceless %}

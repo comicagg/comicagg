@@ -64,13 +64,14 @@ def OAuth2AccessToken(f):
 
 class OAuth2TemplateView(TemplateView, FormMixin):
     form_class = None
+    content_type = "text/xml; charset=utf-8"
 
     @OAuth2AccessToken
     def dispatch(self, *args, **kwargs):
         return super(OAuth2TemplateView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = {}
+        context = super(OAuth2TemplateView, self).get_context_data(**kwargs)
         if self.form_class:
             form_class = self.get_form_class()
             form = self.get_form(form_class)
@@ -78,10 +79,10 @@ class OAuth2TemplateView(TemplateView, FormMixin):
                 'form': form
             }
         context.update(kwargs)
-        return super(OAuth2TemplateView, self).get_context_data(**context)
+        return context
 
 class IndexView(OAuth2TemplateView):
-    template_name = "api/index.html"
+    template_name = "api/index.xml"
 
     def get(self, request, **kwargs):
         logger.debug("API call Index")
@@ -114,8 +115,8 @@ class ComicView(OAuth2TemplateView):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
         # Do you want all the comics or just one?
-        if "comicid" in context["params"].keys():
-            comicid = context["params"]["comicid"]
+        if "comicid" in context.keys():
+            comicid = context["comicid"]
             comic = get_object_or_404(Comic, pk=comicid)
             context["comic"] = comic
         else:
@@ -129,12 +130,12 @@ class ComicView(OAuth2TemplateView):
             return HttpResponseBadRequest()
 
         context = self.get_context_data(**kwargs)
-        if not context["params"]["form"].is_valid():
+        if not context["form"].is_valid():
             return HttpResponseBadRequest()
-        vote = context["params"]["form"].cleaned_data["vote"]
+        vote = context["form"].cleaned_data["vote"]
 
-        if "comicid" in context["params"].keys():
-            comicid = context["params"]["comicid"]
+        if "comicid" in context.keys():
+            comicid = context["comicid"]
             comic = get_object_or_404(Comic, pk=comicid)
         else:
             return HttpResponseBadRequest()
@@ -180,8 +181,8 @@ class UnreadView(OAuth2TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        if "comicid" in context["params"].keys():
-            comicid = context["params"]["comicid"]
+        if "comicid" in context.keys():
+            comicid = context["comicid"]
             subscriptions = request.user.subscription_set.filter(comic=comicid)
         else:
             subscriptions = request.user.subscription_set.all()
@@ -196,9 +197,9 @@ class StripView(OAuth2TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        if not "historyid" in context["params"].keys():
+        if not "historyid" in context.keys():
             return HttpResponse(status=400)
-        historyid = context["params"]["historyid"]
+        historyid = context["historyid"]
         history = get_object_or_404(ComicHistory, pk=historyid)
         context["history"] = history
         return self.render_to_response(context)
