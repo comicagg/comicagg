@@ -63,7 +63,7 @@ class PasswordChangeForm(forms.Form):
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'size':'25'}))
 
 class PasswordResetForm(forms.Form):
-    data = forms.CharField(widget=forms.PasswordInput(attrs={'size':'35'}))
+    data = forms.CharField(widget=forms.TextInput(attrs={'size':'35'}))
 
 class RegisterForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'size':'30'}))
