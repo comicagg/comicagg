@@ -1,5 +1,5 @@
 from comicagg.comics.models import Comic, ComicHistory
-from comicagg.logging import logmsg
+from comicagg.logs import logmsg
 from django import forms
 from django.contrib.auth.models import AnonymousUser
 from django.db import connection
@@ -10,7 +10,7 @@ from django.views.generic.edit import FormMixin
 from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
-import comicagg.logging.tags as logtags
+import comicagg.logs.tags as logtags
 import datetime, sys, re, logging
 
 logger = logging.getLogger(__name__)
