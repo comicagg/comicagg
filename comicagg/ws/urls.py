@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('comicagg.ws.views',
   url(r'^$', 'index', name="index"),

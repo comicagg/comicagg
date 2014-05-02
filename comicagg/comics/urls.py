@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls.defaults import include, patterns, url
+from django.conf.urls import include, patterns, url
 
 ajaxpatterns = patterns('comicagg.comics.ajax.views',
     url(r'^add_comic/$', 'add_comic', name='add_comic'),
