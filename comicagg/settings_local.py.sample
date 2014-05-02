@@ -42,41 +42,36 @@ LANGUAGE_CODE = 'en'
 # to load the internationalization machinery.
 USE_I18N = True
 
-# Absolute path to the directory that holds the comicagg folder
-ROOT = os.path.dirname(os.path.abspath(__file__)) + '/'
-
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '%smedia' % ROOT
-
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://mizar-lan/media/'
+MEDIA_URL = ''
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = 'http://mizar-lan/admin-media/'
+ADMIN_MEDIA_PREFIX = ''
 
-#used for password reset email
-DOMAIN = 'http://localhost:8000'
+# Used for password reset email and other stuff where a full URL needs to be built
+DOMAIN = ''
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    '%stemplates' % ROOT,
-)
+# URL prefix for static files
+STATIC_URL = '/static/'
+# Filesystem folder where static files will be put by manage.py collectstatic
+STATIC_ROOT = '/var/www/static/'
 
-#For SMTP email sending
+
+# For SMTP email sending
 EMAIL_HOST = ''
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 
 DEFAULT_FROM_EMAIL = ''
 
-#From address, for admin emails
+# From address, for admin emails
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
-#Prefix for email sent to the admins
+# Prefix for email sent to the admins
 EMAIL_SUBJECT_PREFIX=''
+
+# https://docs.djangoproject.com/en/1.6/ref/settings/#std:setting-ALLOWED_HOSTS
+ALLOWED_HOSTS = ['']

@@ -41,9 +41,12 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
+# Absolute path to the directory that holds the comicagg folder
+ROOT = os.path.dirname(os.path.abspath(__file__)) + '/'
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-#MEDIA_ROOT = '/home/esu/dev/django/comicagg/media'
+MEDIA_ROOT = '%smedia' % ROOT
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -63,9 +66,19 @@ SECRET_KEY = '0zqsc45e!e*%zy(&gus5p4bj6^mdrt%7^y*fl*(o6rt1yp=)&#'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
-    'django.template.loaders.app_directories.load_template_source',
-#     'django.template.loaders.eggs.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    '%stemplates' % ROOT,
+)
+
+STATICFILES_DIR = (
+    os.path.join(ROOT, 'static'),
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,16 +101,16 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 ROOT_URLCONF = 'comicagg.urls'
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.admin',
     'django.contrib.messages',
+    'django.contrib.sessions',
+    'django.contrib.staticfiles',
     'comicagg.accounts',
     'comicagg.api',
     'comicagg.blog',
     'comicagg.comics',
-    #'comicagg.help',
     'comicagg.todo',
     'provider',
     'provider.oauth2',
@@ -114,8 +127,6 @@ INACTIVE_DAYS = 30
 EMAIL_HOST = ''
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
-
-CACHE_BACKEND = 'db://cachet1'
 
 SESSION_COOKIE_NAME = 'comicagg_session'
 
