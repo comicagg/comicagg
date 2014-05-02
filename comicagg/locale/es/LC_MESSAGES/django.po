@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-20 17:13+0200\n"
-"PO-Revision-Date: 2014-04-20 17:24+0100\n"
+"POT-Creation-Date: 2014-05-01 21:19+0200\n"
+"PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -155,7 +155,7 @@ msgstr "Aquí puedes cambiar tu contraseña o tu correo electrónico."
 
 #: templates/accounts/account.html:11
 #: templates/accounts/password_change_done.html:6
-#: templates/admin/base.html:41
+#: templates/admin/base.html:36
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
@@ -471,15 +471,16 @@ msgstr "Bienvenido,"
 msgid "Documentation"
 msgstr "Documentación"
 
-#: templates/admin/base.html:48
+#: templates/admin/base.html:38
 msgid "Log out"
 msgstr "Desconectar"
 
-#: templates/admin/base.html:49
+#: templates/admin/base.html:39
 msgid "Back to website"
 msgstr "Volver a la web"
 
-#: templates/admin/base.html:56
+#: templates/admin/base.html:48
+#: templates/admin/check.html:6
 msgid "Home"
 msgstr "Inicio"
 
@@ -503,49 +504,49 @@ msgstr "lectores notificados."
 msgid "was not modified."
 msgstr "no fue modificado."
 
-#: templates/admin/index.html:18
+#: templates/admin/index.html:20
 #, python-format
-msgid "Models available in the %(name)s application."
+msgid "Models in the %(name)s application"
 msgstr "Modelos de la aplicación %(name)s"
 
-#: templates/admin/index.html:19
+#: templates/admin/index.html:21
 #, python-format
 msgid "%(name)s"
 msgstr "%(name)s"
 
-#: templates/admin/index.html:29
+#: templates/admin/index.html:33
 msgid "Add"
 msgstr "Añadir"
 
-#: templates/admin/index.html:35
+#: templates/admin/index.html:39
 msgid "Change"
 msgstr "Cambiar"
 
-#: templates/admin/index.html:45
+#: templates/admin/index.html:49
 msgid "Other actions"
 msgstr "Otras acciones"
 
-#: templates/admin/index.html:46
+#: templates/admin/index.html:50
 msgid "Update a comic"
 msgstr "Actualizar un comic"
 
-#: templates/admin/index.html:49
+#: templates/admin/index.html:52
 msgid "You don't have permission to edit anything."
 msgstr "No tienes permiso para editar nada."
 
-#: templates/admin/index.html:57
+#: templates/admin/index.html:60
 msgid "Recent Actions"
 msgstr "Acciones recientes"
 
-#: templates/admin/index.html:58
+#: templates/admin/index.html:61
 msgid "My Actions"
 msgstr "Mis acciones"
 
-#: templates/admin/index.html:62
+#: templates/admin/index.html:65
 msgid "None available"
 msgstr "Ninguna disponible"
 
-#: templates/admin/index.html:76
+#: templates/admin/index.html:79
 msgid "Unknown content"
 msgstr "Contenido desconocido"
 
