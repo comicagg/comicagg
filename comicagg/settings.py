@@ -90,6 +90,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware', #
 #    'comicagg.middleware.UserBasedExceptionMiddleware',
     'comicagg.middleware.MaintenanceMiddleware',
+    'comicagg.middleware.OAuth2Middleware',
     'comicagg.middleware.ActiveUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware', #
     'django.middleware.doc.XViewMiddleware',

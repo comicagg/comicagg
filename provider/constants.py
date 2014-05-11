@@ -14,13 +14,12 @@ RESPONSE_TYPE_CHOICES = getattr(settings, 'OAUTH_RESPONSE_TYPE_CHOICES', ("code"
 TOKEN_TYPE = 'Bearer'
 
 READ = 1 << 1
-WRITE = 1 << 2
-READ_WRITE = READ | WRITE
+WRITE = READ | 1 << 2
+# READ_WRITE = READ | WRITE
 
 DEFAULT_SCOPES = (
     (READ, 'read'),
     (WRITE, 'write'),
-    (READ_WRITE, 'read+write'),
 )
 
 SCOPES = getattr(settings, 'OAUTH_SCOPES', DEFAULT_SCOPES)

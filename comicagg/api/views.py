@@ -15,59 +15,15 @@ import datetime, sys, re, logging
 
 logger = logging.getLogger(__name__)
 
-# Will set request.user and request.access_token according to the Authorization header
-# If the access_token is not present in headers or does not exist in server it will return 403
-# If access_token is not valid, it will return 400
-
-def OAuth2AccessToken(f):
-    def authenticate(request):
-        try:
-            access_token_str = request.META["HTTP_AUTHORIZATION"]
-        except KeyError:
-            logger.debug(logmsg(logtags.API_NO_AUTH_HEADER, "API call without Authorization header."))
-            return None
-
-        # Check the format of the authorization header, must be Bearer
-        if not re.match('Bearer \w{40}', access_token_str):
-            logger.error(logmsg(logtags.API_BAD_AUTH_HEADER_FORMAT, "Format of the Authorization header is not valid."))
-            return None
-
-        access_token_str = access_token_str.replace("Bearer ", "")
-        access_token = None
-        try:
-            access_token = AccessToken.objects.get(token=access_token_str)
-        except:
-            logger.warning(logmsg(logtags.API_TOKEN_INVALID, "Got Authorization header but no access token was found in the database."))
-            return None
-        
-        if access_token:
-             td = access_token.expires - datetime.datetime.now()
-             tds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
-             if tds < 0:
-                 logger.warning(logmsg(logtags.API_TOKEN_EXPIRED, "The access token has expired"))
-                 raise OAuthValidationError("""{"error": "invalid_grant", "error_description": "Your token has expired."}""")
-        logger.debug(logmsg(logtags.API_AUTH_OK, "API call successfully authenticated. Username=" + access_token.user.username))
-        return access_token
-
-    def wrapper(klass, request, *args, **kwargs):
-        try:
-            request.access_token = authenticate(request)
-            if request.access_token:
-                request.user = request.access_token.user
-            else:
-                return HttpResponseForbidden("No access token has been received or not a valid one. Check you Authorization header.")
-        except OAuthValidationError:
-            return HttpResponse(sys.exc_info()[1], status=400, content_type="application/json;charset=UTF-8")
-        return f(klass, request, *args, **kwargs)
-    
-    return wrapper
-
 class OAuth2TemplateView(TemplateView, FormMixin):
     form_class = None
     content_type = "text/xml; charset=utf-8"
 
-    @OAuth2AccessToken
     def dispatch(self, *args, **kwargs):
+        request = args[0]
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        logger.debug("API call: %s %s" % (request.method, request.path))
         return super(OAuth2TemplateView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -75,9 +31,7 @@ class OAuth2TemplateView(TemplateView, FormMixin):
         if self.form_class:
             form_class = self.get_form_class()
             form = self.get_form(form_class)
-            context = {
-                'form': form
-            }
+            context["form"] = form
         context.update(kwargs)
         return context
 
@@ -85,11 +39,12 @@ class IndexView(OAuth2TemplateView):
     template_name = "api/index.xml"
 
     def get(self, request, **kwargs):
-        logger.debug("API call Index")
+        logger.debug("API Index")
         context = self.get_context_data(**kwargs)
-        context["access_token"] = request.access_token
+        if (request.access_token):
+            context["access_token"] = request.access_token
         scopes = dict(getattr(constants, 'SCOPES'))
-        context["scope"] = scopes[request.access_token.scope]
+        context["scope"] = scopes[request.scope]
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
@@ -125,14 +80,16 @@ class ComicView(OAuth2TemplateView):
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        if not request.access_token.scope == constants.READ_WRITE:
+        if not request.access_token.scope == constants.WRITE:
             logger.warning("API-4 The current access token does not have enough permissions for this operation.")
             return HttpResponseBadRequest()
 
         context = self.get_context_data(**kwargs)
-        if not context["form"].is_valid():
+        form = context["form"]
+        if not form.is_valid():
+            logger.warning("API call, form did not pass validation")
             return HttpResponseBadRequest()
-        vote = context["form"].cleaned_data["vote"]
+        vote = form.cleaned_data["vote"]
 
         if "comicid" in context.keys():
             comicid = context["comicid"]
