@@ -9,7 +9,7 @@
 var usercomics = [];
 var usercomics_id = [];
 {% for comic in user_comics %}
-    a = {'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.getRating|perc:8 }}", 'votes':{{ comic.votes }}};
+    a = {'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|perc:8 }}", 'votes':{{ comic.votes }}};
     usercomics.push(a);
     usercomics_id[{{ comic.id }}] = a;
 {% endfor %}

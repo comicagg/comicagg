@@ -15,7 +15,7 @@ def xml(value, arg=False):
             "website": escape(value.website),
             "name": escape(value.name),
             "votes": value.votes,
-            "rating": value.getRating()
+            "rating": value.get_rating()
         }
         if bool(arg):
             d["latest.id"] = value.comichistory_set.latest().id

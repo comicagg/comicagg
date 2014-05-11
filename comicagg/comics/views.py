@@ -157,7 +157,7 @@ def sort_rate(a, b):
     """
     Ordenar únicamente por la puntuación de los comics
     """
-    c = b.getRating() - a.getRating()
+    c = b.get_rating() - a.get_rating()
     if c > 0: return 1
     elif c < 0: return -1
     else: return 0

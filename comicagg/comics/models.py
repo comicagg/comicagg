@@ -79,28 +79,13 @@ class Comic(models.Model):
                     new.save()
                     up.save()
 
-    def get_rating(self):
-        return self.getRating()
-
-    _readers = None
-    def readers(self):
-        if not self._readers:
-            self._readers = self.subscription_set.count()
-        return int(self._readers)
-
-    _strips = None
-    def strips(self):
-        if not self._strips:
-            self._strips= self.comichistory_set.count()
-        return int(self._strips)
-
-    def getRating(self, method='statisticRating'):
+    def get_rating(self), method='statistic_rating'):
         if not hasattr(self, '__rating'):
             r = getattr(self, method)()
             setattr(self, '__rating', r)
         return getattr(self, '__rating')
 
-    def statisticRating(self):
+    def statistic_rating(self):
         pos = self.rating
         n = self.votes
         if n == 0:
@@ -110,7 +95,7 @@ class Comic(models.Model):
         phat = 1.0*pos/n
         return (phat + z*z/(2*n) - z * sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)
 
-    def miRating(self):
+    def mi_rating(self):
         r = 0.5
         if self.votes > 0:
             #p = self.rating
@@ -128,15 +113,27 @@ class Comic(models.Model):
             #g(x)=2/sqrt(pi)*(x-x^3/3+x^5/10-x^7/42+x^9/216)
         return r
 
-    def positivevotes(self):
+    def positive_votes(self):
         try:
             r = float(self.rating)/self.votes
         except:
             r = 0.0
         return r
 
-    def negativevotes(self):
+    def negative_votes(self):
         return self.votes-self.rating
+
+    _readers = None
+    def readers(self):
+        if not self._readers:
+            self._readers = self.subscription_set.count()
+        return int(self._readers)
+
+    _strips = None
+    def strips(self):
+        if not self._strips:
+            self._strips= self.comichistory_set.count()
+        return int(self._strips)
 
     def is_new_for(self, user):
         return NewComic.objects.filter(comic=self, user=user).count() != 0

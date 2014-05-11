@@ -20,10 +20,10 @@
 				<td>{{ comic.strips }}</td>
 				<td>{{ comic.votes }}</td>
 				<td>{{ comic.rating }}</td>
-				<td>{{ comic.negativevotes }}</td>
-				<td>{{ comic.positivevotes|perc:3 }}</td>
-				<td>{{ comic.miRating|perc:3 }}</td>
-				<td>{{ comic.getRating|perc:3 }}</td>
+				<td>{{ comic.negative_votes }}</td>
+				<td>{{ comic.positive_votes|perc:3 }}</td>
+				<td>{{ comic.mi_rating|perc:3 }}</td>
+				<td>{{ comic.get_rating|perc:3 }}</td>
 			</tr>
 {% endfor %}
 		</table>
