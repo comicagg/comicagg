@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n staticfiles %}
 {% block content %}
 <div id="contact" class="loginbox">
 <p>{% trans "If you would like to contact us, write an email to this address:" %}
-  <img src="{{ mediaurl }}images/email.png" alt="email"/></p>
+  <img src="{% static 'base/img/email.png' %}" alt="email"/></p>
 <p>{% trans "Problems, suggestions, hate mail, everything is welcome at that address :)" %}</p>
 </div>
 {% endblock %}

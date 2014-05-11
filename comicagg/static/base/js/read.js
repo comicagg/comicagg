@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global window, document, setTimeout, $, $$, Date, Image, Ajax, Element, media_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, comicCounter, unreadCounter, updateCounters, unreadComics, comics */
+/*global window, document, setTimeout, $, $$, Date, Image, Ajax, Element, static_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, comicCounter, unreadCounter, updateCounters, unreadComics, comics */
 "use strict";
 // comic list. Array of divs
 var clist = [];
@@ -37,7 +37,7 @@ function loadImage(url, elem, comic) {
     };
     img.onerror = function () {
         elem.alt = "ERROR";
-        elem.src = media_url + 'images/error.png';
+        elem.src = static_url + 'images/error.png';
         comics[elem.cid].error = true;
         $('reload' + elem.cid).show();
     };

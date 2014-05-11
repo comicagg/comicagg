@@ -77,7 +77,7 @@ TEMPLATE_DIRS = (
     '%stemplates' % ROOT,
 )
 
-STATICFILES_DIR = (
+STATICFILES_DIRS = (
     os.path.join(ROOT, 'static'),
 )
 

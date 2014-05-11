@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global $, $$, setTimeout, clearTimeout, Image, Ajax, Element, openurl, startRequest, removeComicId, media_url, url_add, url_forget_new_comic, url_remove, updateCounters, usercomics: true, availablecomics, availablecomics_new: true */
+/*global $, $$, setTimeout, clearTimeout, Image, Ajax, Element, openurl, startRequest, removeComicId, static_url, url_add, url_forget_new_comic, url_remove, updateCounters, usercomics: true, availablecomics, availablecomics_new: true */
 "use strict";
 var comics;
 var lastevent;
@@ -163,7 +163,7 @@ function mouseOverAction() {
         img.onerror = function () {
             $('loading').hide();
             $('comic_last').show();
-            $('comic_last').src = media_url + "images/broken32.png";
+            $('comic_last').src = static_url + "images/broken32.png";
             $('comic_last').style.width = "32px";
             $('comic_last').style.height = "32px";
         };

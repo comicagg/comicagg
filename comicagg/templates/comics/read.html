@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n staticfiles %}
 <!-- {% block title %}{% trans 'Read' %} -{% endblock %} -->
 {% block extra_head %}
-		<script src="{{ mediaurl }}js/read.js" type="text/javascript"></script>
+		<script src="{% static 'base/js/read.js' %}" type="text/javascript"></script>
 {% endblock%}
 {% block onload %}onReadLoad();{% endblock %}
 {% block content %}
@@ -26,7 +26,7 @@
 		<div id="mark_all_read">
         {% if unread_count %}
 			<a onclick="mark_all_read()">{% trans "Mark all comics as read" %}</a>
-			<img style="display:none" id="mark_all_read_anim" src="{{ mediaurl }}images/loaderarrows.gif" alt="working"/>
+			<img style="display:none" id="mark_all_read_anim" src="{% static 'base/img/loaderarrows.gif' %}" alt="working"/>
         {% endif %}
 		</div>
 		<p class="info" id="unreadCounters">{% blocktrans %}You are reading <b id="unreadCountersTotal">{{ comic_count }}</b> comics and <b id="unreadCountersUnread">{{ unread_count }}</b> of them have unread strips.{% endblocktrans %}</p>
@@ -45,20 +45,20 @@
 		{% else %}
 			{% for unread in unreadlist %}
 			{% ifchanged %}<h4>{{ unread.history.date|date:"d F Y" }}</h4>{% endifchanged %}
-			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgu{{ unread.id }}" src="{{ mediaurl }}images/striploading.gif" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/></a><br/>
+			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgu{{ unread.id }}" src="{% static 'base/img/striploading.gif' %}" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/></a><br/>
 			<div class="alttext">{{ unread.history.alt_text|default_if_none:""|safe }}</div>
 			{% empty %}
 			<h4>{{ comic.last_check|date:"d F Y" }}</h4>
-			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgl{{ comic.id }}" src="{{ mediaurl }}images/striploading.gif" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/></a>
+			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgl{{ comic.id }}" src="{% static 'base/img/striploading.gif' %}" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/></a>
 			<div class="alttext">{{ comic.last_image_alt_text|default_if_none:""|safe }}</div>
 			{% endfor %}
 		{% endif %}
 		</div>
 		<div class="comicextra">
 			<div class="anims">
-				<img id="working{{ comic.id }}" src="{{ mediaurl }}images/loaderarrows.gif" alt="" style="display:none"/>
-				<img id="workingerror{{ comic.id }}" src="{{ mediaurl }}images/error12.png" alt="" style="display:none"/>
-				<img id="ok{{ comic.id }}" src="{{ mediaurl }}images/ok12.png" alt="" style="display:none"/>
+				<img id="working{{ comic.id }}" src="{% static 'base/img/loaderarrows.gif' %}" alt="" style="display:none"/>
+				<img id="workingerror{{ comic.id }}" src="{% static 'base/img/error12.png' %}" alt="" style="display:none"/>
+				<img id="ok{{ comic.id }}" src="{% static 'base/img/ok12.png' %}" alt="" style="display:none"/>
 				&nbsp;
 			</div>
 			<div class="wrap">
@@ -68,8 +68,8 @@
 					<span id="reading{{ comic.id }}">
 						<a onclick="markread({{ comic.id }}, 0)">{% trans "Mark as read"%}</a>&nbsp;&nbsp;&nbsp;&nbsp;
 						{% trans "Vote" %}&nbsp;&nbsp;
-						<a onclick="markread({{ comic.id }}, -1)"><img src="{{ mediaurl }}/images/vote_down.png" alt="vote up"/></a>&nbsp;&nbsp;
-						<a onclick="markread({{ comic.id }}, 1)"><img src="{{ mediaurl }}/images/vote_up.png" alt="vote up"/></a>&nbsp;&nbsp;&nbsp;&nbsp;
+						<a onclick="markread({{ comic.id }}, -1)"><img src="{% static 'base//img/vote_down.png' %}" alt="vote up"/></a>&nbsp;&nbsp;
+						<a onclick="markread({{ comic.id }}, 1)"><img src="{% static 'base//img/vote_up.png' %}" alt="vote up"/></a>&nbsp;&nbsp;&nbsp;&nbsp;
 					</span>
 					{% endif %}
 				</div>
@@ -88,7 +88,7 @@
     {% if unread_count %}
     <div id="mark_all_read_bottom" class="top_info text_right" style="line-height:30px">
             <a onclick="mark_all_read()">{% trans "Mark all comics as read" %}</a>
-            <img style="display:none" id="mark_all_read_anim" src="{{ mediaurl }}images/loaderarrows.gif" alt="working"/>
+            <img style="display:none" id="mark_all_read_anim" src="{% static 'base/img/loaderarrows.gif' %}" alt="working"/>
     </div>
     {% endif %}
     <div id="no_unread_comics" class="top_info text_center" style="display:none">

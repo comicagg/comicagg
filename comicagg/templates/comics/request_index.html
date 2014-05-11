@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load i18n comics_tags %}
+{% load i18n comics_tags staticfiles %}
 {% block title %}{% trans 'Requests' %} -{% endblock %}
 {% block content %}
 {% regroup user.request_set.all by done as request_list %}
@@ -91,7 +91,7 @@
     <h4>{% trans "Pending requests" %}</h4>
     <ul>
     {% for req in pending %}
-        <li class="first_line"><img src="{{ mediaurl }}images/request_new12.png" alt=""/> {{ req.url }}</li>
+        <li class="first_line"><img src="{% static 'base/img/request_new12.png' %}" alt=""/> {{ req.url }}</li>
         {% if req.comment %}<li>{% trans "Your comment:" %}<p>{{ req.comment }}<p></li>{% endif %}
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% empty %}
@@ -101,7 +101,7 @@
     <h4>{% trans "Rejected requests" %}</h4>
     <ul>
     {% for req in rejected %}
-        <li class="first_line"><img src="{{ mediaurl }}images/error12.png" alt=""/> {{ req.url }}</li>
+        <li class="first_line"><img src="{% static 'base/img/error12.png' %}" alt=""/> {{ req.url }}</li>
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% empty %}
         <li>{% trans "Nothing here." %}<li>
@@ -110,7 +110,7 @@
     <h4>{% trans "Accepted requests" %}</h4>
     <ul>
     {% for req in accepted %}
-        <li class="first_line"><img src="{{ mediaurl }}images/ok12.png" alt=""/> {{ req.url }}</li>
+        <li class="first_line"><img src="{% static 'base/img/ok12.png' %}" alt=""/> {{ req.url }}</li>
         {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
     {% empty %}
         <li>{% trans "Nothing here." %}</li>

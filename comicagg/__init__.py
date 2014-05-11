@@ -26,7 +26,6 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
 
     context['user'] = user
     context['menu'] = menu
-    context['mediaurl'] = settings.MEDIA_URL
 
     context = RequestContext(request, context)
 

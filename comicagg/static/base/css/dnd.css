@@ -37,10 +37,10 @@
 }
 
 .dojoDndItemBefore {
-	background:url(/media/images/2leftarrow_bw10.png) #ccc left center no-repeat;
+	background:url(/static/base/img/2leftarrow_bw10.png) #ccc left center no-repeat;
 }
 .dojoDndItemAfter {
-	background:url(/media/images/2rightarrow_bw10.png) #ccc right center no-repeat;
+	background:url(/static/base/img/2rightarrow_bw10.png) #ccc right center no-repeat;
 }
 .dojoDndAvatar {
 	border:2px solid #ccc;
