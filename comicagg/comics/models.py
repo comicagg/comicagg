@@ -123,22 +123,25 @@ class Comic(models.Model):
     def negative_votes(self):
         return self.votes-self.rating
 
-    _readers = None
-    def readers(self):
-        if not self._readers:
-            self._readers = self.subscription_set.count()
-        return int(self._readers)
+    _reader_count = None
+    def reader_count(self):
+        if not self._reader_count:
+            self._reader_count = self.subscription_set.count()
+        return int(self._reader_count)
 
-    _strips = None
-    def strips(self):
-        if not self._strips:
-            self._strips= self.comichistory_set.count()
-        return int(self._strips)
+    _strip_count = None
+    def strip_count(self):
+        if not self._strip_count:
+            self._strip_count = self.comichistory_set.count()
+        return int(self._strip_count)
 
     def is_new_for(self, user):
+        """
+        Is this comic new to the passed user?
+        """
         return NewComic.objects.filter(comic=self, user=user).count() != 0
 
-    def get_url(self):
+    def last_image_url(self):
         url = self.last_image
         if self.referer:
             url = reverse('comics:last_image_url', kwargs={'cid':self.id})
@@ -183,7 +186,7 @@ class ComicHistory(models.Model):
     def __unicode__(self):
         return u'%s %s' % (self.comic.name, self.date)
 
-    def get_url(self):
+    def image_url(self):
         url = self.url
         if self.comic.referer:
             url = reverse('comics:history_url', kwargs={'hid':self.id})

@@ -15,8 +15,8 @@
 {% endfor %}
 {% for comic,unreadlist in comic_list %}
 	tmp = [];
-	{% if not comic.noimages or perms.comics.all_images %}{% for unread in unreadlist %}tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.history.id }}, "url":"{{ unread.history.get_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});{% endfor %}{% endif %}
-	c = {"name":"{{ comic.name }}", "id":{{ comic.id }}, {% if not comic.noimages or perms.comics.all_images %}"last_url":"{{ comic.get_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false, "last_ch":{{ comic.comichistory_set.all.0.id|default:0 }}};
+	{% if not comic.noimages or perms.comics.all_images %}{% for unread in unreadlist %}tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.history.id }}, "url":"{{ unread.history.image_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});{% endfor %}{% endif %}
+	c = {"name":"{{ comic.name }}", "id":{{ comic.id }}, {% if not comic.noimages or perms.comics.all_images %}"last_url":"{{ comic.last_image_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false, "last_ch":{{ comic.comichistory_set.all.0.id|default:0 }}};
 	comics[{{ comic.id }}] = c;
 {% endfor %}
 </script>

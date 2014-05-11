@@ -106,7 +106,7 @@ function mouseOverAction() {
     $('comic_name').innerHTML = comic.name;
     $('comic_score').innerHTML = comic.score;
     $('comic_votes').innerHTML = comic.votes;
-    $('comic_readers').innerHTML = comic.readers;
+    $('comic_readers').innerHTML = comic.reader_count;
     $('comic_url').href = comic.url;
     if (comic.noimages) {
         $('noimages').show();
