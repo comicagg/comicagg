@@ -181,6 +181,10 @@ LOGGING = {
             'handlers': ['file', 'console'],
             'level': 'DEBUG'
         },
+        'provider': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG'
+        },
     }
 }
 
