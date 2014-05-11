@@ -10,14 +10,13 @@
     <p>{% blocktrans with client__name=client.name%}<b>{{ client__name }}</b> would like to access your data with the following permissions:{% endblocktrans %}</p>
     <ul class="text_left">
         {% for permission in oauth_data.scope|scopes %}
-            <li>
+            <li>{% spaceless %}
                 {% if permission == "read" %}
                 {% trans "Read your data" %}
                 {% else %}
                 {% trans "Write your data" %}
                 {% endif %}
-                ({{ permission }})
-            </li>
+            {% endspaceless %}</li>
         {% endfor %}
     </ul>
     <form method="post" action="{% url "oauth2:authorize" %}">
