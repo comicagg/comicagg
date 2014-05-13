@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from comicagg.comics.models import Comic
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
+import random
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -38,7 +40,40 @@ class UserProfile(models.Model):
         verbose_name = _('User profile')
         verbose_name_plural = _('User profiles')
 
+    # Shortcut methods
 
+    # A comic can be:
+    # A active, E ended
+    #   A T F
+    # E
+    # T   - 2
+    # F   1 3
+    # 1. Active AND not Ended - all ok, ongoing
+    # 2. Not active AND Ended - finished
+    # 3. Not active and not Ended - not working, needs fixing
+    # So visible to the user should be 1 and 2
+
+    def all_comics(self):
+        subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
+        return [s.comic for s in subscriptions]
+
+    def unread_comics(self):
+        unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
+        comic_ids = list(set([u.comic.id for u in unreads]))
+        return [c for c in self.all_comics() if c.id in comic_ids]
+
+    def random_comic(self):
+        comic_ids = [comic.id for comic in self.all_comics()]
+        comics = list(Comic.objects.exclude(id__in=comic_ids))
+        history = None
+        if comics:
+            try:
+                comic = comics[random.randint(0, len(comics) - 1)]
+                history = comic.comichistory_set.all()
+                history = history[random.randint(0, len(history) - 1)]
+            except:
+                pass
+        return history
 
 def create_account(sender, **kwargs):
     if kwargs['created']:

@@ -135,17 +135,22 @@ class Comic(models.Model):
             self._strip_count = self.comichistory_set.count()
         return int(self._strip_count)
 
+    def last_image_url(self):
+        url = self.last_image
+        if self.referer:
+            url = reverse('comics:last_image_url', kwargs={'cid':self.id})
+        return url
+
+    # User related methods
+
     def is_new_for(self, user):
         """
         Is this comic new to the passed user?
         """
         return NewComic.objects.filter(comic=self, user=user).count() != 0
 
-    def last_image_url(self):
-        url = self.last_image
-        if self.referer:
-            url = reverse('comics:last_image_url', kwargs={'cid':self.id})
-        return url
+    def unread_comics_for(self, user):
+        return UnreadComic.objects.filter(comic=self, user=user)
 
 class Subscription(models.Model):
     user = models.ForeignKey(User)
