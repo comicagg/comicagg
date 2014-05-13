@@ -14,7 +14,7 @@ ajaxpatterns = patterns('comicagg.comics.ajax.views',
     url(r'^mark_all_read/$', 'mark_all_read', name='mark_all_read'),
 )
 
-adminpatterns = patterns('comicagg.comics.admin.views',
+adminpatterns = patterns('comicagg.comics.adminviews.views',
     url(r'^check/$', 'admin_check', name='check'),
     url(r'^check/(?P<comic_id>\d+)/$', 'admin_check', name='check_id'),
     url(r'^reported/(?P<chids>[\w-]+)/$', 'admin_reported', name='reported'),                    
