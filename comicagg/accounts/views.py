@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from comicagg.accounts.models import LoginForm, EmailChangeForm, PasswordChangeForm, PasswordResetForm, ProfileForm, RegisterForm
+from comicagg.accounts.forms import LoginForm, EmailChangeForm, PasswordChangeForm, PasswordResetForm, ProfileForm, RegisterForm
 from comicagg import render
 from django.db import IntegrityError
 from django.conf import settings
