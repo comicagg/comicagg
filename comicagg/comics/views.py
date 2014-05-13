@@ -21,22 +21,9 @@ import os, random, urllib2
 @login_required
 def read_view(request):
     if request.user and request.user.is_authenticated():
-        #update the user's profile
-        up = request.user.get_profile()
-        up.last_read_access = datetime.now()
-        up.save()
-        #make the lists
-        comic_list = list()
-        unread_list = list()
-        sub_set = request.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
-        for subs in list(sub_set):
-            lst = request.user.unreadcomic_set.filter(comic=subs.comic)
-            #if there are no unreads and it's ended, skip it
-            if not lst and subs.comic.ended: continue  
-            tup = (subs.comic, lst)
-            comic_list.append(tup)
-            if lst:
-                unread_list.append(tup)
+        profile = request.user.get_profile()
+        comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in profile.all_comics()]
+        unread_list = [(comic, comic.unread_comics_for(request.user)) for comic in profile.unread_comics()]
         random = random_comic(request.user)
         context = RequestContext(request, {
             'comic_list': comic_list,
