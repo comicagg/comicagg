@@ -79,7 +79,7 @@ class Comic(models.Model):
                     new.save()
                     up.save()
 
-    def get_rating(self), method='statistic_rating'):
+    def get_rating(self, method='statistic_rating'):
         if not hasattr(self, '__rating'):
             r = getattr(self, method)()
             setattr(self, '__rating', r)
