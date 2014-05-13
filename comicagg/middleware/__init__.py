@@ -37,11 +37,19 @@ class ActiveUserMiddleware(object):
             user = request.user
         except:
             user = None
-        if user.is_authenticated() and not user.is_active:
-            try:
-                request.POST['activate']
-            except:
-                return render(request, "accounts/activate.html", {})
+        if user.is_authenticated():
+            # Update the user's profile last access time
+            # We do it here so all requests can be traced (api, web, etc)
+            profile = request.user.get_profile()
+            profile.last_read_access = datetime.now()
+            profile.save()
+
+            # Check if the user is active or not and redirect to the reactivate page.
+            if not user.is_active:
+                try:
+                    request.POST['activate']
+                except:
+                    return render(request, "accounts/activate.html", {})
 
 mime_valid = re.compile('[\w]+/[\w.\-+]+')
 
