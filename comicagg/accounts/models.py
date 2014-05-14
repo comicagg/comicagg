@@ -54,13 +54,39 @@ class UserProfile(models.Model):
     # So visible to the user should be 1 and 2
 
     def all_comics(self):
+        """
+        List of all the comics the user is subscribed to
+        """
         subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
         return [s.comic for s in subscriptions]
 
     def unread_comics(self):
+        """
+        List of comics with unread strips ordered by the position chosen by the user.
+        Does not include the strips for each comic.
+        """
         unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
         comic_ids = list(set([u.comic.id for u in unreads]))
         return [c for c in self.all_comics() if c.id in comic_ids]
+
+    def unread_comic_strips(self, comic):
+        """
+        List of unread strips of a certain comic
+        """
+        unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).filter(comic__id=comic.id)
+        return [u.history for u in unreads]
+
+    def unread_comic_strips_count(self, comic):
+        """
+        For a certain comic, how many unread strips does this user have?
+        """
+        return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).filter(comic__id=comic.id).count()
+
+    def unread_strips_count(self):
+        """
+        Number of unread strips
+        """
+        return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).count()
 
     def random_comic(self):
         comic_ids = [comic.id for comic in self.all_comics()]
@@ -74,6 +100,9 @@ class UserProfile(models.Model):
             except:
                 pass
         return history
+
+    def is_subscribed(self, comic):
+        return self.user.subscription_set.filter(comic__id=comic.id).count() == 1
 
 def create_account(sender, **kwargs):
     if kwargs['created']:
