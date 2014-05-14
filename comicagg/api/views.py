@@ -1,10 +1,12 @@
 from comicagg.comics.models import Comic, ComicHistory
+from comicagg.api.serializer import Serializer
 from comicagg.logs import logmsg
 from django import forms
 from django.contrib.auth.models import AnonymousUser
 from django.db import connection
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
+from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormMixin
 from provider import constants
@@ -14,6 +16,43 @@ import comicagg.logs.tags as logtags
 import datetime, sys, re, logging
 
 logger = logging.getLogger(__name__)
+
+class APIView(View, FormMixin):
+    form_class = None
+    content_type = "application/json; charset=utf-8"
+
+    def dispatch(self, *args, **kwargs):
+        request = args[0]
+        if not request.user.is_authenticated():
+            return HttpResponseForbidden()
+        logger.debug("API call: %s %s" % (request.method, request.path))
+        xml = False
+        if self.prefer_xml():
+            xml = True
+            self.content_type = "text/xml; charset=utf-8"
+        self.serializer = Serializer(request.user, xml)
+        return super(APIView, self).dispatch(*args, **kwargs)
+
+    def render_response(self, body):
+        return HttpResponse(body, self.content_type)
+
+    def prefer_xml(self):
+        try:
+            xml_i = self.request.accept_list.index("text/xml")
+        except:
+            return False
+        try:
+            json_i = self.request.accept_list.index("application/json")
+        except:
+            return True
+        return xml_i < json_i
+
+class ComicsView(APIView):
+    def get(self, request, **kwargs):
+        if "comicid" in kwargs.keys():
+            comicid = kwargs["comicid"]
+            data = Comic.objects.get(pk=comicid)
+            return self.render_response(self.serializer.serialize(data))
 
 class OAuth2TemplateView(TemplateView, FormMixin):
     form_class = None
