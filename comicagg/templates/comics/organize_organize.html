@@ -23,6 +23,7 @@ dojo.addOnLoad(initDND);
 {% block onload %}{% endblock %}
 {% block orgcontent %}
 <div id="organize">
+    <div class="comic_list">
     <h3>{% trans "Organize your comics" %}</h3>
     <div id="trash">
         <p>{% trans "Drop comics here<br/>to delete them" %}</p>
@@ -33,13 +34,14 @@ dojo.addOnLoad(initDND);
         <span id="saving_text" style="display:none"><img src="{% static 'base/img/loaderarrows.gif' %}" alt=""/></span>
         <span id="save_error" style="display:none"><img src="{% static 'base/img/remove.png' %}" alt=""/> <span style="font-size:smaller"><a onclick="save()">({% trans "retry" %})</a></span></span>
     </div>
-    <div class="text_center">
+    <p class="text_left">
     {% spaceless %}
-        {% trans "Sort them:" %}&nbsp;
+        {% trans "Alternatively, you can sort them:" %}&nbsp;
         <a onclick="sort_items(true)">{% trans "by name" %}</a>,&nbsp;
         <a onclick="sort_items(false)">{% trans "by score" %}</a>.
     {% endspaceless %}
-    </div>
+    </p>
+</div>
     <div class="comic_list">
         <div id="user_comics">
     {% for comic in auser_comics %}
