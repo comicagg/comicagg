@@ -41,7 +41,7 @@ class ActiveUserMiddleware(object):
             # Update the user's profile last access time
             # We do it here so all requests can be traced (api, web, etc)
             profile = request.user.get_profile()
-            profile.last_read_access = datetime.now()
+            profile.last_read_access = datetime.datetime.now()
             profile.save()
 
             # Check if the user is active or not and redirect to the reactivate page.
