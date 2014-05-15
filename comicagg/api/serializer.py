@@ -105,7 +105,9 @@ def build_xml_element(name, value):
             if type(v) is dict:
                 child = build_xml_element(v["__class"], v)
             elif type(v) is list:
-                child = ''.join([build_xml_element(None, x) for x in v])
+                # Future: if lists should not be wrapped inside an element
+                # child = ''.join([build_xml_element(None, x) for x in v])
+                child = build_xml_element(k, v)
             else:
                 attx[k] = v
 
