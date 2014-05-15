@@ -27,7 +27,7 @@ class Serializer:
         elif not what and self.user:
             d["user"] = self.build_user_dict()
         else:
-            raise ValueError("Object to serialize is not valid or you are missing another parameter (identifier?)")
+            raise ValueError("Object to serialize is not valid. Are you missing a parameter (identifier)?")
 
         if not self.prefer_xml:
             return json.dumps(d, separators=(',', ':'))
@@ -49,7 +49,10 @@ class Serializer:
         out["added"] = str(self.user.get_profile().is_subscribed(comic))
         out["unreadcount"] = self.user.get_profile().unread_comic_strips_count(comic)
         if last_strip:
-            out["laststrip"] = self.build_comichistory_dict(comic.comichistory_set.all()[0])
+            try:
+                out["last_strip"] = self.build_comichistory_dict(comic.comichistory_set.all()[0])
+            except:
+                pass
         if unread_strips:
             out["unreads"] = [self.build_comichistory_dict(h) for h in self.user.get_profile().unread_comic_strips(comic)]
         return out
