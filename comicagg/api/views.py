@@ -1,4 +1,4 @@
-from comicagg.comics.models import Comic, ComicHistory
+from comicagg.comics.models import Comic, ComicHistory, active_comics
 from comicagg.api.serializer import Serializer
 from comicagg.logs import logmsg
 from django import forms
@@ -31,6 +31,7 @@ class APIView(View, FormMixin):
             xml = True
             self.content_type = "text/xml; charset=utf-8"
         self.serializer = Serializer(request.user, xml)
+        self.serialize = self.serializer.serialize
         return super(APIView, self).dispatch(*args, **kwargs)
 
     def render_response(self, body):
@@ -52,7 +53,10 @@ class ComicsView(APIView):
         if "comicid" in kwargs.keys():
             comicid = kwargs["comicid"]
             data = Comic.objects.get(pk=comicid)
-            return self.render_response(self.serializer.serialize(data))
+            return self.render_response(self.serializer.serialize(data, last_strip=True))
+
+        last_strip = "with_last" in kwargs.keys()
+        return self.render_response(self.serialize(list(active_comics()), last_strip=last_strip, identifier="comics"))
 
 class OAuth2TemplateView(TemplateView, FormMixin):
     form_class = None
