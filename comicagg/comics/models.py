@@ -152,6 +152,12 @@ class Comic(models.Model):
     def unread_comics_for(self, user):
         return UnreadComic.objects.filter(comic=self, user=user)
 
+def active_comics():
+    """
+    It will return only comics that an user can follow so no inactive or ended comics.
+    """
+    return Comic.objects.exclude(activo=False, ended=True)
+
 class Subscription(models.Model):
     user = models.ForeignKey(User)
     comic = models.ForeignKey(Comic)
