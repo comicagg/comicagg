@@ -103,7 +103,13 @@ class APIView(View, FormMixin):
         return self.render_response(body, response_class=klass)
 
 class IndexView(APIView):
-    pass
+    def get(self, request, **kwargs):
+        data = {
+            'message': 'Hello %s.' % request.user.username,
+            'message2': 'This is the comicagg API.',
+        }
+        body = self.serialize(data, identifier="welcome")
+        return self.render_response(body)
 
 class ComicsView(APIView):
     form_class = ComicForm
@@ -215,101 +221,44 @@ class ComicsView(APIView):
         return HttpResponse(status=204, content_type=self.content_type)
 
 class SubscriptionsView(APIView):
-    pass
+    def get(self, request, **kwargs):
+        subs = request.user.get_profile().all_comics()
+        body = self.serialize(subs, last_strip=True, identifier='subscriptions')
+        return self.render_response(body)
+
+    @write_required
+    def post(self, request, **kwargs):
+        return HttpResponse("TODO")
+
+    @write_required
+    def delete(self, request, **kwargs):
+        return HttpResponse("TODO")
 
 class StripsView(APIView):
-    pass
+    def get(self, request, **kwargs):
+        return HttpResponse("TODO")
+
+    @write_required
+    def delete(self, request, **kwargs):
+        return HttpResponse("TODO")
+
+    @write_required
+    def delete(self, request, **kwargs):
+        return HttpResponse("TODO")
 
 class UnreadsView(APIView):
-    pass
+    def get(self, request, **kwargs):
+        return HttpResponse("TODO")
+
+    @write_required
+    def delete(self, request, **kwargs):
+        return HttpResponse("TODO")
 
 class UserView(APIView):
-    pass
+    def get(self, request, **kwargs):
+        return HttpResponse("TODO")
 
 """
-class IndexView(OAuth2TemplateView):
-    template_name = "api/index.xml"
-
-    def get(self, request, **kwargs):
-        logger.debug("API Index")
-        context = self.get_context_data(**kwargs)
-        if (request.access_token):
-            context["access_token"] = request.access_token
-        scopes = dict(getattr(constants, 'SCOPES'))
-        context["scope"] = scopes[request.scope]
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-        return HttpResponse("POST received, user: " + str(request.user))
-
-    def put(self, request, *args, **kwargs):
-        return HttpResponse("PUT received, user: " + str(request.user))
-
-    def delete(self, request, *args, **kwargs):
-        return HttpResponse("DELETE received, user: " + str(request.user))
-
-class ComicForm(forms.Form):
-    def vote_validator(value):
-        if value < -1 or value > 1:
-            raise forms.ValidationError("Value not valid")
-
-    vote = forms.IntegerField(validators=[vote_validator])
-
-class ComicView(OAuth2TemplateView):
-    template_name = "api/comic.xml"
-    form_class = ComicForm
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        # Do you want all the comics or just one?
-        if "comicid" in context.keys():
-            comicid = context["comicid"]
-            comic = get_object_or_404(Comic, pk=comicid)
-            context["comic"] = comic
-        else:
-            comics = Comic.objects.exclude(activo=False,ended=True)
-            context["comics"] = comics
-        return self.render_to_response(context)
-
-    def post(self, request, *args, **kwargs):
-        if not request.access_token.scope == constants.WRITE:
-            logger.warning("API-4 The current access token does not have enough permissions for this operation.")
-            return HttpResponseBadRequest()
-
-        context = self.get_context_data(**kwargs)
-        form = context["form"]
-        if not form.is_valid():
-            logger.warning("API call, form did not pass validation")
-            return HttpResponseBadRequest()
-        vote = form.cleaned_data["vote"]
-
-        if "comicid" in context.keys():
-            comicid = context["comicid"]
-            comic = get_object_or_404(Comic, pk=comicid)
-        else:
-            return HttpResponseBadRequest()
-
-        s = request.user.subscription_set.filter(comic=comic)
-        if s.count() == 0:
-            return HttpResponseBadRequest()
-
-        if request.user.unreadcomic_set.filter(comic=comic).count():
-            if vote == -1:
-                votes = 1
-                value = 0
-            elif vote == 0:
-                votes = 0
-                value = 0
-            else:
-                votes = 1
-                value = 1
-            comic.votes += votes
-            comic.rating += value
-            comic.save()
-            request.user.unreadcomic_set.filter(comic=comic).delete()
-        return HttpResponse()
-
-
 class SubscriptionView(OAuth2TemplateView):
     template_name = "api/subscription.xml"
 
