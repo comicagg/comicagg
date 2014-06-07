@@ -45,6 +45,9 @@ class ComicForm(forms.Form):
 
 # Views
 
+class HttpResponseUnauthorized(HttpResponse):
+    status_code = 401
+
 class APIView(View, FormMixin):
     """
     Base class for all API views.
@@ -64,7 +67,7 @@ class APIView(View, FormMixin):
         self.serializer = Serializer(request.user, xml)
         self.serialize = self.serializer.serialize
         if not request.user.is_authenticated():
-            return self.error("Forbidden", "You cannot access this resource", HttpResponseForbidden)
+            return self.error("Unauthorized", "You need to log in to access this resource", HttpResponseUnauthorized)
         return super(APIView, self).dispatch(*args, **kwargs)
 
     def render_response(self, body, response_class=HttpResponse):
