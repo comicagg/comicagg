@@ -90,8 +90,9 @@ class APIView(View, FormMixin):
 
     def get_context_data(self, **kwargs):
         context = super(APIView, self).get_context_data(**kwargs)
-        form_class = self.get_form_class()
-        context['form'] = self.get_form(form_class)
+        if self.form_class:
+            form_class = self.get_form_class()
+            context['form'] = self.get_form(form_class)
         return context
 
     def error(self, name, description, klass=HttpResponseBadRequest):
