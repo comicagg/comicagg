@@ -235,18 +235,6 @@ class SubscriptionsView(APIView):
     def delete(self, request, **kwargs):
         return HttpResponse("TODO")
 
-class StripsView(APIView):
-    def get(self, request, **kwargs):
-        return HttpResponse("TODO")
-
-    @write_required
-    def delete(self, request, **kwargs):
-        return HttpResponse("TODO")
-
-    @write_required
-    def delete(self, request, **kwargs):
-        return HttpResponse("TODO")
-
 class UnreadsView(APIView):
     def get(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
@@ -273,88 +261,18 @@ class UnreadsView(APIView):
     def delete(self, request, **kwargs):
         return HttpResponse("TODO")
 
-class UserView(APIView):
+class StripsView(APIView):
     def get(self, request, **kwargs):
         return HttpResponse("TODO")
 
-"""
-class SubscriptionView(OAuth2TemplateView):
-    template_name = "api/subscription.xml"
+    @write_required
+    def delete(self, request, **kwargs):
+        return HttpResponse("TODO")
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        subscriptions = request.user.subscription_set.all()
-        context["subscriptions"] = subscriptions
-        return self.render_to_response(context)
+    @write_required
+    def delete(self, request, **kwargs):
+        return HttpResponse("TODO")
 
-    def put(self, request, *args, **kwargs):
-        return HttpResponse("TODO, user: " + str(request.user))
-
-    def delete(self, request, *args, **kwargs):
-        return HttpResponse("TODO, user: " + str(request.user))
-
-class UnreadView(OAuth2TemplateView):
-    template_name = "api/unread.xml"
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        if "comicid" in context.keys():
-            comicid = context["comicid"]
-            subscriptions = request.user.subscription_set.filter(comic=comicid)
-        else:
-            subscriptions = request.user.subscription_set.all()
-        context["subscriptions"] = subscriptions
-        return self.render_to_response(context)
-
-    def delete(self, request, *args, **kwargs):
-        return HttpResponse("TODO, user: " + str(request.user))
-
-class StripView(OAuth2TemplateView):
-    template_name = "api/strip.xml"
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        if not "historyid" in context.keys():
-            return HttpResponse(status=400)
-        historyid = context["historyid"]
-        history = get_object_or_404(ComicHistory, pk=historyid)
-        context["history"] = history
-        return self.render_to_response(context)
-
-    def put(self, request, *args, **kwargs):
-        return HttpResponse("TODO, user: " + str(request.user))
-
-    def delete(self, request, *args, **kwargs):
-        return HttpResponse("TODO, user: " + str(request.user))
-
-class UserView(OAuth2TemplateView):
-    template_name = "api/user.xml"
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        #TODO Really need to change how to get this...
-        sql = """
-"""
-SELECT comics_unreadcomic.comic_id, name, count(comics_unreadcomic.id) as count
-FROM comics_unreadcomic
-  INNER JOIN comics_comic ON comics_unreadcomic.comic_id=comics_comic.id
-  INNER JOIN comics_subscription ON comics_unreadcomic.comic_id=comics_subscription.comic_id
-WHERE activo=TRUE
-  AND ended=FALSE
-  AND comics_unreadcomic.user_id=%s
-  AND comics_subscription.user_id=%s
-GROUP BY comics_comic.id, comics_unreadcomic.comic_id, name, comics_subscription.position
-ORDER BY comics_subscription.position"""
-"""
-        acursor = connection.cursor()
-        acursor.execute(sql, [request.user.id, request.user.id])
-        rows = acursor.fetchall()
-        context["unreadcount"] = len(rows)
-        return self.render_to_response(context)
-
-    def put(self, request, *args, **kwargs):
-        return HttpResponse(status=400)
-
-    def delete(self, request, *args, **kwargs):
-        return HttpResponse(status=400)
-"""
+class UserView(APIView):
+    def get(self, request, **kwargs):
+        return HttpResponse("TODO")
