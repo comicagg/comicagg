@@ -249,7 +249,25 @@ class StripsView(APIView):
 
 class UnreadsView(APIView):
     def get(self, request, **kwargs):
-        return HttpResponse("TODO")
+        context = self.get_context_data(**kwargs)
+
+        if 'comicid' in context.keys():
+            comicid = context["comicid"]
+            try:
+                comic = Comic.objects.get(pk=comicid)
+            except:
+                return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
+
+            if request.user.subscription_set.filter(comic__id=comicid).count():
+                body = self.serialize(comic, unread_strips=True)
+            else:
+                return self.error("BadRequest", "You are not subscribed to this comic")
+        else:
+            last_strip = 'withstrips' in context.keys()
+            unreads = request.user.get_profile().unread_comics()
+            body = self.serialize(unreads, last_strip=last_strip, identifier='unreads')
+
+        return self.render_response(body)
 
     @write_required
     def delete(self, request, **kwargs):
