@@ -280,7 +280,16 @@ class UnreadsView(APIView):
 
 class StripsView(APIView):
     def get(self, request, **kwargs):
-        return HttpResponse("TODO")
+        context = self.get_context_data(**kwargs)
+        if not 'stripid' in context.keys():
+            return self.error("BadRequest", "You need to pass a strip id.")
+        stripid = context['stripid']
+        try:
+            strip = ComicHistory.objects.get(pk=stripid)
+        except:
+            return self.error("NotFound", "That strip does not exist", HttpResponseNotFound)
+        body = self.serialize(strip)
+        return self.render_response(body)
 
     @write_required
     def delete(self, request, **kwargs):

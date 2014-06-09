@@ -9,7 +9,7 @@ urlpatterns = patterns('comicagg.api.views',
     url(r'^comic/withlast/$', csrf_exempt(ComicsView.as_view()), {'with_last':True}, name='comics_with_last'),
     url(r'^comic/(?P<comicid>\d+)/$', csrf_exempt(ComicsView.as_view()), name='comicinfo'),
 
-    url(r'^strip/(?P<historyid>\d+)/$', csrf_exempt(StripsView.as_view()), name='strips'),
+    url(r'^strip/(?P<stripid>\d+)/$', csrf_exempt(StripsView.as_view()), name='strips'),
 
     url(r'^subscription/$', csrf_exempt(SubscriptionsView.as_view()), name='subscriptions'),
 
