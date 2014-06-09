@@ -123,10 +123,9 @@ class ComicsView(APIView):
             except:
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
             body = self.serialize(data, last_strip=True)
-            return self.render_response(body)
-
-        last_strip = "with_last" in kwargs.keys()
-        body = self.serialize(list(active_comics()), last_strip=last_strip, identifier="comics")
+        else:
+            last_strip = "with_last" in kwargs.keys()
+            body = self.serialize(list(active_comics()), last_strip=last_strip, identifier="comics")
         return self.render_response(body)
 
     @write_required
