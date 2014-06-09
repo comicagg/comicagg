@@ -286,8 +286,6 @@ class UnreadsView(APIView):
 class StripsView(APIView):
     def get(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
-        if not 'stripid' in context.keys():
-            return self.error("BadRequest", "You need to pass a strip id.")
         stripid = context['stripid']
         try:
             strip = ComicHistory.objects.get(pk=stripid)
@@ -297,12 +295,30 @@ class StripsView(APIView):
         return self.render_response(body)
 
     @write_required
-    def delete(self, request, **kwargs):
-        return HttpResponse("TODO")
+    def put(self, request, **kwargs):
+        context = self.get_context_data(**kwargs)
+        stripid = context['stripid']
+        try:
+            strip = ComicHistory.objects.get(pk=stripid)
+        except:
+            return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
+        if not request.user.get_profile().is_subscribed(strip.comic):
+            return self.error("BadRequest", "You are not subscribed to this comic")
+        request.user.unreadcomic_set.create(user=request.user, comic=strip.comic, history=strip)
+        return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
-        return HttpResponse("TODO")
+        context = self.get_context_data(**kwargs)
+        stripid = context['stripid']
+        try:
+            strip = ComicHistory.objects.get(pk=stripid)
+        except:
+            return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
+        if not request.user.get_profile().is_subscribed(strip.comic):
+            return self.error("BadRequest", "You are not subscribed to this comic")
+        request.user.unreadcomic_set.filter(history__id=stripid).delete()
+        return HttpResponse(status=204, content_type=self.content_type)
 
 class UserView(APIView):
     def get(self, request, **kwargs):
