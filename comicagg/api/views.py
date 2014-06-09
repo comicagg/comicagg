@@ -35,7 +35,7 @@ def write_required(f):
 
 # Forms
 
-class ComicForm(forms.Form):
+class VoteForm(forms.Form):
     def vote_validator(value):
         logger.debug("Vote validator: " + str(value))
         if value < -1 or value > 1:
@@ -113,8 +113,6 @@ class IndexView(APIView):
         return self.render_response(body)
 
 class ComicsView(APIView):
-    form_class = ComicForm
-
     def get(self, request, **kwargs):
         if "comicid" in kwargs.keys():
             comicid = kwargs["comicid"]
@@ -199,6 +197,8 @@ class SubscriptionsView(APIView):
         return HttpResponse(status=204, content_type=self.content_type)
 
 class UnreadsView(APIView):
+    form_class = VoteForm
+
     def get(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
 
