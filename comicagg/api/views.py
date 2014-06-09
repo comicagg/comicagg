@@ -68,6 +68,7 @@ class APIView(View, FormMixin):
         self.serialize = self.serializer.serialize
         if not request.user.is_authenticated():
             return self.error("Unauthorized", "You need to log in to access this resource", HttpResponseUnauthorized)
+        # TODO: Should wrap this call with try/except and handle any unexpected error
         return super(APIView, self).dispatch(*args, **kwargs)
 
     def render_response(self, body, response_class=HttpResponse):
@@ -96,6 +97,7 @@ class APIView(View, FormMixin):
         return context
 
     def error(self, name, description, klass=HttpResponseBadRequest):
+        logger.debug("Returning an error (%s): %s" % (name, description))
         data = {
             "error": name,
             "description": description
@@ -119,7 +121,7 @@ class ComicsView(APIView):
             try:
                 data = Comic.objects.get(pk=comicid)
             except:
-                return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
+                return self.error("NotFound", "The comic does not exist", HttpResponseNotFound)
             body = self.serialize(data, last_strip=True)
         else:
             last_strip = "with_last" in kwargs.keys()
@@ -154,7 +156,10 @@ class ComicsView(APIView):
         # Add the last strip to the user's unread list
         history = ComicHistory.objects.filter(comic=comic)
         if history:
+            logger.debug("Found a strip to add")
             UnreadComic.objects.create(user=request.user, comic=comic, history=history[0])
+        else:
+            logger.debug("Did not add any strip to the user")
         return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
