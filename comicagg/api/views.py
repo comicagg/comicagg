@@ -231,6 +231,10 @@ class SubscriptionsView(APIView):
         return HttpResponse("TODO")
 
     @write_required
+    def put(self, request, **kwargs):
+        return HttpResponse("TODO")
+
+    @write_required
     def delete(self, request, **kwargs):
         return HttpResponse("TODO")
 
