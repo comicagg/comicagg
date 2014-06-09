@@ -263,7 +263,20 @@ class UnreadsView(APIView):
 
     @write_required
     def delete(self, request, **kwargs):
-        return HttpResponse("TODO")
+        context = self.get_context_data(**kwargs)
+        if not 'comicid' in context.keys():
+            # Mark all comics as read
+            request.user.unreadcomic_set.all().delete()
+        else:
+            # Mark just the one comic
+            comicid = context['comicid']
+            try:
+                comic = Comic.objects.get(pk=comicid)
+            except:
+                return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
+            request.user.unreadcomic_set.filter(comic=comic).delete()
+        return HttpResponse(status=204, content_type=self.content_type)
+
 
 class StripsView(APIView):
     def get(self, request, **kwargs):
