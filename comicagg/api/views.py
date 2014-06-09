@@ -129,47 +129,6 @@ class ComicsView(APIView):
         return self.render_response(body)
 
     @write_required
-    def post(self, request, **kwargs):
-        context = self.get_context_data(**kwargs)
-
-        # Do not allow POST if there is not comic id
-        if not 'comicid' in context.keys():
-            return HttpResponseNotAllowed(['GET'])
-
-        form = context["form"]
-
-        if not form.is_valid():
-            return self.error("BadRequest", "Invalid vote parameter")
-
-        vote = form.cleaned_data["vote"]
-        comicid = context["comicid"]
-        try:
-            comic = Comic.objects.get(pk=comicid)
-        except:
-            return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
-
-        s = request.user.subscription_set.filter(comic=comic)
-        if s.count() == 0:
-            return self.error("BadRequest", "You are not subscribed to this comic")
-
-        if request.user.unreadcomic_set.filter(comic=comic).count():
-            if vote == -1:
-                votes = 1
-                value = 0
-            elif vote == 0:
-                votes = 0
-                value = 0
-            else:
-                votes = 1
-                value = 1
-            comic.votes += votes
-            comic.rating += value
-            comic.save()
-            # Mark all unreads as read
-            request.user.unreadcomic_set.filter(comic=comic).delete()
-        return HttpResponse(status=204, content_type=self.content_type)
-
-    @write_required
     def put(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
 
@@ -259,6 +218,47 @@ class UnreadsView(APIView):
             body = self.serialize(unreads, last_strip=last_strip, identifier='unreads')
 
         return self.render_response(body)
+
+    @write_required
+    def post(self, request, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        # Do not allow POST if there is not comic id
+        if not 'comicid' in context.keys():
+            return HttpResponseNotAllowed(['GET'])
+
+        form = context["form"]
+
+        if not form.is_valid():
+            return self.error("BadRequest", "Invalid vote parameter")
+
+        vote = form.cleaned_data["vote"]
+        comicid = context["comicid"]
+        try:
+            comic = Comic.objects.get(pk=comicid)
+        except:
+            return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
+
+        s = request.user.subscription_set.filter(comic=comic)
+        if s.count() == 0:
+            return self.error("BadRequest", "You are not subscribed to this comic")
+
+        if request.user.unreadcomic_set.filter(comic=comic).count():
+            if vote == -1:
+                votes = 1
+                value = 0
+            elif vote == 0:
+                votes = 0
+                value = 0
+            else:
+                votes = 1
+                value = 1
+            comic.votes += votes
+            comic.rating += value
+            comic.save()
+            # Mark all unreads as read
+            request.user.unreadcomic_set.filter(comic=comic).delete()
+        return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
