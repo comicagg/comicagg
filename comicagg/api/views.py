@@ -322,4 +322,5 @@ class StripsView(APIView):
 
 class UserView(APIView):
     def get(self, request, **kwargs):
-        return HttpResponse("TODO")
+        body = self.serialize()
+        return self.render_response(body)

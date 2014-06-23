@@ -73,7 +73,7 @@ class Serializer:
         if self.prefer_xml:
             out["__class"] = "user"
         out["username"] = self.user.username
-        out["email"] = "" # TODO do we really want/need to return this?
+        out["email"] = self.user.email
         out["totalcomics"] = len(self.user.get_profile().all_comics())
         out["unreadcomics"] = len(self.user.get_profile().unread_comics())
         return out
