@@ -2,6 +2,7 @@
 from comicagg import render
 from comicagg.logs import logmsg
 from django.conf import settings
+from django.http import HttpResponse
 from django.views.debug import technical_500_response
 from provider import constants
 from provider.forms import OAuthValidationError
