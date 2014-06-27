@@ -47,6 +47,7 @@ class Serializer:
         out["votes"] = comic.votes
         out["rating"] = comic.get_rating()
         out["added"] = str(self.user.get_profile().is_subscribed(comic))
+        out["ended"] = str(comic.ended)
         out["unreadcount"] = self.user.get_profile().unread_comic_strips_count(comic)
         if last_strip:
             try:
