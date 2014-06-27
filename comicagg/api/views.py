@@ -177,6 +177,7 @@ class SubscriptionsView(APIView):
     @write_required
     def delete(self, request, **kwargs):
         request.user.subscription_set.all().delete()
+        request.user.unreadcomic_set.all().delete()
         return HttpResponse(status=204, content_type=self.content_type)
 
 class UnreadsView(APIView):
