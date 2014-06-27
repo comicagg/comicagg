@@ -89,13 +89,13 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware', #
 #    'comicagg.middleware.UserBasedExceptionMiddleware',
+    'comicagg.middleware.api.OAuth2Middleware',
     'comicagg.middleware.MaintenanceMiddleware',
-    'comicagg.middleware.OAuth2Middleware',
     'comicagg.middleware.ActiveUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware', #
     'django.middleware.doc.XViewMiddleware',
-    'comicagg.middleware.AcceptHeaderProcessingMiddleware',
-    'comicagg.middleware.BodyProcessingMiddleware'
+    'comicagg.middleware.api.AcceptHeaderProcessingMiddleware',
+    'comicagg.middleware.api.BodyProcessingMiddleware'
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
