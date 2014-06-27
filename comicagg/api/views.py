@@ -141,25 +141,7 @@ class ComicsView(APIView):
         except:
             return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
-        if request.user.subscription_set.filter(comic=comic):
-            # The comic is already there, finish here
-            logger.debug("The user is already subscribed")
-            return HttpResponse(status=204, content_type=self.content_type)
-
-        # Calculate the position for the comic, it'll be the last
-        max_position = request.user.subscription_set.aggregate(pos=Max('position'))['pos']
-        if not max_position:
-            # max_position can be None if there are no comics
-            max_position = 0
-        next_pos = max_position + 1
-        request.user.subscription_set.create(comic=comic, position=next_pos)
-        # Add the last strip to the user's unread list
-        history = ComicHistory.objects.filter(comic=comic)
-        if history:
-            logger.debug("Found a strip to add")
-            UnreadComic.objects.create(user=request.user, comic=comic, history=history[0])
-        else:
-            logger.debug("Did not add any strip to the user")
+        request.user.get_profile().subscribe_comic(comic)
         return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
@@ -175,11 +157,7 @@ class ComicsView(APIView):
         except:
             return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
-        s = request.user.subscription_set.filter(comic=comic)
-        if s:
-            logger.debug("Removing subscription")
-            s.delete()
-            request.user.unreadcomic_set.filter(comic=comic).delete()
+        request.user.get_profile().unsubscribe_comic(comic)
         return HttpResponse(status=204, content_type=self.content_type)
 
 class SubscriptionsView(APIView):
