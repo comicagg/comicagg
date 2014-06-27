@@ -8,7 +8,8 @@ from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
 import comicagg.logs.tags as logtags
-import datetime, logging, re, sys
+import datetime, json, logging, re, sys
+import xml.etree.ElementTree as ET
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +63,31 @@ class AcceptHeaderProcessingMiddleware(object):
             l = accept_str.split(',')
             request.accept_list = [ct.strip() for ct in l if mime_valid.match(ct.strip())]
 
+class BodyProcessingMiddleware(object):
+    def process_request(self, request):
+        # TODO we could return the errors in a better way
+        request.processed_body = None
+        if 'CONTENT_TYPE' in request.META.keys():
+            # Not checking CONTENT_LENGTH because the application might not send it
+            ctype = request.META['CONTENT_TYPE'].lower()
+            try:
+                body = request.body
+            except:
+                logger.error("The request body could not be read")
+                return HttpResponse("Error reading body: " + str(sys.exc_info()[1]), status=500)
+
+            if ctype == 'application/json':
+                try:
+                    request.processed_body = json.loads(body)
+                except:
+                    logger.debug("The request body is not valid JSON")
+                    return HttpResponse('Invalid JSON body', status=400)
+            elif ctype == 'text/xml':
+                try:
+                    request.processed_body = ET.fromstring(body)
+                except:
+                    logger.debug('The request body is not valid XML')
+                    return HttpResponse('Invalid XML body', status=400)
 
 class OAuth2Middleware(object):
     """

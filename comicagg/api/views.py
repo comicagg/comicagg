@@ -15,6 +15,7 @@ from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
 import comicagg.logs.tags as logtags
 import datetime, sys, re, logging
+import xml.etree.ElementTree as ET
 
 logger = logging.getLogger(__name__)
 
@@ -168,7 +169,61 @@ class SubscriptionsView(APIView):
 
     @write_required
     def post(self, request, **kwargs):
-        return HttpResponse("TODO")
+        """
+        If the user is currently subscribed to a inactive/broken comic after executing this, that broken comic will be unsubscribed.
+        """
+        if not request.processed_body:
+            return self.error("BadRequest", "The request body is not valid")
+
+        body = request.processed_body
+        id_list = list()
+        if type(body) == ET.Element:
+            # this is a XML request
+            if 'subscriptions' != body.tag:
+                return self.error("BadRequest", "The request XML body is not valid")
+            try:
+                for comicid in body.findall('comicid'):
+                    id_list.append(int(comicid.text))
+            except:
+                return self.error("BadRequest", "Invalid comic ID list")
+        else:
+            # this should be a JSON request
+            if 'subscriptions' not in body.keys():
+                return self.error("BadRequest", "The request JSON body is not valid")
+            try:
+                id_list = [int(x) for x in body['subscriptions']]
+            except:
+                return self.error("BadRequest", "Invalid comic ID list")
+
+        id_list_clean = []
+        [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
+
+        # Now process the comic id list
+        current_active_idx = [c.id for c in request.user.get_profile().all_comics()]
+        # find deleted
+        deleted_idx = [x for x in current_active_idx if not x in id_list_clean]
+        request.user.get_profile().unsubscribe_comics(deleted_idx)
+        # unsubscribe deleted
+        # find added
+        added_idx = [x for x in id_list_clean if not x in current_active_idx]
+        request.user.get_profile().subscribe_comics(added_idx)
+        # subscribe added
+        # reorder
+        current_all = request.user.subscription_set.all()
+        current_all_d = dict([(s.comic.id, s) for s in current_all])
+
+        if len(current_all) < id_list_clean:
+            # This should never happen, something must have gone wrong
+            HttpResponse(status=500, content_type=self.content_type)
+
+        position = 0
+        for cid in id_list_clean:
+            s = current_all_d[cid]
+            s.position = position
+            s.save()
+            position += 1
+
+        return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
     def put(self, request, **kwargs):
