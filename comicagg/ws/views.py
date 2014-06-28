@@ -15,7 +15,7 @@ def unread_user(request, user):
     user = get_object_or_404(User, username=user)
     context = {}
 
-    unreads = user.get_profile().unread_comics(True)
+    unreads = user.get_profile().unread_comics_count()
 
     context['unread_list'] = unreads
     context['count'] = len(unreads)

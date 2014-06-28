@@ -63,7 +63,7 @@ class UserProfile(models.Model):
         subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
         return [s.comic for s in subscriptions]
 
-    def unread_comics(self, count=False):
+    def unread_comics(self):
         """
         List of comics with unread strips ordered by the position chosen by the user.
         Does not include the strips for each comic.
@@ -71,9 +71,17 @@ class UserProfile(models.Model):
         unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
         # build a list of comic ids to later get the comics correctly ordered from all_comics
         comic_ids = list(set([u.comic.id for u in unreads]))
+        return [c for c in self.all_comics() if c.id in comic_ids]
+
+    def unread_comics_count(self):
+        """
+        List of tuples of comics with unread strips ordered by the position chosen by the user.
+        First value is the comic, second is the number of unread strips.
+        """
+        unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
+        # build a list of comic ids to later get the comics correctly ordered from all_comics
+        comic_ids = list(set([u.comic.id for u in unreads]))
         comics = [c for c in self.all_comics() if c.id in comic_ids]
-        if not count:
-            return comics
         unread_counters = dict()
         for u in unreads:
             if not u.comic.id in unread_counters.keys():
@@ -81,7 +89,6 @@ class UserProfile(models.Model):
             else:
                 unread_counters[u.comic.id] += 1
         return [(c, unread_counters[c.id]) for c in comics]
-
 
     def unread_comic_strips(self, comic):
         """
