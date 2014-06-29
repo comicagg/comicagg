@@ -227,7 +227,33 @@ class SubscriptionsView(APIView):
 
     @write_required
     def put(self, request, **kwargs):
-        return HttpResponse("TODO")
+        if not request.processed_body:
+            return self.error("BadRequest", "The request body is not valid")
+
+        body = request.processed_body
+        id_list = list()
+        if type(body) == ET.Element:
+            # this is a XML request
+            if 'subscribe' != body.tag:
+                return self.error("BadRequest", "The request XML body is not valid")
+            try:
+                for comicid in body.findall('comicid'):
+                    id_list.append(int(comicid.text))
+            except:
+                return self.error("BadRequest", "Invalid comic ID list")
+        else:
+            # this should be a JSON request
+            if 'subscribe' not in body.keys():
+                return self.error("BadRequest", "The request JSON body is not valid")
+            try:
+                id_list = [int(x) for x in body['subscribe']]
+            except:
+                return self.error("BadRequest", "Invalid comic ID list")
+
+        id_list_clean = []
+        [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
+        request.user.get_profile().subscribe_comics(id_list_clean)
+        return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
