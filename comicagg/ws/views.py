@@ -15,24 +15,10 @@ def unread_user(request, user):
     user = get_object_or_404(User, username=user)
     context = {}
 
-    sql = """
-SELECT comics_unreadcomic.comic_id, name, count(comics_unreadcomic.id) as count
-FROM comics_unreadcomic
-  INNER JOIN comics_comic ON comics_unreadcomic.comic_id=comics_comic.id
-  INNER JOIN comics_subscription ON comics_unreadcomic.comic_id=comics_subscription.comic_id
-WHERE activo=TRUE
-  AND ended=FALSE
-  AND comics_unreadcomic.user_id=%s
-  AND comics_subscription.user_id=%s
-GROUP BY comics_comic.id, comics_unreadcomic.comic_id, name, comics_subscription.position
-ORDER BY comics_subscription.position"""
+    unreads = user.get_profile().unread_comics_count()
 
-    acursor = connection.cursor()
-    acursor.execute(sql, [user.id, user.id])
-    rows = acursor.fetchall()
-    count = len(rows)
-    context['unread_list'] = rows
-    context['count'] = count
+    context['unread_list'] = unreads
+    context['count'] = len(unreads)
     context['username'] = user
     return render(request, 'ws/unread_user.html', context, xml=True)
 

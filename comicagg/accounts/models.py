@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-from comicagg.comics.models import Comic
+from comicagg.comics.models import Comic, ComicHistory, UnreadComic
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Max
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
-import random
+import logging, random
+
+logger = logging.getLogger(__name__)
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -66,8 +69,26 @@ class UserProfile(models.Model):
         Does not include the strips for each comic.
         """
         unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
+        # build a list of comic ids to later get the comics correctly ordered from all_comics
         comic_ids = list(set([u.comic.id for u in unreads]))
         return [c for c in self.all_comics() if c.id in comic_ids]
+
+    def unread_comics_count(self):
+        """
+        List of tuples of comics with unread strips ordered by the position chosen by the user.
+        First value is the comic, second is the number of unread strips.
+        """
+        unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
+        # build a list of comic ids to later get the comics correctly ordered from all_comics
+        comic_ids = list(set([u.comic.id for u in unreads]))
+        comics = [c for c in self.all_comics() if c.id in comic_ids]
+        unread_counters = dict()
+        for u in unreads:
+            if not u.comic.id in unread_counters.keys():
+                unread_counters[u.comic.id] = 1
+            else:
+                unread_counters[u.comic.id] += 1
+        return [(c, unread_counters[c.id]) for c in comics]
 
     def unread_comic_strips(self, comic):
         """
@@ -84,7 +105,7 @@ class UserProfile(models.Model):
 
     def unread_strips_count(self):
         """
-        Number of unread strips
+        Total number of unread strips
         """
         return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).count()
 
@@ -103,6 +124,45 @@ class UserProfile(models.Model):
 
     def is_subscribed(self, comic):
         return self.user.subscription_set.filter(comic__id=comic.id).count() == 1
+
+    def subscribe_comic(self, comic):
+        if self.is_subscribed(comic):
+            return
+        # Calculate the position for the comic, it'll be the last
+        max_position = self.user.subscription_set.aggregate(pos=Max('position'))['pos']
+        if not max_position:
+            # max_position can be None if there are no comics
+            max_position = 0
+        next_pos = max_position + 1
+        self.user.subscription_set.create(comic=comic, position=next_pos)
+        # Add the last strip to the user's unread list
+        history = ComicHistory.objects.filter(comic=comic)
+        if history:
+            logger.debug("Found a strip to add")
+            UnreadComic.objects.create(user=self.user, comic=comic, history=history[0])
+        else:
+            logger.debug("Did not add any strip to the user")
+
+    def subscribe_comics(self, id_list):
+        new_comics = Comic.objects.in_bulk(id_list)
+        for comic in new_comics.values():
+            self.subscribe_comic(comic)
+
+    def unsubscribe_comic(self, comic):
+        s = self.user.subscription_set.filter(comic=comic)
+        if s:
+            logger.debug("Removing subscription")
+            s.delete()
+            self.user.unreadcomic_set.filter(comic=comic).delete()
+            self.user.newcomic_set.filter(comic=comic).delete()
+
+    def unsubscribe_comics(self, id_list):
+        sx = self.user.subscription_set.filter(comic__id__in=id_list)
+        if sx:
+            logger.debug("Removing subscriptions")
+            sx.delete()
+            self.user.unreadcomic_set.filter(comic__id__in=id_list).delete()
+            self.user.newcomic_set.filter(comic__id__in=id_list).delete()
 
 def create_account(sender, **kwargs):
     if kwargs['created']:
