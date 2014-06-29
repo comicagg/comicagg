@@ -180,11 +180,11 @@ LOGGING = {
             'propagate': False,
         },
         'comicagg': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file'],
             'level': 'DEBUG'
         },
         'provider': {
-            'handlers': ['file', 'console'],
+            'handlers': ['file'],
             'level': 'DEBUG'
         },
     }
