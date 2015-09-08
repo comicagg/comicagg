@@ -37,23 +37,31 @@ def write_required(f):
 # Forms
 
 class VoteForm(forms.Form):
+    """
+    Form used to validate the input of the Vote for a comic
+    """
     def vote_validator(value):
+        """
+        A vote is only valid if it's -1 <= vote <= 1
+        """
         logger.debug("Vote validator: " + str(value))
         if value < -1 or value > 1:
             raise forms.ValidationError("Value not valid")
 
     vote = forms.IntegerField(validators=[vote_validator])
 
-# Views
+# Helper classes
 
 class HttpResponseUnauthorized(HttpResponse):
     status_code = 401
+
+# Views
 
 class APIView(View, FormMixin):
     """
     Base class for all API views.
     Handles the Accept header read by the middleware and chooses the content type to output.
-    Sets up the seralizer too.
+    Sets up the serializer too.
     """
     form_class = None
     content_type = "application/json; charset=utf-8"
@@ -107,6 +115,9 @@ class APIView(View, FormMixin):
         return self.render_response(body, response_class=klass)
 
 class IndexView(APIView):
+    """
+    Welcome view.
+    """
     def get(self, request, **kwargs):
         data = {
             'message': 'Hello %s.' % request.user.username,
@@ -116,6 +127,9 @@ class IndexView(APIView):
         return self.render_response(body)
 
 class ComicsView(APIView):
+    """
+    Handles Comic related stuff. Get information about all the comics available in the service.
+    """
     def get(self, request, **kwargs):
         if "comicid" in kwargs.keys():
             comicid = kwargs["comicid"]
@@ -162,6 +176,9 @@ class ComicsView(APIView):
         return HttpResponse(status=204, content_type=self.content_type)
 
 class SubscriptionsView(APIView):
+    """
+    Handles comic subscriptions. Add, modify or remove subscriptions to comics.
+    """
     def get(self, request, **kwargs):
         subs = request.user.get_profile().all_comics()
         body = self.serialize(subs, last_strip=True, identifier='subscriptions')
@@ -262,6 +279,9 @@ class SubscriptionsView(APIView):
         return HttpResponse(status=204, content_type=self.content_type)
 
 class UnreadsView(APIView):
+    """
+    Handles a user's unread comics. Mark comics as read or unread.
+    """
     form_class = VoteForm
 
     def get(self, request, **kwargs):
@@ -344,6 +364,9 @@ class UnreadsView(APIView):
 
 
 class StripsView(APIView):
+    """
+    Handles information about a comic strip.
+    """
     def get(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
         stripid = context['stripid']
@@ -381,6 +404,9 @@ class StripsView(APIView):
         return HttpResponse(status=204, content_type=self.content_type)
 
 class UserView(APIView):
+    """
+    Handles some user information.
+    """
     def get(self, request, **kwargs):
         body = self.serialize()
         return self.render_response(body)
