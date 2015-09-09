@@ -3,7 +3,7 @@ from comicagg.api.serializer import Serializer
 from comicagg.logs import logmsg
 from django import forms
 from django.contrib.auth.models import AnonymousUser
-from django.db import connection
+from django.db import connection, transaction
 from django.db.models import Max
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound
 from django.shortcuts import get_object_or_404
@@ -200,6 +200,9 @@ class SubscriptionsView(APIView):
     Handles comic subscriptions. Add, modify or remove subscriptions to comics.
     """
     def get(self, request, **kwargs):
+        """
+        Returns all the comics the user is following. Includes the last strip fetched.
+        """
         subs = request.user.get_profile().all_comics()
         body = self.serialize(subs, last_strip=True, identifier='subscriptions')
         return self.render_response(body)
@@ -207,7 +210,47 @@ class SubscriptionsView(APIView):
     @write_required
     def post(self, request, **kwargs):
         """
-        If the user is currently subscribed to a inactive/broken comic after executing this, that broken comic will be unsubscribed.
+        Subscribe to several comics.
+        The comics will be added at the end of the list of subscriptions.
+        """
+        if not request.processed_body:
+            return self.error("BadRequest", "The request body is not valid")
+
+        # Build the list of IDs
+        body = request.processed_body
+        id_list = list()
+        if type(body) == ET.Element:
+            # this is a XML request
+            if 'subscribe' != body.tag:
+                return self.error("BadRequest", "The request XML body is not valid")
+            try:
+                for comic_id in body.findall('id'):
+                    id_list.append(int(comic_id.text))
+            except:
+                return self.error("BadRequest", "Invalid comic ID list")
+        else:
+            # this should be a JSON request
+            if 'subscribe' not in body.keys():
+                return self.error("BadRequest", "The request JSON body is not valid")
+            try:
+                id_list = [int(x) for x in body['subscribe']]
+            except:
+                return self.error("BadRequest", "Invalid comic ID list")
+
+        # Remove possible duplicates
+        id_list_clean = []
+        [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
+        request.user.get_profile().subscribe_comics(id_list_clean)
+        return HttpResponse(status=204, content_type=self.content_type)
+
+    @write_required
+    @transaction.atomic
+    def put(self, request, **kwargs):
+        """
+        Modify the order of the subscribed comics.
+        All the subscriptions will be ordered following the order of the IDs given in the body.
+
+        Subscription/unsubscription operations should be done with this method.
         """
         if not request.processed_body:
             return self.error("BadRequest", "The request body is not valid")
@@ -232,68 +275,54 @@ class SubscriptionsView(APIView):
             except:
                 return self.error("BadRequest", "Invalid comic ID list")
 
+        # Start atomic operation
+        # TODO Test the atomic operation!
+
+        # 1. Remove possible duplicates from the input
+        # These are all the comics the user wants to follow and in this order
         id_list_clean = []
         [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
 
-        # Now process the comic id list
+        # 2. Get the comics the user is currently following
         current_active_idx = [c.id for c in request.user.get_profile().all_comics()]
-        # find deleted
+
+        # 3. Find comics to be removed
         deleted_idx = [x for x in current_active_idx if not x in id_list_clean]
         request.user.get_profile().unsubscribe_comics(deleted_idx)
-        # unsubscribe deleted
-        # find added
+
+        # 4. Find comics to be added
         added_idx = [x for x in id_list_clean if not x in current_active_idx]
         request.user.get_profile().subscribe_comics(added_idx)
-        # subscribe added
-        # reorder
+
+        # 5. Update the position of the subcriptions
         current_all = request.user.subscription_set.all()
-        current_all_d = dict([(s.comic.id, s) for s in current_all])
+        current_all_dict = dict([(s.comic.id, s) for s in current_all])
 
         if len(current_all) < id_list_clean:
             # This should never happen, something must have gone wrong
             HttpResponse(status=500, content_type=self.content_type)
 
         position = 0
-        for cid in id_list_clean:
-            s = current_all_d[cid]
+        for comic_id in id_list_clean:
+            s = current_all_dict[comic_id]
             s.position = position
             s.save()
             position += 1
 
-        return HttpResponse(status=204, content_type=self.content_type)
+        # End atomic operation
 
-    @write_required
-    def put(self, request, **kwargs):
-        if not request.processed_body:
-            return self.error("BadRequest", "The request body is not valid")
-
-        body = request.processed_body
-        id_list = list()
-        if type(body) == ET.Element:
-            # this is a XML request
-            if 'subscribe' != body.tag:
-                return self.error("BadRequest", "The request XML body is not valid")
-            try:
-                for comicid in body.findall('comicid'):
-                    id_list.append(int(comicid.text))
-            except:
-                return self.error("BadRequest", "Invalid comic ID list")
-        else:
-            # this should be a JSON request
-            if 'subscribe' not in body.keys():
-                return self.error("BadRequest", "The request JSON body is not valid")
-            try:
-                id_list = [int(x) for x in body['subscribe']]
-            except:
-                return self.error("BadRequest", "Invalid comic ID list")
-
-        id_list_clean = []
-        [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
-        request.user.get_profile().subscribe_comics(id_list_clean)
         return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
+        """
+        Remove all the subscriptions.
+        Returns a list with the IDs of the comics the user used to follow.
+        """
+        # TODO List of the IDs of the comics the user used to follow.
+        # TODO Change the serializer to allow to return a list of integers
+        # current_active_idx = [c.id for c in request.user.get_profile().all_comics()]
+
         request.user.subscription_set.all().delete()
         request.user.unreadcomic_set.all().delete()
         return HttpResponse(status=204, content_type=self.content_type)
