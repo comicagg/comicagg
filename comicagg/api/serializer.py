@@ -6,6 +6,8 @@ class Serializer:
     """
     This class is used to serialize the data that has to be sent in the response to the API.
     Handles the output format, either JSON or XML, being JSON the default one.
+
+    It works by building dictionaries and lists with the data and then convert these to JSON or XML.
     """
     def __init__(self, user=None, xml=False):
         """
@@ -14,21 +16,26 @@ class Serializer:
         self.user = user
         self.prefer_xml = xml
 
-    def serialize(self, what=None, last_strip=False, unread_strips=False, identifier=None):
+    def serialize(self, object_to_serialize=None, last_strip=False, unread_strips=False, identifier=None):
         """
         Pass an instance of Comic, ComicHistory, a list of Comic instances or a dictionary to get a serialized version.
-        If what is a list or a dict, then identifier will be used as the container name.
+        If object_to_serialize is a list or a dict, then identifier will be used as the container name.
         """
         d = dict()
-        if type(what) is Comic:
-            d["comic"] = self.build_comic_dict(what, last_strip, unread_strips)
-        elif type(what) is ComicHistory:
-            d["strip"] = self.build_comichistory_dict(what)
-        elif type(what) is list and identifier:
-            d[identifier] = [self.build_comic_dict(x, last_strip, unread_strips) for x in what]
-        elif type(what) is dict and identifier:
-            d[identifier] = what
-        elif not what and self.user:
+        # Serialize a Comic object
+        if type(object_to_serialize) is Comic:
+            d["comic"] = self.build_comic_dict(object_to_serialize, last_strip, unread_strips)
+        # Serialize a ComicHistory object (strip)
+        elif type(object_to_serialize) is ComicHistory:
+            d["strip"] = self.build_comichistory_dict(object_to_serialize)
+        # Serialize a list of Comic objects using identifier as the parent element
+        elif type(object_to_serialize) is list and identifier:
+            d[identifier] = [self.build_comic_dict(x, last_strip, unread_strips) for x in object_to_serialize]
+        # Serialize a dictionary of objects using identifier as the parent element
+        elif type(object_to_serialize) is dict and identifier:
+            d[identifier] = object_to_serialize
+        # Serialize the current user information if there is no object_to_serialize
+        elif not object_to_serialize and self.user:
             d["user"] = self.build_user_dict()
         else:
             raise ValueError("Object to serialize is not valid. Are you missing a parameter (identifier)?")
@@ -90,7 +97,7 @@ def build_xml(what):
     what should be a dictionary with only one key which will be the root element
     """
     if len(what.keys()) != 1:
-        raise ValueError
+        raise ValueError("The base Dictionary can only contain one item")
     out = '<?xml version="1.0" encoding="UTF-8" ?>\r\n'
     for k,v in what.items():
         out += build_xml_element(k, v)
@@ -98,22 +105,20 @@ def build_xml(what):
 
 def build_xml_element(name, value):
     """
-    First, we need to check if the value is a dict or a list
-    If value is dict, then parse all values
-    If any value is a dict or list, then this element will need opening and closing tags
-    While parsing the values, build a dict with the values that are scalar as they'll be attributes
-    In the end, write the string
-    If the value passed is a list, then we need just to create opening and closing tags using name and recurse
+    Builds a XML element whose tag is name and the content is value. Value will be parsed to XML accordingly.
     """
+    # If the value passed is a list, then we need just to create opening and closing tags using name and recurse
     if type(value) is list:
         out = "<%s>%s</%s>" % (
             name,
             ''.join([build_xml_element(None, x) for x in value]),
             name)
+    # If value is dict, then parse all values
     else:
         attx = dict()
         child = None
         for k,v in value.items():
+            # If any value is a dict or list, then this element will need opening and closing tags
             if type(v) is dict:
                 child = build_xml_element(v["__class"], v)
             elif type(v) is list:
@@ -121,6 +126,7 @@ def build_xml_element(name, value):
                 # child = ''.join([build_xml_element(None, x) for x in v])
                 child = build_xml_element(k, v)
             else:
+                # While parsing the values, build a dict with the values that are scalar as they'll be attributes
                 attx[k] = v
 
         tag = name if name else attx["__class"]
