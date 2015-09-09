@@ -5,9 +5,9 @@ from django.views.decorators.csrf import csrf_exempt
 urlpatterns = patterns('comicagg.api.views',
     url(r'^$', csrf_exempt(IndexView.as_view()), name='index'),
 
-    url(r'^comic/$', csrf_exempt(ComicsView.as_view()), name='comics'),
-    url(r'^comic/withlast/$', csrf_exempt(ComicsView.as_view()), {'with_last':True}, name='comics_with_last'),
-    url(r'^comic/(?P<comicid>\d+)/$', csrf_exempt(ComicsView.as_view()), name='comicinfo'),
+    url(r'^comics/simple$', csrf_exempt(ComicsView.as_view()), {'simple':True}, name='comics_simple'),
+    url(r'^comics$', csrf_exempt(ComicsView.as_view()), name='comics'),
+    url(r'^comics/(?P<comic_id>\d+)$', csrf_exempt(ComicsView.as_view()), name='comic_info'),
 
     url(r'^strip/(?P<stripid>\d+)/$', csrf_exempt(StripsView.as_view()), name='strips'),
 

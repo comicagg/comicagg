@@ -131,49 +131,20 @@ class ComicsView(APIView):
     Handles comic related stuff. Get information about all the comics available in the service.
     """
     def get(self, request, **kwargs):
-        if "comicid" in kwargs.keys():
-            comicid = kwargs["comicid"]
+        """
+        Get information about a comic or all the comics. May or may not return the last strip fetched of the comics.
+        """
+        if "comic_id" in kwargs.keys():
+            comic_id = kwargs["comic_id"]
             try:
-                data = Comic.objects.get(pk=comicid)
+                data = Comic.objects.get(pk=comic_id)
             except:
                 return self.error("NotFound", "The comic does not exist", HttpResponseNotFound)
             body = self.serialize(data, last_strip=True)
         else:
-            last_strip = "with_last" in kwargs.keys()
-            body = self.serialize(list(active_comics()), last_strip=last_strip, identifier="comics")
+            simple = "simple" in kwargs.keys()
+            body = self.serialize(list(active_comics()), last_strip=(not simple), identifier="comics")
         return self.render_response(body)
-
-    @write_required
-    def put(self, request, **kwargs):
-        context = self.get_context_data(**kwargs)
-
-        if not 'comicid' in context.keys():
-            return HttpResponseNotAllowed(['GET'])
-
-        comicid = context["comicid"]
-        try:
-            comic = Comic.objects.get(pk=comicid)
-        except:
-            return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
-
-        request.user.get_profile().subscribe_comic(comic)
-        return HttpResponse(status=204, content_type=self.content_type)
-
-    @write_required
-    def delete(self, request, **kwargs):
-        context = self.get_context_data(**kwargs)
-
-        if not 'comicid' in context.keys():
-            return HttpResponseNotAllowed(['GET'])
-
-        comicid = context["comicid"]
-        try:
-            comic = Comic.objects.get(pk=comicid)
-        except:
-            return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
-
-        request.user.get_profile().unsubscribe_comic(comic)
-        return HttpResponse(status=204, content_type=self.content_type)
 
 class SubscriptionsView(APIView):
     """
