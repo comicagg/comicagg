@@ -146,6 +146,55 @@ class ComicsView(APIView):
             body = self.serialize(list(active_comics()), last_strip=(not simple), identifier="comics")
         return self.render_response(body)
 
+class StripsView(APIView):
+    """
+    Handles information about a comic strip.
+    """
+    def get(self, request, **kwargs):
+        """
+        Get information about a certain strip.
+        """
+        context = self.get_context_data(**kwargs)
+        strip_id = context['strip_id']
+        try:
+            strip = ComicHistory.objects.get(pk=strip_id)
+        except:
+            return self.error("NotFound", "That strip does not exist", HttpResponseNotFound)
+        body = self.serialize(strip)
+        return self.render_response(body)
+
+    @write_required
+    def put(self, request, **kwargs):
+        """
+        Mark this strip as unread for the user doing the request.
+        """
+        context = self.get_context_data(**kwargs)
+        strip_id = context['strip_id']
+        try:
+            strip = ComicHistory.objects.get(pk=strip_id)
+        except:
+            return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
+        if not request.user.get_profile().is_subscribed(strip.comic):
+            return self.error("BadRequest", "You are not subscribed to this comic")
+        request.user.unreadcomic_set.create(user=request.user, comic=strip.comic, history=strip)
+        return HttpResponse(status=204, content_type=self.content_type)
+
+    @write_required
+    def delete(self, request, **kwargs):
+        """
+        Mark this strip as read for the user doing the request.
+        """
+        context = self.get_context_data(**kwargs)
+        strip_id = context['strip_id']
+        try:
+            strip = ComicHistory.objects.get(pk=strip_id)
+        except:
+            return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
+        if not request.user.get_profile().is_subscribed(strip.comic):
+            return self.error("BadRequest", "You are not subscribed to this comic")
+        request.user.unreadcomic_set.filter(history__id=strip_id).delete()
+        return HttpResponse(status=204, content_type=self.content_type)
+
 class SubscriptionsView(APIView):
     """
     Handles comic subscriptions. Add, modify or remove subscriptions to comics.
@@ -331,47 +380,6 @@ class UnreadsView(APIView):
             except:
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
             request.user.unreadcomic_set.filter(comic=comic).delete()
-        return HttpResponse(status=204, content_type=self.content_type)
-
-
-class StripsView(APIView):
-    """
-    Handles information about a comic strip.
-    """
-    def get(self, request, **kwargs):
-        context = self.get_context_data(**kwargs)
-        stripid = context['stripid']
-        try:
-            strip = ComicHistory.objects.get(pk=stripid)
-        except:
-            return self.error("NotFound", "That strip does not exist", HttpResponseNotFound)
-        body = self.serialize(strip)
-        return self.render_response(body)
-
-    @write_required
-    def put(self, request, **kwargs):
-        context = self.get_context_data(**kwargs)
-        stripid = context['stripid']
-        try:
-            strip = ComicHistory.objects.get(pk=stripid)
-        except:
-            return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
-        if not request.user.get_profile().is_subscribed(strip.comic):
-            return self.error("BadRequest", "You are not subscribed to this comic")
-        request.user.unreadcomic_set.create(user=request.user, comic=strip.comic, history=strip)
-        return HttpResponse(status=204, content_type=self.content_type)
-
-    @write_required
-    def delete(self, request, **kwargs):
-        context = self.get_context_data(**kwargs)
-        stripid = context['stripid']
-        try:
-            strip = ComicHistory.objects.get(pk=stripid)
-        except:
-            return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
-        if not request.user.get_profile().is_subscribed(strip.comic):
-            return self.error("BadRequest", "You are not subscribed to this comic")
-        request.user.unreadcomic_set.filter(history__id=stripid).delete()
         return HttpResponse(status=204, content_type=self.content_type)
 
 class UserView(APIView):
