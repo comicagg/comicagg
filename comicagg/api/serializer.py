@@ -3,6 +3,10 @@ from email import utils
 import json, time
 
 class Serializer:
+    """
+    This class is used to serialize the data that has to be sent in the response to the API.
+    Handles the output format, either JSON or XML, being JSON the default one.
+    """
     def __init__(self, user=None, xml=False):
         """
         xml determines if the output is XML or JSON. By defaul it's JSON.
@@ -37,7 +41,7 @@ class Serializer:
         if not type(comic) is Comic:
             raise ValueError("This is not a comic")
         if not self.user:
-            raise ValueError("To serialize a comic you need an user")
+            raise ValueError("To serialize a comic you need a user")
         out = dict()
         if self.prefer_xml:
             out["__class"] = "comic"
@@ -79,6 +83,8 @@ class Serializer:
         out["unreadcomics"] = len(self.user.get_profile().unread_comics())
         return out
 
+# Helper functions
+
 def build_xml(what):
     """
     what should be a dictionary with only one key which will be the root element
@@ -91,12 +97,14 @@ def build_xml(what):
     return out
 
 def build_xml_element(name, value):
-    # First, we need to check if the value is a dict or a list
-    # If value is dict, then parse all values
-    # If any value is a dict or list, then this element will need opening and closing tags
-    # While parsing the values, build a dict with the values that are scalar as they'll be attributes
-    # In the end, write the string
-    # If the value passed is a list, then we need just to create opening and closing tags using name and recurse
+    """
+    First, we need to check if the value is a dict or a list
+    If value is dict, then parse all values
+    If any value is a dict or list, then this element will need opening and closing tags
+    While parsing the values, build a dict with the values that are scalar as they'll be attributes
+    In the end, write the string
+    If the value passed is a list, then we need just to create opening and closing tags using name and recurse
+    """
     if type(value) is list:
         out = "<%s>%s</%s>" % (
             name,

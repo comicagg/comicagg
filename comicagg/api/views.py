@@ -128,7 +128,7 @@ class IndexView(APIView):
 
 class ComicsView(APIView):
     """
-    Handles Comic related stuff. Get information about all the comics available in the service.
+    Handles comic related stuff. Get information about all the comics available in the service.
     """
     def get(self, request, **kwargs):
         if "comicid" in kwargs.keys():
