@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.models import AnonymousUser
 from django.db import connection, transaction
 from django.db.models import Max
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseServerError
 from django.shortcuts import get_object_or_404
 from django.views.generic import View
 from django.views.generic.base import TemplateView
@@ -66,6 +66,8 @@ class APIView(View, FormMixin):
     form_class = None
     content_type = "application/json; charset=utf-8"
 
+    # FUTURE: Can we use JsonResponse from Django to render JSON instead?
+
     def dispatch(self, *args, **kwargs):
         request = args[0]
         logger.debug("API call: %s %s" % (request.method, request.path))
@@ -77,8 +79,12 @@ class APIView(View, FormMixin):
         self.serialize = self.serializer.serialize
         if not request.user.is_authenticated():
             return self.error("Unauthorized", "You need to log in to access this resource", HttpResponseUnauthorized)
-        # TODO: Should wrap this call with try/except and handle any unexpected error
-        return super(APIView, self).dispatch(*args, **kwargs)
+        response = None
+        try:
+            response = super(APIView, self).dispatch(*args, **kwargs)
+        except:
+            response = self.error("Server error", "Internal server error", HttpResponseServerError)
+        return response
 
     def render_response(self, body, response_class=HttpResponse):
         return response_class(body, self.content_type)
@@ -105,14 +111,14 @@ class APIView(View, FormMixin):
             context['form'] = self.get_form(form_class)
         return context
 
-    def error(self, name, description, klass=HttpResponseBadRequest):
+    def error(self, name, description, error_class=HttpResponseBadRequest):
         logger.debug("Returning an error (%s): %s" % (name, description))
         data = {
             "error": name,
             "description": description
             }
         body = self.serialize(data, identifier='error')
-        return self.render_response(body, response_class=klass)
+        return self.render_response(body, response_class=error_class)
 
 class IndexView(APIView):
     """
@@ -276,7 +282,7 @@ class SubscriptionsView(APIView):
                 return self.error("BadRequest", "Invalid comic ID list")
 
         # Start atomic operation
-        # TODO Test the atomic operation!
+        # TODO: Test the atomic operation!
 
         # 1. Remove possible duplicates from the input
         # These are all the comics the user wants to follow and in this order
@@ -319,8 +325,7 @@ class SubscriptionsView(APIView):
         Remove all the subscriptions.
         Returns a list with the IDs of the comics the user used to follow.
         """
-        # TODO List of the IDs of the comics the user used to follow.
-        # TODO Change the serializer to allow to return a list of integers
+        # TODO: List of the IDs of the comics the user used to follow.
         # current_active_idx = [c.id for c in request.user.get_profile().all_comics()]
 
         request.user.subscription_set.all().delete()

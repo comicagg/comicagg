@@ -21,6 +21,7 @@ class Serializer:
         Pass an instance of Comic, ComicHistory, a list of Comic instances or a dictionary to get a serialized version.
         If object_to_serialize is a list or a dict, then identifier will be used as the container name.
         """
+        # TODO: Change the serializer to allow to return a list of integers
         d = dict()
         # Serialize a Comic object
         if type(object_to_serialize) is Comic:
@@ -88,6 +89,7 @@ class Serializer:
         out["email"] = self.user.email
         out["totalcomics"] = len(self.user.get_profile().all_comics())
         out["unreadcomics"] = len(self.user.get_profile().unread_comics())
+        # TODO: Return also the number of new comics
         return out
 
 # Helper functions
@@ -122,7 +124,7 @@ def build_xml_element(name, value):
             if type(v) is dict:
                 child = build_xml_element(v["__class"], v)
             elif type(v) is list:
-                # Future: if lists should not be wrapped inside an element
+                # NOTE: If lists should not be wrapped inside an element
                 # child = ''.join([build_xml_element(None, x) for x in v])
                 child = build_xml_element(k, v)
             else:
