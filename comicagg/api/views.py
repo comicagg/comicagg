@@ -68,6 +68,7 @@ class APIView(View, FormMixin):
 
     # FUTURE: Can we use JsonResponse from Django to render JSON instead?
 
+    @transaction.atomic
     def dispatch(self, *args, **kwargs):
         request = args[0]
         logger.debug("API call: %s %s" % (request.method, request.path))
@@ -250,7 +251,6 @@ class SubscriptionsView(APIView):
         return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
-    @transaction.atomic
     def put(self, request, **kwargs):
         """
         Modify the order of the subscribed comics.
@@ -280,9 +280,6 @@ class SubscriptionsView(APIView):
                 id_list = [int(x) for x in body['subscriptions']]
             except:
                 return self.error("BadRequest", "Invalid comic ID list")
-
-        # Start atomic operation
-        # TODO: Test the atomic operation!
 
         # 1. Remove possible duplicates from the input
         # These are all the comics the user wants to follow and in this order
@@ -314,8 +311,6 @@ class SubscriptionsView(APIView):
             s.position = position
             s.save()
             position += 1
-
-        # End atomic operation
 
         return HttpResponse(status=204, content_type=self.content_type)
 
