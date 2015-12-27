@@ -30,9 +30,9 @@ def render(request, template, context, menu=None, xml=False, responseClass=HttpR
     context = RequestContext(request, context)
 
     resp_text = render_to_string(template, context)
-    response = responseClass(resp_text, mimetype=mime)
+    response = responseClass(resp_text, content_type=mime)
     if xml:
-        response = responseClass(resp_text, mimetype='text/xml; charset="utf-8"')
+        response = responseClass(resp_text, content_type='text/xml; charset="utf-8"')
     #ie no reconoce el mime que hay que usar para xhtml 1.1 :(
     #response = HttpResponse(resp_text, mimetype="application/xhtml+xml")
     #response['Cache-Control'] = 'no-cache'

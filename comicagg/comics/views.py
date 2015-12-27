@@ -13,7 +13,9 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 from hashlib import md5
-import os, random, urllib2
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
+import os, random
 
 ###################
 # Read page related
@@ -188,8 +190,8 @@ def download_image(url, ref, dest):
         'user-agent':settings.USER_AGENT
     }
     try:
-        r = urllib2.Request(url, None, headers)
-        o = urllib2.urlopen(r)
+        r = Request(url, None, headers)
+        o = urlopen(r)
         ct = o.info()['Content-Type']
         if ct.startswith("image/"):
             #we got an image, thats good
@@ -201,7 +203,7 @@ def download_image(url, ref, dest):
         else:
             #no image mime? not cool
             dest = None
-    except urllib2.HTTPError:
+    except HTTPError:
         dest = None
     return dest
 

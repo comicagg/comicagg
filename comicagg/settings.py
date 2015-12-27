@@ -93,7 +93,7 @@ MIDDLEWARE_CLASSES = (
     'comicagg.middleware.MaintenanceMiddleware',
     'comicagg.middleware.ActiveUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware', #
-    'django.middleware.doc.XViewMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',
     'comicagg.middleware.api.AcceptHeaderProcessingMiddleware',
     'comicagg.middleware.api.BodyProcessingMiddleware'
 )
@@ -146,7 +146,7 @@ LOGGING = {
     'handlers': {
         'null': {
             'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
+            'class':'logging.NullHandler',
         },
         'console': {
             'level':'DEBUG',
@@ -190,4 +190,4 @@ LOGGING = {
     }
 }
 
-from settings_local import *
+from comicagg.settings_local import *

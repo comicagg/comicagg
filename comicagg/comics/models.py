@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from comicagg.comics.fields import ComicNameField, AltTextField
 from datetime import datetime
 from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
-from fields import ComicNameField, AltTextField
+from django.utils.timezone import now as django_now
 from math import atan, sqrt
 
 
@@ -193,7 +194,7 @@ class Request(models.Model):
 
 class ComicHistory(models.Model):
     comic = models.ForeignKey(Comic)
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=django_now())
     url = models.CharField(max_length=255)
     alt_text = AltTextField('Texto alternativo', blank=True, null=True)
 

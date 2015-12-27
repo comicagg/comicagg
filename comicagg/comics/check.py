@@ -24,7 +24,7 @@ def custom_check(comic):
     history_set = list()
     f = comic.custom_func.replace('\r', '')
     code = compile(f, '<string>', 'exec')
-    exec code
+    exec(code)
     #si se han encontrado imagenes
     if history_set:
         #comprobar si son nuevas
@@ -41,7 +41,7 @@ def custom_check(comic):
             notify_subscribers(h)
         return True
     #no se ha encontrado ninguna imagen, lanzar excepcion
-    raise NoMatchException, "%s" % comic.name
+    raise NoMatchException("%s" % comic.name)
 
 def default_check(comic):
     #si hay redireccion, obtener url de la redireccion
@@ -120,7 +120,7 @@ def getoneurl(comic, _url):
     lineas_o = list(lineas)
     (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
     if not match:
-        raise NoMatchException, "%s" % comic.name
+        raise NoMatchException("%s" % comic.name)
     url = comic.base_img % geturl(match)#.decode("utf-8")
     #coger el texto alternativo
     alt = getalt(match)
@@ -132,7 +132,7 @@ def getredirect(comic):
     lineas_o = list(lineas)
     (match, lineas) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
     if not match:
-        raise NoMatchException, "%s" % comic.name
+        raise NoMatchException("%s" % comic.name)
     next_url = comic.base2 % geturl(match)#.decode("utf-8")
     return next_url
 

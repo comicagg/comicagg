@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import redirect
 from django.template import Context, loader

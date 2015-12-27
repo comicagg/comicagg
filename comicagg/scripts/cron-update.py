@@ -6,9 +6,9 @@ actualiza los comics
 import os, sys, threading, time
 from traceback import *
 from datetime import datetime
-d=os.path.dirname(os.path.abspath(sys.argv[0]))
-d=os.path.join(d, '..')
-d=os.path.abspath(d)
+d = os.path.dirname(os.path.abspath(sys.argv[0]))
+d = os.path.join(d, '..')
+d = os.path.abspath(d)
 sys.path.insert(0, d)
 
 from scripts import is_running, not_running_anymore
@@ -54,7 +54,7 @@ class CheckThread(threading.Thread):
 			try:
 				changed = check_comic(comic)
 			except KeyboardInterrupt:
-				print '*** Matado %s ***' % datetime.now()
+				print ('*** Matado %s ***' % datetime.now())
 				sys.exit()
 			except NoMatchException:
 				s = '   Error comprobando %s\n' % comic.name
@@ -88,11 +88,11 @@ class CheckThread(threading.Thread):
 			comic = self.next()
 
 	def next(self):
-		print "%s: %d left, %d errors" % (self.getName(), len(self.all), errors)
+		print("%s: %d left, %d errors" % (self.getName(), len(self.all), errors))
 		if len(self.all):
 			return self.all.pop(0)
 
-print '\n*** Ejecución de cronjob.py (%s) ***' % datetime.now()
+print('\n*** Ejecución de cronjob.py (%s) ***' % datetime.now())
 
 salida = "Hora comienzo: %s\n" % datetime.now()
 thread_list = list()
@@ -131,8 +131,8 @@ salida += "Hora fin: %s\n" % datetime.now()
 try:
 	mail_managers('Salida de cron', salida)
 except:
-	print "Got error sending email"
+	print("Got error sending email")
 	print_exc()
 	
-print salida.encode("utf-8")
+print(salida.encode("utf-8"))
 not_running_anymore()

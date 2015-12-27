@@ -5,10 +5,11 @@ Borra unreadcomics de comics a los que no se esta suscrito
 """
 import os, sys, time
 from datetime import datetime
-d=os.path.dirname(os.path.abspath(sys.argv[0]))
-d=os.path.join(d, '..')
-d=os.path.abspath(d)
+d = os.path.dirname(os.path.abspath(sys.argv[0]))
+d = os.path.join(d, '..')
+d = os.path.abspath(d)
 sys.path.insert(0, d)
+
 import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
@@ -25,9 +26,9 @@ else:
 for user in allusers:
 	now = datetime.now()-starttime
 	if now.seconds > 3000:
-		print "FIN: id=", user.id
+		print("FIN: id=" + user.id)
 		sys.exit()
-	print user
+	print(user)
 	subs = user.subscription_set.all()
 	comics = []
 	for sub in subs:
