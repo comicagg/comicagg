@@ -13,9 +13,9 @@ urlpatterns = patterns('comicagg.api.views',
 
     url(r'^subscriptions$', csrf_exempt(SubscriptionsView.as_view()), name='subscriptions'),
 
-    url(r'^unread/$', csrf_exempt(UnreadsView.as_view()), name='unread'),
-    url(r'^unread/withstrips/$', csrf_exempt(UnreadsView.as_view()), {'withstrips':True}, name='unreadswithstrips'),
-    url(r'^unread/(?P<comicid>\d+)/$', csrf_exempt(UnreadsView.as_view()), {'withstrips':True}, name='unreadsforacomic'),
+    url(r'^unreads/simple$', csrf_exempt(UnreadsView.as_view()), name='unreads'),
+    url(r'^unreads$', csrf_exempt(UnreadsView.as_view()), {'with_strips':True}, name='unreads_with_strips'),
+    url(r'^unreads/(?P<comic_id>\d+)$', csrf_exempt(UnreadsView.as_view()), {'with_strips':True}, name='unreads_for_a_comic'),
 
     url(r'^user$', csrf_exempt(UserView.as_view()), name='user_info'),
 )

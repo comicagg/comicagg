@@ -34,6 +34,9 @@ def write_required(f):
             return view.error("Forbidden", "This access token does not have enough permissions", HttpResponseForbidden)
     return wrapper
 
+# FUTURE: decorator to force a certain query string parameter
+# FUTURE: decorator to automatically parse a query string parameter in a class field
+
 # Forms
 
 class VoteForm(forms.Form):
@@ -321,6 +324,7 @@ class SubscriptionsView(APIView):
         Returns a list with the IDs of the comics the user used to follow.
         """
         # TODO: List of the IDs of the comics the user used to follow.
+        # Needs the serializer to be able to render a list of integers
         # current_active_idx = [c.id for c in request.user.get_profile().all_comics()]
 
         request.user.subscription_set.all().delete()
@@ -336,19 +340,19 @@ class UnreadsView(APIView):
     def get(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
 
-        if 'comicid' in context.keys():
-            comicid = context["comicid"]
+        if 'comic_id' in context.keys():
+            comic_id = context["comic_id"]
             try:
-                comic = Comic.objects.get(pk=comicid)
+                comic = Comic.objects.get(pk=comic_id)
             except:
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
-            if request.user.subscription_set.filter(comic__id=comicid).count():
+            if request.user.get_profile().is_subscribed(comic):
                 body = self.serialize(comic, unread_strips=True)
             else:
                 return self.error("BadRequest", "You are not subscribed to this comic")
         else:
-            last_strip = 'withstrips' in context.keys()
+            last_strip = 'with_strips' in context.keys()
             unreads = request.user.get_profile().unread_comics()
             body = self.serialize(unreads, last_strip=last_strip, identifier='unreads')
 
@@ -359,7 +363,30 @@ class UnreadsView(APIView):
         context = self.get_context_data(**kwargs)
 
         # Do not allow POST if there is not comic id
-        if not 'comicid' in context.keys():
+        if not 'comic_id' in context.keys():
+            return HttpResponseNotAllowed(['GET'])
+
+        comic_id = context["comic_id"]
+        try:
+            comic = Comic.objects.get(pk=comic_id)
+        except:
+            return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
+
+        if request.user.get_profile().is_subscribed(comic):
+            ok = request.user.get_profile().mark_comic_unread(comic)
+            if not ok:
+                return self.error("ServerError", "There was an error setting this comic as unread")
+        else:
+            return self.error("BadRequest", "You are not subscribed to this comic")
+
+        return HttpResponse(status=204, content_type=self.content_type)
+
+    @write_required
+    def put(self, request, **kwargs):
+        context = self.get_context_data(**kwargs)
+
+        # Do not allow PUT if there is not comic id
+        if not 'comic_id' in context.keys():
             return HttpResponseNotAllowed(['GET'])
 
         form = context["form"]
@@ -368,42 +395,42 @@ class UnreadsView(APIView):
             return self.error("BadRequest", "Invalid vote parameter")
 
         vote = form.cleaned_data["vote"]
-        comicid = context["comicid"]
+        comic_id = context["comic_id"]
         try:
-            comic = Comic.objects.get(pk=comicid)
+            comic = Comic.objects.get(pk=comic_id)
         except:
             return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
-        s = request.user.subscription_set.filter(comic=comic)
-        if s.count() == 0:
+        if not request.user.get_profile().is_subscribed(comic):
             return self.error("BadRequest", "You are not subscribed to this comic")
 
-        if request.user.unreadcomic_set.filter(comic=comic).count():
-            if vote == -1:
-                votes = 1
-                value = 0
-            elif vote == 0:
-                votes = 0
-                value = 0
-            else:
-                votes = 1
-                value = 1
-            comic.votes += votes
-            comic.rating += value
-            comic.save()
-            # Mark all unreads as read
-            request.user.unreadcomic_set.filter(comic=comic).delete()
+        # At this point we have confirmed that the comic exists and that the user is subscribed
+        # FUTURE: do the voting in the comic model/use profile and not here
+        if vote == -1:
+            votes = 1
+            value = 0
+        elif vote == 0:
+            votes = 0
+            value = 0
+        else:
+            votes = 1
+            value = 1
+        comic.votes += votes
+        comic.rating += value
+        comic.save()
+        # Mark all unreads as read
+        request.user.unreadcomic_set.filter(comic=comic).delete()
         return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
-        if not 'comicid' in context.keys():
+        if not 'comic_id' in context.keys():
             # Mark all comics as read
             request.user.unreadcomic_set.all().delete()
         else:
             # Mark just the one comic
-            comicid = context['comicid']
+            comic_id = context['comic_id']
             try:
                 comic = Comic.objects.get(pk=comicid)
             except:
