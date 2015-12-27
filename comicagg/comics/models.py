@@ -141,6 +141,9 @@ class Comic(models.Model):
             url = reverse('comics:last_image_url', kwargs={'cid':self.id})
         return url
 
+    def last_strip(self):
+        return self.comichistory_set.all()[0]
+
     # User related methods
 
     def is_new_for(self, user):
