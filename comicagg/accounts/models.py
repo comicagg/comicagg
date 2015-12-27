@@ -45,10 +45,9 @@ class UserProfile(models.Model):
 
     # Shortcut methods
 
-    # A comic can be:
-    # A active, E ended
-    #   A T F
-    # E
+    # Comics can be: A active, E ended
+    #
+    # E/A T F
     # T   - 2
     # F   1 3
     # 1. Active AND not Ended - all ok, ongoing
@@ -62,6 +61,8 @@ class UserProfile(models.Model):
         """
         subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
         return [s.comic for s in subscriptions]
+
+    # Unread comics
 
     def unread_comics(self):
         """
@@ -97,6 +98,17 @@ class UserProfile(models.Model):
         unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).filter(comic__id=comic.id)
         return [u.history for u in unreads]
 
+    def mark_comic_unread(self, comic):
+        """
+        Sets this comic as unread. Adds the last strip as unread for this user
+        """
+        if (self.user.is_subscribed(comic)):
+            strip = comic.last()
+            if (strip):
+                self.user.unreadcomic_set.create(user=self.user, comic=comic, history=strip)  
+                return True      
+        return False
+
     def unread_comic_strips_count(self, comic):
         """
         For a certain comic, how many unread strips does this user have?
@@ -108,6 +120,8 @@ class UserProfile(models.Model):
         Total number of unread strips
         """
         return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).count()
+
+    # Subscribed comics
 
     def random_comic(self):
         comic_ids = [comic.id for comic in self.all_comics()]
