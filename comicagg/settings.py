@@ -87,11 +87,16 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware', #
     'django.middleware.csrf.CsrfViewMiddleware', #
     'django.middleware.locale.LocaleMiddleware',
+
+    # Authentication middleware
     'django.contrib.auth.middleware.AuthenticationMiddleware', #
-#    'comicagg.middleware.UserBasedExceptionMiddleware',
     'comicagg.middleware.api.OAuth2Middleware',
-    'comicagg.middleware.MaintenanceMiddleware',
+
+    # Post authentication middleware
+    'comicagg.middleware.UserProfileMiddleware',
+#    'comicagg.middleware.UserBasedExceptionMiddleware',
     'comicagg.middleware.ActiveUserMiddleware',
+    'comicagg.middleware.MaintenanceMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware', #
     'django.contrib.admindocs.middleware.XViewMiddleware',
     'comicagg.middleware.api.AcceptHeaderProcessingMiddleware',
@@ -119,8 +124,6 @@ INSTALLED_APPS = (
 )
 
 SITE_NAME = 'Comic Aggregator'
-
-AUTH_PROFILE_MODULE = "accounts.userprofile"
 
 TAG_CLOUD_NUMBER = 1
 

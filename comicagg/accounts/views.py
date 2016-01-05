@@ -211,7 +211,7 @@ def save_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():
-            p = request.user.get_profile()
+            p = request.user_profile
             p.hide_read = form.cleaned_data['hide_read']
 #            p.sort_by_points = form.cleaned_data['sort_by_points']
             p.alert_new_comics = form.cleaned_data['alert_new_comics']
@@ -232,7 +232,7 @@ def save_color(request):
         except:
             new_color = None
         if new_color:
-            p = request.user.get_profile()
+            p = request.user_profile
             p.css_color = new_color
             p.save()
             return HttpResponse('0')

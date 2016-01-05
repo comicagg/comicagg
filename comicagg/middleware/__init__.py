@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from comicagg import render
+from comicagg.accounts.utils import get_profile
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.debug import technical_500_response
@@ -27,22 +28,30 @@ class MaintenanceMiddleware(object):
                 return render(request, "maintenance.html", {})
         return None
 
-class ActiveUserMiddleware(object):
+class UserProfileMiddleware(object):
+    """
+    Adds the field user_profile to the Request object with the UserProfile of the user.
+    """
     def process_request(self, request):
-        try:
-            user = request.user
-        except:
-            user = None
-        if user.is_authenticated():
+        if request.user.is_authenticated():
+            request.user_profile = get_profile(request.user)
+
+class ActiveUserMiddleware(object):
+    """
+    Updates the user's profile last access time.
+    Checks if the user is active or not and redirects to the reactivate page.
+    """
+    def process_request(self, request):
+        if request.user.is_authenticated():
             # Update the user's profile last access time
             # We do it here so all requests can be traced (api, web, etc)
-            profile = request.user.get_profile()
-            profile.last_read_access = datetime.datetime.now()
-            profile.save()
+            request.user_profile.last_read_access = datetime.datetime.now()
+            request.user_profile.save()
 
             # Check if the user is active or not and redirect to the reactivate page.
-            if not user.is_active:
+            if not request.user.is_active:
                 try:
                     request.POST['activate']
                 except:
                     return render(request, "accounts/activate.html", {})
+

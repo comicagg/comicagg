@@ -72,7 +72,8 @@ class Comic(models.Model):
         if notify:
             users = User.objects.all()
             for user in users:
-                up = user.get_profile()
+                # Can't use get_profile here because it'd create an infinite import loop
+                up = UserProfile.objects.get(user=user)
                 #por cada usuario poner el campo del perfil new_comics a True
                 if up.alert_new_comics:
                     up.new_comics = True;

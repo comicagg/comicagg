@@ -184,7 +184,7 @@ class StripsView(APIView):
             strip = ComicHistory.objects.get(pk=strip_id)
         except:
             return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
-        if not request.user.get_profile().is_subscribed(strip.comic):
+        if not request.user_profile.is_subscribed(strip.comic):
             return self.error("BadRequest", "You are not subscribed to this comic")
         request.user.unreadcomic_set.create(user=request.user, comic=strip.comic, history=strip)
         return HttpResponse(status=204, content_type=self.content_type)
@@ -200,7 +200,7 @@ class StripsView(APIView):
             strip = ComicHistory.objects.get(pk=strip_id)
         except:
             return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
-        if not request.user.get_profile().is_subscribed(strip.comic):
+        if not request.user_profile.is_subscribed(strip.comic):
             return self.error("BadRequest", "You are not subscribed to this comic")
         request.user.unreadcomic_set.filter(history__id=strip_id).delete()
         return HttpResponse(status=204, content_type=self.content_type)
@@ -213,7 +213,7 @@ class SubscriptionsView(APIView):
         """
         Returns all the comics the user is following. Includes the last strip fetched.
         """
-        subs = request.user.get_profile().all_comics()
+        subs = request.user_profile.all_comics()
         body = self.serialize(subs, last_strip=True, identifier='subscriptions')
         return self.render_response(body)
 
@@ -250,7 +250,7 @@ class SubscriptionsView(APIView):
         # Remove possible duplicates
         id_list_clean = []
         [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
-        request.user.get_profile().subscribe_comics(id_list_clean)
+        request.user_profile.subscribe_comics(id_list_clean)
         return HttpResponse(status=204, content_type=self.content_type)
 
     @write_required
@@ -290,15 +290,15 @@ class SubscriptionsView(APIView):
         [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
 
         # 2. Get the comics the user is currently following
-        current_active_idx = [c.id for c in request.user.get_profile().all_comics()]
+        current_active_idx = [c.id for c in request.user_profile.all_comics()]
 
         # 3. Find comics to be removed
         deleted_idx = [x for x in current_active_idx if not x in id_list_clean]
-        request.user.get_profile().unsubscribe_comics(deleted_idx)
+        request.user_profile.unsubscribe_comics(deleted_idx)
 
         # 4. Find comics to be added
         added_idx = [x for x in id_list_clean if not x in current_active_idx]
-        request.user.get_profile().subscribe_comics(added_idx)
+        request.user_profile.subscribe_comics(added_idx)
 
         # 5. Update the position of the subcriptions
         current_all = request.user.subscription_set.all()
@@ -325,7 +325,7 @@ class SubscriptionsView(APIView):
         """
         # TODO: List of the IDs of the comics the user used to follow.
         # Needs the serializer to be able to render a list of integers
-        # current_active_idx = [c.id for c in request.user.get_profile().all_comics()]
+        # current_active_idx = [c.id for c in request.user_profile.all_comics()]
 
         request.user.subscription_set.all().delete()
         request.user.unreadcomic_set.all().delete()
@@ -347,13 +347,13 @@ class UnreadsView(APIView):
             except:
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
-            if request.user.get_profile().is_subscribed(comic):
+            if request.user_profile.is_subscribed(comic):
                 body = self.serialize(comic, unread_strips=True)
             else:
                 return self.error("BadRequest", "You are not subscribed to this comic")
         else:
             last_strip = 'with_strips' in context.keys()
-            unreads = request.user.get_profile().unread_comics()
+            unreads = request.user_profile.unread_comics()
             body = self.serialize(unreads, last_strip=last_strip, identifier='unreads')
 
         return self.render_response(body)
@@ -372,8 +372,8 @@ class UnreadsView(APIView):
         except:
             return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
-        if request.user.get_profile().is_subscribed(comic):
-            ok = request.user.get_profile().mark_comic_unread(comic)
+        if request.user_profile.is_subscribed(comic):
+            ok = request.user_profile.mark_comic_unread(comic)
             if not ok:
                 return self.error("ServerError", "There was an error setting this comic as unread")
         else:
@@ -401,7 +401,7 @@ class UnreadsView(APIView):
         except:
             return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
-        if not request.user.get_profile().is_subscribed(comic):
+        if not request.user_profile.is_subscribed(comic):
             return self.error("BadRequest", "You are not subscribed to this comic")
 
         # At this point we have confirmed that the comic exists and that the user is subscribed

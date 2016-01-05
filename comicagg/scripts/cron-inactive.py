@@ -15,6 +15,7 @@ import settings_local
 sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
+from comicagg.accounts.utils import get_profile
 from comicagg.comics.models import *
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -31,7 +32,7 @@ for user in users:
     if now.seconds > 3000:
         print("FIN: comenzar de nuevo desde id=" + user.id)
         sys.exit()
-    up = user.get_profile()
+    up = get_profile(user)
     if up.last_read_access < limit:
         print("setting user " + user + " as inactive")
         user.is_active = False

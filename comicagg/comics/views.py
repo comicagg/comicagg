@@ -17,22 +17,21 @@ from urllib.request import urlopen, Request
 from urllib.error import HTTPError
 import os, random
 
-###################
-# Read page related
+######################
+# Reading page views #
+######################
 
 @login_required
 def read_view(request):
-    if request.user and request.user.is_authenticated():
-        profile = request.user.get_profile()
-        comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in profile.all_comics()]
-        unread_list = [(comic, comic.unread_comics_for(request.user)) for comic in profile.unread_comics()]
-        random = random_comic(request.user)
-        context = RequestContext(request, {
-            'comic_list': comic_list,
-            'unread_list': unread_list,
-            'random': random
-        })
-        return render(request, 'comics/read.html', context, 'read')
+    comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user_profile.all_comics()]
+    unread_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user_profile.unread_comics()]
+    random = random_comic(request.user)
+    context = RequestContext(request, {
+        'comic_list': comic_list,
+        'unread_list': unread_list,
+        'random': random
+    })
+    return render(request, 'comics/read.html', context, 'read')
 
 def random_comic(user, xhtml=False, request=None):
     not_in_list = Comic.objects.exclude(activo=False).exclude(id__in=[s.comic.id for s in Subscription.objects.filter(user=user)])
@@ -97,10 +96,10 @@ def comic_sort_name(x, y):
 @login_required
 def hide_new_comics(request):
     """
-    Oculta el aviso de nuevos comics
+    Hides the new comics alert
     """
-    up = request.user.get_profile()
-    up.new_comics = False;
+    up = request.user_profile
+    up.new_comics = False
     up.save()
     return HttpResponse("0")
 
