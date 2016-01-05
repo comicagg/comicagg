@@ -2,9 +2,13 @@
 from comicagg.comics.models import ComicHistory, UnreadComic, NoMatchException
 from datetime import datetime
 from django.conf import settings
-import re, htmlentitydefs, urllib2, cookielib
+from html import unescape
+import re
+import requests
 
-#Funciones para comprobar comics
+"""
+Functions to check if the comics have been updated.
+"""
 
 def check_comic(comic):
     #lo que devolvemos para indicar que se ha actualizado el comic
@@ -20,7 +24,8 @@ def check_comic(comic):
     return changes
 
 def custom_check(comic):
-    #la funcion custom debe rellenar este array con los history de las nuevas tiras
+    #la funcion custom debe rellenar este array con los history de las nuevas
+    #tiras
     history_set = list()
     f = comic.custom_func.replace('\r', '')
     code = compile(f, '<string>', 'exec')
@@ -35,7 +40,8 @@ def custom_check(comic):
         comic.last_image_alt_text = history_set[0].alt_text
         comic.last_check = datetime.now()
         comic.save()
-        #llegado este punto, estamos seguros que son nuevas tiras, guardamos y notificamos
+        #llegado este punto, estamos seguros que son nuevas tiras, guardamos y
+        #notificamos
         for h in history_set:
             h.save()
             notify_subscribers(h)
@@ -77,21 +83,17 @@ def severalinpage(comic, history_set):
         history_set.append(h)
         (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
 
-#Funciones auxiliares para la comprobación
-
+# Auxiliary functions needed to check for updates
 def open_url(comic, _url):
-    #limpiar la url (entidades html)
+    # Clean the URL
     url = unescape(_url)
-    r = urllib2.Request(url)
-    r.add_header('User-Agent', settings.USER_AGENT)
-    #obtener url
-    #respuesta = urllib2.urlopen(url)
-    #lineas = respuesta.readlines()
-    cj = cookielib.LWPCookieJar()
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    respuesta = opener.open(r, None, 20)
-    lineas = respuesta.readlines()
-    return lineas
+
+    # NOTE: why did we need the cookie jar before?
+    headers = {'User-Agent': settings.USER_AGENT}
+    r = requests.get(url, headers=headers)
+    lines = [line for line in r.iter_lines()]
+
+    return lines
 
 def match_lines(comic, lineas, regexp, backwards=False):
     indice = 0
@@ -172,8 +174,7 @@ def notify_subscribers(history):
 #
 # @param text The HTML (or XML) source text.
 # @return The plain text, as a Unicode string, if necessary.
-
-def unescape(text):
+def unescape_old(text):
     def fixup(m):
         text = m.group(0)
         if text[:2] == "&#":
