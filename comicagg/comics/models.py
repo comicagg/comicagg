@@ -194,7 +194,7 @@ class Request(models.Model):
 
 class ComicHistory(models.Model):
     comic = models.ForeignKey(Comic)
-    date = models.DateTimeField(default=django_now())
+    date = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
     alt_text = AltTextField('Texto alternativo', blank=True, null=True)
 
