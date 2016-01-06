@@ -5,16 +5,21 @@ Limit the number of unread comics a user can have
 """
 import os, sys, time
 from datetime import datetime
+# Add the root folder to the python path
 d = os.path.dirname(os.path.abspath(sys.argv[0]))
+d = os.path.join(d, '..')
 d = os.path.join(d, '..')
 d = os.path.abspath(d)
 sys.path.insert(0, d)
 
-import settings_local
-sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
+import django
+django.setup()
+
+from comicagg.accounts.utils import get_profile
 from comicagg.comics.models import *
+from django.conf import settings
 from django.contrib.auth.models import User
 
 starttime = datetime.now()
@@ -26,14 +31,14 @@ else:
 for user in allusers:
     now = datetime.now() - starttime
     if now.seconds > 3000:
-        print("FIN: id=" + user.id)
+        print("Ending: continue from ID=%s" % user.id)
         sys.exit()
     print(user)
     subs = user.subscription_set.all()
     for sub in subs:
         unreads = user.unreadcomic_set.filter(comic__exact=sub.comic).order_by('-id')
         if unreads.count() > 20:
-            print(" " + sub.comic + unreads.count())
+            print(" %s %s" % (sub.comic, unreads.count()))
             sid = unreads[20].id
             deletes = user.unreadcomic_set.filter(comic__exact=sub.comic).order_by('-id').filter(id__lte=sid)
             deletes.delete()

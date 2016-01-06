@@ -1,23 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-actualiza los comics
+Updates the strips in the comics
 """
 import os, sys, threading, time
 from traceback import *
 from datetime import datetime
+# Add the root folder to the python path
 d = os.path.dirname(os.path.abspath(sys.argv[0]))
+d = os.path.join(d, '..')
 d = os.path.join(d, '..')
 d = os.path.abspath(d)
 sys.path.insert(0, d)
 
-from scripts import is_running, not_running_anymore
-is_running()
-
-import settings_local
-sys.path.insert(0, settings_local.ROOT)
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
+import django
+django.setup()
+
+from comicagg.scripts import is_running, not_running_anymore
+is_running()
+
+from builtins import range
 from comicagg.comics.check import check_comic
 from comicagg.comics.models import *
 from django.core.mail import mail_managers
@@ -54,10 +58,10 @@ class CheckThread(threading.Thread):
 			try:
 				changed = check_comic(comic)
 			except KeyboardInterrupt:
-				print ('*** Matado %s ***' % datetime.now())
+				print ('*** Interrupted %s ***' % datetime.now())
 				sys.exit()
 			except NoMatchException:
-				s = '   Error comprobando %s\n' % comic.name
+				s = '   Error checking %s\n' % comic.name
 				if comic.activo:
 					self.errors_active.append(s)
 				else:
@@ -66,7 +70,7 @@ class CheckThread(threading.Thread):
 				#continue
 			except:
 				#print_exc()
-				s = '   Error inesperado %s: %s\n' % (comic.name, sys.exc_info()[1])
+				s = '   Unexpected error %s: %s\n' % (comic.name, sys.exc_info()[1])
 				if comic.activo:
 					self.errors_unexpected.append(s)
 				else:
@@ -78,10 +82,10 @@ class CheckThread(threading.Thread):
 				new += 1
 				#si es un comic desactivado o terminado y se actualiza notificar posible activacion
 				if not comic.activo or comic.ended:
-					s = '   El desactivado o terminado %s se ha actualizado.\n' % comic.name
+					s = '   Disabled or ended comic %s just got an update.\n' % comic.name
 					self.inactive_updated.append(s)
 				else:
-					s = '   Actualizado %s\n' % comic.name
+					s = '   Updated %s\n' % comic.name
 					updated_comics.append(s)
 			else:
 				no_change += 1
@@ -92,11 +96,13 @@ class CheckThread(threading.Thread):
 		if len(self.all):
 			return self.all.pop(0)
 
-print('\n*** Ejecución de cronjob.py (%s) ***' % datetime.now())
+print('\n*** Update job execution (%s) ***' % datetime.now())
 
-salida = "Hora comienzo: %s\n" % datetime.now()
+execution_log = "Start time: %s\n" % datetime.now()
 thread_list = list()
-for i in xrange(5):
+max_threads = 5 if len(all) > 5 else len(all)
+
+for i in range(max_threads):
 	t = CheckThread(all, errors_active, errors_inactive)
 	thread_list.append(t)
 	t.start()
@@ -104,35 +110,35 @@ for i in xrange(5):
 for t in thread_list:
 	t.join()
 
-salida += "Errores en comics activos\n"
+execution_log += "Errors in active comics\n"
 for s in errors_active:
-	salida += s
-salida += "-------------------------\n"
-salida += "Errores inesperados en comics activos\n"
+	execution_log += s
+execution_log += "-------------------------\n"
+execution_log += "Unexpected errors in active comics\n"
 for s in errors_unexpected:
-	salida += s
-salida += "-------------------------\n"
-salida += "Comics desactivados actualizados\n"
+	execution_log += s
+execution_log += "-------------------------\n"
+execution_log += "Disabled comic updated\n"
 for s in inactive_updated:
-	salida += s
-salida += "-------------------------\n"
-salida += "Errores en comics desactivados\n"
+	execution_log += s
+execution_log += "-------------------------\n"
+execution_log += "Errors in disabled comics\n"
 for s in errors_inactive:
-	salida += s
-
-salida += "Comics actualizados\n"
+	execution_log += s
+execution_log += "-------------------------\n"
+execution_log += "Updated comics\n"
 for s in updated_comics:
-	salida += s
-salida += "-------------------------\n"
+	execution_log += s
+execution_log += "-------------------------\n"
 
-salida += "%s nuevos, %s sin cambios, %s errores\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)))
-salida += "Hora fin: %s\n" % datetime.now()
+execution_log += "%s new, %s unchanged, %s errors\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)))
+execution_log += "End time: %s\n" % datetime.now()
 
 try:
-	mail_managers('Salida de cron', salida)
+	mail_managers('Update job', execution_log)
 except:
 	print("Got error sending email")
 	print_exc()
 	
-print(salida.encode("utf-8"))
+print(execution_log)
 not_running_anymore()
