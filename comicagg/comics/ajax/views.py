@@ -23,7 +23,7 @@ def ok_response(request):
     new_comics = request.user.newcomic_set.exclude(comic__activo=False).count()
     news = request.user.newblog_set.count()
     response ='{"comics":%d, "new_comics":%d, "unreads":%d, "news":%d}' % (comics, new_comics, unread, news)
-    return HttpResponse(response, mimetype="application/json")
+    return HttpResponse(response, content_type="application/json")
 
 @login_required
 def add_comic(request):
