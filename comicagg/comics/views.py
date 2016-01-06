@@ -64,7 +64,7 @@ def organize(request, add=False):
     context = {}
     #all of the comics
     all_comics = list(Comic.objects.exclude(activo=False))
-    all_comics.sort(key=comic_sort_name)
+    all_comics.sort(key=slugify)
     #build available list depending on selected comics
     user_subs = request.user.subscription_set.all().exclude(comic__activo=False, comic__ended=False)
     user_comics = list()
