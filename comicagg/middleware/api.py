@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 
 logger = logging.getLogger(__name__)
 
-mime_valid = re.compile('[\w]+/[\w.\-+]+')
+mime_valid = re.compile(r'[\w]+/[\w.\-+]+')
 
 class AcceptHeaderProcessingMiddleware(object):
     def process_request(self, request):
@@ -85,7 +85,7 @@ class OAuth2Middleware(object):
             return None
 
         # Check the format of the authorization header, must be Bearer
-        if not re.match('Bearer \w{40}', access_token_str):
+        if not re.match(r'Bearer \w{40}', access_token_str):
             logger.error(logmsg(logtags.API_BAD_AUTH_HEADER_FORMAT, "Format of the Authorization header is not valid."))
             return None
 
