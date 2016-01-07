@@ -48,7 +48,7 @@ class Serializer:
         return build_xml(d)
 
     def build_comic_dict(self, comic, last_strip=False, unread_strips=False):
-        if not type(comic) is Comic:
+        if type(comic) is not Comic:
             raise ValueError("This is not a comic")
         if not self.user:
             raise ValueError("To serialize a comic you need a user")
