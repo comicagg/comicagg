@@ -150,12 +150,12 @@ def password_reset(request):
                     user.save()
                     t = loader.get_template('accounts/password_reset_email.html')
                     c = {
-                            'new_password': new_pass,
-                            'email': user.email,
-                            'domain': settings.DOMAIN,
-                            'site_name': settings.SITE_NAME,
-                            'user': user,
-                            }
+                        'new_password': new_pass,
+                        'email': user.email,
+                        'domain': settings.DOMAIN,
+                        'site_name': settings.SITE_NAME,
+                        'user': user,
+                        }
                     subject = _('Password reset on %(site)s') % { 'site':settings.SITE_NAME }
                     send_mail(subject, t.render(Context(c)), None, [user.email])
             return redirect('accounts:done', kind='password_reset')

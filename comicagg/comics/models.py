@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from comicagg.comics.fields import ComicNameField, AltTextField
+from comicagg.accounts.models import UserProfile
 from datetime import datetime
 from django import forms
 from django.contrib.auth.models import User

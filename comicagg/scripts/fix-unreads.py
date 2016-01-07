@@ -25,7 +25,7 @@ if len(sys.argv) > 1:
     uid = int(sys.argv[1])
     allusers = User.objects.order_by('id').filter(id__gte = uid)
 else:
-   allusers = User.objects.all()
+    allusers = User.objects.all()
 for user in allusers:
     now = datetime.now()-starttime
     if now.seconds > 3000:

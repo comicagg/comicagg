@@ -5,7 +5,8 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
 from provider.oauth2.models import Client
-from urllib.parse import urlparse
+# TODO: proper import here and fix the code below that uses it
+from urllib import parse as urlparse
 from . import constants, scope
 
 import logging

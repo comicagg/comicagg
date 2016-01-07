@@ -1,5 +1,6 @@
 import json
-import urlparse
+# TODO: fix this import
+from urllib import parse as urlparse
 import datetime
 from django.http import QueryDict
 from django.conf import settings

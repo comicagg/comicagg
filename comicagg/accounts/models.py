@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from comicagg.comics.models import Comic, ComicHistory, UnreadComic
+import logging
+import random
+from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Max
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
-from datetime import datetime
-import logging, random
+from comicagg.comics.models import Comic, ComicHistory, UnreadComic
 
 logger = logging.getLogger(__name__)
 
@@ -102,11 +103,11 @@ class UserProfile(models.Model):
         """
         Sets this comic as unread. Adds the last strip as unread for this user
         """
-        if (self.user.is_subscribed(comic)):
+        if self.user.is_subscribed(comic):
             strip = comic.last()
-            if (strip):
-                self.user.unreadcomic_set.create(user=self.user, comic=comic, history=strip)  
-                return True      
+            if strip:
+                self.user.unreadcomic_set.create(user=self.user, comic=comic, history=strip)
+                return True
         return False
 
     def unread_comic_strips_count(self, comic):

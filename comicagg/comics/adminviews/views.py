@@ -19,11 +19,11 @@ def admin_check(request, comic_id=None):
         comic_list = Comic.objects.all().order_by('name')
         comic_dict = dict()
         for c in comic_list:
-                l = c.name[0].upper()
-                if l in comic_dict.keys():
-                        comic_dict[l].append(c)
-                else:
-                        comic_dict[l] = [c]
+            l = c.name[0].upper()
+            if l in comic_dict.keys():
+                    comic_dict[l].append(c)
+            else:
+                    comic_dict[l] = [c]
         context['list'] = comic_dict
         if comic_id:
             #if a comic_id is passed, check that comic

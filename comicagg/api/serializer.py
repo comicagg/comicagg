@@ -80,7 +80,7 @@ class Serializer:
         out["imageurl"] = history.image_url()
         out["imagetext"] = history.alt_text if history.alt_text else ""
         out["date"] = datetime_to_rfc2822(history.date)
-        out["timestamp"] = long(datetime_to_timestamp(history.date))
+        out["timestamp"] = datetime_to_timestamp(history.date)
         return out
 
     def build_user_dict(self):

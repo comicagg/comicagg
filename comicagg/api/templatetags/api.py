@@ -22,7 +22,7 @@ def xml(value, arg=False):
             d["latest.url"] = escape(value.comichistory_set.latest().url)
             d["latest.alt_text"] = escape(value.comichistory_set.latest().alt_text) if value.comichistory_set.latest().alt_text else ""
             d["latest.date"] = formatdate(time.mktime(value.comichistory_set.latest().date.timetuple()))
-            d["latest.timestamp"] = long(time.mktime(value.comichistory_set.latest().date.timetuple()))
+            d["latest.timestamp"] = time.mktime(value.comichistory_set.latest().date.timetuple())
             output = """<comic id="%(id)d" website="%(website)s" name="%(name)s" votes="%(votes)d" rating="%(rating)f">
             <strip id="%(latest.id)s" imageurl="%(latest.url)s" imagetext="%(latest.alt_text)s" date="%(latest.date)s" timestamp="%(latest.timestamp)d"/>
             </comic>""" % d

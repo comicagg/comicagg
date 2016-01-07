@@ -73,7 +73,7 @@ def to_names(scope):
     """
     return [
         name
-        for (name, value) in SCOPE_NAME_DICT.iteritems()
+        for (name, value) in SCOPE_NAME_DICT.items()
         if check(value, scope)
     ]
 
