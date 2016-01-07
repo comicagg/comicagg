@@ -10,8 +10,8 @@ class Post(models.Model):
     html = models.BooleanField('Si se marca como HTML se pone a pelo en la web, si no, sólo los saltos de línea se convierten.', default=False)
     id_topic = models.IntegerField('Id del tema en el foro', null=True, blank=True, default=0, help_text='Se rellena él sólo')
 
-    def __unicode__(self):
-        return u'%s' % self.title
+    def __str__(self):
+        return '%s' % self.title
 
     def save(self):
         #check if we have to notify the users
@@ -33,6 +33,6 @@ class NewBlog(models.Model):
     user = models.ForeignKey(User)
     post = models.ForeignKey(Post, related_name="new_posts")
 
-    def __unicode__(self):
-        return u'%s - %s' % (self.user, self.post)
+    def __str__(self):
+        return '%s - %s' % (self.user, self.post)
 

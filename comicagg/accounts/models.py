@@ -29,8 +29,8 @@ class UserProfile(models.Model):
 
     css_color = models.CharField(max_length=100, default="blue_white")
 
-    def __unicode__(self):
-        return u'%s' % self.user
+    def __str__(self):
+        return '%s' % self.user
 
     def is_active(self):
         if self.user.is_active:

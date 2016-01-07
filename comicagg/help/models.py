@@ -24,8 +24,8 @@ class Ticket(models.Model):
   title = models.CharField(max_length=255)
   text = models.TextField()
 
-  def __unicode__(self):
-    return u'T%s - %s' % (self.id, self.title)
+  def __str__(self):
+    return 'T%s - %s' % (self.id, self.title)
 
   def is_closed(self):
     return self.status == 'C'
@@ -47,8 +47,8 @@ class TicketMessage(models.Model):
   date = models.DateTimeField(auto_now_add=True)
   text = models.TextField()
 
-  def __unicode__(self):
-    return u'TM%s - %s' % (self.id, self.ticket)
+  def __str__(self):
+    return 'TM%s - %s' % (self.id, self.ticket)
 
   class Meta:
     ordering = ['date']

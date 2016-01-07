@@ -58,8 +58,8 @@ class Comic(models.Model):
             ("all_images", "Can see all images"),
         )
 
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return self.name
 
     def save(self, *args, **kwargs):
         notify = False
@@ -168,8 +168,8 @@ class Subscription(models.Model):
     comic = models.ForeignKey(Comic)
     position = models.PositiveIntegerField(blank=True, default=0)
 
-    def __unicode__(self):
-        return u'%s - %s' % (self.user, self.comic)
+    def __str__(self):
+        return '%s - %s' % (self.user, self.comic)
 
     def delete(self, *args, **kwargs):
         #delete related unreadcomics
@@ -190,8 +190,8 @@ class Request(models.Model):
     class Meta:
         ordering = ['id', '-done']
 
-    def __unicode__(self):
-        return u'%s - %s' % (self.user, self.url)
+    def __str__(self):
+        return '%s - %s' % (self.user, self.url)
 
 class ComicHistory(models.Model):
     comic = models.ForeignKey(Comic)
@@ -199,8 +199,8 @@ class ComicHistory(models.Model):
     url = models.CharField(max_length=255)
     alt_text = AltTextField('Texto alternativo', blank=True, null=True)
 
-    def __unicode__(self):
-        return u'%s %s' % (self.comic.name, self.date)
+    def __str__(self):
+        return '%s %s' % (self.comic.name, self.date)
 
     def image_url(self):
         url = self.url
@@ -219,8 +219,8 @@ class UnreadComic(models.Model):
     history = models.ForeignKey(ComicHistory)
     comic = models.ForeignKey(Comic)
     
-    def __unicode__(self):
-        return u'%s %s' % (self.user, self.history)
+    def __str__(self):
+        return '%s %s' % (self.user, self.history)
     
     class Meta:
         ordering = ['user', '-history']
@@ -230,9 +230,9 @@ class Tag(models.Model):
     comic = models.ForeignKey(Comic)
     name = models.CharField(max_length=255)
     
-    def __unicode__(self):
-        return u'%s' % (self.name)
-        #return u'%s  - %s - %s' % (self.name, self.comic, self.user)
+    def __str__(self):
+        return '%s' % (self.name)
+        #return '%s  - %s - %s' % (self.name, self.comic, self.user)
     
     class Meta:
         ordering = ['name', 'comic']
@@ -241,8 +241,8 @@ class NewComic(models.Model):
     user = models.ForeignKey(User)
     comic = models.ForeignKey(Comic, related_name="new_comics")
     
-    def __unicode__(self):
-        return u'%s - %s' % (self.user, self.comic)
+    def __str__(self):
+        return '%s - %s' % (self.user, self.comic)
 
 class NoMatchException(Exception):
     def __init__(self, value):

@@ -13,5 +13,5 @@ class Task(models.Model):
 	class Meta:
 		ordering = ['state']
 
-	def __unicode__(self):
+	def __str__(self):
 		return self.title

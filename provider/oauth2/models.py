@@ -45,7 +45,7 @@ class Client(models.Model):
     client_secret = models.CharField(max_length=255, default=long_token)
     client_type = models.IntegerField(choices=CLIENT_TYPES)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.redirect_uri
 
     def get_default_token_expiry(self):
@@ -105,7 +105,7 @@ class Grant(models.Model):
     redirect_uri = models.CharField(max_length=255, blank=True)
     scope = models.IntegerField(default=0)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.code
 
 
@@ -138,7 +138,7 @@ class AccessToken(models.Model):
 
     objects = AccessTokenManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.token
 
     def save(self, *args, **kwargs):
@@ -186,5 +186,5 @@ class RefreshToken(models.Model):
     client = models.ForeignKey(Client)
     expired = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.token
