@@ -6,10 +6,10 @@ class ComicNameField(models.CharField):
     __metaclass__ = models.SubfieldBase
     
     def __init__(self, *args, **kwargs):
-        super(models.CharField, self).__init__(*args, **kwargs)
+        super(ComicNameField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
-        ret = super(models.CharField, self).to_python(value)
+        ret = super(ComicNameField, self).to_python(value)
         return try_encodings(ret)
 
 class AltTextField(models.TextField):
@@ -17,10 +17,10 @@ class AltTextField(models.TextField):
     __metaclass__ = models.SubfieldBase
     
     def __init__(self, *args, **kwargs):
-        super(models.TextField, self).__init__(*args, **kwargs)
+        super(AltTextField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
-        ret = super(models.TextField, self).to_python(value)
+        ret = super(AltTextField, self).to_python(value)
         return try_encodings(ret)
 
 def try_encodings(value):
