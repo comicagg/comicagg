@@ -105,7 +105,7 @@ def build_xml(what):
     if len(what.keys()) != 1:
         raise ValueError("The base Dictionary can only contain one item")
     out = '<?xml version="1.0" encoding="UTF-8" ?>\r\n'
-    for k,v in what.items():
+    for k, v in what.items():
         out += build_xml_element(k, v)
     return out
 
@@ -123,7 +123,7 @@ def build_xml_element(name, value):
     else:
         attx = dict()
         child = None
-        for k,v in value.items():
+        for k, v in value.items():
             # If any value is a dict or list, then this element will need opening and closing tags
             if type(v) is dict:
                 child = build_xml_element(v["__class"], v)
@@ -139,7 +139,7 @@ def build_xml_element(name, value):
         out = "<" + tag
         if len(attx):
             out += " "
-            out += " ".join(['%s="%s"' % (k,v) for k,v in attx.items() if not k.startswith("__")])
+            out += " ".join(['%s="%s"' % (k,v) for k, v in attx.items() if not k.startswith("__")])
         if child:
             out += ">" + child + "</" + tag + ">"
         else:

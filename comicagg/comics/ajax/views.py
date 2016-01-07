@@ -22,7 +22,7 @@ def ok_response(request):
     unread = request.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).aggregate(Count('comic', distinct=True))['comic__count']
     new_comics = request.user.newcomic_set.exclude(comic__activo=False).count()
     news = request.user.newblog_set.count()
-    response ='{"comics":%d, "new_comics":%d, "unreads":%d, "news":%d}' % (comics, new_comics, unread, news)
+    response = '{"comics":%d, "new_comics":%d, "unreads":%d, "news":%d}' % (comics, new_comics, unread, news)
     return HttpResponse(response, content_type="application/json")
 
 @login_required
@@ -157,7 +157,7 @@ def save_selection(request):
     #python2.7+
     #subsc_dict = {s.comic.id:s.id for s in request.user.subscription_set.all()}
     #python2.6-
-    subsc_dict = dict([(s.comic.id,s.id) for s in request.user.subscription_set.all()])
+    subsc_dict = dict([(s.comic.id, s.id) for s in request.user.subscription_set.all()])
     #subscriptions is the list of comic ids already added
     subscriptions = subsc_dict.keys()
 

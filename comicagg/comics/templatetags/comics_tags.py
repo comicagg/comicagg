@@ -17,7 +17,7 @@ def is_new(comic, user):
 @stringfilter
 def recortar(value, arg):
     n = int(arg)-3
-    if len(value)<=n: return value
+    if len(value) <= n: return value
     m = n/2
     return '%s...%s' % (value[:m], value[len(value)-m:len(value)])
 
@@ -25,7 +25,7 @@ def recortar(value, arg):
 @stringfilter
 def recortar2(value, arg):
     n = int(arg)-3
-    if len(value)<=n: return value
+    if len(value) <= n: return value
     return '%s...' % (value[:n])
 
 @register.filter()

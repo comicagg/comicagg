@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from comicagg.comics.models import Comic
 from django import template
+from comicagg.comics.models import Comic
 from email.utils import formatdate
 from xml.sax.saxutils import escape
 import time

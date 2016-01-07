@@ -1,17 +1,27 @@
 # -*- coding: utf-8 -*-
-from comicagg.comics.fields import ComicNameField, AltTextField
-from comicagg.accounts.models import UserProfile
 from datetime import datetime
+from math import atan, sqrt
 from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.timezone import now as django_now
-from math import atan, sqrt
-
+from comicagg.comics.fields import ComicNameField, AltTextField
+from comicagg.accounts.models import UserProfile
 
 class Comic(models.Model):
+    """
+    Comics can be: A active, E ended
     
+    E/A T F
+    T   - 2
+    F   1 3
+    1. Active AND not Ended - all ok, ongoing
+    2. Not active AND Ended - finished
+    3. Not active and not Ended - not working, needs fixing
+    So visible to the user should be 1 and 2
+    """
+
     name = ComicNameField('Nombre del comic', max_length=255)
     website = models.URLField('Página del comic')
     activo = models.BooleanField('Comic activo', default=False, help_text='')

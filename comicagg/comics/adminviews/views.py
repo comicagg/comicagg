@@ -47,7 +47,7 @@ def admin_reported(request, chids):
                 ch = ComicHistory.objects.get(pk=int(chid))
             except:
                 ch = None
-            chs[chid]= ch
+            chs[chid] = ch
         context['chs'] = chs
         return render(request, 'admin/reported.html', context)
     raise Http404
