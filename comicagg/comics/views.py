@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from comicagg import render
-from comicagg.comics.models import Comic, ComicHistory, NewComic, Request as ComicRequest, RequestForm, Subscription
+import os, random
 from datetime import datetime
+from hashlib import md5
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -12,10 +14,8 @@ from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
-from hashlib import md5
-from urllib.request import urlopen, Request
-from urllib.error import HTTPError
-import os, random
+from comicagg import render
+from comicagg.comics.models import Comic, ComicHistory, NewComic, Request as ComicRequest, RequestForm, Subscription
 
 ######################
 # Reading page views #
@@ -23,8 +23,8 @@ import os, random
 
 @login_required
 def read_view(request):
-    comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user_profile.all_comics()]
-    unread_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user_profile.unread_comics()]
+    comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user.operations.all_comics()]
+    unread_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user.operations.unread_comics()]
     random = random_comic(request.user)
     context = RequestContext(request, {
         'comic_list': comic_list,

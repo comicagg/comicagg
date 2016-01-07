@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from comicagg import render
-from comicagg.accounts.utils import get_profile
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.debug import technical_500_response
 import datetime, json, logging, re, sys
+from comicagg import render
+from comicagg.accounts.utils import get_profile
+from comicagg.comics.utils import UserOperations
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +31,12 @@ class MaintenanceMiddleware(object):
 
 class UserProfileMiddleware(object):
     """
-    Adds the field user_profile to the Request object with the UserProfile of the user.
+    Adds the fields user_profile to the Request object and the operations field to the User object.
     """
     def process_request(self, request):
         if request.user.is_authenticated():
             request.user_profile = get_profile(request.user)
+            request.user.operations = UserOperations(request.user)
 
 class ActiveUserMiddleware(object):
     """

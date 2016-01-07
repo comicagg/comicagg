@@ -73,7 +73,6 @@ class Comic(models.Model):
         if notify:
             users = User.objects.all()
             for user in users:
-                # Can't use get_profile here because it'd create an infinite import loop
                 up = UserProfile.objects.get(user=user)
                 #por cada usuario poner el campo del perfil new_comics a True
                 if up.alert_new_comics:
@@ -148,7 +147,7 @@ class Comic(models.Model):
         return self.comichistory_set.all()[0]
 
     # User related methods
-
+    # TODO: move this to the UserOperations class
     def is_new_for(self, user):
         """
         Is this comic new to the passed user?

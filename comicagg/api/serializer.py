@@ -1,7 +1,8 @@
-from comicagg.accounts.utils import get_profile
-from comicagg.comics.models import Comic, ComicHistory
+import json
+import time
 from email import utils
-import json, time
+from comicagg.comics.models import Comic, ComicHistory
+from comicagg.comics.utils import UserOperations
 
 class Serializer:
     """
@@ -51,7 +52,7 @@ class Serializer:
             raise ValueError("This is not a comic")
         if not self.user:
             raise ValueError("To serialize a comic you need a user")
-        user_profile = get_profile(self.user)
+        user_operations = UserOperations(self.user)
         out = dict()
         if self.prefer_xml:
             out["__class"] = "comic"
@@ -60,16 +61,16 @@ class Serializer:
         out["website"] = comic.website
         out["votes"] = comic.votes
         out["rating"] = comic.get_rating()
-        out["added"] = str(user_profile.is_subscribed(comic))
+        out["added"] = str(user_operations.is_subscribed(comic))
         out["ended"] = str(comic.ended)
-        out["unreadcount"] = user_profile.unread_comic_strips_count(comic)
+        out["unreadcount"] = user_operations.unread_comic_strips_count(comic)
         if last_strip:
             try:
                 out["last_strip"] = self.build_comichistory_dict(comic.comichistory_set.all()[0])
             except:
                 pass
         if unread_strips:
-            out["unreads"] = [self.build_comichistory_dict(h) for h in user_profile.unread_comic_strips(comic)]
+            out["unreads"] = [self.build_comichistory_dict(h) for h in user_operations.unread_comic_strips(comic)]
         return out
 
     def build_comichistory_dict(self, history):
@@ -84,14 +85,14 @@ class Serializer:
         return out
 
     def build_user_dict(self):
-        user_profile = get_profile(self.user)
+        user_operations = UserOperations(self.user)
         out = dict()
         if self.prefer_xml:
             out["__class"] = "user"
         out["username"] = self.user.username
         out["email"] = self.user.email
-        out["totalcomics"] = len(user_profile.all_comics())
-        out["unreadcomics"] = len(user_profile.unread_comics())
+        out["totalcomics"] = len(user_operations.all_comics())
+        out["unreadcomics"] = len(user_operations.unread_comics())
         # TODO: Return also the number of new comics
         return out
 

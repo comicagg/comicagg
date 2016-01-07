@@ -1,11 +1,11 @@
-from comicagg import render
-from comicagg.accounts.utils import get_profile
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import connection
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from comicagg import render
+from comicagg.comics.utils import UserOperations
 
 def index(request):
     return render(request, 'ws/index.html', {})
@@ -16,7 +16,7 @@ def unread_user(request, user):
     user = get_object_or_404(User, username=user)
     context = {}
 
-    unreads = get_profile(user).unread_comics_count()
+    unreads = UserOperations(user).unread_comics_count()
 
     context['unread_list'] = unreads
     context['count'] = len(unreads)
