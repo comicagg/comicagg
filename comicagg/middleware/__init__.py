@@ -24,7 +24,7 @@ class MaintenanceMiddleware(object):
         except:
             user = None
         if user.is_authenticated():
-            if settings.MAINTENANCE and not(user.is_superuser):
+            if settings.MAINTENANCE and not user.is_superuser:
                 return render(request, "maintenance.html", {})
         return None
 

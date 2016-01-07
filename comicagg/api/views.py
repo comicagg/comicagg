@@ -231,7 +231,7 @@ class SubscriptionsView(APIView):
         id_list = list()
         if type(body) == ET.Element:
             # this is a XML request
-            if 'subscribe' != body.tag:
+            if body.tag != 'subscribe':
                 return self.error("BadRequest", "The request XML body is not valid")
             try:
                 for comic_id in body.findall('id'):
@@ -249,7 +249,7 @@ class SubscriptionsView(APIView):
 
         # Remove possible duplicates
         id_list_clean = []
-        [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
+        [id_list_clean.append(x) for x in id_list if x not in id_list_clean]
         request.user_profile.subscribe_comics(id_list_clean)
         return HttpResponse(status=204, content_type=self.content_type)
 
@@ -268,7 +268,7 @@ class SubscriptionsView(APIView):
         id_list = list()
         if type(body) == ET.Element:
             # this is a XML request
-            if 'subscriptions' != body.tag:
+            if body.tag != 'subscriptions':
                 return self.error("BadRequest", "The request XML body is not valid")
             try:
                 for comicid in body.findall('comicid'):
@@ -287,17 +287,17 @@ class SubscriptionsView(APIView):
         # 1. Remove possible duplicates from the input
         # These are all the comics the user wants to follow and in this order
         id_list_clean = []
-        [id_list_clean.append(x) for x in id_list if not x in id_list_clean]
+        [id_list_clean.append(x) for x in id_list if x not in id_list_clean]
 
         # 2. Get the comics the user is currently following
         current_active_idx = [c.id for c in request.user_profile.all_comics()]
 
         # 3. Find comics to be removed
-        deleted_idx = [x for x in current_active_idx if not x in id_list_clean]
+        deleted_idx = [x for x in current_active_idx if x not in id_list_clean]
         request.user_profile.unsubscribe_comics(deleted_idx)
 
         # 4. Find comics to be added
-        added_idx = [x for x in id_list_clean if not x in current_active_idx]
+        added_idx = [x for x in id_list_clean if x not in current_active_idx]
         request.user_profile.subscribe_comics(added_idx)
 
         # 5. Update the position of the subcriptions
@@ -363,7 +363,7 @@ class UnreadsView(APIView):
         context = self.get_context_data(**kwargs)
 
         # Do not allow POST if there is not comic id
-        if not 'comic_id' in context.keys():
+        if 'comic_id' not in context.keys():
             return HttpResponseNotAllowed(['GET'])
 
         comic_id = context["comic_id"]
@@ -386,7 +386,7 @@ class UnreadsView(APIView):
         context = self.get_context_data(**kwargs)
 
         # Do not allow PUT if there is not comic id
-        if not 'comic_id' in context.keys():
+        if 'comic_id' not in context.keys():
             return HttpResponseNotAllowed(['GET'])
 
         form = context["form"]
@@ -425,7 +425,7 @@ class UnreadsView(APIView):
     @write_required
     def delete(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
-        if not 'comic_id' in context.keys():
+        if 'comic_id' not in context.keys():
             # Mark all comics as read
             request.user.unreadcomic_set.all().delete()
         else:

@@ -86,7 +86,7 @@ class UserProfile(models.Model):
         comics = [c for c in self.all_comics() if c.id in comic_ids]
         unread_counters = dict()
         for u in unreads:
-            if not u.comic.id in unread_counters.keys():
+            if u.comic.id not in unread_counters.keys():
                 unread_counters[u.comic.id] = 1
             else:
                 unread_counters[u.comic.id] += 1
