@@ -85,8 +85,7 @@ class IsNewForUserNode(template.Node):
         return ''
 
 def do_is_new_for_user(parser, token):
-    """
-    Example usage::
+    """Example:
     {% is_new_for_user comic user as var %}
     """
     

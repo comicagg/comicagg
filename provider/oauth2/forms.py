@@ -38,10 +38,9 @@ class ClientAuthForm(forms.Form):
         data = self.cleaned_data
         try:
             client = Client.objects.get(client_id=data.get('client_id'),
-                client_secret=data.get('client_secret'))
+                                        client_secret=data.get('client_secret'))
         except Client.DoesNotExist:
-            raise forms.ValidationError(_("Client could not be validated with "
-                "key pair."))
+            raise forms.ValidationError(_("Client could not be validated with key pair."))
 
         data['client'] = client
         return data
@@ -145,7 +144,7 @@ class AuthorizationRequestForm(ScopeMixin, OAuthForm):
 
         if not response_type:
             raise OAuthValidationError({'error': 'invalid_request',
-                'error_description': "No 'response_type' supplied."})
+                                        'error_description': "No 'response_type' supplied."})
 
         types = response_type.split(" ")
 
@@ -153,8 +152,7 @@ class AuthorizationRequestForm(ScopeMixin, OAuthForm):
             if type not in RESPONSE_TYPE_CHOICES:
                 raise OAuthValidationError({
                     'error': 'unsupported_response_type',
-                    'error_description': u"'%s' is not a supported response "
-                        "type." % type})
+                    'error_description': u"'%s' is not a supported response type." % type})
 
         return response_type
 
@@ -169,8 +167,7 @@ class AuthorizationRequestForm(ScopeMixin, OAuthForm):
             if not redirect_uri == self.client.redirect_uri:
                 raise OAuthValidationError({
                     'error': 'invalid_request',
-                    'error_description': _("The requested redirect didn't "
-                        "match the client settings.")})
+                    'error_description': _("The requested redirect didn't match the client settings.")})
 
         return redirect_uri
 
@@ -207,8 +204,7 @@ class RefreshTokenGrantForm(ScopeMixin, OAuthForm):
             raise OAuthValidationError({'error': 'invalid_request'})
 
         try:
-            token = RefreshToken.objects.get(token=token,
-                expired=False, client=self.client)
+            token = RefreshToken.objects.get(token=token, expired=False, client=self.client)
         except RefreshToken.DoesNotExist:
             raise OAuthValidationError({'error': 'invalid_grant'})
 

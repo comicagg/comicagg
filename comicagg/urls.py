@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from comicagg.common.views import BaseTemplateView
@@ -24,6 +23,6 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns(
-	url(r'^docs/custom_func/$', BaseTemplateView.as_view(template_name='admin/custom_func.html'), name="docs_custom"),
-	url(r'^contact/$', BaseTemplateView.as_view(template_name='contact.html'), name="contact"),
+    url(r'^docs/custom_func/$', BaseTemplateView.as_view(template_name='admin/custom_func.html'), name="docs_custom"),
+    url(r'^contact/$', BaseTemplateView.as_view(template_name='contact.html'), name="contact"),
 )

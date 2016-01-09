@@ -1,19 +1,14 @@
 """View classes to render API responses."""
 
-import datetime
 import logging
 import re
 import sys
 import xml.etree.ElementTree as ET
-from django import forms
-from django.db import connection, transaction
+from django.db import transaction
 from django.db.models import Max
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseServerError
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseServerError
 from django.views.generic import View
-from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormMixin
-from provider import constants
 from provider.forms import OAuthValidationError
 from comicagg.comics.models import Comic, ComicHistory, UnreadComic, active_comics
 from comicagg.api.decorators import write_required

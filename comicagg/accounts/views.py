@@ -211,17 +211,17 @@ def save_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         if form.is_valid():
-            p = request.user_profile
-            p.hide_read = form.cleaned_data['hide_read']
+            user_profile = request.user_profile
+            user_profile.hide_read = form.cleaned_data['hide_read']
 #            p.sort_by_points = form.cleaned_data['sort_by_points']
-            p.alert_new_comics = form.cleaned_data['alert_new_comics']
+            user_profile.alert_new_comics = form.cleaned_data['alert_new_comics']
             nmc = form.cleaned_data['navigation_max_columns']
             if nmc > 0:
-                p.navigation_max_columns = form.cleaned_data['navigation_max_columns']
+                user_profile.navigation_max_columns = form.cleaned_data['navigation_max_columns']
             nmpc = form.cleaned_data['navigation_max_per_column']
             if nmpc > 0:
-                p.navigation_max_per_column = form.cleaned_data['navigation_max_per_column']
-            p.save()
+                user_profile.navigation_max_per_column = form.cleaned_data['navigation_max_per_column']
+            user_profile.save()
     return redirect('accounts:profile_saved')
 
 @login_required

@@ -17,9 +17,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 import django
 django.setup()
 
-from django.conf import settings
 from django.contrib.auth.models import User
-from comicagg.accounts.utils import get_profile
 
 starttime = datetime.now()
 if len(sys.argv) > 1:

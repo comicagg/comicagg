@@ -94,7 +94,7 @@ MIDDLEWARE_CLASSES = (
 
     # Post authentication middleware
     'comicagg.middleware.UserProfileMiddleware',
-#    'comicagg.middleware.UserBasedExceptionMiddleware',
+    #'comicagg.middleware.UserBasedExceptionMiddleware',
     'comicagg.middleware.ActiveUserMiddleware',
     'comicagg.middleware.MaintenanceMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware', #

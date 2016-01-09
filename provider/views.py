@@ -121,9 +121,9 @@ class Capture(OAuthView, Mixin):
 
         if constants.ENFORCE_SECURE and not request.is_secure():
             return self.render_to_response({'error': 'access_denied',
-                'error_description': _("A secure connection is required."),
-                'next': None},
-                status=400)
+                                            'error_description': _("A secure connection is required."),
+                                            'next': None},
+                                           status=400)
 
         return HttpResponseRedirect(self.get_redirect_url(request))
 
@@ -211,8 +211,7 @@ class Authorize(OAuthView, Mixin):
         if client is None:
             raise OAuthError({
                 'error': 'unauthorized_client',
-                'error_description': _("An unauthorized client tried to access"
-                    " your resources.")
+                'error_description': _("An unauthorized client tried to access your resources.")
             })
 
         form = self.get_request_form(client, data)
@@ -261,8 +260,7 @@ class Authorize(OAuthView, Mixin):
         except OAuthError as e:
             return self.error_response(request, e.args[0], status=400)
 
-        authorization_form = self.get_authorization_form(request, client,
-            post_data, data)
+        authorization_form = self.get_authorization_form(request, client, post_data, data)
 
         if not authorization_form.is_bound or not authorization_form.is_valid():
             return self.render_to_response({
@@ -270,8 +268,7 @@ class Authorize(OAuthView, Mixin):
                 'form': authorization_form,
                 'oauth_data': data, })
 
-        code = self.save_authorization(request, client,
-            authorization_form, data)
+        code = self.save_authorization(request, client, authorization_form, data)
 
         # be sure to serialize any objects that aren't natively json
         # serializable because these values are stored as session data
@@ -295,8 +292,7 @@ class Redirect(OAuthView, Mixin):
     an error.
     """
 
-    def error_response(self, error, mimetype='application/json', status=400,
-            **kwargs):
+    def error_response(self, error, mimetype='application/json', status=400, **kwargs):
         """
         Return an error response to the client with default status code of
         *400* stating the error as outlined in :rfc:`5.2`.
@@ -459,8 +455,7 @@ class AccessToken(OAuthView, Mixin):
         """
         raise NotImplementedError
 
-    def error_response(self, error, mimetype='application/json', status=400,
-            **kwargs):
+    def error_response(self, error, mimetype='application/json', status=400, **kwargs):
         """
         Return an error response to the client with default status code of
         *400* stating the error as outlined in :rfc:`5.2`.
@@ -498,14 +493,12 @@ class AccessToken(OAuthView, Mixin):
         :rfc:`4.1.3`.
         """
         logger.debug("provider.AccessToken.authorization_code enter")
-        grant = self.get_authorization_code_grant(request, request.POST,
-                client)
+        grant = self.get_authorization_code_grant(request, request.POST, client)
         if constants.SINGLE_ACCESS_TOKEN:
             at = self.get_access_token(request, grant.user, grant.scope, client)
         else:
             at = self.create_access_token(request, grant.user, grant.scope, client)
-            rt = self.create_refresh_token(request, grant.user, grant.scope, at,
-                    client)
+            rt = self.create_refresh_token(request, grant.user, grant.scope, at, client)
 
         self.invalidate_grant(grant)
 
@@ -521,8 +514,7 @@ class AccessToken(OAuthView, Mixin):
         self.invalidate_refresh_token(rt)
         self.invalidate_access_token(rt.access_token)
 
-        at = self.create_access_token(request, rt.user, rt.access_token.scope,
-                client)
+        at = self.create_access_token(request, rt.user, rt.access_token.scope, client)
         rt = self.create_refresh_token(request, at.user, at.scope, at, client)
 
         return self.access_token_response(at)
@@ -582,8 +574,7 @@ class AccessToken(OAuthView, Mixin):
         if 'grant_type' not in request.POST:
             return self.error_response({
                 'error': 'invalid_request',
-                'error_description': _("No 'grant_type' included in the "
-                    "request.")})
+                'error_description': _("No 'grant_type' included in the request.")})
 
         grant_type = request.POST['grant_type']
 

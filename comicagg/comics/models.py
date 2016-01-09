@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 from math import atan, sqrt
 from django import forms
 from django.contrib.auth.models import User
@@ -167,10 +166,9 @@ class Comic(models.Model):
     def unread_comics_for(self, user):
         return UnreadComic.objects.filter(comic=self, user=user)
 
+# FUTURE: We may want to move this elsewhere
 def active_comics():
-    """
-    It will return only comics that an user can follow so no inactive or ended comics.
-    """
+    """It will only return comics that an user can follow."""
     return Comic.objects.exclude(activo=False, ended=True)
 
 class Subscription(models.Model):
@@ -254,12 +252,16 @@ class NewComic(models.Model):
     def __str__(self):
         return '%s - %s' % (self.user, self.comic)
 
+# FUTURE: move to utils?
 class NoMatchException(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
+    def __init__(self, message):
+        super(Exception, self).__init__(message)
+        self.message = message
 
+    def __str__(self):
+        return repr(self.message)
+
+# FUTURE: put this in its own module?
 class RequestForm(forms.Form):
     url = forms.URLField(widget=forms.TextInput(attrs={'size':50}))
     comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
