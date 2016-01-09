@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import os, random
+import os
+import random
 from datetime import datetime
 from hashlib import md5
 from urllib.request import urlopen, Request

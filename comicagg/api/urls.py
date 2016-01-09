@@ -1,6 +1,6 @@
-from comicagg.api.views import *
 from django.conf.urls import patterns, url
 from django.views.decorators.csrf import csrf_exempt
+from comicagg.api.views import IndexView, ComicsView, StripsView, SubscriptionsView, UnreadsView, UserView
 
 urlpatterns = patterns('comicagg.api.views',
     url(r'^$', csrf_exempt(IndexView.as_view()), name='index'),

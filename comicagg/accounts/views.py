@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from comicagg.accounts.forms import LoginForm, EmailChangeForm, PasswordChangeForm, PasswordResetForm, ProfileForm, RegisterForm
-from comicagg import render
+import re
 from django.db import IntegrityError
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -13,7 +12,8 @@ from django.shortcuts import redirect
 from django.template import Context, loader
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
-import re
+from comicagg.accounts.forms import LoginForm, EmailChangeForm, PasswordChangeForm, PasswordResetForm, ProfileForm, RegisterForm
+from comicagg import render
 
 def index(request):
     if request.user.is_authenticated():

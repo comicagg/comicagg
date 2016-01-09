@@ -3,7 +3,11 @@
 """
 Updates the strips in the comics
 """
-import os, sys, threading, time
+import os
+import sys
+import threading
+import time
+from builtins import range
 from traceback import *
 from datetime import datetime
 # Add the root folder to the python path
@@ -21,10 +25,9 @@ django.setup()
 from comicagg.scripts import is_running, not_running_anymore
 is_running()
 
-from builtins import range
-from comicagg.comics.check import check_comic
-from comicagg.comics.models import *
 from django.core.mail import mail_managers
+from comicagg.comics.check import check_comic
+from comicagg.comics.models import Comic, NoMatchException
 
 #check all comics
 all = list(Comic.objects.all())

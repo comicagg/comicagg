@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
-from comicagg.comics.models import ComicHistory, UnreadComic, NoMatchException
-from datetime import datetime
-from django.conf import settings
-from html import unescape
+"""Functions to check if the comics have been updated."""
 import re
 import requests
-
-"""
-Functions to check if the comics have been updated.
-"""
+from datetime import datetime
+from html import unescape
+from django.conf import settings
+from comicagg.comics.models import ComicHistory, UnreadComic, NoMatchException
 
 def check_comic(comic):
     #lo que devolvemos para indicar que se ha actualizado el comic

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
+import re
 from django.conf import settings
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, HttpResponseServerError
 from django.template import RequestContext
 from django.template.loader import render_to_string
-import os, re
 
 def render(request, template, context, menu=None, xml=False, responseClass=HttpResponse, mime='text/html; charset="utf-8"'):
     context['settings'] = settings

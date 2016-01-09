@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Limit the number of unread comics a user can have
-"""
-import os, sys, time
+"""Limit the number of unread comics a user can have."""
+import os
+import sys
+import time
 from datetime import datetime
 # Add the root folder to the python path
 d = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -17,10 +17,9 @@ os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 import django
 django.setup()
 
-from comicagg.accounts.utils import get_profile
-from comicagg.comics.models import *
 from django.conf import settings
 from django.contrib.auth.models import User
+from comicagg.accounts.utils import get_profile
 
 starttime = datetime.now()
 if len(sys.argv) > 1:

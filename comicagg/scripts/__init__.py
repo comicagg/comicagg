@@ -1,4 +1,6 @@
-import sys, os, signal
+import os
+import signal
+import sys
 
 def is_running():
     path = os.path.join('/tmp', os.path.basename(sys.argv[0]) + ".pid")

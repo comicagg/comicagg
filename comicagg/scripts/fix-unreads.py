@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-Fix: deletes unread comics for comics that the user is not subscribed to
-"""
-import os, sys, time
+"""Fixing script: deletes unread comics for comics that the user is not subscribed to."""
+import os
+import sys
+import time
 from datetime import datetime
 # Add the root folder to the python path
 d = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -17,8 +17,8 @@ os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 import django
 django.setup()
 
-from comicagg.comics.models import *
 from django.contrib.auth.models import User
+from comicagg.comics.models import UnreadComic
 
 starttime = datetime.now()
 if len(sys.argv) > 1:

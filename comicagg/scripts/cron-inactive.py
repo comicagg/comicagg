@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-If a user is inactive, this will change him to inactive and his unread comics will be deleted.
+"""If a user is inactive, this will change him to inactive and his unread comics will be deleted.
+
 The threshold is settings.INACTIVE_DAYS
 """
-import os, sys, time
+import os
+import sys
+import time
 from datetime import datetime, timedelta
 # Add the root folder to the python path
 d = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -18,10 +20,9 @@ os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 import django
 django.setup()
 
-from comicagg.accounts.utils import get_profile
-from comicagg.comics.models import *
 from django.conf import settings
 from django.contrib.auth.models import User
+from comicagg.accounts.utils import get_profile
 
 starttime = datetime.now()
 if len(sys.argv) > 1:
