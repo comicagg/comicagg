@@ -8,147 +8,157 @@ from django.conf import settings
 from comicagg.comics.models import ComicHistory, UnreadComic, NoMatchException
 
 def check_comic(comic):
-    #lo que devolvemos para indicar que se ha actualizado el comic
-    changes = False
-    #si el campo custom_func está tenemos una funcion personalizada
+    """Entry point to check for an update in a comic."""
+    has_changed = False
+    # We may need to use a custom check function
     if comic.custom_func:
-        changes = custom_check(comic)
+        has_changed = custom_check(comic)
     else:
-        h = default_check(comic)
-        if h:
-            notify_subscribers(h)
-            changes = True
-    return changes
+        comic_history = default_check(comic)
+        if comic_history:
+            notify_subscribers(comic_history)
+            has_changed = True
+    return has_changed
 
 def custom_check(comic):
-    #la funcion custom debe rellenar este array con los history de las nuevas
-    #tiras
+    """Wrapper for the custom check function.
+    
+    A custom check function must fill in the list history_set with the ComicHistory objects it has found.
+    The most recent strip found must be the first in the list."""
     history_set = list()
-    f = comic.custom_func.replace('\r', '')
-    code = compile(f, '<string>', 'exec')
-    exec(code)
-    #si se han encontrado imagenes
+
+    function_text = comic.custom_func.replace('\r', '')
+    function_compiled = compile(function_text, '<string>', 'exec')
+    exec(function_compiled)
     if history_set:
-        #comprobar si son nuevas
+        # If the first image of the list is the same as the comic's last_image, abandon ship
         if comic.last_image == history_set[0].url:
             return False
-        #actualizar last_image y last_image_alt_text
+        # Update the comic
         comic.last_image = history_set[0].url
         comic.last_image_alt_text = history_set[0].alt_text
         comic.last_check = datetime.now()
         comic.save()
-        #llegado este punto, estamos seguros que son nuevas tiras, guardamos y
-        #notificamos
-        for h in history_set:
-            h.save()
-            notify_subscribers(h)
+        # Persist the ComicHistory objects in the database
+        for history in history_set:
+            history.save()
+            notify_subscribers(history)
         return True
-    #no se ha encontrado ninguna imagen, lanzar excepcion
     raise NoMatchException("%s" % comic.name)
 
 def default_check(comic):
-    #si hay redireccion, obtener url de la redireccion
+    """Default checking function. Looks for just one image in the URL.
+    
+    If the comic doesn't use a redirection, then we will download the default URL and then search with the regex in that data.
+    If it uses a redirection, then it will download the redirection URL and look for the final URL there."""
     if comic.url2:
-        next_url = getredirect(comic)
+        next_url = get_redirected_url(comic)
     else:
         next_url = comic.url
 
-    #buscar url en la web que contiene la tira
-    (last_image, alt) = getoneurl(comic, next_url)
-    #en este punto last_image debe estar completamente saneada, es decir
-    #si tiene entidades html, éstas pasadas a sus caracteres correspondientes
-    #y a continuación el url debe estar urlencoded
+    # Here next_url should be the URL where the comic strip is
+    (last_image, alt_text) = get_one_image(comic, next_url)
+
+    # At this point, last_image should be completely clean,
+    # meaning that it should be URL encoded if needed
     if last_image == comic.last_image:
         return None
     comic.last_image = last_image
-    comic.last_image_alt_text = alt
+    comic.last_image_alt_text = alt_text
     comic.last_check = datetime.now()
-    h = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt)
-    h.save()
+    history = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt_text)
+    history.save()
     comic.save()
-    return h
+    return history
 
-def severalinpage(comic, history_set):
-    lineas = open_url(comic, comic.url)
+def get_several_images(comic, history_set):
+    """This function looks for several images in the same page."""
+    lines = download_url(comic.url)
     #for check comic debugging
-    lineas_o = list(lineas)
-    (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+    lines_debug = list(lines)
+    (match, lines) = find_match(comic, lines, comic.regexp, comic.backwards)
     while match:
-        url = comic.base_img % geturl(match)
-        alt = getalt(match)
-        h = ComicHistory(comic=comic, url=url, alt_text=alt)
-        history_set.append(h)
-        (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+        image_url = comic.base_img % url_from_match(match)
+        alt_text = alt_from_match(match)
+        history = ComicHistory(comic=comic, url=image_url, alt_text=alt_text)
+        history_set.append(history)
+        (match, lines) = find_match(lines, comic.regexp, comic.backwards)
 
 # Auxiliary functions needed to check for updates
-def open_url(comic, _url):
+def download_url(url):
+    """Download the data from the URL and return the lines of the response."""
     # Clean the URL
-    url = unescape(_url)
-
+    url = unescape(url)
     # NOTE: why did we need the cookie jar before?
     headers = {'User-Agent': settings.USER_AGENT}
-    r = requests.get(url, headers=headers)
-    lines = [line for line in r.iter_lines()]
-
+    response = requests.get(url, headers=headers)
+    lines = [line for line in response.iter_lines()]
     return lines
 
-def match_lines(comic, lineas, regexp, backwards=False):
-    indice = 0
-    #si hay que empezar desde el final a buscar
+def find_match(remaining_lines, regexp, backwards=False):
+    """Find a match in the remaining lines using the regex and returning a tuple containing the match object and the remaining lines to review."""
+    # Depending if we check the lines forward or backwards, then we set the popping index.
+    pop_index = 0
     if backwards:
-        indice = -1
-    #compilar regexp
-    rege = r'%s' % regexp
-    prog = re.compile(rege)
-    #search in every line for the regexp
+        pop_index = -1
+
+    regex_text = r'%s' % regexp
+    regex_compiled = re.compile(regex_text)
     match = None
-    while len(lineas) > 0:
-        linea = lineas.pop(indice)
+    while len(remaining_lines) > 0:
+        line = remaining_lines.pop(pop_index)
+        # FUTURE: should we use django.utils.encoding.smart_text instead?
         try:
-            linea = linea.decode('utf-8')
+            line = line.decode('utf-8')
         except:
             pass
-        match = prog.search(linea)
+        match = regex_compiled.search(line)
         if match:
             break
-    return (match, lineas)
+    return (match, remaining_lines)
 
-def getoneurl(comic, _url):
-    lineas = open_url(comic, _url)
-    #for check comic debugging
-    lineas_o = list(lineas)
-    (match, lineas) = match_lines(comic, lineas, comic.regexp, comic.backwards)
+def get_one_image(comic, url):
+    """Find one image in this URL."""
+    lines = download_url(url)
+    # We use this field to be able to debug the NoMatchException in case it fails
+    lines_debug = list(lines)
+    (match, lines) = find_match(lines, comic.regexp, comic.backwards)
     if not match:
         raise NoMatchException("%s" % comic.name)
-    url = comic.base_img % geturl(match)#.decode("utf-8")
-    #coger el texto alternativo
-    alt = getalt(match)
-    return (url, alt)
+    image_url = comic.base_img % url_from_match(match)
+    alt_text = alt_from_match(match)
+    return (image_url, alt_text)
 
-def getredirect(comic):
-    lineas = open_url(comic, comic.url2)
-    #for check comic debugging
-    lineas_o = list(lineas)
-    (match, lineas) = match_lines(comic, lineas, comic.regexp2, comic.backwards2)
+def get_redirected_url(comic):
+    """Find the final URL using the redirection in the comic."""
+    lines = download_url(comic.url2)
+    # We use this field to be able to debug the NoMatchException in case it fails
+    lines_debug = list(lines)
+    (match, lines) = find_match(lines, comic.regexp2, comic.backwards2)
     if not match:
         raise NoMatchException("%s" % comic.name)
-    next_url = comic.base2 % geturl(match)#.decode("utf-8")
+    next_url = comic.base2 % url_from_match(match)
     return next_url
 
-def geturl(match):
+def url_from_match(match):
+    """Return the URL from the match object.
+    
+    The URL should be on the named group. We check the first group too, just in case."""
     try:
         url = match.group("url")
     except IndexError:
         url = match.group(1)
-    #devolver la url sin entidades html
+    # Unescape the URL
     return unescape(url)
 
-def getalt(match):
+def alt_from_match(match):
+    """Return the alternative text if the named group exists."""
     try:
         alt = match.group("alt")
     except IndexError:
         alt = None
     if alt:
+        # FUTURE: should we use smart_text here?
         try:
             alt = unicode(alt, 'utf-8')
         except:
@@ -159,35 +169,8 @@ def getalt(match):
     return alt
 
 def notify_subscribers(history):
-    #por cada usuario que ha seleccionado el comic, añadir un unread
-    subscriptions = history.comic.subscription_set.all()
-    for subscription in subscriptions:
-        if subscription.user.is_active:
-            UnreadComic.objects.get_or_create(user=subscription.user, history=history, comic=subscription.comic)
-
-##
-# Removes HTML or XML character references and entities from a text string.
-# from http://effbot.org/zone/re-sub.htm#unescape-html
-#
-# @param text The HTML (or XML) source text.
-# @return The plain text, as a Unicode string, if necessary.
-def unescape_old(text):
-    def fixup(m):
-        text = m.group(0)
-        if text[:2] == "&#":
-            # character reference
-            try:
-                if text[:3] == "&#x":
-                    return unichr(int(text[3:-1], 16))
-                else:
-                    return unichr(int(text[2:-1]))
-            except ValueError:
-                pass
-        else:
-            # named entity
-            try:
-                text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
-            except KeyError:
-                pass
-        return text # leave as is
-    return re.sub(r"&#?\w+;", fixup, text)
+    """Create one UnreadComic for each subscribed user."""
+    subscribers = history.comic.subscription_set.all()
+    for subscriber in subscribers:
+        if subscriber.user.is_active:
+            UnreadComic.objects.get_or_create(user=subscriber.user, history=history, comic=subscriber.comic)
