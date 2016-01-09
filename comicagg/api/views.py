@@ -1,4 +1,9 @@
-import datetime, sys, re, logging
+"""View classes to render API responses."""
+
+import datetime
+import logging
+import re
+import sys
 import xml.etree.ElementTree as ET
 from django import forms
 from django.db import connection, transaction
@@ -8,48 +13,16 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormMixin
-from comicagg.comics.models import Comic, ComicHistory, UnreadComic, active_comics
-from comicagg.api.serializer import Serializer
-from comicagg.logs import logmsg
 from provider import constants
 from provider.forms import OAuthValidationError
+from comicagg.comics.models import Comic, ComicHistory, UnreadComic, active_comics
+from comicagg.api.decorators import write_required
+from comicagg.api.forms import VoteForm
+from comicagg.api.serializer import Serializer
+from comicagg.logs import logmsg
 import comicagg.logs.tags as logtags
 
 logger = logging.getLogger(__name__)
-
-# Decorators
-
-def write_required(f):
-    """
-    Check if the passed request has write permissions in the scope
-    """
-    def wrapper(*args, **kwargs):
-        request = args[1]
-        if request.scope == getattr(constants, "WRITE"):
-            return f(*args, **kwargs)
-        else:
-            view = args[0]
-            return view.error("Forbidden", "This access token does not have enough permissions", HttpResponseForbidden)
-    return wrapper
-
-# FUTURE: decorator to force a certain query string parameter
-# FUTURE: decorator to automatically parse a query string parameter in a class field
-
-# Forms
-
-class VoteForm(forms.Form):
-    """
-    Form used to validate the input of the Vote for a comic
-    """
-    def vote_validator(value):
-        """
-        A vote is only valid if it's -1 <= vote <= 1
-        """
-        logger.debug("Vote validator: " + str(value))
-        if value < -1 or value > 1:
-            raise forms.ValidationError("Value not valid")
-
-    vote = forms.IntegerField(validators=[vote_validator])
 
 # Helper classes
 
@@ -59,11 +32,13 @@ class HttpResponseUnauthorized(HttpResponse):
 # Views
 
 class APIView(View, FormMixin):
-    """
-    Base class for all API views.
+    """Base class for all API views.
+
     Handles the Accept header read by the middleware and chooses the content type to output.
     Sets up the serializer too.
+    The rest of the API views inherit from this class.
     """
+
     form_class = None
     content_type = "application/json; charset=utf-8"
 
@@ -72,9 +47,9 @@ class APIView(View, FormMixin):
     @transaction.atomic
     def dispatch(self, *args, **kwargs):
         request = args[0]
-        logger.debug("API call: %s %s" % (request.method, request.path))
+        logger.debug("API call: %s %s", request.method, request.path)
         xml = False
-        if self.prefer_xml():
+        if self.prefers_xml():
             xml = True
             self.content_type = "text/xml; charset=utf-8"
         self.serializer = Serializer(request.user, xml)
@@ -91,11 +66,8 @@ class APIView(View, FormMixin):
     def render_response(self, body, response_class=HttpResponse):
         return response_class(body, self.content_type)
 
-    def prefer_xml(self):
-        """
-        Inspect the list of accepted content types.
-        Return a boolean if the request prefers XML over JSON.
-        """
+    def prefers_xml(self):
+        """Inspect the list of accepted content types and return a boolean if the request prefers XML over JSON."""
         try:
             xml_i = self.request.accept_list.index("text/xml")
         except:
@@ -114,7 +86,8 @@ class APIView(View, FormMixin):
         return context
 
     def error(self, name, description, error_class=HttpResponseBadRequest):
-        logger.debug("Returning an error (%s): %s" % (name, description))
+        """Render an error response."""
+        logger.debug("Returning an error (%s): %s", name, description)
         data = {
             "error": name,
             "description": description
@@ -123,9 +96,8 @@ class APIView(View, FormMixin):
         return self.render_response(body, response_class=error_class)
 
 class IndexView(APIView):
-    """
-    Welcome view.
-    """
+    """Welcome view."""
+
     def get(self, request, **kwargs):
         data = {
             'message': 'Hello %s.' % request.user.username,
@@ -135,13 +107,10 @@ class IndexView(APIView):
         return self.render_response(body)
 
 class ComicsView(APIView):
-    """
-    Handles comic related stuff. Get information about all the comics available in the service.
-    """
+    """Handles general comic related stuff. Get information about all the comics available in the service."""
+
     def get(self, request, **kwargs):
-        """
-        Get information about a comic or all the comics. May or may not return the last strip fetched of the comics.
-        """
+        """Get information about a specific comic or all the comics and optionally return the last strip fetched of the comics."""
         if "comic_id" in kwargs.keys():
             comic_id = kwargs["comic_id"]
             try:
@@ -155,13 +124,10 @@ class ComicsView(APIView):
         return self.render_response(body)
 
 class StripsView(APIView):
-    """
-    Handles information about a comic strip.
-    """
+    """Handles information about a comic strip."""
+
     def get(self, request, **kwargs):
-        """
-        Get information about a certain strip.
-        """
+        """Get information about a certain strip."""
         context = self.get_context_data(**kwargs)
         strip_id = context['strip_id']
         try:
@@ -173,9 +139,7 @@ class StripsView(APIView):
 
     @write_required
     def put(self, request, **kwargs):
-        """
-        Mark this strip as unread for the user doing the request.
-        """
+        """Mark this strip as unread for the user doing the request."""
         context = self.get_context_data(**kwargs)
         strip_id = context['strip_id']
         try:
@@ -189,9 +153,7 @@ class StripsView(APIView):
 
     @write_required
     def delete(self, request, **kwargs):
-        """
-        Mark this strip as read for the user doing the request.
-        """
+        """Mark this strip as read for the user doing the request."""
         context = self.get_context_data(**kwargs)
         strip_id = context['strip_id']
         try:
@@ -204,21 +166,18 @@ class StripsView(APIView):
         return HttpResponse(status=204, content_type=self.content_type)
 
 class SubscriptionsView(APIView):
-    """
-    Handles comic subscriptions. Add, modify or remove subscriptions to comics.
-    """
+    """Handles comic subscriptions. Add, modify or remove subscriptions to comics."""
+
     def get(self, request, **kwargs):
-        """
-        Returns all the comics the user is following. Includes the last strip fetched.
-        """
+        """Get all the comics the user is following including the last strip fetched."""
         subs = request.user.operations.all_comics()
         body = self.serialize(subs, last_strip=True, identifier='subscriptions')
         return self.render_response(body)
 
     @write_required
     def post(self, request, **kwargs):
-        """
-        Subscribe to several comics.
+        """Subscribe to several comics.
+
         The comics will be added at the end of the list of subscriptions.
         """
         if not request.processed_body:
@@ -253,8 +212,8 @@ class SubscriptionsView(APIView):
 
     @write_required
     def put(self, request, **kwargs):
-        """
-        Modify the order of the subscribed comics.
+        """Modify the order of the subscribed comics.
+
         All the subscriptions will be ordered following the order of the IDs given in the body.
 
         Subscription/unsubscription operations should be done with this method.
@@ -317,25 +276,23 @@ class SubscriptionsView(APIView):
 
     @write_required
     def delete(self, request, **kwargs):
-        """
-        Remove all the subscriptions.
-        Returns a list with the IDs of the comics the user used to follow.
-        """
+        """Remove all the subscriptions, returning a list with the IDs of the comics the user used to follow."""
         # TODO: List of the IDs of the comics the user used to follow.
         # Needs the serializer to be able to render a list of integers
         # current_active_idx = [c.id for c in request.user.operations.all_comics()]
-
         request.user.subscription_set.all().delete()
         request.user.unreadcomic_set.all().delete()
         return HttpResponse(status=204, content_type=self.content_type)
 
 class UnreadsView(APIView):
-    """
-    Handles a user's unread comics. Mark comics as read or unread.
+    """Handles a user's unread comics.
+    
+    Mark comics as read or unread.
     """
     form_class = VoteForm
 
     def get(self, request, **kwargs):
+        """Get the unread comics followed by the user."""
         context = self.get_context_data(**kwargs)
 
         if 'comic_id' in context.keys():
@@ -358,6 +315,7 @@ class UnreadsView(APIView):
 
     @write_required
     def post(self, request, **kwargs):
+        """Mark a comic as unread."""
         context = self.get_context_data(**kwargs)
 
         # Do not allow POST if there is not comic id
@@ -381,6 +339,7 @@ class UnreadsView(APIView):
 
     @write_required
     def put(self, request, **kwargs):
+        """Mark a comic as read and optionally including a vote in the body."""
         context = self.get_context_data(**kwargs)
 
         # Do not allow PUT if there is not comic id
@@ -388,7 +347,6 @@ class UnreadsView(APIView):
             return HttpResponseNotAllowed(['GET'])
 
         form = context["form"]
-
         if not form.is_valid():
             return self.error("BadRequest", "Invalid vote parameter")
 
@@ -403,7 +361,7 @@ class UnreadsView(APIView):
             return self.error("BadRequest", "You are not subscribed to this comic")
 
         # At this point we have confirmed that the comic exists and that the user is subscribed
-        # FUTURE: do the voting in the comic model/use profile and not here
+        # FUTURE: do the voting in the comic operations and not here
         if vote == -1:
             votes = 1
             value = 0
@@ -422,6 +380,7 @@ class UnreadsView(APIView):
 
     @write_required
     def delete(self, request, **kwargs):
+        """Mark all comics as read."""
         context = self.get_context_data(**kwargs)
         if 'comic_id' not in context.keys():
             # Mark all comics as read
@@ -433,13 +392,14 @@ class UnreadsView(APIView):
                 comic = Comic.objects.get(pk=comicid)
             except:
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
+            # TODO: move this to the user operations class
             request.user.unreadcomic_set.filter(comic=comic).delete()
         return HttpResponse(status=204, content_type=self.content_type)
 
 class UserView(APIView):
-    """
-    Handles some user information.
-    """
+    """Handles some user information."""
+
     def get(self, request, **kwargs):
+        """Get some user information."""
         body = self.serialize()
         return self.render_response(body)
