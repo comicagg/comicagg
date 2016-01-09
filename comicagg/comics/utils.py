@@ -81,6 +81,14 @@ class UserOperations(object):
                 return True
         return False
 
+    def mark_comic_read(self, comic):
+        """Mark the comic as read, removing the unread strips."""
+        self.user.unreadcomic_set.filter(comic=comic).delete()
+
+    def mark_all_read(self):
+        """Mark all comics as read."""
+        self.user.unreadcomic_set.all().delete()
+
     def unread_comic_strips_count(self, comic):
         """For a certain comic, how many unread strips does this user have?"""
         return self.unread_comic_set().filter(comic__id=comic.id).count()
@@ -132,3 +140,7 @@ class UserOperations(object):
             sx.delete()
             self.user.unreadcomic_set.filter(comic__id__in=id_list).delete()
             self.user.newcomic_set.filter(comic__id__in=id_list).delete()
+
+    def unsubscribe_all_comics(self):
+        self.user.subscription_set.all().delete()
+        self.mark_all_read()

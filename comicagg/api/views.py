@@ -265,12 +265,9 @@ class SubscriptionsView(APIView):
     @write_required
     def delete(self, request, **kwargs):
         """Remove all the subscriptions, returning a list with the IDs of the comics the user used to follow."""
-        # Needs the serializer to be able to render a list of integers
-        current_active_idx = [c.id for c in request.user.operations.subscribed_comics()]
-        body = self.serialize(current_active_idx, identifier="removed_subscriptions")
-        # TODO: move this to UserOperations
-        request.user.subscription_set.all().delete()
-        request.user.unreadcomic_set.all().delete()
+        subscribed_idx = [c.id for c in request.user.operations.subscribed_comics()]
+        body = self.serialize(subscribed_idx, identifier="removed_subscriptions")
+        request.user.operations.unsubscribe_all_comics()
         return self.render_response(body)
 
 class UnreadsView(APIView):
@@ -376,16 +373,15 @@ class UnreadsView(APIView):
         context = self.get_context_data(**kwargs)
         if 'comic_id' not in context.keys():
             # Mark all comics as read
-            request.user.unreadcomic_set.all().delete()
+            request.user.operations.mark_all_read()
         else:
             # Mark just the one comic
             comic_id = context['comic_id']
             try:
-                comic = Comic.objects.get(pk=comicid)
+                comic = Comic.objects.get(pk=comic_id)
             except:
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
-            # TODO: move this to the user operations class
-            request.user.unreadcomic_set.filter(comic=comic).delete()
+            request.user.operations.mark_comic_read(comic)
         return HttpResponseNoContent(content_type=self.content_type)
 
 class UserView(APIView):
