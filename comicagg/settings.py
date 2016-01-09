@@ -82,22 +82,22 @@ STATICFILES_DIRS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.gzip.GZipMiddleware',
+    'django.middleware.gzip.GZipMiddleware', # Compress the output
     'django.middleware.common.CommonMiddleware', #
-    'django.contrib.sessions.middleware.SessionMiddleware', #
-    'django.middleware.csrf.CsrfViewMiddleware', #
-    'django.middleware.locale.LocaleMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware', # Django sessions
+    'django.middleware.csrf.CsrfViewMiddleware', # Cross site request forgery protection
+    'django.middleware.locale.LocaleMiddleware', # Change the locale
 
     # Authentication middleware
     'django.contrib.auth.middleware.AuthenticationMiddleware', #
     'comicagg.middleware.api.OAuth2Middleware',
 
     # Post authentication middleware
-    'comicagg.middleware.UserProfileMiddleware',
+    'comicagg.middleware.UserProfileMiddleware', # Set up the user profile and user operations
     #'comicagg.middleware.UserBasedExceptionMiddleware',
-    'comicagg.middleware.ActiveUserMiddleware',
-    'comicagg.middleware.MaintenanceMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware', #
+    'comicagg.middleware.ActiveUserMiddleware', # Check if the user is active
+    'comicagg.middleware.MaintenanceMiddleware', # Maintenance mode
+    'django.contrib.messages.middleware.MessageMiddleware', # Django messages
     'django.contrib.admindocs.middleware.XViewMiddleware',
     'comicagg.middleware.api.AcceptHeaderProcessingMiddleware',
     'comicagg.middleware.api.BodyProcessingMiddleware'
