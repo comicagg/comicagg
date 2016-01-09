@@ -22,7 +22,7 @@ history_set.append(h)</pre></p>
 <p>Cuando se usa la función personalizada el resto de campos (url, base_img, regexp, backwards, url2, base2, regexp2 y backwards2) dejan de tener sentido y se pueden usar para guardar lo que haga falta en ellos.</p>
 <p>Se disponen de varias funciones para ayudar:</p>
 <ul>
-	<li><code>list open_url(comic, url)</code>: abre una url y devuelve una lista con las líneas de la misma.</li>
+	<li><code>list open_url(url)</code>: abre una url y devuelve una lista con las líneas de la misma.</li>
 	<li><code>(MatchObject, lineas) match_lines(comic, lineas, regexp, backwards)</code>: busca en <i>lineas</i> la primera ocurrencia de <i>regexp</i>. Devuelve una tupla con el objeto de la coincidencia y las líneas restantes.</li>
 	<li><code>string geturl(MatchObject)</code>: devuelve la url de una coincidencia.</li>
 	<li><code>string getalt(MatchObject)</code>: devuelve el texto alternativo de una coincidencia.</li>

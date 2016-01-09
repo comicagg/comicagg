@@ -148,16 +148,16 @@ def password_reset(request):
                     new_pass = User.objects.make_random_password()
                     user.set_password(new_pass)
                     user.save()
-                    t = loader.get_template('accounts/password_reset_email.html')
-                    c = {
+                    template_file = loader.get_template('accounts/password_reset_email.html')
+                    template_context = {
                         'new_password': new_pass,
                         'email': user.email,
                         'domain': settings.DOMAIN,
                         'site_name': settings.SITE_NAME,
                         'user': user,
                         }
-                    subject = _('Password reset on %(site)s') % { 'site':settings.SITE_NAME }
-                    send_mail(subject, t.render(Context(c)), None, [user.email])
+                    subject = _('Password reset on %(site)s') % {'site':settings.SITE_NAME}
+                    send_mail(subject, template_file.render(Context(template_context)), None, [user.email])
             return redirect('accounts:done', kind='password_reset')
     context['form'] = form
     return render(request, 'accounts/password_reset_form.html', context, 'account')

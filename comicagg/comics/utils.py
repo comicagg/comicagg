@@ -2,24 +2,19 @@
 from comicagg.comics.models import Comic, ComicHistory, UnreadComic
 
 class UserOperations(object):
-    """
-    This class allows operations with comic stuff and a certain user
-    """
+    """This class allows operations with comic stuff and a certain user."""
+
     def __init__(self, user, **kwargs):
         super().__init__(**kwargs)
         self.user = user
 
     def all_comics(self):
-        """
-        List of all the comics the user is subscribed to
-        """
+        """List of all the comics the user is subscribed to."""
         subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
         return [s.comic for s in subscriptions]
 
     def random_comic(self):
-        """
-        Return a random comic that the user is not following
-        """
+        """Return a random comic that the user is not following."""
         comic_ids = [comic.id for comic in self.all_comics()]
         comics = list(Comic.objects.exclude(id__in=comic_ids))
         history = None
@@ -35,8 +30,7 @@ class UserOperations(object):
     # Unread comics
 
     def unread_comics(self):
-        """
-        List of comics with unread strips ordered by the position chosen by the user.
+        """List of comics with unread strips ordered by the position chosen by the user.
         
         Does not include the strips for each comic.
         """
@@ -46,8 +40,7 @@ class UserOperations(object):
         return [c for c in self.all_comics() if c.id in comic_ids]
 
     def unread_comics_count(self):
-        """
-        List of tuples of comics with unread strips ordered by the position chosen by the user.
+        """List of tuples of comics with unread strips ordered by the position chosen by the user.
 
         First value is the comic, second is the number of unread strips.
         """
@@ -64,16 +57,12 @@ class UserOperations(object):
         return [(c, unread_counters[c.id]) for c in comics]
 
     def unread_comic_strips(self, comic):
-        """
-        List of unread strips of a certain comic
-        """
+        """List of unread strips of a certain comic."""
         unreads = self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).filter(comic__id=comic.id)
         return [u.history for u in unreads]
 
     def mark_comic_unread(self, comic):
-        """
-        Sets this comic as unread. Adds the last strip as unread for this user
-        """
+        """Sets a comic as unread adding the last strip as unread for this user."""
         if self.user.is_subscribed(comic):
             strip = comic.last()
             if strip:
@@ -82,15 +71,11 @@ class UserOperations(object):
         return False
 
     def unread_comic_strips_count(self, comic):
-        """
-        For a certain comic, how many unread strips does this user have?
-        """
+        """For a certain comic, how many unread strips does this user have?"""
         return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).filter(comic__id=comic.id).count()
 
     def unread_strips_count(self):
-        """
-        Total number of unread strips
-        """
+        """Total number of unread strips."""
         return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).count()
 
     # Subscribed comics
@@ -136,4 +121,3 @@ class UserOperations(object):
             sx.delete()
             self.user.unreadcomic_set.filter(comic__id__in=id_list).delete()
             self.user.newcomic_set.filter(comic__id__in=id_list).delete()
-

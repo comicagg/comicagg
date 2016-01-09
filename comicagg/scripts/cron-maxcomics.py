@@ -24,7 +24,7 @@ from comicagg.accounts.utils import get_profile
 starttime = datetime.now()
 if len(sys.argv) > 1:
     uid = int(sys.argv[1])
-    allusers = User.objects.order_by('id').filter(id__gte = uid)
+    allusers = User.objects.order_by('id').filter(id__gte=uid)
 else:
     allusers = User.objects.all()
 for user in allusers:

@@ -41,63 +41,63 @@ errors_unexpected = list()
 inactive_updated = list()
 
 class CheckThread(threading.Thread):
-	def __init__(self, all, errors_active, errors_inactive):
-		threading.Thread.__init__(self)
-		self.all = all
-		self.errors_active = errors_active
-		self.errors_inactive = errors_inactive
-		self.errors_unexpected = errors_unexpected
-		self.inactive_updated = inactive_updated
-		self.updated_comics = updated_comics
+    def __init__(self, all, errors_active, errors_inactive):
+        threading.Thread.__init__(self)
+        self.all = all
+        self.errors_active = errors_active
+        self.errors_inactive = errors_inactive
+        self.errors_unexpected = errors_unexpected
+        self.inactive_updated = inactive_updated
+        self.updated_comics = updated_comics
 
-	def run(self):
-		global new
-		global no_change
-		global errors
+    def run(self):
+        global new
+        global no_change
+        global errors
 
-		comic = self.next()
-		while comic:
-			changed = False
-			try:
-				changed = check_comic(comic)
-			except KeyboardInterrupt:
-				print ('*** Interrupted %s ***' % datetime.now())
-				sys.exit()
-			except NoMatchException:
-				s = '   Error checking %s\n' % comic.name
-				if comic.activo:
-					self.errors_active.append(s)
-				else:
-					self.errors_inactive.append(s)
-				errors += 1
-				#continue
-			except:
-				#print_exc()
-				s = '   Unexpected error %s: %s\n' % (comic.name, sys.exc_info()[1])
-				if comic.activo:
-					self.errors_unexpected.append(s)
-				else:
-					self.errors_inactive.append(s)
-				errors += 1
-				#raise
-				#continue
-			if changed:
-				new += 1
-				#si es un comic desactivado o terminado y se actualiza notificar posible activacion
-				if not comic.activo or comic.ended:
-					s = '   Disabled or ended comic %s just got an update.\n' % comic.name
-					self.inactive_updated.append(s)
-				else:
-					s = '   Updated %s\n' % comic.name
-					updated_comics.append(s)
-			else:
-				no_change += 1
-			comic = self.next()
+        comic = self.next()
+        while comic:
+            changed = False
+            try:
+                changed = check_comic(comic)
+            except KeyboardInterrupt:
+                print('*** Interrupted %s ***' % datetime.now())
+                sys.exit()
+            except NoMatchException:
+                s = '   Error checking %s\n' % comic.name
+                if comic.activo:
+                    self.errors_active.append(s)
+                else:
+                    self.errors_inactive.append(s)
+                errors += 1
+                #continue
+            except:
+                #print_exc()
+                s = '   Unexpected error %s: %s\n' % (comic.name, sys.exc_info()[1])
+                if comic.activo:
+                    self.errors_unexpected.append(s)
+                else:
+                    self.errors_inactive.append(s)
+                errors += 1
+                #raise
+                #continue
+            if changed:
+                new += 1
+                #si es un comic desactivado o terminado y se actualiza notificar posible activacion
+                if not comic.activo or comic.ended:
+                    s = '   Disabled or ended comic %s just got an update.\n' % comic.name
+                    self.inactive_updated.append(s)
+                else:
+                    s = '   Updated %s\n' % comic.name
+                    updated_comics.append(s)
+            else:
+                no_change += 1
+            comic = self.next()
 
-	def next(self):
-		print("%s: %d left, %d errors" % (self.getName(), len(self.all), errors))
-		if len(self.all):
-			return self.all.pop(0)
+    def next(self):
+        print("%s: %d left, %d errors" % (self.getName(), len(self.all), errors))
+        if len(self.all):
+            return self.all.pop(0)
 
 print('\n*** Update job execution (%s) ***' % datetime.now())
 
@@ -106,42 +106,42 @@ thread_list = list()
 max_threads = 5 if len(all) > 5 else len(all)
 
 for i in range(max_threads):
-	t = CheckThread(all, errors_active, errors_inactive)
-	thread_list.append(t)
-	t.start()
+    t = CheckThread(all, errors_active, errors_inactive)
+    thread_list.append(t)
+    t.start()
 
 for t in thread_list:
-	t.join()
+    t.join()
 
 execution_log += "Errors in active comics\n"
 for s in errors_active:
-	execution_log += s
+    execution_log += s
 execution_log += "-------------------------\n"
 execution_log += "Unexpected errors in active comics\n"
 for s in errors_unexpected:
-	execution_log += s
+    execution_log += s
 execution_log += "-------------------------\n"
 execution_log += "Disabled comic updated\n"
 for s in inactive_updated:
-	execution_log += s
+    execution_log += s
 execution_log += "-------------------------\n"
 execution_log += "Errors in disabled comics\n"
 for s in errors_inactive:
-	execution_log += s
+    execution_log += s
 execution_log += "-------------------------\n"
 execution_log += "Updated comics\n"
 for s in updated_comics:
-	execution_log += s
+    execution_log += s
 execution_log += "-------------------------\n"
 
 execution_log += "%s new, %s unchanged, %s errors\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)))
 execution_log += "End time: %s\n" % datetime.now()
 
 try:
-	mail_managers('Update job', execution_log)
+    mail_managers('Update job', execution_log)
 except:
-	print("Got error sending email")
-	print_exc()
-	
+    print("Got error sending email")
+    print_exc()
+    
 print(execution_log)
 not_running_anymore()

@@ -71,7 +71,8 @@ def organize(request, add=False):
     user_comics = list()
     for sub in user_subs:
         lst = request.user.unreadcomic_set.filter(comic=sub.comic)
-        if not lst and sub.comic.ended: continue
+        if not lst and sub.comic.ended:
+            continue
         user_comics.append(sub.comic)
     context['user_comics'] = user_comics
     
@@ -154,9 +155,12 @@ def sort_rate(a, b):
     Ordenar únicamente por la puntuación de los comics
     """
     c = b.get_rating() - a.get_rating()
-    if c > 0: return 1
-    elif c < 0: return -1
-    else: return 0
+    if c > 0:
+        return 1
+    elif c < 0:
+        return -1
+    else:
+        return 0
 
 def last_image_url(request, cid):
     """

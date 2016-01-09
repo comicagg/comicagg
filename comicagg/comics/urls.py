@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import include, patterns, url
 
-ajaxpatterns = patterns('comicagg.comics.ajax.views',
+ajax_patterns = patterns('comicagg.comics.ajax.views',
     url(r'^add_comic/$', 'add_comic', name='add_comic'),
     url(r'^remove_comic/$', 'remove_comic', name='remove_comic'),
     url(r'^remove_comic_list/$', 'remove_comic_list', name='remove_comic_list'),
@@ -14,7 +14,7 @@ ajaxpatterns = patterns('comicagg.comics.ajax.views',
     url(r'^mark_all_read/$', 'mark_all_read', name='mark_all_read'),
 )
 
-adminpatterns = patterns('comicagg.comics.adminviews.views',
+admin_patterns = patterns('comicagg.comics.adminviews.views',
     url(r'^check/$', 'admin_check', name='check'),
     url(r'^check/(?P<comic_id>\d+)/$', 'admin_check', name='check_id'),
     url(r'^reported/(?P<chids>[\w-]+)/$', 'admin_reported', name='reported'),                    
@@ -31,8 +31,8 @@ urlpatterns = patterns('comicagg.comics.views',
     url(r'^li/(?P<cid>\d+)/', 'last_image_url', name='last_image_url'),
     url(r'^hi/(?P<hid>\d+)/', 'history_image_url', name='history_url'),
     
-    (r'^ajax/', include(ajaxpatterns, namespace="ajax")),
-    (r'^admin/', include(adminpatterns, namespace="admin")),
+    (r'^ajax/', include(ajax_patterns, namespace="ajax")),
+    (r'^admin/', include(admin_patterns, namespace="admin")),
 )
 
 

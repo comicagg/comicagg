@@ -9,7 +9,7 @@ def index(request, archive=False):
     """It will render either the last 10 news items or all of them, depending on
     the keyword archive.
     """
-    context = { 'archive':archive }
+    context = {'archive':archive}
     posts = Post.objects.all()
     if not archive:
         posts = posts[:10]

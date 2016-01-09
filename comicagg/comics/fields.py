@@ -2,9 +2,9 @@
 from django.db import models
 
 class ComicNameField(models.CharField):
-    
+
     __metaclass__ = models.SubfieldBase
-    
+
     def __init__(self, *args, **kwargs):
         super(ComicNameField, self).__init__(*args, **kwargs)
 
@@ -13,9 +13,9 @@ class ComicNameField(models.CharField):
         return try_encodings(ret)
 
 class AltTextField(models.TextField):
-    
+
     __metaclass__ = models.SubfieldBase
-    
+
     def __init__(self, *args, **kwargs):
         super(AltTextField, self).__init__(*args, **kwargs)
 

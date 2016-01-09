@@ -132,56 +132,58 @@ def report_comic(request):
 def save_selection(request):
     if not request.POST:
         raise Http404
-    #get selection
+    # get selection
     try:
         selection = request.POST['selected'].split(',')
     except:
         return HttpResponseBadRequest("Check the parameters")
 
-    #remove posible duplicates, can't use a set, cos its order is undefined
-    #this will keep first appearances and delete later ones
+    # remove posible duplicates, can't use a set, cos its order is undefined
+    # this will keep first appearances and delete later ones
     selection_clean = list()
     for item in selection:
-        if len(item) == 0: continue
-        #try to get an index, if it fails, item is not in the list so we append the item to the list
+        if len(item) == 0:
+            continue
+        # try to get an index, if it fails, item is not in the list so we append the item to the list
         try:
             selection_clean.index(int(item))
         except:
             selection_clean.append(int(item))
 
-    #if there's nothing selected, we're finished
+    # if there's nothing selected, we're finished
     if len(selection_clean) == 0:
         return ok_response(request)
 
-    #subsc_dict is a dictionary, key=comic.id value=subscription.id
-    #python2.7+
-    #subsc_dict = {s.comic.id:s.id for s in request.user.subscription_set.all()}
-    #python2.6-
+    # subsc_dict is a dictionary, key=comic.id value=subscription.id
+    # python2.7+
+    # subsc_dict = {s.comic.id:s.id for s in request.user.subscription_set.all()}
+    # python2.6-
     subsc_dict = dict([(s.comic.id, s.id) for s in request.user.subscription_set.all()])
-    #subscriptions is the list of comic ids already added
+    # subscriptions is the list of comic ids already added
     subscriptions = subsc_dict.keys()
 
-    #guess what comics have been removed
+    # guess what comics have been removed
     removed = list()
     for s in subscriptions:
         if s not in selection_clean:
             removed.append(s)
-    #unsubscribe the removed comics 
+    # unsubscribe the removed comics
     request.user.subscription_set.filter(comic__id__in=removed).delete()
     request.user.unreadcomic_set.filter(comic__id__in=removed).delete()
 
-    #now change the position of the selected comics
-    #make the list of subscriptions we want to change
+    # now change the position of the selected comics
+    # make the list of subscriptions we want to change
     sids = list()
     for cid in selection_clean:
-        #get the subscription id
+        # get the subscription id
         sids.append(subsc_dict[cid])
-    #ss is a dictionary key:id value=subscription
+    # ss is a dictionary key:id value=subscription
     ss = Subscription.objects.in_bulk(sids)
-    #now change the position
+    # now change the position
     pos = 0
     for sid in sids:
-        if ss[sid].position == pos: continue
+        if ss[sid].position == pos:
+            continue
         ss[sid].position = pos
         ss[sid].save()
         pos += 1

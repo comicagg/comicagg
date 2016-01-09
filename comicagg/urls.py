@@ -19,7 +19,7 @@ urlpatterns = patterns('',
 	(r'^api/', include('comicagg.api.urls', namespace="api")),
 	(r'^comics/', include('comicagg.comics.urls', namespace="comics")),
 	(r'^news/', include('comicagg.blog.urls', namespace="news")),
-	(r'^oauth2/', include('provider.oauth2.urls', namespace = 'oauth2')),
+	(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
 	(r'^ws/', include('comicagg.ws.urls', namespace="ws")),
 )
 

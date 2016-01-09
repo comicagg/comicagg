@@ -86,7 +86,7 @@ class Comic(models.Model):
                 up = UserProfile.objects.get(user=user)
                 #por cada usuario poner el campo del perfil new_comics a True
                 if up.alert_new_comics:
-                    up.new_comics = True;
+                    up.new_comics = True
                     new = NewComic(user=user, comic=self)
                     new.save()
                     up.save()

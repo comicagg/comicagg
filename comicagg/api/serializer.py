@@ -139,7 +139,7 @@ def build_xml_element(name, value):
         out = "<" + tag
         if len(attx):
             out += " "
-            out += " ".join(['%s="%s"' % (k,v) for k, v in attx.items() if not k.startswith("__")])
+            out += " ".join(['%s="%s"' % (k, v) for k, v in attx.items() if not k.startswith("__")])
         if child:
             out += ">" + child + "</" + tag + ">"
         else:
