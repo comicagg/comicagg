@@ -1,3 +1,4 @@
+import logging
 from django import forms
 from django.contrib.auth import authenticate
 from django.utils.encoding import smart_text
@@ -9,7 +10,6 @@ from ..scope import SCOPE_NAMES
 from ..utils import now
 from .models import Client, Grant, RefreshToken
 
-import logging
 logger = logging.getLogger(__name__)
 
 class ClientForm(forms.ModelForm):

@@ -4,7 +4,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.timezone import now as django_now
 from comicagg.comics.fields import ComicNameField, AltTextField
 from comicagg.accounts.models import UserProfile
 
@@ -219,8 +218,6 @@ class ComicHistory(models.Model):
     class Meta:
         ordering = ['-id']
         get_latest_by = "date"
-
-
 
 class UnreadComic(models.Model):
     user = models.ForeignKey(User)

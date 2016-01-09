@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
-from comicagg.comics.models import Comic, ComicHistory, NewComic, UnreadComic, Subscription
+"""These are views for ajax requests.
+
+If they need any parameters, they always have to be sent via POST.
+Response status:
+- Everything OK: 200 (of course). Response is JSON with several counters
+- Bad parameters: 400
+- Not found or no POST: 404
+"""
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
@@ -7,15 +15,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Count, Max
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
-
-"""
-These are views for ajax requests.
-If they need any parameters, they always have to be sent via POST.
-Response status:
-- Everything OK: 200 (of course). Response is JSON with several counters
-- Bad parameters: 400
-- Not found or no POST: 404
-"""
+from comicagg.comics.models import Comic, ComicHistory, NewComic, UnreadComic, Subscription
 
 def ok_response(request):
     comics = request.user.subscription_set.exclude(comic__activo=False, comic__ended=False).count()

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from django import template
-from comicagg.comics.models import Comic
+import time
 from email.utils import formatdate
 from xml.sax.saxutils import escape
-import time
+from django import template
+from comicagg.comics.models import Comic
 
 register = template.Library()
 

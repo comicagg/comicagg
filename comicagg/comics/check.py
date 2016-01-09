@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """Functions to check if the comics have been updated."""
 import re
-import requests
 from datetime import datetime
 from html import unescape
 from django.conf import settings
+import requests
 from comicagg.comics.models import ComicHistory, UnreadComic, NoMatchException
 
 def check_comic(comic):

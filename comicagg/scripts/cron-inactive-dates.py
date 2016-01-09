@@ -6,7 +6,6 @@ The threshold to be considered inactive is settings.INACTIVE_DAYS
 """
 import os
 import sys
-import time
 from datetime import datetime, timedelta
 # Add the root folder to the python path
 d = os.path.dirname(os.path.abspath(sys.argv[0]))

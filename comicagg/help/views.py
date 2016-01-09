@@ -1,9 +1,9 @@
-from comicagg import *
-from comicagg.help.models import *
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from comicagg import render
+from comicagg.help.models import Ticket, Faq, NewTicketForm, ReplyTicketForm
 
 # Create your views here.
 def index(request):

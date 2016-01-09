@@ -10,7 +10,6 @@ from django.http import HttpResponse
 from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
-from comicagg import render
 from comicagg.logs import logmsg
 import comicagg.logs.tags as logtags
 

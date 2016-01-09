@@ -6,9 +6,8 @@ Updates the strips in the comics
 import os
 import sys
 import threading
-import time
+from traceback import print_exc
 from builtins import range
-from traceback import *
 from datetime import datetime
 # Add the root folder to the python path
 d = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -70,20 +69,15 @@ class CheckThread(threading.Thread):
                 else:
                     self.errors_inactive.append(s)
                 errors += 1
-                #continue
             except:
-                #print_exc()
                 s = '   Unexpected error %s: %s\n' % (comic.name, sys.exc_info()[1])
                 if comic.activo:
                     self.errors_unexpected.append(s)
                 else:
                     self.errors_inactive.append(s)
                 errors += 1
-                #raise
-                #continue
             if changed:
                 new += 1
-                #si es un comic desactivado o terminado y se actualiza notificar posible activacion
                 if not comic.activo or comic.ended:
                     s = '   Disabled or ended comic %s just got an update.\n' % comic.name
                     self.inactive_updated.append(s)
@@ -103,15 +97,15 @@ print('\n*** Update job execution (%s) ***' % datetime.now())
 
 execution_log = "Start time: %s\n" % datetime.now()
 thread_list = list()
+# Limit the number of threads to 5 or less if there are less comics in the service
 max_threads = 5 if len(all) > 5 else len(all)
-
 for i in range(max_threads):
-    t = CheckThread(all, errors_active, errors_inactive)
-    thread_list.append(t)
-    t.start()
+    thread = CheckThread(all, errors_active, errors_inactive)
+    thread_list.append(thread)
+    thread.start()
 
-for t in thread_list:
-    t.join()
+for thread in thread_list:
+    thread.join()
 
 execution_log += "Errors in active comics\n"
 for s in errors_active:

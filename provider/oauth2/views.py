@@ -1,4 +1,5 @@
 from datetime import timedelta
+import logging
 from django.core.urlresolvers import reverse
 from .. import constants
 from ..views import Capture, Authorize, Redirect
@@ -10,7 +11,6 @@ from .forms import AuthorizationCodeGrantForm
 from .models import Client, RefreshToken, AccessToken
 from .backends import BasicClientBackend, RequestParamsClientBackend, PublicPasswordBackend
 
-import logging
 logger = logging.getLogger(__name__)
 
 class Capture(Capture):
