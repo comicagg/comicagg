@@ -34,7 +34,7 @@ class APIView(View, FormMixin):
     """
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(APIView, self).__init__(**kwargs)
         # FUTURE: what if we want to use several form classes?
         self.form_class = None
         self.content_type = "application/json; charset=utf-8"
@@ -70,7 +70,7 @@ class APIView(View, FormMixin):
         # FUTURE: what if we want to use several form classes?
         if self.form_class:
             form_class = self.get_form_class()
-            context['form'] = self.get_form(form_class)
+            context['form'] = self.get_form(self.form_class)
         return context
 
     def error(self, name, description, error_class=HttpResponseBadRequest):
@@ -158,7 +158,7 @@ class SubscriptionsView(APIView):
 
     def get(self, request, **kwargs):
         """Get all the comics the user is following including the last strip fetched."""
-        subs = request.user.operations.all_comics()
+        subs = request.user.operations.subscribed_comics()
         body = self.serialize(subs, include_last_strip=True, identifier='subscriptions')
         return self.render_response(body)
 
@@ -235,7 +235,7 @@ class SubscriptionsView(APIView):
         [id_list_clean.append(x) for x in id_list if x not in id_list_clean]
 
         # 2. Get the comics the user is currently following
-        current_active_idx = [c.id for c in request.user.operations.all_comics()]
+        current_active_idx = [c.id for c in request.user.operations.subscribed_comics()]
 
         # 3. Find comics to be removed
         deleted_idx = [x for x in current_active_idx if x not in id_list_clean]
@@ -266,7 +266,7 @@ class SubscriptionsView(APIView):
     def delete(self, request, **kwargs):
         """Remove all the subscriptions, returning a list with the IDs of the comics the user used to follow."""
         # Needs the serializer to be able to render a list of integers
-        current_active_idx = [c.id for c in request.user.operations.all_comics()]
+        current_active_idx = [c.id for c in request.user.operations.subscribed_comics()]
         body = self.serialize(current_active_idx, identifier="removed_subscriptions")
         # TODO: move this to UserOperations
         request.user.subscription_set.all().delete()
@@ -278,7 +278,10 @@ class UnreadsView(APIView):
     
     Mark comics as read or unread.
     """
-    form_class = VoteForm
+
+    def __init__(self, **kwargs):
+        super(UnreadsView, self).__init__(**kwargs)
+        self.form_class = VoteForm
 
     def get(self, request, **kwargs):
         """Get the unread comics followed by the user."""

@@ -23,7 +23,7 @@ from comicagg.comics.models import Comic, ComicHistory, NewComic, Request as Com
 
 @login_required
 def read_view(request):
-    comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user.operations.all_comics()]
+    comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user.operations.subscribed_comics()]
     unread_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user.operations.unread_comics()]
     random = random_comic(request.user)
     context = RequestContext(request, {

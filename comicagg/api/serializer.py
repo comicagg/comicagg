@@ -32,7 +32,10 @@ class Serializer:
             d["strip"] = self.build_comichistory_dict(object_to_serialize)
         elif isinstance(object_to_serialize, list) and identifier:
             # Serialize a list of Comic objects using identifier as the parent element
-            if isinstance(object_to_serialize[0], Comic):
+            if len(object_to_serialize) == 0:
+                # This clause could be joined with the next one with an or, but it's easier to read like this
+                d[identifier] = []
+            elif isinstance(object_to_serialize[0], Comic):
                 # This is a list of comics
                 d[identifier] = [self.build_comic_dict(x, include_last_strip, include_unread_strips) for x in object_to_serialize]
             else:
@@ -52,7 +55,7 @@ class Serializer:
         return build_xml(d)
 
     def build_comic_dict(self, comic, last_strip=False, unread_strips=False):
-        if type(comic) is not Comic:
+        if not isinstance(comic, Comic):
             raise ValueError("This is not a comic")
         if not self.user:
             raise ValueError("To serialize a comic you need a user")
@@ -95,7 +98,7 @@ class Serializer:
             out["__class"] = "user"
         out["username"] = self.user.username
         out["email"] = self.user.email
-        out["totalcomics"] = len(user_operations.all_comics())
+        out["totalcomics"] = len(user_operations.subscribed_comics())
         out["unreadcomics"] = len(user_operations.unread_comics())
         # TODO: Return also the number of new comics
         return out
@@ -117,7 +120,7 @@ def build_xml(dictionary):
 def build_xml_element(tag_name, tag_content):
     """Builds a XML element whose tag is name and the content is value. Value will be parsed to XML accordingly."""
     out = ""
-    if isinstance(tag_content, list) and isinstance(tag_content[0], int):
+    if isinstance(tag_content, list) and len(tag_content) > 0 and isinstance(tag_content[0], int):
         # This is a list of integers
         out = "<%s>%s</%s>" % (
             tag_name,
@@ -125,7 +128,6 @@ def build_xml_element(tag_name, tag_content):
             tag_name)
     elif isinstance(tag_content, list):
         # If the value passed is a list, then we need just to create opening and closing tags using name and recurse
-        print(type(tag_content[0]))
         out = "<%s>%s</%s>" % (
             tag_name,
             ''.join([build_xml_element(None, item) for item in tag_content]),
