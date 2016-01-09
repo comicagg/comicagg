@@ -61,6 +61,11 @@ class Comic(models.Model):
 
     add_date = models.DateTimeField(auto_now_add=True)
 
+    def __init__(self, *args, **kwargs):
+        super(Comic, self).__init__(*args, **kwargs)
+        self._reader_count = None
+        self._strip_count = None
+
     class Meta:
         ordering = ['name']
         permissions = (
@@ -133,13 +138,11 @@ class Comic(models.Model):
     def negative_votes(self):
         return self.votes-self.rating
 
-    _reader_count = None
     def reader_count(self):
         if not self._reader_count:
             self._reader_count = self.subscription_set.count()
         return int(self._reader_count)
 
-    _strip_count = None
     def strip_count(self):
         if not self._strip_count:
             self._strip_count = self.comichistory_set.count()
