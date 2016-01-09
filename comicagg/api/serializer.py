@@ -26,16 +26,16 @@ class Serializer:
         # TODO: Change the serializer to allow to return a list of integers
         d = dict()
         # Serialize a Comic object
-        if type(object_to_serialize) is Comic:
+        if isinstance(object_to_serialize, Comic):
             d["comic"] = self.build_comic_dict(object_to_serialize, last_strip, unread_strips)
         # Serialize a ComicHistory object (strip)
-        elif type(object_to_serialize) is ComicHistory:
+        elif isinstance(object_to_serialize, ComicHistory):
             d["strip"] = self.build_comichistory_dict(object_to_serialize)
         # Serialize a list of Comic objects using identifier as the parent element
-        elif type(object_to_serialize) is list and identifier:
+        elif isinstance(object_to_serialize, list) and identifier:
             d[identifier] = [self.build_comic_dict(x, last_strip, unread_strips) for x in object_to_serialize]
         # Serialize a dictionary of objects using identifier as the parent element
-        elif type(object_to_serialize) is dict and identifier:
+        elif isinstance(object_to_serialize, dict) and identifier:
             d[identifier] = object_to_serialize
         # Serialize the current user information if there is no object_to_serialize
         elif not object_to_serialize and self.user:

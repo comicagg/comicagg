@@ -181,7 +181,7 @@ class SubscriptionsView(APIView):
         # Build the list of IDs
         body = request.processed_body
         id_list = list()
-        if type(body) == ET.Element:
+        if isinstance(body, ET.Element):
             # this is a XML request
             if body.tag != 'subscribe':
                 return self.error("BadRequest", "The request XML body is not valid")
@@ -218,7 +218,7 @@ class SubscriptionsView(APIView):
 
         body = request.processed_body
         id_list = list()
-        if type(body) == ET.Element:
+        if isinstance(body, ET.Element):
             # this is a XML request
             if body.tag != 'subscriptions':
                 return self.error("BadRequest", "The request XML body is not valid")
