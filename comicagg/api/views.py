@@ -30,47 +30,41 @@ class APIView(View, FormMixin):
     The rest of the API views inherit from this class.
     """
 
-    form_class = None
-    content_type = "application/json; charset=utf-8"
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # FUTURE: what if we want to use several form classes?
+        self.form_class = None
+        self.content_type = "application/json; charset=utf-8"
 
     # FUTURE: Can we use JsonResponse from Django to render JSON instead?
-
     @transaction.atomic
     def dispatch(self, *args, **kwargs):
+        """Setup the response content type and handle errors from the specific verb methods."""
         request = args[0]
         logger.debug("API call: %s %s", request.method, request.path)
-        xml = False
-        if self.prefers_xml():
-            xml = True
+
+        if request.client_prefers_xml:
             self.content_type = "text/xml; charset=utf-8"
-        self.serializer = Serializer(request.user, xml)
-        self.serialize = self.serializer.serialize
+        self.serialize = Serializer(request.user, request.client_prefers_xml).serialize
+
         if not request.user.is_authenticated():
             return self.error("Unauthorized", "You need to log in to access this resource", HttpResponseUnauthorized)
         response = None
         try:
             response = super(APIView, self).dispatch(*args, **kwargs)
-        except:
+        except Exception as exception:
+            # TODO : log this exception
             response = self.error("Server error", "Internal server error", HttpResponseServerError)
         return response
 
     def render_response(self, body, response_class=HttpResponse):
+        """Shortcut method to create the response object with the class and body parameters and the correct content type."""
         return response_class(body, self.content_type)
 
-    def prefers_xml(self):
-        """Inspect the list of accepted content types and return a boolean if the request prefers XML over JSON."""
-        try:
-            xml_i = self.request.accept_list.index("text/xml")
-        except:
-            return False
-        try:
-            json_i = self.request.accept_list.index("application/json")
-        except:
-            return True
-        return xml_i < json_i
-
     def get_context_data(self, **kwargs):
+        """Populates the form in the context if the inheriting class has specified a form"""
         context = super(APIView, self).get_context_data(**kwargs)
+        # FUTURE: what if we want to use several form classes?
         if self.form_class:
             form_class = self.get_form_class()
             context['form'] = self.get_form(form_class)
@@ -108,10 +102,10 @@ class ComicsView(APIView):
                 data = Comic.objects.get(pk=comic_id)
             except:
                 return self.error("NotFound", "The comic does not exist", HttpResponseNotFound)
-            body = self.serialize(data, last_strip=True)
+            body = self.serialize(data, include_last_strip=True)
         else:
             simple = "simple" in kwargs.keys()
-            body = self.serialize(list(active_comics()), last_strip=(not simple), identifier="comics")
+            body = self.serialize(list(active_comics()), include_last_strip=(not simple), identifier="comics")
         return self.render_response(body)
 
 class StripsView(APIView):
@@ -162,7 +156,7 @@ class SubscriptionsView(APIView):
     def get(self, request, **kwargs):
         """Get all the comics the user is following including the last strip fetched."""
         subs = request.user.operations.all_comics()
-        body = self.serialize(subs, last_strip=True, identifier='subscriptions')
+        body = self.serialize(subs, include_last_strip=True, identifier='subscriptions')
         return self.render_response(body)
 
     @write_required
@@ -268,12 +262,13 @@ class SubscriptionsView(APIView):
     @write_required
     def delete(self, request, **kwargs):
         """Remove all the subscriptions, returning a list with the IDs of the comics the user used to follow."""
-        # TODO: List of the IDs of the comics the user used to follow.
         # Needs the serializer to be able to render a list of integers
-        # current_active_idx = [c.id for c in request.user.operations.all_comics()]
+        current_active_idx = [c.id for c in request.user.operations.all_comics()]
+        body = self.serialize(current_active_idx, identifier="removed_subscriptions")
+        # TODO: move this to UserOperations
         request.user.subscription_set.all().delete()
         request.user.unreadcomic_set.all().delete()
-        return HttpResponse(status=204, content_type=self.content_type)
+        return self.render_response(body)
 
 class UnreadsView(APIView):
     """Handles a user's unread comics.
@@ -294,13 +289,13 @@ class UnreadsView(APIView):
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
 
             if request.user.operations.is_subscribed(comic):
-                body = self.serialize(comic, unread_strips=True)
+                body = self.serialize(comic, include_unread_strips=True)
             else:
                 return self.error("BadRequest", "You are not subscribed to this comic")
         else:
             last_strip = 'with_strips' in context.keys()
             unreads = request.user.operations.unread_comics()
-            body = self.serialize(unreads, last_strip=last_strip, identifier='unreads')
+            body = self.serialize(unreads, include_last_strip=last_strip, identifier='unreads')
 
         return self.render_response(body)
 

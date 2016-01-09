@@ -89,8 +89,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware', # Change the locale
 
     # Authentication middleware
-    'django.contrib.auth.middleware.AuthenticationMiddleware', #
-    'comicagg.middleware.api.OAuth2Middleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # Default authentication
+    'comicagg.api.middleware.OAuth2Middleware', # OAuth2 authentication
 
     # Post authentication middleware
     'comicagg.middleware.UserProfileMiddleware', # Set up the user profile and user operations
@@ -99,8 +99,8 @@ MIDDLEWARE_CLASSES = (
     'comicagg.middleware.MaintenanceMiddleware', # Maintenance mode
     'django.contrib.messages.middleware.MessageMiddleware', # Django messages
     'django.contrib.admindocs.middleware.XViewMiddleware',
-    'comicagg.middleware.api.AcceptHeaderProcessingMiddleware',
-    'comicagg.middleware.api.BodyProcessingMiddleware'
+    'comicagg.api.middleware.AcceptHeaderProcessingMiddleware', # Processes the Accept header
+    'comicagg.api.middleware.BodyProcessingMiddleware' # Process the body
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
