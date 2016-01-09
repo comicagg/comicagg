@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
+import logging
+from django.db.models import Max
 from comicagg.comics.models import Comic, ComicHistory, UnreadComic
+
+logger = logging.getLogger(__name__)
 
 class UserOperations(object):
     """This class allows operations with comic stuff and a certain user."""
