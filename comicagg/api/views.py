@@ -20,6 +20,9 @@ logger = logging.getLogger(__name__)
 class HttpResponseUnauthorized(HttpResponse):
     status_code = 401
 
+class HttpResponseNoContent(HttpResponse):
+    status_code = 204
+
 # Views
 
 class APIView(View, FormMixin):
@@ -134,7 +137,7 @@ class StripsView(APIView):
         if not request.user.operations.is_subscribed(strip.comic):
             return self.error("BadRequest", "You are not subscribed to this comic")
         request.user.unreadcomic_set.create(user=request.user, comic=strip.comic, history=strip)
-        return HttpResponse(status=204, content_type=self.content_type)
+        return HttpResponseNoContent(content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
@@ -148,7 +151,7 @@ class StripsView(APIView):
         if not request.user.operations.is_subscribed(strip.comic):
             return self.error("BadRequest", "You are not subscribed to this comic")
         request.user.unreadcomic_set.filter(history__id=strip_id).delete()
-        return HttpResponse(status=204, content_type=self.content_type)
+        return HttpResponseNoContent(content_type=self.content_type)
 
 class SubscriptionsView(APIView):
     """Handles comic subscriptions. Add, modify or remove subscriptions to comics."""
@@ -193,7 +196,7 @@ class SubscriptionsView(APIView):
         id_list_clean = []
         [id_list_clean.append(x) for x in id_list if x not in id_list_clean]
         request.user.operations.subscribe_comics(id_list_clean)
-        return HttpResponse(status=204, content_type=self.content_type)
+        return HttpResponseNoContent(content_type=self.content_type)
 
     @write_required
     def put(self, request, **kwargs):
@@ -257,7 +260,7 @@ class SubscriptionsView(APIView):
             s.save()
             position += 1
 
-        return HttpResponse(status=204, content_type=self.content_type)
+        return HttpResponseNoContent(content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
@@ -321,7 +324,7 @@ class UnreadsView(APIView):
         else:
             return self.error("BadRequest", "You are not subscribed to this comic")
 
-        return HttpResponse(status=204, content_type=self.content_type)
+        return HttpResponseNoContent(content_type=self.content_type)
 
     @write_required
     def put(self, request, **kwargs):
@@ -362,7 +365,7 @@ class UnreadsView(APIView):
         comic.save()
         # Mark all unreads as read
         request.user.unreadcomic_set.filter(comic=comic).delete()
-        return HttpResponse(status=204, content_type=self.content_type)
+        return HttpResponseNoContent(content_type=self.content_type)
 
     @write_required
     def delete(self, request, **kwargs):
@@ -380,7 +383,7 @@ class UnreadsView(APIView):
                 return self.error("NotFound", "Comic does not exist", HttpResponseNotFound)
             # TODO: move this to the user operations class
             request.user.unreadcomic_set.filter(comic=comic).delete()
-        return HttpResponse(status=204, content_type=self.content_type)
+        return HttpResponseNoContent(content_type=self.content_type)
 
 class UserView(APIView):
     """Handles some user information."""
