@@ -2,7 +2,7 @@
 import logging
 import random
 from django.db.models import Max
-from comicagg.comics.models import Comic, ComicHistory, UnreadComic, NewComic
+from comicagg.comics.models import Comic, ComicHistory, UnreadComic, NewComic, active_comics
 
 logger = logging.getLogger(__name__)
 
@@ -13,33 +13,7 @@ class UserOperations(object):
         super().__init__(**kwargs)
         self.user = user
 
-    # Subscriptions
-
-    def subscribed_all(self):
-        """Get a list of Subscriptions including inactive and ended."""
-        return self.user.subscription_set.all()
-
-    def subscribed_comics(self):
-        """Get a list of Comic objects that the user is subscribed to."""
-        subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
-        return [s.comic for s in subscriptions]
-
-    def random_comic(self):
-        """Get a random comic that the user is not following."""
-        subscribed_ids = [comic.id for comic in self.subscribed_comics()]
-        not_subscribed_comics = list(Comic.objects.exclude(id__in=subscribed_ids))
-        history = None
-        if not_subscribed_comics:
-            try:
-                random_comic = not_subscribed_comics[random.randint(0, len(not_subscribed_comics) - 1)]
-                history_set = random_comic.comichistory_set.all()
-                history = history_set[random.randint(0, len(history_set) - 1)]
-            except:
-                pass
-        return history
-
-    # Unreads
-
+    # Unread comics
     def unread_comic_set(self):
         """Return the UnreadComic set for the user filtered."""
         return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
@@ -101,7 +75,34 @@ class UserOperations(object):
         """Total number of unread strips."""
         return self.unread_comic_set().count()
 
-    # Subscribed comics
+    # Subscriptions
+    def subscribed_all(self):
+        """Get a list of Subscriptions including inactive and ended."""
+        # FUTURE: Should we return a list of Comic objects instead?
+        return self.user.subscription_set.all()
+
+    def subscribed_comics(self):
+        """Get a list of Comic objects that the user is subscribed to."""
+        # FUTURE: Should we return a list of Subscription objects instead?
+        subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
+        return [s.comic for s in subscriptions]
+
+    def random_comic(self):
+        """Get a random ComicHistory of a Comic that the user is not following.
+
+        The comic must be active and the ComicHistory returned must be the most recent."""
+        subscribed_ids = [subscription.comic.id for subscription in self.subscribed_all()]
+        not_subscribed_comics = list(active_comics().exclude(id__in=subscribed_ids))
+        history = None
+        if not_subscribed_comics:
+            while not history:
+                # Find the first not subscribed comic with a ComicHistory
+                try:
+                    random_comic = not_subscribed_comics[random.randint(0, len(not_subscribed_comics) - 1)]
+                    history = random_comic.last_strip()
+                except:
+                    pass
+        return history
 
     def new_comics(self):
         """Get the new comics for the user in a QuerySet."""

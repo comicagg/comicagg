@@ -1,0 +1,16 @@
+Comics in the fixtures
+
+Active      5
+Ended       3
+Disabled    1
+
+ID  Status  Strips  Name
+1   E       2       Plush
+2   A       1       GNC
+3   E               CBML
+4   A       1       Penny
+5   A       1       Megatokyo
+6   A       1       XKCD
+7   A       3       Cyanide
+8   E               Wally
+9   D               LinuxHispano

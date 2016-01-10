@@ -188,22 +188,22 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'WARNING',
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['file', 'mail_admins'],
+            'handlers': ['console', 'mail_admins'],
             'level': 'WARNING',
             'propagate': False,
         },
         'comicagg': {
-            'handlers': ['file'],
-            'level': 'DEBUG'
+            'handlers': ['console'],
+            'level': 'WARNING'
         },
         'provider': {
-            'handlers': ['file'],
-            'level': 'DEBUG'
+            'handlers': ['console'],
+            'level': 'WARNING'
         },
     }
 }

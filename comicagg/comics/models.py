@@ -170,7 +170,8 @@ class Comic(models.Model):
 
 # FUTURE: We may want to move this elsewhere
 def active_comics():
-    """It will only return comics that an user can follow."""
+    """Returns a QuerySet of Comic objects that a user can follow.
+    So, only active and not ended."""
     return Comic.objects.exclude(activo=False, ended=True)
 
 class Subscription(models.Model):
