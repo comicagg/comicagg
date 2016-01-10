@@ -81,6 +81,10 @@ STATICFILES_DIRS = (
     os.path.join(ROOT, 'static'),
 )
 
+FIXTURE_DIRS = (
+    os.path.join(ROOT, 'test_fixtures'),
+)
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.gzip.GZipMiddleware', # Compress the output
     'django.middleware.common.CommonMiddleware', #
@@ -136,6 +140,17 @@ EMAIL_HOST_PASSWORD = ''
 SESSION_COOKIE_NAME = 'comicagg_session'
 
 USER_AGENT = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)'
+
+"""
+Logging levels
+
+CRITICAL    50
+ERROR       40
+WARNING     30
+INFO        20
+DEBUG       10
+NOTSET      0
+"""
 
 LOGGING = {
     'version': 1,
