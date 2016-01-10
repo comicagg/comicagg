@@ -15,6 +15,10 @@ class UserOperations(object):
 
     # Subscriptions
 
+    def subscribed_all(self):
+        """Get a list of Subscriptions including inactive and ended."""
+        return self.user.subscription_set.all()
+
     def subscribed_comics(self):
         """Get a list of Comic objects that the user is subscribed to."""
         subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)

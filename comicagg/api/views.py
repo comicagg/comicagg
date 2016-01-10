@@ -210,14 +210,14 @@ class SubscriptionsView(APIView):
             return self.error("BadRequest", "The request body is not valid")
 
         body = request.processed_body
-        id_list = list()
+        requested_idx = list()
         if isinstance(body, ET.Element):
             # this is a XML request
             if body.tag != 'subscriptions':
                 return self.error("BadRequest", "The request XML body is not valid")
             try:
                 for comicid in body.findall('comicid'):
-                    id_list.append(int(comicid.text))
+                    requested_idx.append(int(comicid.text))
             except:
                 return self.error("BadRequest", "Invalid comic ID list")
         else:
@@ -225,39 +225,39 @@ class SubscriptionsView(APIView):
             if 'subscriptions' not in body.keys():
                 return self.error("BadRequest", "The request JSON body is not valid")
             try:
-                id_list = [int(x) for x in body['subscriptions']]
+                requested_idx = [int(x) for x in body['subscriptions']]
             except:
                 return self.error("BadRequest", "Invalid comic ID list")
 
         # 1. Remove possible duplicates from the input
         # These are all the comics the user wants to follow and in this order
-        id_list_clean = []
-        [id_list_clean.append(x) for x in id_list if x not in id_list_clean]
+        requested_idx_clean = []
+        [requested_idx_clean.append(comic_id) for comic_id in requested_idx if comic_id not in requested_idx_clean]
 
         # 2. Get the comics the user is currently following
-        current_active_idx = [c.id for c in request.user.operations.subscribed_comics()]
+        current_active_idx = [comic.id for comic in request.user.operations.subscribed_comics()]
 
         # 3. Find comics to be removed
-        deleted_idx = [x for x in current_active_idx if x not in id_list_clean]
+        deleted_idx = [comic_id for comic_id in current_active_idx if comic_id not in requested_idx_clean]
         request.user.operations.unsubscribe_comics(deleted_idx)
 
         # 4. Find comics to be added
-        added_idx = [x for x in id_list_clean if x not in current_active_idx]
+        added_idx = [comic_id for comic_id in requested_idx_clean if comic_id not in current_active_idx]
         request.user.operations.subscribe_comics(added_idx)
 
         # 5. Update the position of the subcriptions
-        current_all = request.user.subscription_set.all()
-        current_all_dict = dict([(s.comic.id, s) for s in current_all])
+        subscribed_all = request.user.operations.subscribed_all()
+        subscribed_all_dict = dict([(subscription.comic.id, subscription) for subscription in subscribed_all])
 
-        if len(current_all) < id_list_clean:
-            # This should never happen, something must have gone wrong
+        if len(subscribed_all) < requested_idx_clean:
+            # We have already added/removed the comics so this should never happen, something must have gone wrong.
             HttpResponse(status=500, content_type=self.content_type)
 
         position = 0
-        for comic_id in id_list_clean:
-            s = current_all_dict[comic_id]
-            s.position = position
-            s.save()
+        for comic_id in requested_idx_clean:
+            subscription = subscribed_all_dict[comic_id]
+            subscription.position = position
+            subscription.save()
             position += 1
 
         return HttpResponseNoContent(content_type=self.content_type)
