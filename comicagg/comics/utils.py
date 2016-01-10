@@ -51,8 +51,8 @@ class UserOperations(object):
         """
         unreads = self.unread_comic_set()
         # Build a list of comic ids to later get the comics correctly ordered from all_comics
-        comic_ids = list(set([u.comic.id for u in unreads]))
-        return [c for c in self.subscribed_comics() if c.id in comic_ids]
+        comic_ids = list(set([unread.comic.id for unread in unreads]))
+        return [comic for comic in self.subscribed_comics() if comic.id in comic_ids]
 
     def unread_comics_count(self):
         """Get a list of tuples of comics with unread strips ordered by the position chosen by the user.
@@ -61,20 +61,20 @@ class UserOperations(object):
         """
         unreads = self.unread_comic_set()
         # build a list of comic ids to later get the comics correctly ordered from all_comics
-        comic_ids = list(set([u.comic.id for u in unreads]))
-        comics = [c for c in self.subscribed_comics() if c.id in comic_ids]
+        comic_ids = list(set([unread.comic.id for unread in unreads]))
+        comics = [comic for comic in self.subscribed_comics() if comic.id in comic_ids]
         unread_counters = dict()
         for unread in unreads:
             if unread.comic.id not in unread_counters.keys():
                 unread_counters[unread.comic.id] = 1
             else:
                 unread_counters[unread.comic.id] += 1
-        return [(c, unread_counters[c.id]) for c in comics]
+        return [(comic, unread_counters[comic.id]) for comic in comics]
 
     def unread_comic_strips(self, comic):
         """List of unread strips of a certain comic."""
         unreads = self.unread_comic_set().filter(comic__id=comic.id)
-        return [u.history for u in unreads]
+        return [unread.history for unread in unreads]
 
     def mark_comic_unread(self, comic):
         """Sets a comic as unread adding the last strip as unread for this user."""
@@ -108,9 +108,11 @@ class UserOperations(object):
         return NewComic.objects.exclude(comic__activo=False, comic__ended=False)
 
     def is_subscribed(self, comic):
+        """Check if the user is subscribed to a comic."""
         return self.user.subscription_set.filter(comic__id=comic.id).count() == 1
 
     def subscribe_comic(self, comic):
+        """Subscribe the user to this comic, adding it last to his list."""
         if self.is_subscribed(comic):
             return
         # Calculate the position for the comic, it'll be the last
@@ -129,26 +131,30 @@ class UserOperations(object):
             logger.debug("Did not add any strip to the user")
 
     def subscribe_comics(self, id_list):
+        """Subscribe the user to all the comics in the list."""
         new_comics = Comic.objects.in_bulk(id_list)
         for comic in new_comics.values():
             self.subscribe_comic(comic)
 
     def unsubscribe_comic(self, comic):
-        s = self.user.subscription_set.filter(comic=comic)
-        if s:
+        """Remove the comic from the user's subscriptions."""
+        subscription = self.user.subscription_set.filter(comic=comic)
+        if subscription:
             logger.debug("Removing subscription")
-            s.delete()
+            subscription.delete()
             self.user.unreadcomic_set.filter(comic=comic).delete()
             self.user.newcomic_set.filter(comic=comic).delete()
 
     def unsubscribe_comics(self, id_list):
-        sx = self.user.subscription_set.filter(comic__id__in=id_list)
-        if sx:
+        """Remove the comics in the list from the user's subscriptions."""
+        subscriptions = self.user.subscription_set.filter(comic__id__in=id_list)
+        if subscriptions:
             logger.debug("Removing subscriptions")
-            sx.delete()
+            subscriptions.delete()
             self.user.unreadcomic_set.filter(comic__id__in=id_list).delete()
             self.user.newcomic_set.filter(comic__id__in=id_list).delete()
 
     def unsubscribe_all_comics(self):
+        """Remove all of the user's subscriptions."""
         self.user.subscription_set.all().delete()
         self.mark_all_read()
