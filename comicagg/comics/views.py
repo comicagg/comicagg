@@ -76,7 +76,7 @@ def organize(request, add=False):
     context['user_comics'] = user_comics
     
     if add:
-        context['new_comics'] = NewComic.objects.filter(user=request.user).exclude(comic__activo=False)
+        context['new_comics'] = request.user.operations.new_comics()
         context['all_comics'] = all_comics
         #quitar aviso de nuevos comics
         hide_new_comics(request)

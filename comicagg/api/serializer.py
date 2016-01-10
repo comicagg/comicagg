@@ -100,7 +100,7 @@ class Serializer:
         out["email"] = self.user.email
         out["totalcomics"] = len(user_operations.subscribed_comics())
         out["unreadcomics"] = len(user_operations.unread_comics())
-        # TODO: Return also the number of new comics
+        out["newcomics"] = user_operations.new_comics().count()
         return out
 
 # Helper functions

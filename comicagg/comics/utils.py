@@ -2,7 +2,7 @@
 import logging
 import random
 from django.db.models import Max
-from comicagg.comics.models import Comic, ComicHistory, UnreadComic
+from comicagg.comics.models import Comic, ComicHistory, UnreadComic, NewComic
 
 logger = logging.getLogger(__name__)
 
@@ -102,6 +102,10 @@ class UserOperations(object):
         return self.unread_comic_set().count()
 
     # Subscribed comics
+
+    def new_comics(self):
+        """Get the new comics for the user in a QuerySet."""
+        return NewComic.objects.exclude(comic__activo=False, comic__ended=False)
 
     def is_subscribed(self, comic):
         return self.user.subscription_set.filter(comic__id=comic.id).count() == 1
