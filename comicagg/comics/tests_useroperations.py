@@ -104,6 +104,21 @@ class SubscriptionTests(TestCase):
         self.assertEqual(random_history.url, suggested_comic.last_strip().url)
 
     # Tests for UserOperations.is_subscribed(comic)
+    def test_is_subscribed(self):
+        """Test that the user is subscribed to a comic."""
+        self.assertEqual(len(self.operations.subscribed_all()), 0)
+        comic = Comic.objects.get(pk=1)
+        # We know that the user cannot be subscribed now to the comic.
+        self.assertFalse(self.operations.is_subscribed(comic))
+
+        self.operations.subscribe_comic(comic)
+        self.assertTrue(self.operations.is_subscribed(comic))
+        self.assertEqual(len(self.operations.subscribed_all()), 1)
+        # If we subscribe the user again, it shouldn't change anything
+        self.operations.subscribe_comic(comic)
+        self.assertTrue(self.operations.is_subscribed(comic))
+        self.assertEqual(len(self.operations.subscribed_all()), 1)
+
     # Tests for UserOperations.subscribe_comic(comic)
     # Tests for UserOperations.subscribe_comics(id_list)
     # Tests for UserOperations.unsubscribe_comic(comic)
