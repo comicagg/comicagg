@@ -14,9 +14,9 @@ class SubscriptionTests(TestCase):
 
     # Tests for UserOperations.subscribed_all()
     def test_all_comics_empty(self):
-        """Test that the user is not subscribed to any comic"""
-        all_comics = self.operations.subscribed_all()
-        self.assertEqual(len(all_comics), 0)
+        """Test that the user is not subscribed to any comic."""
+        self.assertEqual(len(self.operations.subscribed_all()), 0)
+        self.assertEqual(self.operations.unread_strips_count(), 0)
 
     def test_all_comics(self):
         """Test that the returned list contains 3 items."""
@@ -33,7 +33,7 @@ class SubscriptionTests(TestCase):
 
     # Tests for UserOperations.subscribed_comics()
     def test_filtered_comics_empty(self):
-        """Test that the user is not subscribed to any comic"""
+        """Test that the user is not subscribed to any comic."""
         self.assertEqual(len(self.operations.subscribed_all()), 0)
         filtered = self.operations.subscribed_comics()
         self.assertEqual(len(filtered), 0)
@@ -120,6 +120,25 @@ class SubscriptionTests(TestCase):
         self.assertEqual(len(self.operations.subscribed_all()), 1)
 
     # Tests for UserOperations.subscribe_comic(comic)
+    def test_subscribe_comic(self):
+        """Test what happens when a user subscribes to one comic with strips and without strips."""
+        self.assertEqual(len(self.operations.subscribed_all()), 0)
+        self.assertEqual(self.operations.unread_strips_count(), 0)
+        comic_with = Comic.objects.get(pk=1)
+        comic_without = Comic.objects.get(pk=3)
+
+        self.operations.subscribe_comic(comic_with)
+        self.assertEqual(len(self.operations.subscribed_all()), 1)
+        self.assertEqual(self.operations.unread_strips_count(), 1)
+
+        self.operations.subscribe_comic(comic_with)
+        self.assertEqual(len(self.operations.subscribed_all()), 1)
+        self.assertEqual(self.operations.unread_strips_count(), 1)
+
+        self.operations.subscribe_comic(comic_without)
+        self.assertEqual(len(self.operations.subscribed_all()), 2)
+        self.assertEqual(self.operations.unread_strips_count(), 1)
+
     # Tests for UserOperations.subscribe_comics(id_list)
     # Tests for UserOperations.unsubscribe_comic(comic)
     # Tests for UserOperations.unsubscribe_comics(id_list)
