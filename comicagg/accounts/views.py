@@ -137,13 +137,13 @@ def password_reset(request):
         form = PasswordResetForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data['data']
-            #check if there are valid email add
+            # Check if there are valid email add
             users_email = list(User.objects.filter(email__iexact=data))
-            #check if there is a username
+            # Check if there is a username
             users_username = list(User.objects.filter(username__iexact=data))
             users = users_email + users_username
             if users:
-                #create new password and send email
+                # Create new password and send email
                 for user in users:
                     new_pass = User.objects.make_random_password()
                     user.set_password(new_pass)
@@ -168,7 +168,7 @@ def password_change(request):
     form = PasswordChangeForm()
     if request.POST:
         form = PasswordChangeForm(request.POST)
-        #check old password
+        # Validate old password
         if form.is_valid():
             old = form.cleaned_data['old_password']
             new1 = form.cleaned_data['new_password1']

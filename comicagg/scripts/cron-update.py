@@ -25,10 +25,10 @@ from comicagg.scripts import is_running, not_running_anymore
 is_running()
 
 from django.core.mail import mail_managers
-from comicagg.comics.check import check_comic, NoMatchException
+from comicagg.comics.update import update_comic, NoMatchException
 from comicagg.comics.models import Comic
 
-#check all comics
+# Update all comics
 all = list(Comic.objects.all())
 new = 0
 no_change = 0
@@ -39,7 +39,7 @@ errors_inactive = list()
 errors_unexpected = list()
 inactive_updated = list()
 
-class CheckThread(threading.Thread):
+class UpdateThread(threading.Thread):
     def __init__(self, all, errors_active, errors_inactive):
         threading.Thread.__init__(self)
         self.all = all
@@ -58,12 +58,12 @@ class CheckThread(threading.Thread):
         while comic:
             changed = False
             try:
-                changed = check_comic(comic)
+                changed = update_comic(comic)
             except KeyboardInterrupt:
                 print('*** Interrupted %s ***' % datetime.now())
                 sys.exit()
             except NoMatchException:
-                s = '   Error checking %s\n' % comic.name
+                s = '   Error updating %s\n' % comic.name
                 if comic.activo:
                     self.errors_active.append(s)
                 else:
@@ -100,7 +100,7 @@ thread_list = list()
 # Limit the number of threads to 5 or less if there are less comics in the service
 max_threads = 5 if len(all) > 5 else len(all)
 for i in range(max_threads):
-    thread = CheckThread(all, errors_active, errors_inactive)
+    thread = UpdateThread(all, errors_active, errors_inactive)
     thread_list.append(thread)
     thread.start()
 

@@ -48,7 +48,7 @@
 			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgu{{ unread.id }}" src="{% static 'base/img/striploading.gif' %}" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/></a><br/>
 			<div class="alttext">{{ unread.history.alt_text|default_if_none:""|safe }}</div>
 			{% empty %}
-			<h4>{{ comic.last_check|date:"d F Y" }}</h4>
+			<h4>{{ comic.last_update|date:"d F Y" }}</h4>
 			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgl{{ comic.id }}" src="{% static 'base/img/striploading.gif' %}" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/></a>
 			<div class="alttext">{{ comic.last_image_alt_text|default_if_none:""|safe }}</div>
 			{% endfor %}

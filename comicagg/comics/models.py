@@ -51,7 +51,7 @@ class Comic(models.Model):
     referer = models.URLField('Referer', null=True, blank=True, help_text='Si la web del comic comprueba el referer poner aquí alguno para que no dé error')
     fake_user_agent = models.BooleanField('Cambiar User-Agent', default=False, help_text='Si además la web comprueba el User-Agent marcar para conectarse a la web usando otro User-Agent')
 
-    last_check = models.DateTimeField('Última actualización', blank=True)
+    last_update = models.DateTimeField('Última actualización', blank=True)
     last_image = models.URLField('Última imagen', blank=True)
     last_image_alt_text = AltTextField('Texto alternativo', blank=True, null=True) 
 

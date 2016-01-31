@@ -8,7 +8,7 @@ import requests
 from comicagg.comics.models import ComicHistory, UnreadComic
 
 class NoMatchException(Exception):
-    """To be thrown when checking for comic updates if we did not find the image in the page."""
+    """To be thrown when updating a comic if we did not find the image in the page."""
 
     def __init__(self, message):
         super(Exception, self).__init__(message)
@@ -17,23 +17,23 @@ class NoMatchException(Exception):
     def __str__(self):
         return repr(self.message)
 
-def check_comic(comic):
-    """Entry point to check for an update in a comic."""
+def update_comic(comic):
+    """Entry point to trigger an update in a comic."""
     has_changed = False
-    # We may need to use a custom check function
+    # We may need to use a custom update function
     if comic.custom_func:
-        has_changed = custom_check(comic)
+        has_changed = custom_update(comic)
     else:
-        comic_history = default_check(comic)
+        comic_history = default_update(comic)
         if comic_history:
             notify_subscribers(comic_history)
             has_changed = True
     return has_changed
 
-def custom_check(comic):
-    """Wrapper for the custom check function.
+def custom_update(comic):
+    """Wrapper for the custom update function.
     
-    A custom check function must fill in the list history_set with the ComicHistory objects it has found.
+    A custom update function must fill in the list history_set with the ComicHistory objects it has found.
     The most recent strip found must be the first in the list."""
     history_set = list()
 
@@ -47,7 +47,7 @@ def custom_check(comic):
         # Update the comic
         comic.last_image = history_set[0].url
         comic.last_image_alt_text = history_set[0].alt_text
-        comic.last_check = datetime.now()
+        comic.last_update = datetime.now()
         comic.save()
         # Persist the ComicHistory objects in the database
         for history in history_set:
@@ -56,8 +56,8 @@ def custom_check(comic):
         return True
     raise NoMatchException("%s" % comic.name)
 
-def default_check(comic):
-    """Default checking function. Looks for just one image in the URL.
+def default_update(comic):
+    """Default update function. Looks for just one image in the URL.
     
     If the comic doesn't use a redirection, then we will download the default URL and then search with the regex in that data.
     If it uses a redirection, then it will download the redirection URL and look for the final URL there."""
@@ -75,7 +75,7 @@ def default_check(comic):
         return None
     comic.last_image = last_image
     comic.last_image_alt_text = alt_text
-    comic.last_check = datetime.now()
+    comic.last_update = datetime.now()
     history = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt_text)
     history.save()
     comic.save()
@@ -84,7 +84,7 @@ def default_check(comic):
 def get_several_images(comic, history_set):
     """This function looks for several images in the same page."""
     lines = download_url(comic.url)
-    #for check comic debugging
+    #for debugging
     lines_debug = list(lines)
     (match, lines) = find_match(comic, lines, comic.regexp, comic.backwards)
     while match:
@@ -94,7 +94,7 @@ def get_several_images(comic, history_set):
         history_set.append(history)
         (match, lines) = find_match(lines, comic.regexp, comic.backwards)
 
-# Auxiliary functions needed to check for updates
+# Auxiliary functions needed during update operations
 def download_url(url):
     """Download the data from the URL and return the lines of the response."""
     # Clean the URL
@@ -107,7 +107,7 @@ def download_url(url):
 
 def find_match(remaining_lines, regexp, backwards=False):
     """Find a match in the remaining lines using the regex and returning a tuple containing the match object and the remaining lines to review."""
-    # Depending if we check the lines forward or backwards, then we set the popping index.
+    # Set the pop index, depending on how we need to look for a match.
     pop_index = 0
     if backwards:
         pop_index = -1
