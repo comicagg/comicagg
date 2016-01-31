@@ -210,7 +210,7 @@ function showUnreadComics() {
     }
     $('showingAll').hide();
     $('showingUnread').show();
-    if (unreadCounter === 0) {
+    if (unreadCounter === 0 && comicCounter) {
         $('noUnreadCounters').show();
 	$('unreadCounters').hide();
 	$('no_unread_comics').show();
@@ -246,7 +246,7 @@ function onReadLoad() {
             initLoadImages();
         } else {
             //TODO mostrar comic aleatorio
-	    $("no_unread_comics").show();
+            $("no_unread_comics").show();
             return 0;
         }
     } else {
