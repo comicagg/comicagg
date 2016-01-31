@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from math import atan, sqrt
-from django import forms
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -255,8 +254,3 @@ class NoMatchException(Exception):
 
     def __str__(self):
         return repr(self.message)
-
-# FUTURE: put this in its own module?
-class RequestForm(forms.Form):
-    url = forms.URLField(widget=forms.TextInput(attrs={'size':50}))
-    comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':40}))
