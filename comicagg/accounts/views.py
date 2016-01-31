@@ -29,10 +29,10 @@ def logout_view(request):
 def login_view(request):
     context = {}
     context["parent_template"] = "base.html"
-    #if user is authenticated redirect him to index
+    # If the user is authenticated redirect him to index
     if request.user.is_authenticated():
         return redirect('index')
-    #if we get data in post treat as a login attempt
+    # If we get data in POST treat this as a login attempt
     if request.POST:
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -42,13 +42,17 @@ def login_view(request):
             oauth2 = form.cleaned_data['oauth2']
             user = authenticate(username=username, password=password)
             if user is not None:
-            #From now on the user is logged in
+            # From now on the user is logged in
                 login(request, user)
                 if user.is_active:
                     # Redirect to the page he was requesting.
-                    return HttpResponseRedirect(nexturl)
+                    if nexturl:
+                        print("NextUrl:", nexturl)
+                        return HttpResponseRedirect(nexturl)
+                    else:
+                        return redirect('comics:read')
                 else:
-                    #User was inactive, redirect to activate page
+                    # User was inactive, redirect to activate page
                     return redirect('accounts:activate')
             else:
                 if oauth2:
@@ -59,7 +63,7 @@ def login_view(request):
                 context['form'] = LoginForm(initial={'username': username, 'next': nexturl, 'oauth2': oauth2})
                 return render(request, 'accounts/login_form.html', context, 'login')
         context['form'] = form
-        #received nothing so show login form
+        # Received an invalid login form, so show the login form again
         return render(request, 'accounts/login_form.html', context, 'login')
     try:
         nexturl = request.GET['next']
@@ -71,7 +75,7 @@ def login_view(request):
     except:
         form = LoginForm()
     context['form'] = form
-    #received nothing so show login form
+    # Show the login form
     return render(request, 'accounts/login_form.html', context, 'login')
 
 def register(request):
