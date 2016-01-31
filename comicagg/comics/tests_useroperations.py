@@ -127,14 +127,18 @@ class SubscriptionTests(TestCase):
         comic_with = Comic.objects.get(pk=1)
         comic_without = Comic.objects.get(pk=3)
 
+        # Subscribe to a comic with one strip, user should end up with one comic and one unread
+        # TODO: We should test also with a comic marked as new, but there are no fixtures with new comics yet
         self.operations.subscribe_comic(comic_with)
         self.assertEqual(len(self.operations.subscribed_all()), 1)
         self.assertEqual(self.operations.unread_strips_count(), 1)
 
+        # Subscribe to the same comic again, no changes should have happened
         self.operations.subscribe_comic(comic_with)
         self.assertEqual(len(self.operations.subscribed_all()), 1)
         self.assertEqual(self.operations.unread_strips_count(), 1)
 
+        # Subscribe to a comic without strips, two subscribed comics but just one unread.
         self.operations.subscribe_comic(comic_without)
         self.assertEqual(len(self.operations.subscribed_all()), 2)
         self.assertEqual(self.operations.unread_strips_count(), 1)

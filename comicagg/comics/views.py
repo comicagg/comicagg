@@ -24,6 +24,7 @@ from comicagg.comics.forms import RequestForm
 
 @login_required
 def read_view(request):
+    # comic_list and unread_list are lists of tuples of (comic, QuerySet of UnreadComic)
     comic_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user.operations.subscribed_comics()]
     unread_list = [(comic, comic.unread_comics_for(request.user)) for comic in request.user.operations.unread_comics()]
     random = random_comic(request.user)
