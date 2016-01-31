@@ -5,7 +5,17 @@ from datetime import datetime
 from html import unescape
 from django.conf import settings
 import requests
-from comicagg.comics.models import ComicHistory, UnreadComic, NoMatchException
+from comicagg.comics.models import ComicHistory, UnreadComic
+
+class NoMatchException(Exception):
+    """To be thrown when checking for comic updates if we did not find the image in the page."""
+
+    def __init__(self, message):
+        super(Exception, self).__init__(message)
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)
 
 def check_comic(comic):
     """Entry point to check for an update in a comic."""

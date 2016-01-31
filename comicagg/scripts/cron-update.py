@@ -25,8 +25,8 @@ from comicagg.scripts import is_running, not_running_anymore
 is_running()
 
 from django.core.mail import mail_managers
-from comicagg.comics.check import check_comic
-from comicagg.comics.models import Comic, NoMatchException
+from comicagg.comics.check import check_comic, NoMatchException
+from comicagg.comics.models import Comic
 
 #check all comics
 all = list(Comic.objects.all())
