@@ -158,13 +158,7 @@ class Comic(models.Model):
         return self.comichistory_set.all()[0]
 
     # User related methods
-    # TODO: move this to the UserOperations class
-    def is_new_for(self, user):
-        """
-        Is this comic new to the passed user?
-        """
-        return NewComic.objects.filter(comic=self, user=user).count() != 0
-
+    # FUTURE: Remove this? Still used in views
     def unread_comics_for(self, user):
         return UnreadComic.objects.filter(comic=self, user=user)
 

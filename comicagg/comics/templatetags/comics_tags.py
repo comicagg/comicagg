@@ -9,7 +9,7 @@ register = template.Library()
 @register.simple_tag
 def is_new(comic, user):
     ret = ""
-    if comic.is_new_for(user):
+    if user.operations.is_new(comic):
         ret = '<span id="new_comic' + str(comic.id) + '" class="new_comic">' + _("NEW!") + '&nbsp;</span>'
     return ret
 
@@ -81,7 +81,7 @@ class IsNewForUserNode(template.Node):
         comic = template.resolve_variable(self.comic, context)
         user = template.resolve_variable(self.user, context)
         
-        context[self.context_var] = comic.is_new_for(user)
+        context[self.context_var] = user.operations.is_new(comic)
         return ''
 
 def do_is_new_for_user(parser, token):

@@ -7,7 +7,10 @@ from comicagg.comics.models import Comic, ComicHistory, UnreadComic, NewComic, a
 logger = logging.getLogger(__name__)
 
 class UserOperations(object):
-    """This class allows operations with comic stuff and a certain user."""
+    """This class allows operations with comic stuff and a certain user.
+
+    All operations related to comics and users should be done with this class and not directly with the ORM.
+    """
 
     def __init__(self, user, **kwargs):
         super().__init__(**kwargs)
@@ -15,7 +18,7 @@ class UserOperations(object):
 
     # Unread comics
     def unread_comic_set(self):
-        """Return the UnreadComic set for the user filtered."""
+        """Return the filtered UnreadComic QuerySet for the user."""
         return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
 
     def unread_comics(self):
@@ -33,6 +36,7 @@ class UserOperations(object):
 
         First value is the comic, second is the number of unread strips.
         """
+        # NOTE: this is exactly the same as unread_comics(). Use it?
         unreads = self.unread_comic_set()
         # build a list of comic ids to later get the comics correctly ordered from all_comics
         comic_ids = list(set([unread.comic.id for unread in unreads]))
@@ -87,27 +91,6 @@ class UserOperations(object):
         subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
         return [s.comic for s in subscriptions]
 
-    def random_comic(self):
-        """Get a random ComicHistory of a Comic that the user is not following.
-
-        The comic must be active and the ComicHistory returned must be the most recent."""
-        subscribed_ids = [subscription.comic.id for subscription in self.subscribed_all()]
-        not_subscribed_comics = list(active_comics().exclude(id__in=subscribed_ids))
-        history = None
-        if not_subscribed_comics:
-            while not history:
-                # Find the first not subscribed comic with a ComicHistory
-                try:
-                    random_comic = not_subscribed_comics[random.randint(0, len(not_subscribed_comics) - 1)]
-                    history = random_comic.last_strip()
-                except:
-                    pass
-        return history
-
-    def new_comics(self):
-        """Get the new comics for the user in a QuerySet."""
-        return NewComic.objects.exclude(comic__activo=False, comic__ended=False)
-
     def is_subscribed(self, comic):
         """Check if the user is subscribed to a comic."""
         return self.user.subscription_set.filter(comic__id=comic.id).count() == 1
@@ -159,3 +142,28 @@ class UserOperations(object):
         """Remove all of the user's subscriptions."""
         self.user.subscription_set.all().delete()
         self.mark_all_read()
+
+    def random_comic(self):
+        """Get a random ComicHistory of a Comic that the user is not following.
+
+        The comic must be active and the ComicHistory returned must be the most recent."""
+        subscribed_ids = [subscription.comic.id for subscription in self.subscribed_all()]
+        not_subscribed_comics = list(active_comics().exclude(id__in=subscribed_ids))
+        history = None
+        if not_subscribed_comics:
+            while not history:
+                # Find the first not subscribed comic with a ComicHistory
+                try:
+                    random_comic = not_subscribed_comics[random.randint(0, len(not_subscribed_comics) - 1)]
+                    history = random_comic.last_strip()
+                except:
+                    pass
+        return history
+
+    def new_comics(self):
+        """Get the new comics for the user in a QuerySet."""
+        return NewComic.objects.exclude(comic__activo=False, comic__ended=False)
+
+    def is_new(self, comic):
+        """Is this comic new for the user?"""
+        return NewComic.objects.filter(comic=comic, user=self.user).count() != 0
