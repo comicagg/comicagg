@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'comicagg.api',
     'comicagg.blog',
     'comicagg.comics',
-    'comicagg.todo',
     'provider',
     'provider.oauth2',
 )
