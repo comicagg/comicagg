@@ -1,4 +1,10 @@
-"""Decorators used in the API views."""
+"""Decorators used in the API views.
+
+In the decorator parameters we can find:
+ args[0] is the View
+ args[1] is the Request
+ kwargs are the query string parameters
+"""
 from django.http import HttpResponseForbidden
 from provider import constants
 
@@ -13,6 +19,16 @@ def write_required(original_function):
             return view.error("Forbidden", "This access token does not have enough permissions", HttpResponseForbidden)
     return wrapper
 
-# FUTURE: decorator to force a certain query string parameter
-# FUTURE: decorator to automatically parse a query string parameter in a class field
-
+def parse_param(param_name):
+    """Add the argument named param_name as an attribute in the view class."""
+    def wrapper(original_function):
+        def wrapped(*args, **kwargs):
+            view = args[0]
+            request = args[1]
+            context = view.get_context_data(**kwargs)
+            # NOTE: For the moment we'll allow this to throw KeyError if the parameter does not exist
+            value = context[param_name]
+            setattr(view, param_name, value)
+            return original_function(*args, **kwargs)
+        return wrapped
+    return wrapper
