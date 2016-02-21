@@ -91,6 +91,7 @@ def register(request):
             email = form.cleaned_data['email']
             captcha = form.cleaned_data['captcha']
             errors = False
+            # TODO: Should use validators in the fields instead of the following
             if password != password2:
                 errors = True
                 msg = _("Passwords don't match!")
