@@ -6,13 +6,13 @@
 		<script src="{% static 'base/js/organize_add.js' %}" type="text/javascript"></script>
 		<script type="text/javascript">
 var usercomics = [
-{% for comic in user_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|perc:2 }}", 'votes':{{ comic.votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe}}"},{% endfor %}
+{% for comic in user_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|perc:2 }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe}}"},{% endfor %}
 ];
 var availablecomics = [
-{% for comic in all_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|perc:2 }}", 'votes':{{ comic.votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe }}"},{% endfor %}
+{% for comic in all_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|perc:2 }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe }}"},{% endfor %}
 ];
 var availablecomics_new = [
-{% for newcomic in new_comics %}{'id':{{ newcomic.comic.id}}, 'name':"{{ newcomic.comic.name|escape }}", 'slug':"{{ newcomic.comic.name|slugify }}", 'score':"{{ newcomic.comic.get_rating|perc:2 }}", 'votes':{{ newcomic.comic.votes }}, 'no_images':{{ newcomic.comic.no_images|lower }}, 'url': "{{ newcomic.comic.website }}", 'updated':"{{ newcomic.comic.last_update|date:"j F, Y" }}", 'readers':{{ newcomic.comic.reader_count }}, 'last':"{{ newcomic.comic.last_image_url|safe }}"},{% endfor %}
+{% for newcomic in new_comics %}{'id':{{ newcomic.comic.id}}, 'name':"{{ newcomic.comic.name|escape }}", 'slug':"{{ newcomic.comic.name|slugify }}", 'score':"{{ newcomic.comic.get_rating|perc:2 }}", 'total_votes':{{ newcomic.comic.total_votes }}, 'no_images':{{ newcomic.comic.no_images|lower }}, 'url': "{{ newcomic.comic.website }}", 'updated':"{{ newcomic.comic.last_update|date:"j F, Y" }}", 'readers':{{ newcomic.comic.reader_count }}, 'last':"{{ newcomic.comic.last_image_url|safe }}"},{% endfor %}
 ];
 dojo.addOnLoad(initAdd);
 		</script>
@@ -28,7 +28,7 @@ dojo.addOnLoad(initAdd);
             <div id="comic_info_wrap" style="display:none">
                 <h3 id="comic_name"></h3>
                 <h4 id="comic_new">{% trans "New comic!" %}</h4>
-                <p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.get_rating }}</span>%</b> (<span id="comic_votes">{{ comic.votes }}</span> {% trans "votes" %}, <span id="comic_readers">{{ comic.reader_count }}</span> {% trans "readers" %}).</p>
+                <p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.get_rating }}</span>%</b> (<span id="comic_votes">{{ comic.total_votes }}</span> {% trans "votes" %}, <span id="comic_readers">{{ comic.reader_count }}</span> {% trans "readers" %}).</p>
                 <p><a id="comic_url">{% trans "Link to its website"%}</a></p>
                 <p id="comic_image">
                     <img id="loading" src="{% static 'base/img/loading.gif' %}" alt="" style="display:none"/>

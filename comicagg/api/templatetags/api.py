@@ -14,7 +14,7 @@ def xml(value, arg=False):
             "id": value.id,
             "website": escape(value.website),
             "name": escape(value.name),
-            "votes": value.votes,
+            "votes": value.total_votes,
             "rating": value.get_rating()
         }
         if bool(arg):

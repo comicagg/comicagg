@@ -360,8 +360,8 @@ class UnreadsView(APIView):
         else:
             votes = 1
             value = 1
-        comic.votes += votes
-        comic.rating += value
+        comic.total_votes += votes
+        comic.positive_votes += value
         comic.save()
         # Mark all unreads as read
         request.user.unreadcomic_set.filter(comic=comic).delete()

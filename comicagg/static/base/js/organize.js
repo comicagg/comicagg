@@ -116,7 +116,7 @@ function setNewList(is) {
 function etoString(e) {
     var s = e.name;
     s += " " + e.score + "%";
-    s += " " + e.votes + "v";
+    s += " " + e.total_votes + "v";
     return s.toLowerCase();
 }
 function sort_az(a, b) {
@@ -138,8 +138,8 @@ function sort_score(a, b) {
     y = parseInt(b.score, 10);
     ret = y - x;
     if (ret === 0) {
-        x = parseInt(a.votes, 10);
-        y = parseInt(b.votes, 10);
+        x = parseInt(a.total_votes, 10);
+        y = parseInt(b.total_votes, 10);
         ret = y - x;
         if (ret === 0) {
             ret = sort_az(a, b);

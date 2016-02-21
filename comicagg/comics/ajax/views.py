@@ -205,7 +205,7 @@ def rate_comic(request):
         value = 1
     else:
         return HttpResponseBadRequest("Check the parameters")
-    comic.rating += value
-    comic.votes += 1
+    comic.positive_votes += value
+    comic.total_votes += 1
     comic.save()
     return ok_response(request)

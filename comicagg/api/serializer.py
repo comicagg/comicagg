@@ -66,7 +66,7 @@ class Serializer:
         out["id"] = comic.id
         out["name"] = comic.name
         out["website"] = comic.website
-        out["votes"] = comic.votes
+        out["votes"] = comic.total_votes
         out["rating"] = comic.get_rating()
         out["added"] = str(user_operations.is_subscribed(comic))
         out["ended"] = str(comic.ended)

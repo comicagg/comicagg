@@ -69,8 +69,8 @@ class Comic(models.Model):
     last_image = models.URLField('Last image URL', blank=True)
     last_image_alt_text = AltTextField('Last image alt text', blank=True, null=True)
 
-    rating = models.IntegerField('Positive votes', default=0)
-    votes = models.IntegerField('Total votes', default=0)
+    positive_votes = models.IntegerField('Positive votes', default=0)
+    total_votes = models.IntegerField('Total votes', default=0)
 
     add_date = models.DateTimeField(auto_now_add=True)
 
@@ -113,42 +113,42 @@ class Comic(models.Model):
         return getattr(self, '__rating')
 
     def statistic_rating(self):
-        pos = self.rating
-        n = self.votes
+        pos = self.positive_votes
+        n = self.total_votes
         if n == 0:
             return 0.0
         #z = Statistics2.pnormaldist(1-power/2)
         z = 3.95
         phat = 1.0*pos/n
-        return (phat + z*z/(2*n) - z * sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)
+        return (phat+z*z/(2*n)-z*sqrt((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n)
 
     def mi_rating(self):
         r = 0.5
-        if self.votes > 0:
-            #p = self.rating
-            #n = self.votes - self.rating
+        if self.total_votes > 0:
+            #p = self.positive_votes
+            #n = self.total_votes - self.positive_votes
             #x = p - n
-            x = 2 * self.rating - self.votes
+            x = 2 * self.positive_votes - self.total_votes
             if x > 0:
                 r = ((20-atan(x/5.0)/(x/100.0))/40+0.5)
             elif x < 0:
                 r = (0.5-(20-atan(x/5.0)/(x/100.0))/40)
             #porcentaje de votos positivos
-            #r = int(floor(self.rating / float(self.votes) * 100))
+            #r = int(floor(self.positive_votes / float(self.total_votes) * 100))
             #porcentaje de votos negativos
             #n = 100 - r
             #g(x)=2/sqrt(pi)*(x-x^3/3+x^5/10-x^7/42+x^9/216)
         return r
 
-    def positive_votes(self):
+    def positive_votes_perc(self):
         try:
-            r = float(self.rating)/self.votes
+            r = float(self.positive_votes) / self.total_votes
         except:
             r = 0.0
         return r
 
     def negative_votes(self):
-        return self.votes-self.rating
+        return self.total_votes - self.positive_votes
 
     def reader_count(self):
         if not self._reader_count:

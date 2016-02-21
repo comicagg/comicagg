@@ -18,10 +18,10 @@
 				<td class="left">{{ comic.name }}</td>
 				<td>{{ comic.reader_count }}</td>
 				<td>{{ comic.strip_count }}</td>
-				<td>{{ comic.votes }}</td>
-				<td>{{ comic.rating }}</td>
+				<td>{{ comic.total_votes }}</td>
+				<td>{{ comic.positive_votes }}</td>
 				<td>{{ comic.negative_votes }}</td>
-				<td>{{ comic.positive_votes|perc:3 }}</td>
+				<td>{{ comic.positive_votes_perc|perc:3 }}</td>
 				<td>{{ comic.mi_rating|perc:3 }}</td>
 				<td>{{ comic.get_rating|perc:3 }}</td>
 			</tr>
