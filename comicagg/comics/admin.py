@@ -12,30 +12,30 @@ class ComicAdmin(admin.ModelAdmin):
     save_on_top = True
     inlines = [TagInline,]
     fieldsets = (
-        ('Datos del comic', {
+        ('Comic details', {
             'fields' : ('name', 'website', 'active', 'ended', 'notify', 'no_images')
         }),
-        ('Configuración básica', {
+        ('Image regex', {
             'classes': ('wide', ),
             'fields' : ('url', 'base_img', 'regexp', 'backwards')
         }),
-        ('Opciones redirección', {
+        ('Redirection regex', {
             'classes': ('collapse', 'wide', ),
             'fields' : ('url2', 'base2', 'regexp2', 'backwards2')
         }),
-        ('Función personalizada', {
+        ('Custom update function', {
             'classes': ('collapse',),
             'fields' : ('custom_func',)
         }),
-        ('Opciones avanzadas', {
+        ('Other options', {
             'classes': ('collapse',),
             'fields' : ('referer',)
         }),
-        ('Votos', {
+        ('Votes', {
             'classes': ('collapse',),
-            'fields' : ('rating', 'votes')
+            'fields' : ('positive_votes', 'total_votes')
         }),
-        ('Otros datos', {
+        ('Last image', {
             'fields' : ('last_update', 'last_image', 'last_image_alt_text')
         }),
     )
