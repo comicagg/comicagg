@@ -8,8 +8,6 @@ class Post(models.Model):
     text = models.TextField('Text')
     date = models.DateTimeField(auto_now_add=True)
     html = models.BooleanField('Is the text HTML or plain text?', default=False)
-    # TODO: Remove this field
-    id_topic = models.IntegerField('Id del tema en el foro', null=True, blank=True, default=0, help_text='Se rellena él sólo')
 
     class Meta:
         ordering = ['-date']
