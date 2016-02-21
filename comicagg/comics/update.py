@@ -61,10 +61,10 @@ def default_update(comic):
     
     If the comic doesn't use a redirection, then we will download the default URL and then search with the regex in that data.
     If it uses a redirection, then it will download the redirection URL and look for the final URL there."""
-    if comic.url2:
+    if comic.re2_url:
         next_url = get_redirected_url(comic)
     else:
-        next_url = comic.url
+        next_url = comic.re1_url
 
     # Here next_url should be the URL where the comic strip is
     (last_image, alt_text) = get_one_image(comic, next_url)
@@ -83,16 +83,16 @@ def default_update(comic):
 
 def get_several_images(comic, history_set):
     """This function looks for several images in the same page."""
-    lines = download_url(comic.url)
+    lines = download_url(comic.re1_url)
     #for debugging
     lines_debug = list(lines)
-    (match, lines) = find_match(comic, lines, comic.regexp, comic.backwards)
+    (match, lines) = find_match(comic, lines, comic.re1_re, comic.re1_backwards)
     while match:
-        image_url = comic.base_img % url_from_match(match)
+        image_url = comic.re1_base % url_from_match(match)
         alt_text = alt_from_match(match)
         history = ComicHistory(comic=comic, url=image_url, alt_text=alt_text)
         history_set.append(history)
-        (match, lines) = find_match(lines, comic.regexp, comic.backwards)
+        (match, lines) = find_match(lines, comic.re1_re, comic.re1_backwards)
 
 # Auxiliary functions needed during update operations
 def download_url(url):
@@ -132,22 +132,22 @@ def get_one_image(comic, url):
     lines = download_url(url)
     # We use this field to be able to debug the NoMatchException in case it fails
     lines_debug = list(lines)
-    (match, lines) = find_match(lines, comic.regexp, comic.backwards)
+    (match, lines) = find_match(lines, comic.re1_re, comic.re1_backwards)
     if not match:
         raise NoMatchException("%s" % comic.name)
-    image_url = comic.base_img % url_from_match(match)
+    image_url = comic.re1_base % url_from_match(match)
     alt_text = alt_from_match(match)
     return (image_url, alt_text)
 
 def get_redirected_url(comic):
     """Find the final URL using the redirection in the comic."""
-    lines = download_url(comic.url2)
+    lines = download_url(comic.re2_url)
     # We use this field to be able to debug the NoMatchException in case it fails
     lines_debug = list(lines)
-    (match, lines) = find_match(lines, comic.regexp2, comic.backwards2)
+    (match, lines) = find_match(lines, comic.re2_re, comic.re2_backwards)
     if not match:
         raise NoMatchException("%s" % comic.name)
-    next_url = comic.base2 % url_from_match(match)
+    next_url = comic.re2_base % url_from_match(match)
     return next_url
 
 def url_from_match(match):

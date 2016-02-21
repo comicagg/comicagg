@@ -33,29 +33,29 @@ class Comic(models.Model):
         help_text='Check the <a href="/docs/custom_func/">docs</a> for reference.')
 
     # First regex section
-    url = models.URLField('URL of the page where the image can be found', null=True, blank=True,
+    re1_url = models.URLField('URL of the page where the image can be found', null=True, blank=True,
         help_text='If the redirection URL is used, this field will not be used.')
-    base_img = models.CharField('Base URL for the image URL', max_length=255, null=True, blank=True,
+    re1_base = models.CharField('Base URL for the image URL', max_length=255, null=True, blank=True,
         help_text='It must contain the placeholder <b>%s</b> which will be replaced with whatever matches in the regex.')
-    regexp = models.CharField('Regular expression', max_length=255, null=True, blank=True,
+    re1_re = models.CharField('Regular expression', max_length=255, null=True, blank=True,
         help_text="""It must contain one group (between parentheses) that matches the URL of the image.
         Named groups can also be used:<br/>
         - <i>url</i> for the URL of the image: (?P&lt;url>.+)<br/>
         - <i>alt</i> for the alternative text of the image: (?P&lt;alt>.+)""")
-    backwards = models.BooleanField('Check backwards.', default=False,
+    re1_backwards = models.BooleanField('Check backwards.', default=False,
         help_text="Read the page backwards by line (last line first).")
 
     # Second regex section
-    url2 = models.URLField('URL where the page of the image can be found', null=True, blank=True,
+    re2_url = models.URLField('URL where the page of the image can be found', null=True, blank=True,
         help_text="""Setting this enables the redirection. The engine will open this URL and
         use the regex in this section to search for the URL of the page where the image can be found.""")
-    base2 = models.CharField('Base URL for the page URL', max_length=255, null=True, blank=True,
+    re2_base = models.CharField('Base URL for the page URL', max_length=255, null=True, blank=True,
         help_text='It must contain the placeholder <b>%s</b> which will be replaced with whatever matches in the regex.')
-    regexp2 = models.CharField('Regular expression', max_length=255, null=True, blank=True,
+    re2_re = models.CharField('Regular expression', max_length=255, null=True, blank=True,
         help_text="""It must contain one group (between parentheses) that matches the URL of the page.
         Named groups can also be used:<br/>
         - <i>url</i> for the URL of the page: (?P&lt;url>.+)""")
-    backwards2 = models.BooleanField('Check backwards.', default=False,
+    re2_backwards = models.BooleanField('Check backwards.', default=False,
         help_text="Read the page backwards by line (last line first).")
 
     # Other settings

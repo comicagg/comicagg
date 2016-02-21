@@ -19,7 +19,7 @@ code {
 <p>La función custom debe crear objetos ComicHistory y añadirlos a la lista <i>history_set</i>. Esto es lo único que debe hacer. Para ello se dispone del objeto del comic en la variable <i>comic</i>. Los objetos ComicHistory se crean y añaden así:
 <pre>h = ComicHistory(comic, url, alt_text)
 history_set.append(h)</pre></p>
-<p>Cuando se usa la función personalizada el resto de campos (url, base_img, regexp, backwards, url2, base2, regexp2 y backwards2) dejan de tener sentido y se pueden usar para guardar lo que haga falta en ellos.</p>
+<p>Cuando se usa la función personalizada el resto de campos (re1_url, re1_base, re1_re, re1_backwards, re2_url, re2_base, re2_re y re2_backwards) dejan de tener sentido y se pueden usar para guardar lo que haga falta en ellos.</p>
 <p>Se disponen de varias funciones para ayudar:</p>
 <ul>
 	<li><code>list open_url(url)</code>: abre una url y devuelve una lista con las líneas de la misma.</li>
@@ -31,7 +31,7 @@ history_set.append(h)</pre></p>
 </ul>
 <p>Además se pueden usar una de estas funciones que hacen cosas más complejas (se escriben tal y como están en el campo de la función):</p>
 <ul>
-	<li><code>severalinpage(comic, history_set)</code>: busca varias imagenes en la misma página. Los campos url, base_img y regexp del comic deben estar rellenos.</li>
+	<li><code>severalinpage(comic, history_set)</code>: busca varias imagenes en la misma página. Los campos re1_url, re1_base y re1_re del comic deben estar rellenos.</li>
 </ul>
 <p>NO hay que:</p>
 <ul>

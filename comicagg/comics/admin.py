@@ -17,11 +17,11 @@ class ComicAdmin(admin.ModelAdmin):
         }),
         ('Image regex', {
             'classes': ('wide', ),
-            'fields' : ('url', 'base_img', 'regexp', 'backwards')
+            'fields' : ('re1_url', 're1_base', 're1_re', 're1_backwards')
         }),
         ('Redirection regex', {
             'classes': ('collapse', 'wide', ),
-            'fields' : ('url2', 'base2', 'regexp2', 'backwards2')
+            'fields' : ('re2_url', 're2_base', 're2_re', 're2_backwards')
         }),
         ('Custom update function', {
             'classes': ('collapse',),
