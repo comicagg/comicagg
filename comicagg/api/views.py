@@ -7,8 +7,8 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAll
 from django.views.generic import View
 from django.views.generic.edit import FormMixin
 from comicagg.comics.models import Comic, ComicHistory, active_comics
-from comicagg.api.decorators import write_required
-from comicagg.api.forms import VoteForm
+from comicagg.api.decorators import write_required, parse_param
+from comicagg.api.forms import VoteForm, StripForm
 from comicagg.api.serializer import Serializer
 from comicagg.logs import logmsg
 import comicagg.logs.tags as logtags
@@ -114,24 +114,26 @@ class ComicsView(APIView):
 class StripsView(APIView):
     """Handles information about a comic strip."""
 
+    def __init__(self, **kwargs):
+        super(StripsView, self).__init__(**kwargs)
+        self.form_class = StripForm
+
+    @parse_param('strip_id')
     def get(self, request, **kwargs):
         """Get information about a certain strip."""
-        context = self.get_context_data(**kwargs)
-        strip_id = context['strip_id']
         try:
-            strip = ComicHistory.objects.get(pk=strip_id)
+            strip = ComicHistory.objects.get(pk=self.strip_id)
         except:
             return self.error("NotFound", "That strip does not exist", HttpResponseNotFound)
         body = self.serialize(strip)
         return self.render_response(body)
 
     @write_required
+    @parse_param('strip_id')
     def put(self, request, **kwargs):
         """Mark this strip as unread for the user doing the request."""
-        context = self.get_context_data(**kwargs)
-        strip_id = context['strip_id']
         try:
-            strip = ComicHistory.objects.get(pk=strip_id)
+            strip = ComicHistory.objects.get(pk=self.strip_id)
         except:
             return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
         if not request.user.operations.is_subscribed(strip.comic):
@@ -140,17 +142,16 @@ class StripsView(APIView):
         return HttpResponseNoContent(content_type=self.content_type)
 
     @write_required
+    @parse_param('strip_id')
     def delete(self, request, **kwargs):
         """Mark this strip as read for the user doing the request."""
-        context = self.get_context_data(**kwargs)
-        strip_id = context['strip_id']
         try:
-            strip = ComicHistory.objects.get(pk=strip_id)
+            strip = ComicHistory.objects.get(pk=self.strip_id)
         except:
             return self.error("NotFound", "The strip does not exist", HttpResponseNotFound)
         if not request.user.operations.is_subscribed(strip.comic):
             return self.error("BadRequest", "You are not subscribed to this comic")
-        request.user.unreadcomic_set.filter(history__id=strip_id).delete()
+        request.user.unreadcomic_set.filter(history__id=self.strip_id).delete()
         return HttpResponseNoContent(content_type=self.content_type)
 
 class SubscriptionsView(APIView):

@@ -13,3 +13,7 @@ def vote_validator(value):
 class VoteForm(forms.Form):
     """Form used to validate the input of the vote for a comic."""
     vote = forms.IntegerField(validators=[vote_validator])
+
+class StripForm(forms.Form):
+	"""Form used to validate the input of the parameter"""
+	strip_id = forms.IntegerField()
