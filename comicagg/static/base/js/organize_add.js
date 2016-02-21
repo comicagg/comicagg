@@ -108,11 +108,11 @@ function mouseOverAction() {
     $('comic_votes').innerHTML = comic.votes;
     $('comic_readers').innerHTML = comic.readers;
     $('comic_url').href = comic.url;
-    if (comic.noimages) {
-        $('noimages').show();
+    if (comic.no_images) {
+        $('no_images').show();
         $('comic_last').hide();
     } else {
-        $('noimages').hide();
+        $('no_images').hide();
         $('loading').show();
         $('comic_last').hide();
         img = new Image();

@@ -64,21 +64,21 @@ class UpdateThread(threading.Thread):
                 sys.exit()
             except NoMatchException:
                 s = '   Error updating %s\n' % comic.name
-                if comic.activo:
+                if comic.active:
                     self.errors_active.append(s)
                 else:
                     self.errors_inactive.append(s)
                 errors += 1
             except:
                 s = '   Unexpected error %s: %s\n' % (comic.name, sys.exc_info()[1])
-                if comic.activo:
+                if comic.active:
                     self.errors_unexpected.append(s)
                 else:
                     self.errors_inactive.append(s)
                 errors += 1
             if changed:
                 new += 1
-                if not comic.activo or comic.ended:
+                if not comic.active or comic.ended:
                     s = '   Disabled or ended comic %s just got an update.\n' % comic.name
                     self.inactive_updated.append(s)
                 else:

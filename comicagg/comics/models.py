@@ -21,12 +21,12 @@ class Comic(models.Model):
 
     name = ComicNameField('Name', max_length=255)
     website = models.URLField("Website")
-    activo = models.BooleanField('Is active?', default=False, help_text='The comic is ongoing and gets updated regularly.')
+    active = models.BooleanField('Is active?', default=False, help_text='The comic is ongoing and gets epdated regularly.')
     notify = models.BooleanField('Notify the users?', default=False,
         help_text="""This is always disabled. If it's enabled when saving the comic, the users will be notified of the new comic.""")
     ended = models.BooleanField('Has ended?', default=False,
         help_text='Check this if the comic has ended. Also mark it as inactive.')
-    noimages = models.BooleanField("Don't show images?", default=False,
+    no_images = models.BooleanField("Don't show images?", default=False,
         help_text='Use it to hide the images of the comic, but allow a notification to the users.')
 
     custom_func = models.TextField('Custom update function', null=True, blank=True,
@@ -177,7 +177,7 @@ class Comic(models.Model):
 # FUTURE: We may want to move this elsewhere
 def active_comics():
     """Returns a QuerySet of Comic objects that a user can follow meaning only active and not ended."""
-    return Comic.objects.exclude(activo=False, ended=True)
+    return Comic.objects.exclude(active=False, ended=True)
 
 class Subscription(models.Model):
     """A user follows a certain comic and the position of the comic in the reading list."""

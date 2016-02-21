@@ -18,8 +18,8 @@ from django.shortcuts import get_object_or_404
 from comicagg.comics.models import Comic, ComicHistory, NewComic, UnreadComic, Subscription
 
 def ok_response(request):
-    comics = request.user.subscription_set.exclude(comic__activo=False, comic__ended=False).count()
-    unread = request.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False).aggregate(Count('comic', distinct=True))['comic__count']
+    comics = request.user.subscription_set.exclude(comic__active=False, comic__ended=False).count()
+    unread = request.user.unreadcomic_set.exclude(comic__active=False, comic__ended=False).aggregate(Count('comic', distinct=True))['comic__count']
     new_comics = request.user.operations.new_comics().count()
     news = request.user.newblog_set.count()
     response = '{"comics":%d, "new_comics":%d, "unreads":%d, "news":%d}' % (comics, new_comics, unread, news)

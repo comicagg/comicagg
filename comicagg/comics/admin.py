@@ -7,13 +7,13 @@ class TagInline(admin.TabularInline):
     ordering = ('name', 'comic',)
 
 class ComicAdmin(admin.ModelAdmin):
-    list_display = ('name', 'activo', 'ended', 'last_update', )
+    list_display = ('name', 'active', 'ended', 'last_update', )
     search_fields = ['name']
     save_on_top = True
     inlines = [TagInline,]
     fieldsets = (
         ('Datos del comic', {
-            'fields' : ('name', 'website', 'activo', 'ended', 'notify', 'noimages')
+            'fields' : ('name', 'website', 'active', 'ended', 'notify', 'no_images')
         }),
         ('Configuración básica', {
             'classes': ('wide', ),

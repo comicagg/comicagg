@@ -36,7 +36,7 @@ def read_view(request):
     return render(request, 'comics/read.html', context, 'read')
 
 def random_comic(user, xhtml=False, request=None):
-    not_in_list = Comic.objects.exclude(activo=False).exclude(id__in=[s.comic.id for s in Subscription.objects.filter(user=user)])
+    not_in_list = Comic.objects.exclude(active=False).exclude(id__in=[s.comic.id for s in Subscription.objects.filter(user=user)])
     if not_in_list:
         try:
             comic = not_in_list[random.randint(0, len(not_in_list) - 1)]
@@ -65,10 +65,10 @@ def random_comic_view(request):
 def organize(request, add=False):
     context = {}
     #all of the comics
-    all_comics = list(Comic.objects.exclude(activo=False))
+    all_comics = list(Comic.objects.exclude(active=False))
     all_comics.sort(key=slugify)
     #build available list depending on selected comics
-    user_subs = request.user.subscription_set.all().exclude(comic__activo=False, comic__ended=False)
+    user_subs = request.user.subscription_set.all().exclude(comic__active=False, comic__ended=False)
     user_comics = list()
     for sub in user_subs:
         lst = request.user.unreadcomic_set.filter(comic=sub.comic)

@@ -98,7 +98,7 @@ class SubscriptionTests(TestCase):
 
         random_history = self.operations.random_comic()
         self.assertIsNotNone(random_history)
-        self.assertTrue(random_history.comic.activo)
+        self.assertTrue(random_history.comic.active)
         self.assertFalse(random_history.comic.ended)
         self.assertEqual(random_history.comic.id, suggested_id)
         self.assertEqual(random_history.url, suggested_comic.last_strip().url)

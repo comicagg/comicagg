@@ -19,7 +19,7 @@ class UserOperations(object):
     # Unread comics
     def unread_comic_set(self):
         """Return the filtered UnreadComic QuerySet for the user."""
-        return self.user.unreadcomic_set.exclude(comic__activo=False, comic__ended=False)
+        return self.user.unreadcomic_set.exclude(comic__active=False, comic__ended=False)
 
     def unread_comics(self):
         """Get a list of comics that have unread strips ordered by the position chosen by the user.
@@ -88,7 +88,7 @@ class UserOperations(object):
     def subscribed_comics(self):
         """Get a list of Comic objects that the user is subscribed to."""
         # FUTURE: Should we return a list of Subscription objects instead?
-        subscriptions = self.user.subscription_set.exclude(comic__activo=False, comic__ended=False)
+        subscriptions = self.user.subscription_set.exclude(comic__active=False, comic__ended=False)
         return [s.comic for s in subscriptions]
 
     def is_subscribed(self, comic):
@@ -162,7 +162,7 @@ class UserOperations(object):
 
     def new_comics(self):
         """Get the new comics for the user in a QuerySet."""
-        return NewComic.objects.exclude(comic__activo=False, comic__ended=False)
+        return NewComic.objects.exclude(comic__active=False, comic__ended=False)
 
     def is_new(self, comic):
         """Is this comic new for the user?"""
