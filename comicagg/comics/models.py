@@ -59,11 +59,9 @@ class Comic(models.Model):
         help_text="Read the page backwards by line (last line first).")
 
     # Other settings
-    # FUTURE: Consider removing these two and always use the first URL as referer and mask the User-Agent.
+    # FUTURE: Consider removing this and always use the first URL as referer
     referer = models.URLField('Referer', null=True, blank=True,
         help_text='Set this to a URL that the web will accept as referer when getting an update.')
-    fake_user_agent = models.BooleanField('Change User-Agent', default=False,
-        help_text='Si además la web comprueba el User-Agent marcar para conectarse a la web usando otro User-Agent')
 
     last_update = models.DateTimeField('Last update', blank=True)
     last_image = models.URLField('Last image URL', blank=True)
