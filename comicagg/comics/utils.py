@@ -63,8 +63,20 @@ class UserOperations(object):
                 return True
         return False
 
-    def mark_comic_read(self, comic):
-        """Mark the comic as read, removing the unread strips."""
+    def mark_comic_read(self, comic, vote=0):
+        """Mark the comic as read, removing the unread strips and updating the votes."""
+        if vote == -1:
+            votes = 1
+            value = 0
+        elif vote == 0:
+            votes = 0
+            value = 0
+        else:
+            votes = 1
+            value = 1
+        comic.total_votes += votes
+        comic.positive_votes += value
+        comic.save()
         self.user.unreadcomic_set.filter(comic=comic).delete()
 
     def mark_all_read(self):

@@ -308,6 +308,7 @@ class UnreadsView(APIView):
         context = self.get_context_data(**kwargs)
 
         # Do not allow POST if there is not comic id
+        # TODO: wtf
         if 'comic_id' not in context.keys():
             return HttpResponseNotAllowed(['GET'])
 
@@ -350,21 +351,7 @@ class UnreadsView(APIView):
             return self.error("BadRequest", "You are not subscribed to this comic")
 
         # At this point we have confirmed that the comic exists and that the user is subscribed
-        # FUTURE: do the voting in the comic operations and not here
-        if vote == -1:
-            votes = 1
-            value = 0
-        elif vote == 0:
-            votes = 0
-            value = 0
-        else:
-            votes = 1
-            value = 1
-        comic.total_votes += votes
-        comic.positive_votes += value
-        comic.save()
-        # Mark all unreads as read
-        request.user.unreadcomic_set.filter(comic=comic).delete()
+        request.user.operations.mark_comic_read(comic, vote=vote)
         return HttpResponseNoContent(content_type=self.content_type)
 
     @write_required
