@@ -27,6 +27,11 @@ class UserProfile(models.Model):
 
     css_color = models.CharField(max_length=100, default="blue_white")
 
+    class Meta:
+        ordering = ['user']
+        verbose_name = _('User profile')
+        verbose_name_plural = _('User profiles')
+
     def __str__(self):
         return '%s' % self.user
 
@@ -35,11 +40,6 @@ class UserProfile(models.Model):
             return True
         return False
     is_active.boolean = True
-
-    class Meta:
-        ordering = ['user']
-        verbose_name = _('User profile')
-        verbose_name_plural = _('User profiles')
 
 def create_account(sender, **kwargs):
     if kwargs['created']:

@@ -4,30 +4,31 @@ from django.db import models
 
 class Post(models.Model):
     user = models.ForeignKey(User)
-    title = models.CharField('Título', max_length=255)
-    text = models.TextField('Texto')
+    title = models.CharField('Title', max_length=255)
+    text = models.TextField('Text')
     date = models.DateTimeField(auto_now_add=True)
-    html = models.BooleanField('Si se marca como HTML se pone a pelo en la web, si no, sólo los saltos de línea se convierten.', default=False)
+    html = models.BooleanField('Is the text HTML or plain text?', default=False)
+    # TODO: Remove this field
     id_topic = models.IntegerField('Id del tema en el foro', null=True, blank=True, default=0, help_text='Se rellena él sólo')
+
+    class Meta:
+        ordering = ['-date']
 
     def __str__(self):
         return '%s' % self.title
 
     def save(self):
-        #check if we have to notify the users
+        # Do we have to notify the users
         notify = False
         if not self.id:
+            # The object doesn't have an ID yet so it's new and then we want to notify the users
             notify = True
         super(Post, self).save()
-        #avisar de que hay nuevo post
         if notify:
             users = User.objects.all()
             for user in users:
                 new = NewBlog(user=user, post=self)
                 new.save()
-
-    class Meta:
-        ordering = ['-date']
 
 class NewBlog(models.Model):
     user = models.ForeignKey(User)
@@ -35,4 +36,3 @@ class NewBlog(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.user, self.post)
-
