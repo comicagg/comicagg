@@ -15,63 +15,6 @@ import comicagg.logs.tags as logtags
 
 logger = logging.getLogger(__name__)
 
-mime_valid = re.compile(r'[\w]+/[\w.\-+]+')
-
-class AcceptHeaderProcessingMiddleware(object):
-    """Builds the content type accept list into the request object."""
-
-    def process_request(self, request):
-        request.accept_list = list()
-        request.client_prefers_xml = False
-        if 'HTTP_ACCEPT' in request.META.keys():
-            accept_str = request.META["HTTP_ACCEPT"]
-            l = accept_str.split(',')
-            request.accept_list = [ct.strip() for ct in l if mime_valid.match(ct.strip())]
-            request.client_prefers_xml = self.client_prefers_xml(request)
-
-    def client_prefers_xml(self, request):
-        """Inspect the list of accepted content types and return a boolean if the request prefers XML over JSON."""
-        try:
-            xml_i = request.accept_list.index("text/xml")
-        except:
-            return False
-        try:
-            json_i = request.accept_list.index("application/json")
-        except:
-            return True
-        return xml_i < json_i
-
-class BodyProcessingMiddleware(object):
-    """Processes the body in the request and sets the processed_body in the request.
-    
-    The processing depends on the Content-Type sent by the client. It will process JSON or XML.
-    """
-
-    def process_request(self, request):
-        # TODO we could return the errors in a better way
-        request.processed_body = None
-        if 'CONTENT_TYPE' in request.META.keys():
-            # Not checking CONTENT_LENGTH because the application might not send it
-            content_type = request.META['CONTENT_TYPE'].lower()
-            try:
-                body = request.body
-            except:
-                logger.error("The request body could not be read")
-                return HttpResponse("Error reading body: " + str(sys.exc_info()[1]), status=500)
-
-            if content_type == 'application/json':
-                try:
-                    request.processed_body = json.loads(body)
-                except:
-                    logger.debug("The request body is not valid JSON")
-                    return HttpResponse('Invalid JSON body', status=400)
-            elif content_type == 'text/xml':
-                try:
-                    request.processed_body = ET.fromstring(body)
-                except:
-                    logger.debug('The request body is not valid XML')
-                    return HttpResponse('Invalid XML body', status=400)
-
 class OAuth2Middleware(object):
     """Authenticates an anonymouse user using the Authorization header.
 

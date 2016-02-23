@@ -103,8 +103,6 @@ MIDDLEWARE_CLASSES = (
     'comicagg.middleware.MaintenanceMiddleware', # Maintenance mode
     'django.contrib.messages.middleware.MessageMiddleware', # Django messages
     'django.contrib.admindocs.middleware.XViewMiddleware',
-    'comicagg.api.middleware.AcceptHeaderProcessingMiddleware', # Processes the Accept header
-    'comicagg.api.middleware.BodyProcessingMiddleware' # Process the body
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

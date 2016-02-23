@@ -17,3 +17,8 @@ class VoteForm(forms.Form):
 class StripForm(forms.Form):
 	"""Form used to validate the input of the parameter"""
 	strip_id = forms.IntegerField()
+
+class SubscriptionForm(forms.Form):
+	"""Form used to validate the input of the parameter"""
+	# TODO: do we want to validate here?
+	subscribe = forms.CharField()
