@@ -47,7 +47,6 @@ def login_view(request):
                 if user.is_active:
                     # Redirect to the page he was requesting.
                     if nexturl:
-                        print("NextUrl:", nexturl)
                         return HttpResponseRedirect(nexturl)
                     else:
                         return redirect('comics:read')
