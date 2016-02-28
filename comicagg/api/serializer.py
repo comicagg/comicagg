@@ -60,9 +60,9 @@ class Serializer:
         out["website"] = comic.website
         out["votes"] = comic.total_votes
         out["rating"] = comic.get_rating()
-        out["added"] = str(user_operations.is_subscribed(comic))
-        out["ended"] = str(comic.ended)
-        out["unreadcount"] = user_operations.unread_comic_strips_count(comic)
+        out["added"] = user_operations.is_subscribed(comic)
+        out["ended"] = comic.ended
+        out["unread_count"] = user_operations.unread_comic_strips_count(comic)
         if last_strip:
             try:
                 out["last_strip"] = self.build_comichistory_dict(comic.last_strip())
@@ -75,8 +75,8 @@ class Serializer:
     def build_comichistory_dict(self, history):
         out = dict()
         out["id"] = history.id
-        out["imageurl"] = history.image_url()
-        out["imagetext"] = history.alt_text if history.alt_text else ""
+        out["url"] = history.image_url()
+        out["text"] = history.alt_text if history.alt_text else ""
         out["date"] = datetime_to_rfc2822(history.date)
         out["timestamp"] = datetime_to_timestamp(history.date)
         return out
@@ -86,9 +86,9 @@ class Serializer:
         out = dict()
         out["username"] = self.user.username
         out["email"] = self.user.email
-        out["totalcomics"] = len(user_operations.subscribed_comics())
-        out["unreadcomics"] = len(user_operations.unread_comics())
-        out["newcomics"] = user_operations.new_comics().count()
+        out["total_comics"] = len(user_operations.subscribed_comics())
+        out["unread_comics"] = len(user_operations.unread_comics())
+        out["new_comics"] = user_operations.new_comics().count()
         return out
 
 # Helper functions
