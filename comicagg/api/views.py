@@ -4,7 +4,8 @@ import logging
 import xml.etree.ElementTree as ET
 from django.db import transaction
 from django.http import (HttpResponse, JsonResponse,
-    HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseServerError)
+    HttpResponseBadRequest, HttpResponseNotAllowed, HttpResponseNotFound,
+    HttpResponseServerError)
 from django.views.generic import View
 from django.views.generic.edit import FormMixin
 from comicagg.comics.models import Comic, ComicHistory, active_comics
@@ -20,6 +21,9 @@ logger = logging.getLogger(__name__)
 
 class HttpResponseUnauthorized(HttpResponse):
     status_code = 401
+
+class HttpResponseCreated(HttpResponse):
+    status_code = 201
 
 class HttpResponseNoContent(HttpResponse):
     status_code = 204
@@ -42,20 +46,22 @@ class APIView(View, FormMixin):
 
     @transaction.atomic
     def dispatch(self, *args, **kwargs):
-        """Setup the response content type and handle errors from the specific verb methods."""
+        """Handle exception from the specific verb methods."""
         request = args[0]
         logger.debug("API call: %s %s", request.method, request.path)
 
         self.serialize = Serializer(request.user).serialize
 
         if not request.user.is_authenticated():
-            return self.response_error("Unauthorized", "You need to log in to access this resource", HttpResponseUnauthorized)
+            return self.response_error("You need to log in to access this resource",
+                "Unauthorized", HttpResponseUnauthorized)
         response = None
         try:
             response = super(APIView, self).dispatch(*args, **kwargs)
         except Exception as exception:
             # TODO : log this exception
-            response = self.response_error("Server error", "Internal server error", HttpResponseServerError)
+            response = self.response_error("Internal Server error",
+                "ServerError", HttpResponseServerError)
         return response
 
     def get_context_data(self, **kwargs):
@@ -65,7 +71,8 @@ class APIView(View, FormMixin):
             self.form = context['form']
         return context
 
-    def response_error(self, name, description, error_class=HttpResponseBadRequest):
+    def response_error(self, description="", name="BadRequest",
+        error_class=HttpResponseBadRequest):
         """Render an error response."""
         logger.debug("Returning an error (%s): %s", name, description)
         data = {
@@ -75,16 +82,22 @@ class APIView(View, FormMixin):
         body = self.serialize(data, identifier='error')
         return self.response_content(body, response_class=error_class)
 
+    def response_not_found(self, message):
+        return self.response_error(message, "NotFound", HttpResponseNotFound)
+
     def response_no_content(self):
         return HttpResponseNoContent(content_type=self.content_type)
 
+    def response_created(self):
+        return HttpResponseCreated(content_type=self.content_type)
+
     def response_content(self, data, response_class=JsonResponse):
         """Helper method to wrap the response data."""
-        # FUTUE: we may want to change this so that we can change the status code
-        final_data = self.add_meta(data)
+        # FUTURE: we may want to change this so that we can change the status code in meta
+        final_data = self.wrap_data(data)
         return response_class(final_data)
 
-    def add_meta(self, data):
+    def wrap_data(self, data):
         """In case we want to do JSONP in the future."""
         final_data = dict()
         final_data["meta"] = dict()
@@ -105,16 +118,18 @@ class IndexView(APIView):
         return self.response_content(body)
 
 class ComicsView(APIView):
-    """Handles general comic related stuff. Get information about all the comics available in the service."""
+    """Handles general comic related stuff.
+    Get information about all the comics available in the service."""
 
     @request_param('comic_id') # url path
     def get(self, request, **kwargs):
-        """Get information about a specific comic or all the comics and optionally return the last strip fetched of the comics."""
+        """Get information about a specific comic or all the comics
+        and optionally return the last strip fetched of the comics."""
         if self.comic_id is not None:
             try:
                 data = Comic.objects.get(pk=self.comic_id)
             except:
-                return self.response_error("NotFound", "The comic does not exist", HttpResponseNotFound)
+                return self.response_not_found("The comic does not exist")
             body = self.serialize(data, include_last_strip=True)
         else:
             simple = "simple" in kwargs.keys()
@@ -134,7 +149,7 @@ class StripsView(APIView):
         try:
             strip = ComicHistory.objects.get(pk=self.strip_id)
         except:
-            return self.response_error("NotFound", "That strip does not exist", HttpResponseNotFound)
+            return self.response_not_found("That strip does not exist")
         body = self.serialize(strip)
         return self.response_content(body)
 
@@ -145,10 +160,11 @@ class StripsView(APIView):
         try:
             strip = ComicHistory.objects.get(pk=self.strip_id)
         except:
-            return self.response_error("NotFound", "The strip does not exist", HttpResponseNotFound)
+            return self.response_not_found("The strip does not exist")
         if not request.user.operations.is_subscribed(strip.comic):
-            return self.response_error("BadRequest", "You are not subscribed to this comic")
-        request.user.unreadcomic_set.create(user=request.user, comic=strip.comic, history=strip)
+            return self.response_error("You are not subscribed to this comic")
+        request.user.unreadcomic_set.create(user=request.user, comic=strip.comic,
+            history=strip)
         return self.response_no_content()
 
     @write_required
@@ -158,9 +174,9 @@ class StripsView(APIView):
         try:
             strip = ComicHistory.objects.get(pk=self.strip_id)
         except:
-            return self.response_error("NotFound", "The strip does not exist", HttpResponseNotFound)
+            return self.response_not_found("The strip does not exist")
         if not request.user.operations.is_subscribed(strip.comic):
-            return self.response_error("BadRequest", "You are not subscribed to this comic")
+            return self.response_error("You are not subscribed to this comic")
         request.user.unreadcomic_set.filter(history__id=self.strip_id).delete()
         return self.response_no_content()
 
@@ -186,7 +202,7 @@ class SubscriptionsView(APIView):
         The comics will be added at the end of the list of subscriptions.
         """
         if self.subscribe is None:
-            return self.response_error("BadRequest", "Empty list.")
+            return self.response_error("Empty list.")
 
         id_list = [int(x) for x in self.subscribe.split(',') if len(x) > 0]
 
@@ -196,7 +212,7 @@ class SubscriptionsView(APIView):
             for x in id_list
             if x not in id_list_clean]
         request.user.operations.subscribe_comics(id_list_clean)
-        return self.response_no_content()
+        return self.response_created()
 
     @write_required
     @body_not_empty
@@ -204,13 +220,17 @@ class SubscriptionsView(APIView):
     def put(self, request, **kwargs):
         """Modify the order of the subscribed comics.
 
-        All the subscriptions will be ordered following the order of the IDs given in the body.
+        All the subscriptions will be ordered with the same order
+        of the IDs given in the body.
 
         Subscription/unsubscription operations can be done with this method.
         """
-        requested_idx = [int(x)
-                            for x in self.subscriptions[0].split(',')
-                            if len(x) > 0]
+        # FUTURE: move this to the user operations
+        if self.subscriptions is None:
+            return self.response_error("Invalid body.")
+
+        subscriptions_split = self.subscriptions[0].split(',')
+        requested_idx = [int(x) for x in subscriptions_split if len(x) > 0]
 
         # 1. Remove possible duplicates from the input
         # These are all the comics the user wants to follow and in this order
@@ -220,25 +240,33 @@ class SubscriptionsView(APIView):
             if comic_id not in requested_idx_clean]
 
         # 2. Get the comics the user is currently following
-        current_active_idx = [comic.id for comic in request.user.operations.subscribed_comics()]
+        current_active_idx = [comic.id
+            for comic in request.user.operations.subscribed_comics()]
 
         # 3. Find comics to be removed
-        deleted_idx = [comic_id for comic_id in current_active_idx if comic_id not in requested_idx_clean]
+        deleted_idx = [comic_id
+            for comic_id in current_active_idx
+            if comic_id not in requested_idx_clean]
         if len(deleted_idx) > 0:
             request.user.operations.unsubscribe_comics(deleted_idx)
 
         # 4. Find comics to be added
-        added_idx = [comic_id for comic_id in requested_idx_clean if comic_id not in current_active_idx]
+        added_idx = [comic_id
+            for comic_id in requested_idx_clean
+            if comic_id not in current_active_idx]
         if len(added_idx) > 0:
             request.user.operations.subscribe_comics(added_idx)
 
         # 5. Update the position of the subcriptions
         subscribed_all = request.user.operations.subscribed_all()
-        subscribed_all_dict = dict([(subscription.comic.id, subscription) for subscription in subscribed_all])
+        subscribed_all_dict = dict([(subscription.comic.id, subscription)
+            for subscription in subscribed_all])
 
         if len(subscribed_all) < len(requested_idx_clean):
-            # We have already added/removed the comics so this should never happen, something must have gone wrong
-            HttpResponse(status=500, content_type=self.content_type)
+            # We have already added/removed the comics so this should never happen
+            # something must have gone wrong
+            return self.response_error("Internal server error", "ServerError",
+                HttpResponseServerError)
 
         position = 0
         for comic_id in requested_idx_clean:
@@ -251,7 +279,8 @@ class SubscriptionsView(APIView):
 
     @write_required
     def delete(self, request, **kwargs):
-        """Remove all the subscriptions, returning a list with the IDs of the comics the user used to follow."""
+        """Remove all the subscriptions, returning a list with the IDs of the comics
+        the user used to follow."""
         subscribed_idx = [c.id for c in request.user.operations.subscribed_comics()]
         body = self.serialize(subscribed_idx, identifier="removed_subscriptions")
         request.user.operations.unsubscribe_all_comics()
@@ -275,12 +304,12 @@ class UnreadsView(APIView):
             try:
                 comic = Comic.objects.get(pk=self.comic_id)
             except:
-                return self.response_error("NotFound", "Comic does not exist", HttpResponseNotFound)
+                return self.response_not_found("Comic does not exist")
 
             if request.user.operations.is_subscribed(comic):
                 body = self.serialize(comic, include_unread_strips=True)
             else:
-                return self.response_error("BadRequest", "You are not subscribed to this comic")
+                return self.response_error("You are not subscribed to this comic")
         else:
             unreads = request.user.operations.unread_comics()
             body = self.serialize(unreads, include_last_strip=self.with_strips, identifier='unreads')
@@ -298,16 +327,18 @@ class UnreadsView(APIView):
         try:
             comic = Comic.objects.get(pk=self.comic_id)
         except:
-            return self.response_error("NotFound", "Comic does not exist", HttpResponseNotFound)
+            return self.response_not_found("Comic does not exist")
 
         if request.user.operations.is_subscribed(comic):
             ok = request.user.operations.mark_comic_unread(comic)
             if not ok:
-                return self.response_error("ServerError", "There was an error setting this comic as unread")
+                return self.response_error(
+                    "There was an error setting this comic as unread",
+                    "ServerError")
         else:
-            return self.response_error("BadRequest", "You are not subscribed to this comic")
+            return self.response_error("You are not subscribed to this comic")
 
-        return self.response_no_content()
+        return self.response_created()
 
     @write_required
     @body_not_empty
@@ -321,17 +352,18 @@ class UnreadsView(APIView):
 
         # Vote will be None if there was no vote or it was invalid
         if self.vote is None:
-            return self.response_error("BadRequest", "Invalid vote parameter")
+            return self.response_error("Invalid vote parameter")
 
         try:
             comic = Comic.objects.get(pk=self.comic_id)
         except:
-            return self.response_error("NotFound", "Comic does not exist", HttpResponseNotFound)
+            return self.response_not_found("Comic does not exist")
 
         if not request.user.operations.is_subscribed(comic):
-            return self.response_error("BadRequest", "You are not subscribed to this comic")
+            return self.response_error("You are not subscribed to this comic")
 
-        # At this point we have confirmed that the comic exists and that the user is subscribed to it
+        # At this point we have confirmed that the comic exists and
+        # that the user is subscribed to it
         request.user.operations.mark_comic_read(comic, vote=self.vote)
         return self.response_no_content()
 
@@ -347,7 +379,7 @@ class UnreadsView(APIView):
             try:
                 comic = Comic.objects.get(pk=self.comic_id)
             except:
-                return self.response_error("NotFound", "Comic does not exist", HttpResponseNotFound)
+                return self.response_not_found("Comic does not exist")
             request.user.operations.mark_comic_read(comic)
         return self.response_no_content()
 

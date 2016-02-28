@@ -6,18 +6,21 @@ In the decorator parameters we can find:
  kwargs are the query string parameters
 """
 from urllib.parse import parse_qs
-from django.http import HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponseForbidden
 from provider import constants
 
 def write_required(original_function):
     """Check if the passed request has write permissions in the scope."""
     def wrapper(*args, **kwargs):
+        view = args[0]
         request = args[1]
         if request.scope == getattr(constants, "WRITE"):
             return original_function(*args, **kwargs)
         else:
-            view = args[0]
-            return view.response_error("Forbidden", "This access token does not have enough permissions", HttpResponseForbidden)
+            return view.response_error(
+                "This token does not have enough permissions to perform this action",
+                "Forbidden",
+                HttpResponseForbidden)
     return wrapper
 
 def body_not_empty(original_function):
@@ -26,7 +29,7 @@ def body_not_empty(original_function):
         request = args[1]
         view = args[0]
         if len(request.body) == 0:
-            return view.response_error("BadRequest", "This method requires a body.", HttpResponseBadRequest)
+            return view.response_error("This method requires a body")
         return original_function(*args, **kwargs)
     return wrapper
 
