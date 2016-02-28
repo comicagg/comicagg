@@ -69,7 +69,8 @@ class SubscriptionTests(TestCase):
     def test_random_comic(self):
         """Test that a random comic must be active and not ended.
 
-        We subscribe the user to all the active comics, so that no random comic can be suggested.
+        We subscribe the user to all the active comics, so that no random comic
+        can be suggested.
         """
         self.assertEqual(len(self.operations.subscribed_all()), 0)
         comics = active_comics()
@@ -83,9 +84,11 @@ class SubscriptionTests(TestCase):
     def test_random_comic_one(self):
         """Test that a random comic must be active and not ended.
 
-        We subscribe the user to all the active comics but one and we confirm that that is the random comic suggested.
+        We subscribe the user to all the active comics but one and confirm that
+        this is the random comic suggested.
         Also, the comic history returned must be the most recent.
-        We need to make sure that the suggested is the Comic with ID 7, because it's the one with several strips in the fixtures.
+        We need to make sure that the suggested is the Comic with ID 7,
+        because it's the one with several strips in the fixtures.
         """
         suggested_id = 7
         self.assertEqual(len(self.operations.subscribed_all()), 0)

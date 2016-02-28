@@ -174,8 +174,9 @@ class Comic(models.Model):
 
 # FUTURE: We may want to move this elsewhere
 def active_comics():
-    """Returns a QuerySet of Comic objects that a user can follow meaning only active and not ended."""
-    return Comic.objects.exclude(active=False, ended=True)
+    """Returns a QuerySet of Comic objects that a user can follow. Includes ended comics."""
+    # FUTURE: Should not include ended comics?
+    return Comic.objects.exclude(active=False)
 
 class Subscription(models.Model):
     """A user follows a certain comic and the position of the comic in the reading list."""
