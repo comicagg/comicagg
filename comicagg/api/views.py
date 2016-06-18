@@ -128,6 +128,8 @@ class ComicsView(APIView):
         if self.comic_id is not None:
             try:
                 data = Comic.objects.get(pk=self.comic_id)
+                if not data.active and not data.ended:
+                    return self.response_not_found("The comic is disabled")
             except:
                 return self.response_not_found("The comic does not exist")
             body = self.serialize(data, include_last_strip=True)
