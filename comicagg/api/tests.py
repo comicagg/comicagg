@@ -39,6 +39,18 @@ class LoggedInTestCase(TestCase):
         login_ok = self.client.login(username=test_user, password=test_pwd)
         self.assertTrue(login_ok)
 
+    def postForm(self, *args, **kwargs):
+        kwargs['content_type'] = 'application/x-www-form-urlencoded'
+        return self.client.post(
+            *args,
+            **kwargs)
+
+    def putForm(self, *args, **kwargs):
+        kwargs['content_type'] = 'application/x-www-form-urlencoded'
+        return self.client.put(
+            *args,
+            **kwargs)
+
 class IndexTests(LoggedInTestCase):
     """Tests for the Index view."""
 
@@ -101,7 +113,7 @@ class SubscriptionTests(LoggedInTestCase):
         """This get should return a subscriptions set with 2 results."""
         user = User.objects.get(pk=1)
         operations = UserOperations(user)
-        operations.subscribe_comics([1, 2, 9])
+        operations.subscribe_comics([1, 2, 9]) # E, A, D
 
         response = self.client.get('/api/subscriptions')
         self.assertEqual(response.status_code, 200)
@@ -113,35 +125,28 @@ class SubscriptionTests(LoggedInTestCase):
     # Invalid bodies
     def test_post_wrong_body(self):
         """Send wrong bodies."""
-        response = self.client.post('/api/subscriptions', '',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', '')
         self.assertEqual(response.status_code, 400)
 
-        response = self.client.post('/api/subscriptions', 'subscribe',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe')
         self.assertEqual(response.status_code, 400)
 
-        response = self.client.post('/api/subscriptions', 'subscribe=',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe=')
         self.assertEqual(response.status_code, 400)
 
-        response = self.client.post('/api/subscriptions', 'subscribe_me=',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe_me=')
         self.assertEqual(response.status_code, 400)
 
-        response = self.client.post('/api/subscriptions', 'subscribe_me=1',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe_me=1')
         self.assertEqual(response.status_code, 400)
 
-        response = self.client.post('/api/subscriptions', 'subscribe_me=1,2',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe_me=1,2')
         self.assertEqual(response.status_code, 400)
 
     # Subscribe to one
     def test_post_one_active(self):
         """Subscribe the user to one comic."""
-        response = self.client.post('/api/subscriptions', 'subscribe=2',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe=2')
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
@@ -151,8 +156,7 @@ class SubscriptionTests(LoggedInTestCase):
 
     def test_post_one_ended(self):
         """Subscribe the user to one ended comic."""
-        response = self.client.post('/api/subscriptions', 'subscribe=1',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe=1')
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
@@ -161,16 +165,19 @@ class SubscriptionTests(LoggedInTestCase):
 
     def test_post_one_disabled(self):
         """Subscribe the user to one disabled comic."""
-        response = self.client.post('/api/subscriptions', 'subscribe=9',
-            content_type='application/x-www-form-urlencoded')
-        self.assertEqual(response.status_code, 400)
+        user = User.objects.get(pk=1)
+        operations = UserOperations(user)
+        self.assertEqual(len(operations.subscribed_all()), 0)
+
+        response = self.postForm('/api/subscriptions', 'subscribe=9')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(operations.subscribed_all()), 0)
 
     # Subscribe to several
     def test_post_several(self):
         """Subscribe the user to several comics."""
         # 2 active, 2 ended
-        response = self.client.post('/api/subscriptions', 'subscribe=1,3,2,4',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe=1,3,2,4')
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
@@ -180,8 +187,7 @@ class SubscriptionTests(LoggedInTestCase):
     # Subscribe to several with messed up but accepted values
     def test_post_format(self):
         """Subscribe the user to several comics."""
-        response = self.client.post('/api/subscriptions', 'subscribe=1,3,,2,4',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe=1,3,,2,4')
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
@@ -190,8 +196,7 @@ class SubscriptionTests(LoggedInTestCase):
 
     def test_post_format2(self):
         """Subscribe the user to several comics."""
-        response = self.client.post('/api/subscriptions', 'subscribe=,1,,3,2,4',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe=,1,,3,2,4')
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
@@ -200,8 +205,7 @@ class SubscriptionTests(LoggedInTestCase):
 
     def test_post_duplicate(self):
         """Subscribe the user to several comics."""
-        response = self.client.post('/api/subscriptions', 'subscribe=1,2,3,2,4',
-            content_type='application/x-www-form-urlencoded')
+        response = self.postForm('/api/subscriptions', 'subscribe=1,2,3,2,4')
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
@@ -211,29 +215,24 @@ class SubscriptionTests(LoggedInTestCase):
     #PUT cases
     def test_put_wrong_body(self):
         """Send wrong bodies."""
-        response = self.client.put('/api/subscriptions', '',
-            content_type='application/x-www-form-urlencoded')
+        response = self.putForm('/api/subscriptions', '')
         self.assertEqual(response.status_code, 400)
 
-        response = self.client.put('/api/subscriptions', 'subscriptionsz',
-            content_type='application/x-www-form-urlencoded')
+        response = self.putForm('/api/subscriptions', 'subscriptionsz')
         self.assertEqual(response.status_code, 400)
 
     def test_put_none(self):
         """Remove all user subscriptions and get a 204."""
-        response = self.client.put('/api/subscriptions','subscriptions=',
-            content_type='application/x-www-form-urlencoded')
+        response = self.putForm('/api/subscriptions', 'subscriptions=')
         self.assertEqual(response.status_code, 204)
 
-        response = self.client.put('/api/subscriptions', 'subscriptions',
-            content_type='application/x-www-form-urlencoded')
+        response = self.putForm('/api/subscriptions', 'subscriptions')
         self.assertEqual(response.status_code, 400)
 
     # TODO test cases with already subscribed comics to test order and added/removed
     def test_put_one(self):
         """Subscribe to one comic."""
-        response = self.client.put('/api/subscriptions', 'subscriptions=1',
-            content_type='application/x-www-form-urlencoded')
+        response = self.putForm('/api/subscriptions', 'subscriptions=1')
         self.assertEqual(response.status_code, 204)
 
         user = User.objects.get(pk=1)
@@ -242,8 +241,7 @@ class SubscriptionTests(LoggedInTestCase):
 
     def test_put_several(self):
         """We will subscribe the user to several comics and we should get a 204."""
-        response = self.client.put('/api/subscriptions', 'subscriptions=1,3,2,4',
-            content_type='application/x-www-form-urlencoded')
+        response = self.putForm('/api/subscriptions', 'subscriptions=1,3,2,4')
         self.assertEqual(response.status_code, 204)
 
         user = User.objects.get(pk=1)
@@ -316,25 +314,21 @@ class UnreadTests(LoggedInTestCase):
 
     def test_put_ok(self):
         """Get info of all the comics, get a 200."""
-        r = self.client.put('/api/unreads/1', 'vote=1',
-            content_type='application/x-www-form-urlencoded')
+        r = self.putForm('/api/unreads/1', 'vote=1')
         self.assertEqual(r.status_code, 204)
 
     def test_put_invalid_comic(self):
         """Get info of all the comics, get a 200."""
-        r = self.client.put('/api/unreads/100', 'vote=1',
-            content_type='application/x-www-form-urlencoded')
+        r = self.putForm('/api/unreads/100', 'vote=1')
         self.assertEqual(r.status_code, 404)
 
     def test_put_invalid_vote(self):
         """Get info of all the comics, get a 200."""
-        r = self.client.put('/api/unreads/1')
+        r = self.putForm('/api/unreads/1')
         self.assertEqual(r.status_code, 400)
-        r = self.client.put('/api/unreads/1', 'vote=165',
-            content_type='application/x-www-form-urlencoded')
+        r = self.putForm('/api/unreads/1', 'vote=165')
         self.assertEqual(r.status_code, 400)
-        r = self.client.put('/api/unreads/1', 'vote=a',
-            content_type='application/x-www-form-urlencoded')
+        r = self.putForm('/api/unreads/1', 'vote=a')
         self.assertEqual(r.status_code, 400)
     #TODO: PUT cases
 
