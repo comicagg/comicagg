@@ -174,7 +174,7 @@ class UserOperations(object):
 
     def new_comics(self):
         """Get the new comics for the user in a QuerySet."""
-        return NewComic.objects.exclude(comic__active=False, comic__ended=False)
+        return NewComic.objects.filter(user=self.user).exclude(comic__active=False, comic__ended=False)
 
     def is_new(self, comic):
         """Is this comic new for the user?"""
