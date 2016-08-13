@@ -14,8 +14,8 @@ Contents:
    intro
    authentication
    doing requests
-   Endpoints table <endpoints>
-   objects
+   Working with the API<usage>
+   API Endpoints <endpoints>
 
 Indices and tables
 ==================
