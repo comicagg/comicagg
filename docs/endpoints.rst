@@ -40,6 +40,14 @@ response itself.
 Pagination
 ----------
 
+Endpoints that return lists support pagination and the response object will
+include a pagination object with information of the next page. You can use
+``next_url`` to retrieve the next set of objects. The parameter
+``next_max_id`` can be used to understand which would be the first object in the
+next page.
+A parameter ``count`` can also be used to specify the number of items
+to be returned.
+
 .. code-block:: json
 
     {
@@ -52,11 +60,22 @@ Pagination
 Errors
 ------
 
+Errors are returned in the ``response`` object like if were the result of the
+operation. ``status`` and ``text`` in the ``meta`` object of the response
+and also the HTTP status of the response will also indicate that an error
+occurred.
+
 .. code-block:: json
 
     {
-        "error": {
+        "response": {
             "error_type": "BadRequest",
             "error_message": "You are not subscribed to this comic"
         }
     }
+
+
+.. include:: endpoints-comics.rst
+.. include:: endpoints-unreads.rst
+.. include:: endpoints-subscriptions.rst
+.. include:: endpoints-user.rst
