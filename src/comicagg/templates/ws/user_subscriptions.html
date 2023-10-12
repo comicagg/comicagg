@@ -1,0 +1,15 @@
+{% extends 'ws/base_xml.html' %}
+{% load comics_tags %}
+{% block content %}
+{% spaceless %}
+<subscriptions user="{{ user }}">
+{% for subscription in subscriptions %}
+<comic id="{{ subscription.comic.id }}" name="{{ subscription.comic.name }}">
+{% for unread in subscription.comic|unreads:user.id %}
+<unread id="{{ unread.history.id }}" date="{{ unread.history.date|date:"r" }}"/>
+{% endfor %}
+</comic>
+{% endfor %}
+</subscriptions>
+{% endspaceless %}
+{% endblock %}

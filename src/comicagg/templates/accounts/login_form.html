@@ -1,0 +1,67 @@
+{% extends parent_template %}
+{% load i18n %}
+{% block title %}{% trans 'Login'%} -{% endblock %}
+{% block onload %}focusOnLogin(){% endblock %}
+{% block content %}
+{% block done-content %}{% endblock %}
+{% if oauth2 %}
+<div id="login_wrap" class="oauth2_box">
+	<h1>Comic Aggregator</h1>
+	<br/>
+        <h3>{% trans 'Login into your account to authorize an application'%}</h3>
+        <p>{% trans 'Write your username and passwod to get you logged in.'%}</p>
+        {% if error %}
+        <p><span id="errorContainer">{{ error }}</p>
+        {% endif %}
+        <div class="text_left">
+                <div id="error"></div>
+                <form method="post" action="{% url 'accounts:login' %}" enctype="application/x-www-form-urlencoded">{% csrf_token %}
+                        <table>
+                                <tr>
+                                        <td><label class="small_text">{% trans 'User '%}</label></td>
+                                        <td>{{ form.username }}<td>
+                                </tr>
+                                <tr>
+                                        <td><label class="small_text">{% trans 'Password '%}</label></td>
+                                        <td>{{ form.password }}</td>
+                                </tr>
+                                <tr>
+                                        <td colspan="2" class="text_center"><input type="submit" value="{% trans 'Log in'%}" />{{ form.next }}{{ form.oauth2 }}</td>
+                                </tr>
+                        </table>
+                </form>
+        </div>
+        <p>{% trans "Don't you have an account?" %} <a href="{% url 'accounts:register' %}">{% trans "Create one" %}</a></p>
+        <p>{% trans "Can't remember your password?" %} <a href="{% url 'accounts:password_reset' %}">{% trans 'Send me a new password'%}</a></p>
+</div>
+{% else %}
+<p class="loginbox">{% trans "Comic Aggregator allows you to read lots and lots of webcomics in the same page." %}</p>
+<div id="login_wrap" class="loginbox">
+	<h3>{% trans 'Login into your account'%}</h3>
+	<p>{% trans 'Write your username and passwod to get you logged in.'%}</p>
+	{% if error %}
+	<p><span id="errorContainer">{{ error }}</p>
+	{% endif %}
+	<div class="text_left">
+		<div id="error"></div>
+		<form method="post" action="{% url 'accounts:login' %}" enctype="application/x-www-form-urlencoded">{% csrf_token %}
+			<table>
+				<tr>
+					<td><label class="small_text">{% trans 'User '%}</label></td>
+					<td>{{ form.username }}<td>
+				</tr>
+				<tr>
+					<td><label class="small_text">{% trans 'Password '%}</label></td>
+					<td>{{ form.password }}</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="text_center"><input type="submit" value="{% trans 'Log in'%}" />{{ form.next }}</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<p>{% trans "Don't you have an account?" %} <a href="{% url 'accounts:register' %}">{% trans "Create one" %}</a></p>
+	<p>{% trans "Can't remember your password?" %} <a href="{% url 'accounts:password_reset' %}">{% trans 'Send me a new password'%}</a></p>
+</div>
+{% endif %}
+{% endblock %}

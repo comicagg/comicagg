@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+{% load i18n static %}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>{% block title %}{% endblock %} Comic Aggregator</title>
+		<link rel="stylesheet" href="{% static 'base/css/base.css' %}" type="text/css"/>
+		<link rel="shortcut icon" href="{% static 'base/img/favicon.png' %}" type="image/png" />
+		<script src="{% static 'base/js/lib/prototype.js' %}" type="text/javascript"></script>
+		<script src="{% static 'base/js/lib/jquery-1.6.1.min.js' %}" type="text/javascript"></script>
+		<script type="text/javascript">
+			var $j = jQuery.noConflict();
+		</script>
+		<script src="{% static 'base/js/all.js' %}" type="text/javascript"></script>
+		<script type="text/javascript">
+			var static_url = '{% static 'base/' %}';
+		</script>
+{% block extra_head %}{% endblock %}
+	</head>
+	<body onload="{% block onload %}{% endblock %}" class="oauth2_page">
+		<div id="content">
+{% block content %}
+{% endblock %}
+		</div>
+	</body>
+</html>
