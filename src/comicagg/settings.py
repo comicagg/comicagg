@@ -24,6 +24,13 @@ DATABASES = {
     }
 }
 
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Database connection max age: https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-CONN_MAX_AGE
+CONN_MAX_AGE = 1
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be avilable on all operating systems.
@@ -135,9 +142,6 @@ INSTALLED_APPS = (
 
 SITE_NAME = 'Comic Aggregator'
 
-# Database connection max age: https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-CONN_MAX_AGE
-CONN_MAX_AGE = 1
-
 TAG_CLOUD_NUMBER = 1
 
 INACTIVE_DAYS = 30
@@ -198,12 +202,12 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'WARNING',
+            'level': 'INFO',
             'propagate': True,
         },
         'django.request': {
             'handlers': ['console', 'mail_admins'],
-            'level': 'WARNING',
+            'level': 'INFO',
             'propagate': False,
         },
         'comicagg': {
