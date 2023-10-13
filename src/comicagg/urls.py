@@ -27,7 +27,7 @@ urlpatterns = [
 
     path(
         "docs/custom_func/",
-        BaseTemplateView.as_view(template_name="admin/custom_func.html"),
+        admin.site.admin_view(BaseTemplateView.as_view(template_name="admin/custom_func.html")),
         name="docs_custom",
     ),
     path(

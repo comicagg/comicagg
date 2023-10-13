@@ -20,9 +20,9 @@
   {% endif %}
 {% endblock %}
 
-{% block nav-breadcrumbs %}
+{% block "nav-breadcrumbs" %}
 <div class="breadcrumbs">
-  <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo; <a href="{% url 'comics:admin:update_comics' %}">{% trans 'Update comic' %}</a>
+  <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a> &rsaquo; <a href="{% url 'admin:update_comics' %}">{% trans 'Update comic' %}</a>
 </div>
 {% endblock %}
 
@@ -46,7 +46,7 @@
       <div id="{{ k }}">
         <h4>{{ k }}</h4>
         {% for comic in l %}
-          <a href="{% url 'comics:admin:update_comic' comic.id %}">{{ comic.name }}</a><br />
+          <a href="{% url 'admin:update_comic' comic.id %}">{{ comic.name }}</a><br />
         {% endfor %}
       </div>
     {% endfor %}
