@@ -86,6 +86,10 @@ class Comic(models.Model):
     def __str__(self):
         return self.name
 
+    def __lt__(self, other: "Comic"):
+        """To allow ordering using list.sort()"""
+        return self.get_rating() < other.get_rating()
+
     def save(self, *args, **kwargs):
         notify = False
         # If the user saved this with the notify field to true

@@ -9,17 +9,17 @@ from comicagg.api.views import (
     UserView,
 )
 
-app_name = "comics"
+app_name = "api"
 urlpatterns = [
-    path(r"^$", IndexView.as_view(), name="index"),
-    path(r"^comics$", ComicsView.as_view(), name="comics"),
+    path("", IndexView.as_view(), name="index"),
+    path("comics", ComicsView.as_view(), name="comics"),
     re_path(r"^comics/(?P<comic_id>\d+)$", ComicsView.as_view(), name="comic_info"),
     path(
-        r"^subscriptions$",
+        "subscriptions",
         csrf_exempt(SubscriptionsView.as_view()),
         name="subscriptions",
     ),
-    path(r"^unreads$", UnreadsView.as_view(), name="unreads"),
+    path("unreads", UnreadsView.as_view(), name="unreads"),
     re_path(
         r"^unreads/(?P<comic_id>\d+)$",
         csrf_exempt(UnreadsView.as_view()),
@@ -30,5 +30,5 @@ urlpatterns = [
         csrf_exempt(StripsView.as_view()),
         name="strip_info",
     ),
-    path(r"^user$", UserView.as_view(), name="user_info"),
+    path("user", UserView.as_view(), name="user_info"),
 ]

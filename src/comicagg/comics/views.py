@@ -39,10 +39,11 @@ def read_view(request):
         for comic in request.user.operations.unread_comics()
     ]
     random = random_comic(request.user)
-    context = RequestContext(
-        request,
-        {"comic_list": comic_list, "unread_list": unread_list, "random": random},
-    )
+    # context = RequestContext(
+    #     request,
+    #     {"comic_list": comic_list, "unread_list": unread_list, "random": random},
+    # )
+    context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
     return render(request, "comics/read.html", context, "read")
 
 
@@ -176,21 +177,8 @@ def stats(request):
     Genera una página de estadísticas para cada comic ordenada según la puntuación de cada comic
     """
     comics = list(Comic.objects.all())
-    comics.sort(sort_rate)
+    comics.sort()
     return render(request, "stats.html", {"comics": comics})
-
-
-def sort_rate(a, b):
-    """
-    Ordenar únicamente por la puntuación de los comics
-    """
-    c = b.get_rating() - a.get_rating()
-    if c > 0:
-        return 1
-    elif c < 0:
-        return -1
-    else:
-        return 0
 
 
 def last_image_url(request, cid):

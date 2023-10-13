@@ -15,17 +15,9 @@ class ComicaggAdminSite(admin.AdminSite):
             re_path(
                 r"^update/((?P<comic_id>\d+)/)?$",
                 self.admin_view(admin_views.admin_update_view),
+                # Send the current AdminSite so that the view can use AdminSite.each_context to get the proper variables
                 {"admin_site": self},
                 name="update_comics"
             )
         ]
         return more_urls + urls
-
-    def my_view(self, request):
-        # ...
-        context = dict(
-            # Include common variables for rendering the admin template.
-            self.each_context(request),
-            # Anything else you want in the context...
-        )
-        return TemplateResponse(request, "admin/reported.html", context)

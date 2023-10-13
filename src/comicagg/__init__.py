@@ -23,6 +23,9 @@ def render(
     responseClass=HttpResponse,
     mime='text/html; charset="utf-8"',
 ):
+    """
+    Used to provide additional context variables to a template in order to render common items.
+    """
     context["settings"] = settings
     try:
         user = request.user
@@ -49,7 +52,7 @@ def render(
 
     # context = RequestContext(request, context)
 
-    resp_text = render_to_string(template, context)
+    resp_text = render_to_string(template, context, request)
     response = responseClass(resp_text, content_type=mime)
     if xml:
         response = responseClass(resp_text, content_type='text/xml; charset="utf-8"')

@@ -15,5 +15,4 @@ urlpatterns = [
     re_path(r"^hi/(?P<hid>\d+)/", views.history_image_url, name="history_url"),
 
     path("ajax/", include("comicagg.comics.ajax.urls", namespace="ajax")),
-    path("admin/", include("comicagg.comics.admin_views.urls", namespace="admin")),
 ]

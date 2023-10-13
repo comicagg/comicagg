@@ -9,7 +9,7 @@ ajax_patterns = (
     "ajax",
 )
 
-app_name = "blog"
+app_name = "news"
 urlpatterns = [
     path("", views.index, name="index"),
     path("all/", views.index, name="archive", kwargs={"archive": True}),

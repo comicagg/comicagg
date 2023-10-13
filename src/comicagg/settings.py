@@ -135,6 +135,9 @@ INSTALLED_APPS = (
 
 SITE_NAME = 'Comic Aggregator'
 
+# Database connection max age: https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-CONN_MAX_AGE
+CONN_MAX_AGE = 1
+
 TAG_CLOUD_NUMBER = 1
 
 INACTIVE_DAYS = 30
