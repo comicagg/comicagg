@@ -8,13 +8,13 @@ import sys
 import threading
 from traceback import print_exc
 from builtins import range
-from datetime import datetime
+from datetime import datetime, timezone
 # Add the root folder to the python path
-d = os.path.dirname(os.path.abspath(sys.argv[0]))
-d = os.path.join(d, '..')
-d = os.path.join(d, '..')
-d = os.path.abspath(d)
-sys.path.insert(0, d)
+# d = os.path.dirname(os.path.abspath(sys.argv[0]))
+# d = os.path.join(d, '..')
+# d = os.path.join(d, '..')
+# d = os.path.abspath(d)
+# sys.path.insert(0, d)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
@@ -60,7 +60,7 @@ class UpdateThread(threading.Thread):
             try:
                 changed = update_comic(comic)
             except KeyboardInterrupt:
-                print('*** Interrupted %s ***' % datetime.now())
+                print('*** Interrupted %s ***' % datetime.now(timezone.utc))
                 sys.exit()
             except NoMatchException:
                 s = '   Error updating %s\n' % comic.name
@@ -89,13 +89,13 @@ class UpdateThread(threading.Thread):
             comic = self.next()
 
     def next(self):
-        print("%s: %d left, %d errors" % (self.getName(), len(self.all), errors))
+        print("%s: %d left, %d errors" % (self.name, len(self.all), errors))
         if len(self.all):
             return self.all.pop(0)
 
-print('\n*** Update job execution (%s) ***' % datetime.now())
+print('\n*** Update job execution (%s) ***' % datetime.now(timezone.utc))
 
-execution_log = "Start time: %s\n" % datetime.now()
+execution_log = "Start time: %s\n" % datetime.now(timezone.utc)
 thread_list = list()
 # Limit the number of threads to 5 or less if there are less comics in the service
 max_threads = 5 if len(all) > 5 else len(all)
@@ -129,7 +129,7 @@ for s in updated_comics:
 execution_log += "-------------------------\n"
 
 execution_log += "%s new, %s unchanged, %s errors\n" % (new, no_change, (len(errors_active)+len(errors_inactive)+len(errors_unexpected)))
-execution_log += "End time: %s\n" % datetime.now()
+execution_log += "End time: %s\n" % datetime.now(timezone.utc)
 
 try:
     mail_managers('Update job', execution_log)

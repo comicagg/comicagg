@@ -1,17 +1,11 @@
-# -*- coding: utf-8 -*-
-import os
-import re
-
 from django.conf import settings
 from django.db.models import Count
-from django.http import (
-    HttpResponse,
-    HttpResponseNotFound,
-    HttpResponseRedirect,
-    HttpResponseServerError,
-)
-from django.template import RequestContext
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseServerError
 from django.template.loader import render_to_string
+
+from .celery import app as celery_app
+
+__all__ = ("celery_app",)
 
 
 def render(

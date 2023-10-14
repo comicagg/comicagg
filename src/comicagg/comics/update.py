@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Functions to check if the comics have been updated."""
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 from html import unescape
 
 import requests
@@ -52,7 +52,7 @@ def custom_update(comic):
         # Update the comic
         comic.last_image = history_set[0].url
         comic.last_image_alt_text = history_set[0].alt_text
-        comic.last_update = datetime.now()
+        comic.last_update = datetime.now(timezone.utc)
         comic.save()
         # Persist the ComicHistory objects in the database
         for history in history_set:
@@ -82,7 +82,7 @@ def default_update(comic):
         return None
     comic.last_image = last_image
     comic.last_image_alt_text = alt_text
-    comic.last_update = datetime.now()
+    comic.last_update = datetime.now(timezone.utc)
     history = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt_text)
     history.save()
     comic.save()

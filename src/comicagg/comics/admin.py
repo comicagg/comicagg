@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from django.template.response import TemplateResponse
 from django.urls import path
 
 from comicagg.comics.models import (
@@ -66,8 +65,15 @@ class ComicAdmin(admin.ModelAdmin):
             {"classes": ("collapse",), "fields": ("positive_votes", "total_votes")},
         ),
         (
-            "Last image",
-            {"fields": ("last_update", "last_image", "last_image_alt_text")},
+            "Last update",
+            {
+                "fields": (
+                    "last_update_status",
+                    "last_update",
+                    "last_image",
+                    "last_image_alt_text",
+                )
+            },
         ),
     )
 

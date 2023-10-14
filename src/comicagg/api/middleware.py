@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+from datetime import datetime, timezone
 import json
 import logging
 import re
@@ -93,7 +93,7 @@ class OAuth2Middleware:
             return None
 
         if access_token:
-            td = access_token.expires - datetime.datetime.now()
+            td = access_token.expires - datetime.now(timezone.utc)
             tds = (
                 td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6
             ) / 10**6

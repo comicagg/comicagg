@@ -5,40 +5,41 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
-
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// This can be used to network with other containers or the host.
 	,
 	"forwardPorts": [
 		8000,
-		5432
+		5432,
+		5555
 	],
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"tushortz.python-extended-snippets",
-				"ahmadalli.vscode-nginx-conf",
-				"batisteo.vscode-django",
-				"ms-azuretools.vscode-docker",
+				// VSCode helpers
 				"tal7aouy.indent-colorizer",
-				"ms-python.isort",
-				"DavidAnson.vscode-markdownlint",
-				"twixes.pypi-assistant",
 				"ms-python.black-formatter",
-				"junstyle.vscode-django-support"
+				"jgclark.vscode-todo-highlight",
+				// Python
+				"tushortz.python-extended-snippets",
+				"ms-python.isort",
+				"twixes.pypi-assistant",
+				// Django
+				"batisteo.vscode-django",
+				"junstyle.vscode-django-support",
+				// Extras
+				"ahmadalli.vscode-nginx-conf",
+				"ms-azuretools.vscode-docker",
+				"DavidAnson.vscode-markdownlint"
 			]
 		}
 	}
-
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "pip install --user -r requirements.txt",
-
 	// Configure tool-specific properties.
 	// "customizations": {},
-
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	// ,"remoteUser": "root"
 }

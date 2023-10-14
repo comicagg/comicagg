@@ -4,6 +4,7 @@
 import os
 
 from django.core.management.commands.runserver import Command as runserver
+
 runserver.default_addr = "0.0.0.0"
 runserver.default_port = 8000
 
@@ -14,13 +15,13 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    "default": {
+        "ENGINE": "django.db.backends.",  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        "NAME": "",  # Or path to database file if using sqlite3.
+        "USER": "",  # Not used with sqlite3.
+        "PASSWORD": "",  # Not used with sqlite3.
+        "HOST": "",  # Set to empty string for localhost. Not used with sqlite3.
+        "PORT": "",  # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -36,11 +37,12 @@ CONN_MAX_AGE = 1
 # although not all choices may be avilable on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'CET'
+TIME_ZONE = "UTC"
+USE_TZ = True
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = "en"
 
 SITE_ID = 1
 
@@ -53,33 +55,33 @@ USE_I18N = True
 USE_L10N = True
 
 # Absolute path to the directory that holds the comicagg folder
-ROOT = os.path.dirname(os.path.abspath(__file__)) + '/'
+ROOT = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(ROOT, 'media')
+MEDIA_ROOT = os.path.join(ROOT, "media")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-#MEDIA_URL = 'https://localhost/media_comicagg/'
+# MEDIA_URL = 'https://localhost/media_comicagg/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-#ADMIN_MEDIA_PREFIX = '/admin-media/'
+# ADMIN_MEDIA_PREFIX = '/admin-media/'
 
 # Used for password reset email, without trailing slash
-#DOMAIN = 'http://192.168.0.3:8000'
+# DOMAIN = 'http://192.168.0.3:8000'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '0zqsc45e!e*%zy(&gus5p4bj6^mdrt%7^y*fl*(o6rt1yp=)&#'
+SECRET_KEY = "0zqsc45e!e*%zy(&gus5p4bj6^mdrt%7^y*fl*(o6rt1yp=)&#"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(ROOT, 'templates'),
+            os.path.join(ROOT, "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -93,66 +95,62 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = (
-    os.path.join(ROOT, 'static'),
-)
+STATICFILES_DIRS = (os.path.join(ROOT, "static"),)
 
-FIXTURE_DIRS = (
-    os.path.join(ROOT, 'test_fixtures'),
-)
+FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
 
 MIDDLEWARE = (
-    'django.middleware.gzip.GZipMiddleware', # Compress the output
-    'django.middleware.common.CommonMiddleware', #
-    'django.contrib.sessions.middleware.SessionMiddleware', # Django sessions
-    'django.middleware.csrf.CsrfViewMiddleware', # Cross site request forgery protection
-    'django.middleware.locale.LocaleMiddleware', # Change the locale
-
+    "django.middleware.gzip.GZipMiddleware",  # Compress the output
+    "django.middleware.common.CommonMiddleware",  #
+    "django.contrib.sessions.middleware.SessionMiddleware",  # Django sessions
+    "django.middleware.csrf.CsrfViewMiddleware",  # Cross site request forgery protection
+    "django.middleware.locale.LocaleMiddleware",  # Change the locale
     # Authentication middleware
-    'django.contrib.auth.middleware.AuthenticationMiddleware', # Default authentication
-    'comicagg.api.middleware.OAuth2Middleware', # OAuth2 authentication
-
+    "django.contrib.auth.middleware.AuthenticationMiddleware",  # Default authentication
+    "comicagg.api.middleware.OAuth2Middleware",  # OAuth2 authentication
     # Post authentication middleware
-    'comicagg.middleware.UserProfileMiddleware', # Set up the user profile and user operations
+    "comicagg.middleware.UserProfileMiddleware",  # Set up the user profile and user operations
     #'comicagg.middleware.UserBasedExceptionMiddleware',
-    'comicagg.middleware.ActiveUserMiddleware', # Check if the user is active
-    'comicagg.middleware.MaintenanceMiddleware', # Maintenance mode
-    'django.contrib.messages.middleware.MessageMiddleware', # Django messages
-    'django.contrib.admindocs.middleware.XViewMiddleware',
+    "comicagg.middleware.ActiveUserMiddleware",  # Check if the user is active
+    "comicagg.middleware.MaintenanceMiddleware",  # Maintenance mode
+    "django.contrib.messages.middleware.MessageMiddleware",  # Django messages
+    "django.contrib.admindocs.middleware.XViewMiddleware",
 )
 
-MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
-ROOT_URLCONF = 'comicagg.urls'
+ROOT_URLCONF = "comicagg.urls"
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.messages',
-    'django.contrib.sessions',
-    'django.contrib.staticfiles',
-    'comicagg.apps.ComicaggAdminConfig', #'django.contrib.admin',
-    'comicagg.accounts',
-    'comicagg.api',
-    'comicagg.blog',
-    'comicagg.comics',
-    'provider',
-    'provider.oauth2',
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.staticfiles",
+    "celery",
+    "django_celery_beat",
+    "django_celery_results",
+    "comicagg.apps.ComicaggAdminConfig",  #'django.contrib.admin',
+    "comicagg.accounts",
+    "comicagg.api",
+    "comicagg.blog",
+    "comicagg.comics",
+    "provider",
+    "provider.oauth2",
 )
 
-SITE_NAME = 'Comic Aggregator'
-
-TAG_CLOUD_NUMBER = 1
+SITE_NAME = "Comic Aggregator"
 
 INACTIVE_DAYS = 30
+MAX_UNREADS_PER_USER = 20
 
-EMAIL_HOST = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST = ""
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
 
-SESSION_COOKIE_NAME = 'comicagg_session'
+SESSION_COOKIE_NAME = "comicagg_session"
 
-USER_AGENT = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)'
+USER_AGENT = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)"
 
 """
 Logging levels
@@ -166,59 +164,67 @@ NOTSET      0
 """
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s %(process)d %(name)s %(levelname)s %(message)s'
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "verbose": {
+            "format": "%(asctime)s %(process)d %(name)s %(levelname)s %(message)s"
         },
     },
-    'filters': {},
-    'handlers': {
-        'null': {
-            'level':'DEBUG',
-            'class':'logging.NullHandler',
+    "filters": {},
+    "handlers": {
+        "null": {
+            "level": "DEBUG",
+            "class": "logging.NullHandler",
         },
-        'console': {
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
         },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
         },
-        'file': {
-            'level':'DEBUG',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.handlers.TimedRotatingFileHandler",
             # The user that runs the django process will need to have permissions in this folder
-            'filename': os.path.join('/var/log/comicagg', 'comicagg.log'),
-            'when': 'midnight',
-            'backupCount': 30,
-            'encoding': 'utf-8',
-            'delay': True,
-            'formatter': 'verbose'
+            "filename": os.path.join("/var/log/comicagg", "comicagg.log"),
+            "when": "midnight",
+            "backupCount": 30,
+            "encoding": "utf-8",
+            "delay": True,
+            "formatter": "verbose",
         },
     },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': True,
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": True,
         },
-        'django.request': {
-            'handlers': ['console', 'mail_admins'],
-            'level': 'INFO',
-            'propagate': False,
+        "django.request": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
         },
-        'comicagg': {
-            'handlers': ['console'],
-            'level': 'WARNING'
-        },
-        'provider': {
-            'handlers': ['console'],
-            'level': 'WARNING'
-        },
-    }
+        "comicagg": {"handlers": ["console"], "level": "WARNING"},
+        "provider": {"handlers": ["console"], "level": "WARNING"},
+    },
 }
+
+# Celery tasks
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379")
+# CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379")
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = os.getenv("TIME_ZONE", "UTC")
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # seconds
 
 from comicagg.settings_local import *

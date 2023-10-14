@@ -4,13 +4,13 @@
 import os
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 # Add the root folder to the python path
-d = os.path.dirname(os.path.abspath(sys.argv[0]))
-d = os.path.join(d, '..')
-d = os.path.join(d, '..')
-d = os.path.abspath(d)
-sys.path.insert(0, d)
+# d = os.path.dirname(os.path.abspath(sys.argv[0]))
+# d = os.path.join(d, '..')
+# d = os.path.join(d, '..')
+# d = os.path.abspath(d)
+# sys.path.insert(0, d)
 
 os.environ['DJANGO_SETTINGS_MODULE'] = "comicagg.settings"
 
@@ -19,14 +19,14 @@ django.setup()
 
 from django.contrib.auth.models import User
 
-starttime = datetime.now()
+starttime = datetime.now(timezone.utc)
 if len(sys.argv) > 1:
     uid = int(sys.argv[1])
     allusers = User.objects.order_by('id').filter(id__gte=uid)
 else:
     allusers = User.objects.all()
 for user in allusers:
-    now = datetime.now() - starttime
+    now = datetime.now(timezone.utc) - starttime
     if now.seconds > 3000:
         print("Ending: continue from ID=%s" % user.id)
         sys.exit()

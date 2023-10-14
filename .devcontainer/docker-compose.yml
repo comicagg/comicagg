@@ -20,6 +20,9 @@ services:
 
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
+    depends_on:
+      - redis
+      - db
 
   db:
     image: postgres:latest
@@ -30,9 +33,11 @@ services:
       POSTGRES_USER: comicagg
       POSTGRES_DB: comicagg
       POSTGRES_PASSWORD: comicagg
-
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  redis:
+    image: redis:7-alpine
 
 volumes:
   postgres-data:
