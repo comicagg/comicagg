@@ -14,7 +14,9 @@ def update_comics():
 
     comic_ids: list[int] = list(Comic.objects.values_list("id", flat=True))
     for comic_id in comic_ids:
-        update_comic_task.delay(comic_id)
+        update_comic_task.apply_async(
+            (comic_id,), periodic_task_name=f"Update comic {comic_id}"
+        )
     return "Ok"
 
 
