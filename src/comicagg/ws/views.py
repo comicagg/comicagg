@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from comicagg import render
+from comicagg.utils import render
 from comicagg.comics.utils import UserOperations
 
 

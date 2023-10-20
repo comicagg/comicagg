@@ -4,7 +4,7 @@ from django.http import Http404, HttpRequest
 from django.utils.translation import gettext as _
 from django.contrib.admin import AdminSite
 
-from comicagg import render
+from comicagg.utils import render
 from comicagg.comics.models import Comic, ComicHistory
 from comicagg.comics.update import update_comic
 

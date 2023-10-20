@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from django.conf import settings
 from django.views.debug import technical_500_response
 
-from comicagg import render
+from comicagg.utils import render
 from comicagg.accounts.utils import get_profile
 from comicagg.comics.utils import UserOperations
 

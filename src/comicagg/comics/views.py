@@ -16,7 +16,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
 
-from comicagg import render
+from comicagg.utils import render
 from comicagg.comics.forms import RequestForm
 from comicagg.comics.models import Comic, ComicHistory, NewComic
 from comicagg.comics.models import Request as ComicRequest

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
-from comicagg import render
+from comicagg.utils import render
 from comicagg.comics.ajax.views import ok_response
 from comicagg.blog.models import Post, NewBlog
 

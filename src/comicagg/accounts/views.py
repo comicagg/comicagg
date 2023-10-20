@@ -14,7 +14,7 @@ from django.template import Context, loader
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 
-from comicagg import render
+from comicagg.utils import render
 from comicagg.accounts.forms import (
     EmailChangeForm,
     LoginForm,
