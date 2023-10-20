@@ -227,4 +227,7 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60  # seconds
 
-from comicagg.settings_local import *
+try:
+    from comicagg.settings_local import *
+except:
+    print("Make sure there's a settings_loca.py file with your own configuration.")
