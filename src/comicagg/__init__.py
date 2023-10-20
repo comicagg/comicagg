@@ -1,3 +1,6 @@
+import os
+from urllib.parse import urlparse
+
 from django.conf import settings
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseServerError
@@ -6,6 +9,20 @@ from django.template.loader import render_to_string
 from .celery import app as celery_app
 
 __all__ = ("celery_app",)
+
+
+class Env:
+    @staticmethod
+    def int(key: str, default: int, namespace="DJANGO") -> int:
+        return int(os.environ.get(f"{namespace}_{key}", default))
+
+    @staticmethod
+    def list(key: str, namespace="DJANGO") -> list[str]:
+        return os.environ.get(f"{namespace}_{key}").split(",")
+
+    @staticmethod
+    def url(key: str, namespace="DJANGO") -> str:
+        return urlparse(os.environ.get(f"{namespace}_{key}"), allow_fragments=True)
 
 
 def render(

@@ -1,27 +1,34 @@
-# -*- coding: utf-8 -*-
 # Django settings for comicagg project.
 
 import os
+from email.utils import parseaddr
 
+from comicagg import Env
 from django.core.management.commands.runserver import Command as runserver
 
+# Change default Django runserver address and port
 runserver.default_addr = "0.0.0.0"
 runserver.default_port = 8000
 
-ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
-)
+# A list of all the people who get code error notifications.
+# When DEBUG=False and AdminEmailHandler is configured in LOGGING (done by default),
+# Django emails these people the details of exceptions raised in the request/response cycle.
+ADMINS = tuple(parseaddr(email) for email in Env.list("DJANGO_ADMINS"))
 
-MANAGERS = ADMINS
+# A list in the same format as ADMINS that specifies who should get broken link notifications
+# when BrokenLinkEmailsMiddleware is enabled.
+MANAGERS = tuple(parseaddr(email) for email in Env.list("DJANGO_MANAGERS"))
 
+# scheme://netloc/path;parameters?query#fragment
+# postgresql_psycopg2://user:password@server:port/path
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.",  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         "NAME": "",  # Or path to database file if using sqlite3.
-        "USER": "",  # Not used with sqlite3.
-        "PASSWORD": "",  # Not used with sqlite3.
         "HOST": "",  # Set to empty string for localhost. Not used with sqlite3.
         "PORT": "",  # Set to empty string for default. Not used with sqlite3.
+        "USER": "",  # Not used with sqlite3.
+        "PASSWORD": "",  # Not used with sqlite3.
     }
 }
 
