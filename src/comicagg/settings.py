@@ -14,12 +14,12 @@ ROOT = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 django_env = Env()
 
-DEBUG = django_env.getn("DEBUG") is not None
+DEBUG = django_env.int("DEBUG", 0)
 TEMPLATE_DEBUG = DEBUG
 
 # comicagg.middleware.MaintenanceMiddleware
 # Only superusers can access the site, others will see a message
-MAINTENANCE = django_env.getn("MAINTENANCE") is not None
+MAINTENANCE = django_env.int("MAINTENANCE", 0)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = django_env.get("SECRET_KEY")
@@ -43,6 +43,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Use 0 to close database connections at the end of each request
 # — Django’s historical behavior — and None for unlimited persistent database connections.
 CONN_MAX_AGE = 1
+
+# If set to True, existing persistent database connections will be health checked
+# before they are reused in each request performing database access.
+CONN_HEALTH_CHECKS = True
 
 # List of directories searched for fixture files,
 # in addition to the fixtures directory of each application, in search order.
