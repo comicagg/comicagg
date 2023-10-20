@@ -8,16 +8,16 @@
         {% if user.is_authenticated %}
        <li>
            <h4>{% trans "Export user subscriptions" %}</h4>
-           <a href="{% url 'ws:user_subscriptions_simple' %}">{{ settings.DOMAIN }}{% url 'ws:user_subscriptions_simple' %}</a>
+           <a href="{% url 'ws:user_subscriptions_simple' %}">{{ settings.SITE_DOMAIN }}{% url 'ws:user_subscriptions_simple' %}</a>
        </li>
        <li>
            <h4>{% trans "Export user subscriptions with unread comics" %}</h4>
-           <a href="{% url 'ws:user_subscriptions' %}">{{ settings.DOMAIN }}{% url 'ws:user_subscriptions' %}</a>
+           <a href="{% url 'ws:user_subscriptions' %}">{{ settings.SITE_DOMAIN }}{% url 'ws:user_subscriptions' %}</a>
        </li>
         {% endif %}
        <li>
            <h4>{% trans "Unread counters" %}</h4>
-           <a href="{% url 'ws:unread_user' user %}">{{ settings.DOMAIN }}{% url 'ws:unread_user' user %}</a>
+           <a href="{% url 'ws:unread_user' user %}">{{ settings.SITE_DOMAIN }}{% url 'ws:unread_user' user %}</a>
        </li>
         </ul>
     </div>

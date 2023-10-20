@@ -175,7 +175,7 @@ def password_reset(request):
                     template_context = {
                         "new_password": new_pass,
                         "email": user.email,
-                        "domain": settings.DOMAIN,
+                        "domain": settings.SITE_DOMAIN,
                         "site_name": settings.SITE_NAME,
                         "user": user,
                     }

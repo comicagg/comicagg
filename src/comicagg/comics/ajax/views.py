@@ -142,7 +142,7 @@ def report_comic(request):
         % (request.user, comic.name)
     )
     url = reverse("comics:admin:reported", kwargs={"chids": "-".join(chids)})
-    message += "%s%s" % (settings.DOMAIN, url)
+    message += "%s%s" % (settings.SITE_DOMAIN, url)
     try:
         mail_managers("Imagen rota: " + comic.name, message)
     except:

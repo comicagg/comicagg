@@ -1,88 +1,104 @@
 # Django settings for comicagg project.
 
 import os
-from email.utils import parseaddr
 
-from comicagg import Env
+from comicagg.utils import Env
 from django.core.management.commands.runserver import Command as runserver
 
 # Change default Django runserver address and port
 runserver.default_addr = "0.0.0.0"
 runserver.default_port = 8000
 
-# A list of all the people who get code error notifications.
-# When DEBUG=False and AdminEmailHandler is configured in LOGGING (done by default),
-# Django emails these people the details of exceptions raised in the request/response cycle.
-ADMINS = tuple(parseaddr(email) for email in Env.list("DJANGO_ADMINS"))
+# Absolute path to the directory that holds the comicagg folder
+ROOT = os.path.dirname(os.path.abspath(__file__)) + "/"
 
-# A list in the same format as ADMINS that specifies who should get broken link notifications
-# when BrokenLinkEmailsMiddleware is enabled.
-MANAGERS = tuple(parseaddr(email) for email in Env.list("DJANGO_MANAGERS"))
+django_env = Env()
 
-# scheme://netloc/path;parameters?query#fragment
-# postgresql_psycopg2://user:password@server:port/path
+DEBUG = django_env.getn("DEBUG") is not None
+TEMPLATE_DEBUG = DEBUG
+
+# comicagg.middleware.MaintenanceMiddleware
+# Only superusers can access the site, others will see a message
+MAINTENANCE = django_env.getn("MAINTENANCE") is not None
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = django_env.get("SECRET_KEY")
+
+# ################
+# #              #
+# #   Database   #
+# #              #
+# ################
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.",  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        "NAME": "",  # Or path to database file if using sqlite3.
-        "HOST": "",  # Set to empty string for localhost. Not used with sqlite3.
-        "PORT": "",  # Set to empty string for default. Not used with sqlite3.
-        "USER": "",  # Not used with sqlite3.
-        "PASSWORD": "",  # Not used with sqlite3.
-    }
+    # psycopg2://user:password@server:5432/path
+    "default": django_env.db("DATABASE")
 }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Database connection max age: https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-CONN_MAX_AGE
+# The lifetime of a database connection, as an integer of seconds.
+# Use 0 to close database connections at the end of each request
+# — Django’s historical behavior — and None for unlimited persistent database connections.
 CONN_MAX_AGE = 1
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be avilable on all operating systems.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
-TIME_ZONE = "UTC"
-USE_TZ = True
+# List of directories searched for fixture files,
+# in addition to the fixtures directory of each application, in search order.
+FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
 
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = "en"
+# ##############
+# #            #
+# #   Server   #
+# #            #
+# ##############
 
-SITE_ID = 1
+INSTALLED_APPS = (
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.staticfiles",
+    "celery",
+    "django_celery_beat",
+    "django_celery_results",
+    # Instead of 'django.contrib.admin'
+    "comicagg.apps.ComicaggAdminConfig",
+    "comicagg.accounts",
+    "comicagg.api",
+    "comicagg.blog",
+    "comicagg.comics",
+    "provider",
+    "provider.oauth2",
+)
 
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
-USE_I18N = True
+MIDDLEWARE = (
+    "django.middleware.gzip.GZipMiddleware",  # Compress the output
+    "django.middleware.common.CommonMiddleware",  # Adds a few conveniences for perfectionists
+    "django.contrib.sessions.middleware.SessionMiddleware",  # Django sessions
+    "django.middleware.csrf.CsrfViewMiddleware",  # Cross site request forgery protection
+    "django.middleware.locale.LocaleMiddleware",  # Change the locale
+    # Authentication middleware
+    "django.contrib.auth.middleware.AuthenticationMiddleware",  # Default authentication
+    "comicagg.api.middleware.OAuth2Middleware",  # OAuth2 authentication
+    # Post authentication middleware
+    "comicagg.middleware.UserProfileMiddleware",  # Set up the user profile and user operations
+    #'comicagg.middleware.UserBasedExceptionMiddleware',
+    "comicagg.middleware.ActiveUserMiddleware",  # Check if the user is active
+    "comicagg.middleware.MaintenanceMiddleware",  # Maintenance mode
+    "django.contrib.messages.middleware.MessageMiddleware",  # Django messages
+    "django.contrib.admindocs.middleware.XViewMiddleware",
+)
 
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
-USE_L10N = True
+ROOT_URLCONF = "comicagg.urls"
 
-# Absolute path to the directory that holds the comicagg folder
-ROOT = os.path.dirname(os.path.abspath(__file__)) + "/"
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(ROOT, "media")
+SESSION_COOKIE_NAME = "comicagg_session"
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
-# MEDIA_URL = 'https://localhost/media_comicagg/'
-
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-# ADMIN_MEDIA_PREFIX = '/admin-media/'
-
-# Used for password reset email, without trailing slash
-# DOMAIN = 'http://192.168.0.3:8000'
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = "0zqsc45e!e*%zy(&gus5p4bj6^mdrt%7^y*fl*(o6rt1yp=)&#"
+# A list of strings representing the host/domain names that this Django site can serve.
+ALLOWED_HOSTS = django_env.list("ALLOWED_HOSTS")
 
 TEMPLATES = [
     {
@@ -102,62 +118,107 @@ TEMPLATES = [
     },
 ]
 
+# ######################
+# #                    #
+# #   URLs and paths   #
+# #                    #
+# ######################
+
+# Absolute path to the directory that holds media.
+# Example: "/home/media/media.lawrence.com/"
+MEDIA_ROOT = os.path.join(ROOT, "media")
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+# MEDIA_URL = 'https://localhost/media_comicagg/'
+MEDIA_URL = django_env.get("MEDIA_URL")
+
+# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
+# trailing slash.
+# Examples: "http://foo.com/media/", "/media/".
+# ADMIN_MEDIA_PREFIX = '/admin-media/'
+ADMIN_MEDIA_PREFIX = django_env.get("ADMIN_MEDIA_PREFIX")
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = django_env.get("STATIC_ROOT")
+
+# URL to use when referring to static files located in STATIC_ROOT.
+STATIC_URL = django_env.get("STATIC_URL")
+
+# This setting defines the additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled
+# This should be set to a list of strings that contain full paths to your additional files directory(ies)
 STATICFILES_DIRS = (os.path.join(ROOT, "static"),)
 
-FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
+# ######################################
+# #                                    #
+# #   Dates and internationalization   #
+# #                                    #
+# ######################################
 
-MIDDLEWARE = (
-    "django.middleware.gzip.GZipMiddleware",  # Compress the output
-    "django.middleware.common.CommonMiddleware",  #
-    "django.contrib.sessions.middleware.SessionMiddleware",  # Django sessions
-    "django.middleware.csrf.CsrfViewMiddleware",  # Cross site request forgery protection
-    "django.middleware.locale.LocaleMiddleware",  # Change the locale
-    # Authentication middleware
-    "django.contrib.auth.middleware.AuthenticationMiddleware",  # Default authentication
-    "comicagg.api.middleware.OAuth2Middleware",  # OAuth2 authentication
-    # Post authentication middleware
-    "comicagg.middleware.UserProfileMiddleware",  # Set up the user profile and user operations
-    #'comicagg.middleware.UserBasedExceptionMiddleware',
-    "comicagg.middleware.ActiveUserMiddleware",  # Check if the user is active
-    "comicagg.middleware.MaintenanceMiddleware",  # Maintenance mode
-    "django.contrib.messages.middleware.MessageMiddleware",  # Django messages
-    "django.contrib.admindocs.middleware.XViewMiddleware",
-)
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be avilable on all operating systems.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = "UTC"
+USE_TZ = True
 
-MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = "en"
 
-ROOT_URLCONF = "comicagg.urls"
+# If you set this to False, Django will make some optimizations so as not
+# to load the internationalization machinery.
+USE_I18N = True
 
-INSTALLED_APPS = (
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.messages",
-    "django.contrib.sessions",
-    "django.contrib.staticfiles",
-    "celery",
-    "django_celery_beat",
-    "django_celery_results",
-    "comicagg.apps.ComicaggAdminConfig",  #'django.contrib.admin',
-    "comicagg.accounts",
-    "comicagg.api",
-    "comicagg.blog",
-    "comicagg.comics",
-    "provider",
-    "provider.oauth2",
-)
+# If you set this to False, Django will not format dates, numbers and
+# calendars according to the current locale
+USE_L10N = True
 
-SITE_NAME = "Comic Aggregator"
+# The ID, as an integer, of the current site in the django_site database table.
+# This is used so that application data can hook into specific sites
+# and a single database can manage content for multiple sites.
+SITE_ID = 1
 
-INACTIVE_DAYS = 30
-MAX_UNREADS_PER_USER = 20
+# #############
+# #           #
+# #   Email   #
+# #           #
+# #############
 
-EMAIL_HOST = ""
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
+# A list of all the people who get code error notifications.
+# When DEBUG=False and AdminEmailHandler is configured in LOGGING (done by default),
+# Django emails these people the details of exceptions raised in the request/response cycle.
+ADMINS = django_env.email_list("ADMINS")
 
-SESSION_COOKIE_NAME = "comicagg_session"
+# A list in the same format as ADMINS that specifies who should get broken link notifications
+# when BrokenLinkEmailsMiddleware is enabled.
+MANAGERS = django_env.email_list("MANAGERS")
 
-USER_AGENT = "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0)"
+# Expected value: //user:password@host:port
+email = django_env.url("EMAIL_HOST")
+EMAIL_HOST = email.hostname
+EMAIL_HOST_USER = email.username
+EMAIL_HOST_PASSWORD = email.password
+
+# Default email address to use for various automated correspondence from the site manager(s).
+# This doesn’t include error messages sent to ADMINS and MANAGERS
+DEFAULT_FROM_EMAIL = django_env.get("DEFAULT_FROM_EMAIL")
+
+# The email address that error messages come from, such as those sent to ADMINS and MANAGERS.
+# This address is used only for error messages.
+SERVER_EMAIL = django_env.get("SERVER_EMAIL")
+
+# Subject-line prefix for email messages sent with django.core.mail.mail_admins
+# or django.core.mail.mail_managers. You’ll probably want to include the trailing space.
+EMAIL_SUBJECT_PREFIX = "[Comicagg] "
+
+# ###############
+# #             #
+# #   Logging   #
+# #             #
+# ###############
 
 """
 Logging levels
@@ -169,6 +230,8 @@ INFO        20
 DEBUG       10
 NOTSET      0
 """
+
+LOGS_DIR = django_env.get("LOGS_DIR")
 
 LOGGING = {
     "version": 1,
@@ -196,7 +259,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.handlers.TimedRotatingFileHandler",
             # The user that runs the django process will need to have permissions in this folder
-            "filename": os.path.join("/var/log/comicagg", "comicagg.log"),
+            "filename": os.path.join(LOGS_DIR, "comicagg.log"),
             "when": "midnight",
             "backupCount": 30,
             "encoding": "utf-8",
@@ -220,22 +283,43 @@ LOGGING = {
     },
 }
 
-# Celery tasks
+# ##############
+# #            #
+# #   Custom   #
+# #            #
+# ##############
 
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379")
-# CELERY_RESULT_BACKEND = os.environ.get("CELERY_BACKEND", "redis://redis:6379")
-CELERY_RESULT_BACKEND = "django-db"
+SITE_NAME = "Comic Aggregator"
+
+# Without trailing slash, used in the password reset email and ws index page
+SITE_DOMAIN = django_env.get("SITE_DOMAIN")
+
+INACTIVE_DAYS = 30
+MAX_UNREADS_PER_USER = 20
+
+# #################
+# #               #
+# #   Scrapping   #
+# #               #
+# #################
+
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.46"
+
+# ####################
+# #                  #
+# #   Celery tasks   #
+# #                  #
+# ####################
+
+celery_env = Env("CELERY")
+CELERY_BROKER_URL = celery_env.get("BROKER_URL")  # "redis://redis:6379"
+CELERY_RESULT_BACKEND = "django-db"  # "redis://redis:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIMEZONE = os.getenv("TIME_ZONE", "UTC")
+CELERY_TIMEZONE = "UTC"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60  # seconds
 CELERY_RESULT_EXTENDED = True
-
-try:
-    from comicagg.settings_local import *
-except:
-    print("Make sure there's a settings_loca.py file with your own configuration.")

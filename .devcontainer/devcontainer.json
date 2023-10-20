@@ -18,21 +18,18 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				// VSCode helpers
 				"tal7aouy.indent-colorizer",
 				"ms-python.black-formatter",
 				"jgclark.vscode-todo-highlight",
-				// Python
 				"tushortz.python-extended-snippets",
 				"ms-python.isort",
 				"twixes.pypi-assistant",
-				// Django
 				"batisteo.vscode-django",
 				"junstyle.vscode-django-support",
-				// Extras
 				"ahmadalli.vscode-nginx-conf",
 				"ms-azuretools.vscode-docker",
-				"DavidAnson.vscode-markdownlint"
+				"DavidAnson.vscode-markdownlint",
+				"vict0rsch.coblock"
 			]
 		}
 	}
