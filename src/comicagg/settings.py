@@ -77,23 +77,45 @@ INSTALLED_APPS = (
     "provider.oauth2",
 )
 
-MIDDLEWARE = (
-    "django.middleware.gzip.GZipMiddleware",  # Compress the output
-    "django.middleware.common.CommonMiddleware",  # Adds a few conveniences for perfectionists
-    "django.contrib.sessions.middleware.SessionMiddleware",  # Django sessions
-    "django.middleware.csrf.CsrfViewMiddleware",  # Cross site request forgery protection
-    "django.middleware.locale.LocaleMiddleware",  # Change the locale
-    # Authentication middleware
-    "django.contrib.auth.middleware.AuthenticationMiddleware",  # Default authentication
-    "comicagg.api.middleware.OAuth2Middleware",  # OAuth2 authentication
-    # Post authentication middleware
-    "comicagg.middleware.UserProfileMiddleware",  # Set up the user profile and user operations
+MIDDLEWARE = [
+    # ##########################
+    # #   Pre-authentication   #
+    # ##########################
+    # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.security
+    "django.middleware.security.SecurityMiddleware",
+    # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.gzip
+    "django.middleware.gzip.GZipMiddleware",
+    # https://docs.djangoproject.com/en/4.2/topics/http/sessions/
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    # Enables language selection based on data from the request.
+    "django.middleware.locale.LocaleMiddleware",
+    # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.common
+    "django.middleware.common.CommonMiddleware",
+    # https://docs.djangoproject.com/en/4.2/ref/csrf/
+    "django.middleware.csrf.CsrfViewMiddleware",
+    # ######################
+    # #   Authentication   #
+    # ######################
+    # Adds the user attribute, representing the currently-logged-in user, to every incoming HttpRequest object.
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # OAuth2 authentication
+    "comicagg.api.middleware.OAuth2Middleware",
+    # ###########################
+    # #   Post-authentication   #
+    # ###########################
+    # Show detailed error pages to super users.
     #'comicagg.middleware.UserBasedExceptionMiddleware',
-    "comicagg.middleware.ActiveUserMiddleware",  # Check if the user is active
-    "comicagg.middleware.MaintenanceMiddleware",  # Maintenance mode
-    "django.contrib.messages.middleware.MessageMiddleware",  # Django messages
-    "django.contrib.admindocs.middleware.XViewMiddleware",
-)
+    # Set up the user profile and user operations
+    "comicagg.middleware.UserProfileMiddleware",
+    # Check if the user is active
+    "comicagg.middleware.ActiveUserMiddleware",
+    # Maintenance mode
+    "comicagg.middleware.MaintenanceMiddleware",
+    # Django messages
+    "django.contrib.messages.middleware.MessageMiddleware",
+    # Clickjacking Protection
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
 
 ROOT_URLCONF = "comicagg.urls"
 

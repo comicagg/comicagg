@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 
 # Create your models here.
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, unique=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, related_name="user_profile", on_delete=models.CASCADE
+    )
 
     last_read_access = models.DateTimeField()
     new_comics = models.BooleanField(default=False)
