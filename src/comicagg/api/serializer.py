@@ -2,7 +2,7 @@ import json
 import time
 from email import utils
 from comicagg.comics.models import Comic, ComicHistory
-from comicagg.comics.utils import UserOperations
+from comicagg.comics.utils import ComicsService
 
 class Serializer:
     """
@@ -53,7 +53,7 @@ class Serializer:
             raise ValueError("This is not a comic")
         if not self.user:
             raise ValueError("To serialize a comic you need a user")
-        user_operations = UserOperations(self.user)
+        user_operations = ComicsService(self.user)
         out = dict()
         out["id"] = comic.id
         out["name"] = comic.name
@@ -82,7 +82,7 @@ class Serializer:
         return out
 
     def build_user_dict(self):
-        user_operations = UserOperations(self.user)
+        user_operations = ComicsService(self.user)
         out = dict()
         out["username"] = self.user.username
         out["email"] = self.user.email

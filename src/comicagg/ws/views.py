@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from comicagg.utils import render
-from comicagg.comics.utils import UserOperations
+from comicagg.comics.utils import ComicsService
 
 
 def index(request):
@@ -18,7 +18,7 @@ def unread_user(request, user):
     user = get_object_or_404(User, username=user)
     context = {}
 
-    unreads = UserOperations(user).unread_comics_count()
+    unreads = ComicsService(user).unread_comics_count()
 
     context["unread_list"] = unreads
     context["count"] = len(unreads)

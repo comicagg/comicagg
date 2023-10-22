@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             model_name="comic",
             name="last_update",
             field=models.DateTimeField(
-                blank=True, verbose_name="Last successful update"
+                blank=True, verbose_name="Last successful update", null=True
             ),
         ),
         migrations.AlterField(

@@ -7,7 +7,6 @@
     "python.analysis.typeCheckingMode": "basic",
     "coblock.boxCharacter": "#",
     "coblock.boxWidth": 1,
-    "coblock.numBlankLines": 1,
     "coblock.spaceAround": 3,
     "coblock.preferBlockComment": true
 }

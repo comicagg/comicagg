@@ -30,7 +30,8 @@
 				"ahmadalli.vscode-nginx-conf",
 				"ms-azuretools.vscode-docker",
 				"DavidAnson.vscode-markdownlint",
-				"vict0rsch.coblock"
+				"vict0rsch.coblock",
+				"sourcery.sourcery"
 			]
 		}
 	}

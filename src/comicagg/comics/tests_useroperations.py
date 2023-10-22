@@ -1,7 +1,7 @@
 """Tests that target the UserOperations class"""
 from django.contrib.auth.models import AnonymousUser, User
 from django.test import TestCase
-from comicagg.comics.utils import UserOperations
+from comicagg.comics.utils import ComicsService
 from comicagg.comics.models import Comic, active_comics
 
 class SubscriptionTests(TestCase):
@@ -10,7 +10,7 @@ class SubscriptionTests(TestCase):
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user(username='test_user', email='test_user@tests.dev', password='top_secret')
-        self.operations = UserOperations(self.user)
+        self.operations = ComicsService(self.user)
 
     # Tests for UserOperations.subscribed_all()
     def test_all_comics_empty(self):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """These are views for ajax requests.
 
 If they need any parameters, they always have to be sent via POST.
@@ -8,70 +7,66 @@ Response status:
 - Not found or no POST: 404
 """
 
+from typing import List
+from comicagg.comics.models import (
+    Comic,
+    ComicHistory,
+    NewComic,
+    Subscription,
+    UnreadComic,
+)
+from comicagg.comics.utils import ComicsService
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
 from django.db.models import Count, Max
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from comicagg.comics.models import (Comic, ComicHistory, NewComic,
-                                    Subscription, UnreadComic)
 
-
-def ok_response(request):
-    comics = request.user.subscription_set.exclude(
+def ok_response(request: HttpRequest):
+    comic_count = request.user.subscription_set.exclude(
         comic__active=False, comic__ended=False
     ).count()
-    unread = request.user.unreadcomic_set.exclude(
+    unread_count = request.user.unreadcomic_set.exclude(
         comic__active=False, comic__ended=False
     ).aggregate(Count("comic", distinct=True))["comic__count"]
-    new_comics = request.user.operations.new_comics().count()
-    news = request.user.newblog_set.count()
-    response = '{"comics":%d, "new_comics":%d, "unreads":%d, "news":%d}' % (
-        comics,
-        new_comics,
-        unread,
-        news,
-    )
+    new_comics_count = ComicsService(request.user).new_comics().count()
+    news_count = request.user.newblog_set.count()
+    response = f'{"comics":{comic_count}, "new_comics":{new_comics_count}, "unreads":{unread_count}, "news":{news_count}}'
+    # TODO: Use JsonResponse?
     return HttpResponse(response, content_type="application/json")
 
 
 @login_required
-def add_comic(request):
-    if not request.POST:
-        raise Http404
+def add_comic(request: HttpRequest):
     try:
         comic_id = int(request.POST["id"])
-    except:
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
-    s = request.user.subscription_set.filter(comic=comic)
-    if s:
+    if request.user.subscription_set.filter(comic=comic):
         # the comic is already added, finish here
         return ok_response(request)
     # continue adding the comic
     # calculate position for the comic, it'll be the last
-    max_position = request.user.subscription_set.aggregate(pos=Max("position"))["pos"]
-    if not max_position:  # max_position can be None if there are no comics
-        max_position = 0
+    max_position = (
+        request.user.subscription_set.aggregate(pos=Max("position"))["pos"] or 0
+    )
     next_pos = max_position + 1
     request.user.subscription_set.create(comic=comic, position=next_pos)
     # add the last strip to the user's unread list
-    history = ComicHistory.objects.filter(comic=comic)
-    if history:
+    if history := ComicHistory.objects.filter(comic=comic):
         UnreadComic.objects.create(user=request.user, comic=comic, history=history[0])
     return ok_response(request)
 
 
 @login_required
-def forget_new_comic(request):
-    if not request.POST:
-        raise Http404
+def forget_new_comic(request: HttpRequest):
     try:
         comic_id = int(request.POST["id"])
-    except:
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
     NewComic.objects.filter(user=request.user, comic=comic).delete()
@@ -79,13 +74,11 @@ def forget_new_comic(request):
 
 
 @login_required
-def mark_read(request):
-    if not request.POST:
-        raise Http404
+def mark_read(request: HttpRequest):
     try:
         comic_id = request.POST["id"]
         value = int(request.POST["value"])
-    except:
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
     if value != 0:
         rate_comic(request)
@@ -95,18 +88,16 @@ def mark_read(request):
 
 
 @login_required
-def mark_all_read(request):
+def mark_all_read(request: HttpRequest):
     UnreadComic.objects.filter(user=request.user).delete()
     return ok_response(request)
 
 
 @login_required
-def remove_comic(request):
-    if not request.POST:
-        raise Http404
+def remove_comic(request: HttpRequest):
     try:
         comic_id = int(request.POST["id"])
-    except:
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
     request.user.subscription_set.filter(comic=comic).delete()
@@ -115,12 +106,10 @@ def remove_comic(request):
 
 
 @login_required
-def remove_comic_list(request):
-    if not request.POST:
-        raise Http404
+def remove_comic_list(request: HttpRequest):
     try:
         ids = request.POST["ids"].split(",")
-    except:
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
     request.user.subscription_set.filter(comic__id__in=ids).delete()
     request.user.unreadcomic_set.filter(comic__id__in=ids).delete()
@@ -128,13 +117,11 @@ def remove_comic_list(request):
 
 
 @login_required
-def report_comic(request):
-    if not request.POST:
-        raise Http404
+def report_comic(request: HttpRequest):
     try:
         comic_id = int(request.POST["id"])
         chids = request.POST.getlist("chids[]")
-    except:
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
     message = (
@@ -142,87 +129,86 @@ def report_comic(request):
         % (request.user, comic.name)
     )
     url = reverse("comics:admin:reported", kwargs={"chids": "-".join(chids)})
-    message += "%s%s" % (settings.SITE_DOMAIN, url)
+    message += f"{settings.SITE_DOMAIN}{url}"
     try:
         mail_managers("Imagen rota: " + comic.name, message)
-    except:
+    except Exception:
         # TODO log this error
         pass
     return ok_response(request)
 
 
 @login_required
-def save_selection(request):
-    if not request.POST:
-        raise Http404
-    # get selection
+def save_selection(request: HttpRequest):
     try:
-        selection = request.POST["selected"].split(",")
-    except:
+        selected_raw = request.POST["selected"]
+        if not isinstance(selected_raw, str):
+            return HttpResponseBadRequest("Check the parameters")
+        selected_comics = selected_raw.split(",")
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
 
-    # remove posible duplicates, can't use a set, cos its order is undefined
-    # this will keep first appearances and delete later ones
-    selection_clean = list()
-    for item in selection:
-        if len(item) == 0:
+    # If there's nothing selected, we're finished
+    if not selected_comics:
+        return ok_response(request)
+
+    # Remove posible duplicates
+    # This will keep the first appearance of an item and remove later ones
+    selection_clean: list[int] = []
+    for selected_comic_id in selected_comics:
+        if not selected_comic_id:
             continue
         # try to get an index, if it fails, item is not in the list so we append the item to the list
         try:
-            selection_clean.index(int(item))
-        except:
-            selection_clean.append(int(item))
-
-    # if there's nothing selected, we're finished
-    if len(selection_clean) == 0:
-        return ok_response(request)
+            selection_clean.index(int(selected_comic_id))
+        except Exception:
+            selection_clean.append(int(selected_comic_id))
 
     # subsc_dict is a dictionary, key=comic.id value=subscription.id
-    # python2.7+
-    # subsc_dict = {s.comic.id:s.id for s in request.user.subscription_set.all()}
-    # python2.6-
-    subsc_dict = dict([(s.comic.id, s.id) for s in request.user.subscription_set.all()])
+    subsc_dict = dict(
+        [
+            (subscription.comic.id, subscription.id)
+            for subscription in request.user.subscription_set.all()
+        ]
+    )
     # subscriptions is the list of comic ids already added
     subscriptions = subsc_dict.keys()
 
-    # guess what comics have been removed
-    removed = list()
-    for s in subscriptions:
-        if s not in selection_clean:
-            removed.append(s)
-    # unsubscribe the removed comics
-    request.user.subscription_set.filter(comic__id__in=removed).delete()
-    request.user.unreadcomic_set.filter(comic__id__in=removed).delete()
+    # Unsubscribe the removed comics
+    if removed := [
+        subscription
+        for subscription in subscriptions
+        if subscription not in selection_clean
+    ]:
+        request.user.subscription_set.filter(comic__id__in=removed).delete()
+        request.user.unreadcomic_set.filter(comic__id__in=removed).delete()
 
-    # now change the position of the selected comics
-    # make the list of subscriptions we want to change
-    sids = list()
-    for cid in selection_clean:
-        # get the subscription id
-        sids.append(subsc_dict[cid])
+    # Change the position of the selected comics
+    # Make the list of subscriptions we want to change
+    sids = [subsc_dict[cid] for cid in selection_clean]
+    # for cid in selection_clean:
+    # get the subscription id
+    # sids.append(subsc_dict[cid])
     # ss is a dictionary key:id value=subscription
     ss = Subscription.objects.in_bulk(sids)
     # now change the position
-    pos = 0
+    position = 0
     for sid in sids:
-        if ss[sid].position == pos:
+        position += 1
+        if ss[sid].position == position:
             continue
-        ss[sid].position = pos
+        ss[sid].position = position
         ss[sid].save()
-        pos += 1
     return ok_response(request)
 
-
 @login_required
-def rate_comic(request):
-    if not request.POST:
-        raise Http404
+def rate_comic(request: HttpRequest):
     try:
-        id = int(request.POST["id"])
+        comic_id = int(request.POST["id"])
         value = int(request.POST["value"])
-    except:
+    except Exception:
         return HttpResponseBadRequest("Check the parameters")
-    comic = get_object_or_404(Comic, pk=id)
+    comic = get_object_or_404(Comic, pk=comic_id)
     if value == -1:
         value = 0
     elif value == 1:

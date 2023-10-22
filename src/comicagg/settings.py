@@ -106,7 +106,7 @@ MIDDLEWARE = [
     # Show detailed error pages to super users.
     #'comicagg.middleware.UserBasedExceptionMiddleware',
     # Set up the user profile and user operations
-    "comicagg.middleware.UserProfileMiddleware",
+    # "comicagg.middleware.UserProfileMiddleware",
     # Check if the user is active
     "comicagg.middleware.ActiveUserMiddleware",
     # Maintenance mode
