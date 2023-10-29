@@ -3,7 +3,6 @@ import random
 from hashlib import md5
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
-
 from comicagg.utils import render
 from django.conf import settings
 from django.contrib import messages
@@ -15,7 +14,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
-
 from .forms import RequestForm
 from .models import Comic, ComicHistory
 from .models import Request as ComicRequest
@@ -44,10 +42,10 @@ def read_view(request: HttpRequest):
 
 
 def random_comic(user: User, xhtml=False, request=None):
-    not_in_list = Comic.objects.exclude(active=False).exclude(
-        id__in=[s.comic.id for s in Subscription.objects.filter(user=user)]
-    )
-    if not_in_list:
+    subscribed_ids = [s.comic.id for s in Subscription.objects.filter(user=user)]
+    if not_in_list := Comic.objects.exclude(active=False).exclude(
+        id__in=subscribed_ids
+    ):
         try:
             comic = not_in_list[random.randint(0, len(not_in_list) - 1)]
             history = comic.comichistory_set.all()
@@ -74,7 +72,7 @@ def random_comic_view(request):
 
 
 @login_required
-def organize(request, add=False):
+def organize(request: HttpRequest, add=False):
     # all of the comics
     all_comics = list(Comic.objects.exclude(active=False))
     all_comics.sort(key=slugify_comic)
@@ -167,8 +165,9 @@ def request_index(request):
     return render(request, "comics/request_index.html", context)
 
 
-########
-# Others
+# ##############
+# #   Others   #
+# ##############
 
 
 @cache_page(24 * 3600)
@@ -180,21 +179,21 @@ def stats(request):
     return render(request, "stats.html", {"comics": comics})
 
 
-def last_image_url(request, cid):
+def last_image_url(request: HttpRequest, comic_id):
     """
     Redirecciona a la url de la ultima imagen de  un comic
     """
-    comic = get_object_or_404(Comic, pk=cid)
+    comic = get_object_or_404(Comic, pk=comic_id)
     url = comic.last_image
     ref = comic.referer or ""
     return image_url(url, ref)
 
 
-def history_image_url(request, hid):
+def history_image_url(request: HttpRequest, history_id):
     """
     Redirecciona a la url de un objeto comic_history
     """
-    ch = get_object_or_404(ComicHistory, pk=hid)
+    ch = get_object_or_404(ComicHistory, pk=history_id)
     url = ch.url
     ref = ch.comic.referer or ""
     return image_url(url, ref)

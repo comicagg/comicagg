@@ -150,9 +150,10 @@ TEMPLATES = [
 # #                    #
 # ######################
 
-# Absolute path to the directory that holds media.
+# Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(ROOT, "media")
+# MEDIA_ROOT = os.path.join(ROOT, "media")
+MEDIA_ROOT = "/tmp/"
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -164,7 +165,7 @@ MEDIA_URL = django_env.get("MEDIA_URL")
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 # ADMIN_MEDIA_PREFIX = '/admin-media/'
-ADMIN_MEDIA_PREFIX = django_env.get("ADMIN_MEDIA_PREFIX")
+# ADMIN_MEDIA_PREFIX = django_env.get("ADMIN_MEDIA_PREFIX")
 
 # The absolute path to the directory where collectstatic will collect static files for deployment.
 STATIC_ROOT = django_env.get("STATIC_ROOT")

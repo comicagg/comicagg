@@ -211,7 +211,7 @@ class Comic(models.Model):
     def positive_votes_perc(self):
         try:
             r = float(self.positive_votes) / self.total_votes
-        except:
+        except Exception:
             r = 0.0
         return r
 
@@ -229,10 +229,12 @@ class Comic(models.Model):
         return int(self._strip_count)
 
     def last_image_url(self):
-        url = self.last_image
-        if self.referer:
-            url = reverse("comics:last_image_url", kwargs={"cid": self.id})
-        return url
+        """Return last_image or a reversed URL if a referrer is used."""
+        return (
+            reverse("comics:last_image_url", kwargs={"comic_id": self.id})
+            if self.referer
+            else self.last_image
+        )
 
     def last_strip(self):
         return self.comichistory_set.all()[0]
@@ -261,7 +263,7 @@ class Subscription(models.Model):
         ordering = ["user", "position"]
 
     def __str__(self):
-        return "%s - %s" % (self.user, self.comic)
+        return f"{self.user} - {self.comic}"
 
     def delete(self, *args, **kwargs):
         # Delete the related unread comics
@@ -281,7 +283,7 @@ class Request(models.Model):
         ordering = ["id", "-done"]
 
     def __str__(self):
-        return "%s - %s" % (self.user, self.url)
+        return f"{self.user} - {self.url}"
 
 
 # FUTURE: Rename this to ComicStrip
@@ -296,12 +298,12 @@ class ComicHistory(models.Model):
         get_latest_by = "date"
 
     def __str__(self):
-        return "%s %s" % (self.comic.name, self.date)
+        return f"{self.comic.name} - {self.date}"
 
     def image_url(self):
         url = self.url
         if self.comic.referer:
-            url = reverse("comics:history_url", kwargs={"hid": self.id})
+            url = reverse("comics:history_url", kwargs={"history_id": self.id})
         return url
 
 
@@ -314,7 +316,7 @@ class UnreadComic(models.Model):
         ordering = ["user", "-history"]
 
     def __str__(self):
-        return "%s %s" % (self.user, self.history)
+        return f"{self.user} {self.history}"
 
 
 class Tag(models.Model):
@@ -326,7 +328,7 @@ class Tag(models.Model):
         ordering = ["name", "comic"]
 
     def __str__(self):
-        return "%s" % (self.name)
+        return self.name
         # return '%s  - %s - %s' % (self.name, self.comic, self.user)
 
 
@@ -337,4 +339,4 @@ class NewComic(models.Model):
     )
 
     def __str__(self):
-        return "%s - %s" % (self.user, self.comic)
+        return f"{self.user} - {self.comic}"

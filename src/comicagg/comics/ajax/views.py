@@ -20,7 +20,13 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
 from django.db.models import Count, Max
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponseBadRequest,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
@@ -34,9 +40,14 @@ def ok_response(request: HttpRequest):
     ).aggregate(Count("comic", distinct=True))["comic__count"]
     new_comics_count = ComicsService(request.user).new_comics().count()
     news_count = request.user.newblog_set.count()
-    response = f'{"comics":{comic_count}, "new_comics":{new_comics_count}, "unreads":{unread_count}, "news":{news_count}}'
+    response_data = {
+        "comics": comic_count,
+        "new_comics": new_comics_count,
+        "unreads": unread_count,
+        "news": news_count,
+    }
     # TODO: Use JsonResponse?
-    return HttpResponse(response, content_type="application/json")
+    return JsonResponse(response_data)
 
 
 @login_required
@@ -200,6 +211,7 @@ def save_selection(request: HttpRequest):
         ss[sid].position = position
         ss[sid].save()
     return ok_response(request)
+
 
 @login_required
 def rate_comic(request: HttpRequest):
