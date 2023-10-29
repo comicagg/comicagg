@@ -22,7 +22,7 @@
 
 {% block breadcrumbs %}
   <div class="breadcrumbs">
-    <a href="/admin/">Inicio</a> &rsaquo;{% trans 'Reported broken images' %}
+    <a href="/admin/">Inicio</a> &rsaquo; {% trans 'Reported broken images' %}
   </div>
 {% endblock %}
 
@@ -33,7 +33,7 @@
         <a href="/admin/comics/comichistory/{{ ch.id }}/">comic history id={{ ch.id }}</a><br />
         <img src="{{ ch.image_url }}" style="width:500px" title="{{ ch.alt_text }}" /><br />
       {% else %}
-        history id:{{ k }} no existe
+        comic history id={{ k }} no existe
       {% endif %}
       <hr />
     {% endfor %}

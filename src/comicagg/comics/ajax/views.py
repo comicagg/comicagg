@@ -8,6 +8,7 @@ Response status:
 """
 
 from typing import List
+
 from comicagg.comics.models import (
     Comic,
     ComicHistory,
@@ -131,7 +132,7 @@ def remove_comic_list(request: HttpRequest):
 def report_comic(request: HttpRequest):
     try:
         comic_id = int(request.POST["id"])
-        chids = request.POST.getlist("chids[]")
+        id_list = request.POST.getlist("id_list[]")
     except Exception:
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
@@ -139,7 +140,7 @@ def report_comic(request: HttpRequest):
         "El usuario %s dice que hay una imagen rota en el comic %s en alguna de las siguientes actualizaciones:\n"
         % (request.user, comic.name)
     )
-    url = reverse("comics:admin:reported", kwargs={"chids": "-".join(chids)})
+    url = reverse("admin:reported", kwargs={"id_list": "-".join(id_list)})
     message += f"{settings.SITE_DOMAIN}{url}"
     try:
         mail_managers("Imagen rota: " + comic.name, message)

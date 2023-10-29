@@ -293,19 +293,19 @@ function markread(id, vote) {
 }
 
 function reportbroken(id) {
-    var list, chids, params, ret;
-    chids = [];
+    var list, ch_list, params, ret;
+    ch_list = [];
     list = comics[id].list;
     if (list.length === 0) {
         //for a read comic
-        chids.push(comics[id].last_ch);
+        ch_list.push(comics[id].last_ch);
     } else {
         //for an unread comic
         list.each(function (item) {
-            chids.push(item.chid);
+            ch_list.push(item.chid);
         });
     }
-    params = {'id': id, 'chids[]': chids};
+    params = {'id': id, 'id_list[]': ch_list};
     Element.show('working' + id);
     Element.hide('workingerror' + id);
     startRequest(url_report, {

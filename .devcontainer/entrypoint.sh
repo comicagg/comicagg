@@ -1,4 +1,5 @@
 #!/bin/sh
+
 # Start Celery worker
 celery -A comicagg worker -E -l INFO &
 # Start Celery scheduler

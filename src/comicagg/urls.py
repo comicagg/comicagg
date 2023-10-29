@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
-
+from django.urls import include, path, re_path
 from comicagg.accounts import views as accounts_views
 from comicagg.views import robots_txt
 from comicagg.common.views import BaseTemplateView
@@ -31,3 +31,17 @@ urlpatterns = [
     ),
     path("admin/", admin.site.urls),
 ]
+
+if settings.DEBUG:
+    # Server files from MEDIA_ROOT if Debug
+    from django.views.static import serve
+
+    urlpatterns += [
+        re_path(
+            r"^media/(?P<path>.*)$",
+            serve,
+            {
+                "document_root": settings.MEDIA_ROOT,
+            },
+        )
+    ]

@@ -2,7 +2,9 @@ import os
 import random
 from hashlib import md5
 from urllib.error import HTTPError
+from urllib.parse import urljoin
 from urllib.request import Request, urlopen
+
 from comicagg.utils import render
 from django.conf import settings
 from django.contrib import messages
@@ -14,6 +16,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
+
 from .forms import RequestForm
 from .models import Comic, ComicHistory
 from .models import Request as ComicRequest
@@ -103,19 +106,6 @@ def slugify_comic(comic: Comic) -> str:
     return slugify(str(comic))
 
 
-def comic_sort_name(x, y):
-    """
-    Sort the comics by their name, ascending
-    """
-    a = slugify(x.name)
-    b = slugify(y.name)
-    if a < b:
-        return -1
-    elif a == b:
-        return 0
-    return 1
-
-
 @login_required
 def hide_new_comics(request):
     """
@@ -179,55 +169,59 @@ def stats(request):
     return render(request, "stats.html", {"comics": comics})
 
 
+STRIPS_FOLDER = ""
+
+
 def last_image_url(request: HttpRequest, comic_id):
     """
     Redirecciona a la url de la ultima imagen de  un comic
     """
     comic = get_object_or_404(Comic, pk=comic_id)
     url = comic.last_image
-    ref = comic.referer or ""
-    return image_url(url, ref)
+    referrer = comic.referer or ""
+    return _image_url(url, referrer)
 
 
 def history_image_url(request: HttpRequest, history_id):
     """
     Redirecciona a la url de un objeto comic_history
     """
-    ch = get_object_or_404(ComicHistory, pk=history_id)
-    url = ch.url
-    ref = ch.comic.referer or ""
-    return image_url(url, ref)
+    comic_history = get_object_or_404(ComicHistory, pk=history_id)
+    url = comic_history.url
+    referrer = comic_history.comic.referer or ""
+    return _image_url(url, referrer)
 
 
-def image_url(url: str, ref: str):
+def _image_url(url: str, referrer: str):
     url_hash = md5(url.encode()).hexdigest()
-    ldst = os.path.join(settings.MEDIA_ROOT, "strips", url_hash)
-    dst = ldst
-    if not os.path.exists(ldst):
-        if dst := download_image(url, ref, dst):
+    link_path = os.path.join(settings.MEDIA_ROOT, STRIPS_FOLDER, url_hash)
+    file_path = link_path
+    if not os.path.exists(link_path):
+        if file_path := _download_image(url, referrer, file_path):
             # the download went ok, we get the filename back
-            os.symlink(dst, ldst)
+            os.symlink(file_path, link_path)
         else:
             # the download returned None? return an error
             raise Http404
-    return HttpResponseRedirect(f"{settings.MEDIA_URL}strips/{url_hash}")
+    url_path = f"{STRIPS_FOLDER}/{url_hash}" if STRIPS_FOLDER else url_hash
+    return HttpResponseRedirect(urljoin(settings.MEDIA_URL, url_path))
 
 
-def download_image(url: str, ref: str, dest):
-    headers = {"referer": ref, "user-agent": settings.USER_AGENT}
+def _download_image(url: str, referrer: str, file_path):
+    headers = {"referer": referrer, "user-agent": settings.USER_AGENT}
     try:
-        r = Request(url, None, headers)
-        o = urlopen(r)
-        ct = o.info()["Content-Type"]
-        if ct.startswith("image/"):
-            # we got an image, thats good
-            ext = ct.replace("image/", "")
-            dest += f".{ext}"
-            with open(dest, "w+b") as f:
-                f.writelines(o.readlines())
+        request = Request(url, None, headers)
+        response = urlopen(request)
+        content_type = response.info()["Content-Type"]
+        if content_type.startswith("image/"):
+            # we got an image, that's good
+            extension = content_type.replace("image/", "")
+            file_path += f".{extension}"
+            with open(file_path, "w+b") as file:
+                file.writelines(response.readlines())
         else:
             # no image mime? not cool
-            dest = None
+            file_path = None
     except HTTPError:
-        dest = None
-    return dest
+        file_path = None
+    return file_path
