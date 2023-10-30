@@ -39,12 +39,12 @@ def read_view(request: HttpRequest):
         (comic, comic.unread_comics_for(request.user))
         for comic in ComicsService(request.user).unread_comics()
     ]
-    random = random_comic(request.user)
+    random = _random_comic(request.user)
     context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
     return render(request, "comics/read.html", context, "read")
 
 
-def random_comic(user: User, xhtml=False, request=None):
+def _random_comic(user: User, xhtml=False, request=None):
     subscribed_ids = [s.comic.id for s in Subscription.objects.filter(user=user)]
     if not_in_list := Comic.objects.exclude(active=False).exclude(
         id__in=subscribed_ids
@@ -63,7 +63,7 @@ def random_comic(user: User, xhtml=False, request=None):
 
 @login_required
 def random_comic_view(request):
-    if resp := random_comic(request.user, xhtml=True, request=request):
+    if resp := _random_comic(request.user, xhtml=True, request=request):
         return resp
     else:
         raise Http404
@@ -78,7 +78,7 @@ def random_comic_view(request):
 def organize(request: HttpRequest, add=False):
     # all of the comics
     all_comics = list(Comic.objects.exclude(active=False))
-    all_comics.sort(key=slugify_comic)
+    all_comics.sort(key=_slugify_comic)
 
     # build the available list depending on selected comics
     user_subs = request.user.subscription_set.all().exclude(
@@ -102,7 +102,7 @@ def organize(request: HttpRequest, add=False):
     return render(request, template, context)
 
 
-def slugify_comic(comic: Comic) -> str:
+def _slugify_comic(comic: Comic) -> str:
     return slugify(str(comic))
 
 
@@ -161,7 +161,7 @@ def request_index(request):
 
 
 @cache_page(24 * 3600)
-def stats(request):
+def stats(request: HttpRequest):
     """
     Genera una página de estadísticas para cada comic ordenada según la puntuación de cada comic
     """
@@ -195,9 +195,8 @@ def history_image_url(request: HttpRequest, history_id):
 def _image_url(url: str, referrer: str):
     url_hash = md5(url.encode()).hexdigest()
     link_path = os.path.join(settings.MEDIA_ROOT, STRIPS_FOLDER, url_hash)
-    file_path = link_path
     if not os.path.exists(link_path):
-        if file_path := _download_image(url, referrer, file_path):
+        if file_path := _download_image(url, referrer, link_path):
             # the download went ok, we get the filename back
             os.symlink(file_path, link_path)
         else:

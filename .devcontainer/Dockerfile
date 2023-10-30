@@ -9,6 +9,8 @@ RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requ
     && rm -rf /tmp/pip-tmp
 
 COPY .devcontainer/entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//g' /entrypoint.sh && \
+    chmod +x /entrypoint.sh
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \

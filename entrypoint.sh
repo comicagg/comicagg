@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # echo "Waiting for PostgreSQL..."
 # while ! nc -z $SQL_HOST $SQL_PORT; do
 #     sleep 0.1
