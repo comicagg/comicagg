@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<welcome>
+<message>Welcome to the API, {{ user }}</message>
+<message>Scope: {{ scope }}</message>
+</welcome>

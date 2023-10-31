@@ -1,0 +1,44 @@
+{% extends 'simple_base.html' %}
+{% load scope i18n %}
+{% load url from future %}
+{% block content %}
+<div class="text_left oauth2_box">
+    <h1>Comic Aggregator</h1>
+    <br>
+    {% if not error %}
+    <h2>{% trans "Authorize an application" %}</h2>
+    <p>{% blocktrans with client__name=client.name%}<b>{{ client__name }}</b> would like to access your data with the following permissions:{% endblocktrans %}</p>
+    <ul class="text_left">
+        {% for permission in oauth_data.scope|scopes %}
+            <li>{% spaceless %}
+                {% if permission == "read" %}
+                {% trans "Read your data" %}
+                {% else %}
+                {% trans "Write your data" %}
+                {% endif %}
+            {% endspaceless %}</li>
+        {% endfor %}
+    </ul>
+    <form method="post" action="{% url "oauth2:authorize" %}">
+        {% csrf_token %}
+        {{ form.errors }}
+        {{ form.non_field_errors }}
+        <fieldset>
+            <div style="display: none;" />
+                <select type="select" name="scope" multiple="multiple">
+                {% for scope in oauth_data.scope|scopes %}
+                    <option value="{{ scope }}" selected="selected">{{ scope }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <input type="submit" class="btn login large danger" value="{% trans "Cancel" %}" />
+            <input type="submit" class="btn login large primary" name="authorize" value="{% trans "Authorize"%}" />
+        </fieldset>
+    </form>
+    {% else %}
+    <h2>{% trans "An error has occurred" %}</h1>
+    <p class="text_left"><b>{% trans "Error code:" %} </b>{{ error }}<br/>
+    {% if error_description %}<b>{% trans "Message:" %} </b>{{ error_description }}</p>{% endif %}
+    {% endif %}
+</div>
+{% endblock %}

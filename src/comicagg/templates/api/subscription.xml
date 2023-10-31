@@ -1,0 +1,6 @@
+{% load comics_tags %}<?xml version="1.0" encoding="UTF-8" ?>
+<subscriptions>
+	{% for s in subscriptions %}
+		<comic id="{{ s.comic.id }}" name="{{ s.comic }}" unreadcount="{{ s.comic|unreads:user|length }}"/>
+	{% endfor %}
+</subscriptions>

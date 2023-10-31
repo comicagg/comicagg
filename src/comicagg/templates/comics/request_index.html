@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load i18n comics_tags static %}
+{% block title %}{% trans 'Requests' %} -{% endblock %}
+{% block content %}
+{% regroup user.request_set.all by done as request_list %}
+<div id="request_list" class="box">
+    <h4>{% trans "Request a comic" %}</h4>
+    <div id="request_new">
+        <p class="info text_left">{% trans "Write the url of the comic you would like to read here and we will try to add it is as soon as possible (if it's possible, of course)."%}</p>
+        {% if count %}<p class="info text_left">{% blocktrans %}Currently there are {{ count }} requests waiting to be added. We have to add them one by one by hand so, please, be patient. Thanks!{% endblocktrans %}</p>{% endif %}
+        <form action="{% url 'comics:requests' %}" method="post">
+            {% csrf_token %}
+            <div class="form_div {% if form.url.errors %}error_tr{% endif %}">
+              <label>{% trans "The comic's Url"%}</label><br/>
+              {% if form.url.errors %}{{ form.url.errors }}{% endif %}
+              {{ form.url }}
+            </div>
+            <div class="form_div"><label>{% trans 'Any comment?'%}</label><br/>{{ form.comment }}</div>
+            <div class="form_div"><input type="submit" value="{% trans 'Send'%}"/></div>
+        </form>
+        {% if messages %}
+        {% for message in messages %}
+        <div id="thanks">{{ message }}</div>
+        {% endfor %}
+        <script type="text/javascript">setTimeout('Element.hide("thanks")', 10000);</script>
+        {% endif %}
+    </div>
+    <br/>
+    <div>
+        {% trans "There are a number of authors that don't want their comics in this website so please don't ask for the following comics as we won't add the to the list. Thanks!" %}
+        <ul id="no_request_list">
+            <li>Adam@Home</li>
+            <li>Baldo (English)</li>
+            <li>Baldo (Espanol)</li>
+            <li>Between Failures</li>
+            <li>Calvin and Hobbes (English)</li>
+            <li>Calvin and Hobbes (Espanol)</li>
+            <li>Close to Home</li>
+            <li>Ctrl+Alt+Del</li>
+            <li>Ctrl+Alt+Del Sillies</li>
+            <li>Cul de Sac</li>
+            <li>Dresden Codak</li>
+            <li>Doonesbury</li>
+            <li>Earthsong</li>
+            <li>Evil Inc.</li>
+            <li>For Better or For Worse</li>
+            <li>Foxtrot</li>
+            <li>Foxtrot Classics</li>
+            <li>Fred Basset</li>
+            <li>Garfield</li>
+            <li>Garfield Minus Garfield</li>
+            <li>Heart of the City</li>
+            <li>In the Bleachers</li>
+            <li>Least I Could Do</li>
+            <li>Lio</li>
+            <li>Looking for Group</li>
+            <li>Married to the sea</li>
+            <li>Natalie Dee</li>
+            <li>Non Sequitur</li>
+            <li>NPC Comic</li>
+            <li>Nuklear Power 8-Bit Theater</li>
+            <li>Overboard</li>
+            <li>Pat Oliphant</li>
+            <li>Peanuts</li>
+            <li>Penny & Aggie</li>
+            <li>Pooch Café</li>
+            <li>Questionable Content</li>
+            <li>Red & Rover</li>
+            <li>Requiem</li>
+            <li>Sheldon</li>
+            <li>Sorcery 101</li>
+            <li>Something Positive</li>
+            <li>Super Effective</li>
+            <li>Superpoop</li>
+            <li>Ted Rall</li>
+            <li>Theater Hopper</li>
+            <li>The Adventures of Dr. McNinja</li>
+            <li>The Argyle Sweater</li>
+            <li>The Book of Biff</li>
+            <li>The Zombie Hunters</li>
+            <li>Tom the Dancing Bug</li>
+            <li>Toothpaste for dinner</li>
+            <li>Unshelved</li>
+            <li>VG Cats</li>
+            <li>VG Cats Adventure Log</li>
+            <li>Warbot</li>
+            <li>What The Duck</li>
+            <li>Ziggy</li>
+        </ul>
+    </div>
+    <div style="clear:both"></div>
+    <h4>{% trans "Pending requests" %}</h4>
+    <ul>
+    {% for req in pending %}
+        <li class="first_line"><img src="{% static 'base/img/request_new12.png' %}" alt=""/> {{ req.url }}</li>
+        {% if req.comment %}<li>{% trans "Your comment:" %}<p>{{ req.comment }}<p></li>{% endif %}
+        {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
+    {% empty %}
+        <li>{% trans "Nothing here." %}<li>
+    {% endfor %}
+    </ul>
+    <h4>{% trans "Rejected requests" %}</h4>
+    <ul>
+    {% for req in rejected %}
+        <li class="first_line"><img src="{% static 'base/img/error12.png' %}" alt=""/> {{ req.url }}</li>
+        {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
+    {% empty %}
+        <li>{% trans "Nothing here." %}<li>
+    {% endfor %}
+    </ul>
+    <h4>{% trans "Accepted requests" %}</h4>
+    <ul>
+    {% for req in accepted %}
+        <li class="first_line"><img src="{% static 'base/img/ok12.png' %}" alt=""/> {{ req.url }}</li>
+        {% if req.admin_comment %}<li>{% trans "Our comment:" %}<p>{{ req.admin_comment }}<p></li>{% endif %}
+    {% empty %}
+        <li>{% trans "Nothing here." %}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

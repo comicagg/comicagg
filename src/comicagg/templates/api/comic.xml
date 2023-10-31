@@ -1,0 +1,13 @@
+{% load api %}<?xml version="1.0" encoding="UTF-8" ?>
+{% spaceless %}
+{% if comics %}
+{# We will render the whole list of comics #}
+	<comics>
+	{% for comic in comics %}
+	{{ comic|xml|safe }}
+	{% endfor %}
+	</comics>
+{% else %}
+	{{ comic|xml:"True"|safe }}
+{% endif %}
+{% endspaceless %}

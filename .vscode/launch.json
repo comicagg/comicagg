@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/manage.py",
+            "args": [
+                "runserver"
+            ],
+            "django": true,
+            "justMyCode": false
+        },
+        {
+            "name": "Celery: Worker",
+            "type": "python",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "args": [
+                "-A",
+                "comicagg",
+                "worker",
+                "-P",
+                "solo",
+                "-E",
+                "-l",
+                "INFO"
+            ],
+            "django": false,
+            "justMyCode": false
+        },
+        {
+            "name": "Celery: Beat",
+            "type": "python",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "args": [
+                "-A",
+                "comicagg",
+                "beat"
+            ],
+            "django": false,
+            "justMyCode": false
+        }
+    ]
+}
