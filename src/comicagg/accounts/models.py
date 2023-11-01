@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 from datetime import datetime, timezone
 
@@ -10,7 +9,6 @@ from django.utils.translation import gettext_lazy as _
 logger = logging.getLogger(__name__)
 
 
-# Create your models here.
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, related_name="user_profile", on_delete=models.CASCADE

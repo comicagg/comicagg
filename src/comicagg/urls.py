@@ -3,12 +3,12 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 from comicagg.accounts import views as accounts_views
-from comicagg.views import robots_txt
+from comicagg.views import robots_txt, index
 from comicagg.common.views import BaseTemplateView
 from comicagg.comics import views as comics_views
 
 urlpatterns = [
-    path("", accounts_views.index, name="index"),
+    path("", index, name="index"),
     path("accounts/", include("comicagg.accounts.urls")),
     path("comics/", include("comicagg.comics.urls")),
     path("news/", include("comicagg.blog.urls")),

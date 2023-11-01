@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Post(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    title = models.CharField('Title', max_length=255)
-    text = models.TextField('Text')
+    title = models.CharField("Title", max_length=255)
+    text = models.TextField("Text")
     date = models.DateTimeField(auto_now_add=True)
-    html = models.BooleanField('Is the text HTML or plain text?', default=False)
+    html = models.BooleanField("Is the text HTML or plain text?", default=False)
 
     class Meta:
-        ordering = ['-date']
+        ordering = ["-date"]
 
     def __str__(self):
-        return '%s' % self.title
+        return self.title
 
     def save(self):
         # Do we have to notify the users
@@ -28,9 +28,10 @@ class Post(models.Model):
                 new = NewBlog(user=user, post=self)
                 new.save()
 
+
 class NewBlog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="new_posts")
 
     def __str__(self):
-        return '%s - %s' % (self.user, self.post)
+        return f"{self.user} - {self.post}"

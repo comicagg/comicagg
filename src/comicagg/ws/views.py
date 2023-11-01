@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
@@ -8,11 +8,11 @@ from comicagg.utils import render
 from comicagg.comics.utils import ComicsService
 
 
-def index(request):
+def index(request: HttpRequest):
     return render(request, "ws/index.html", {})
 
 
-def unread_user(request, user):
+def unread_user(request: HttpRequest, user: User):
     if not user:
         return HttpResponseRedirect(reverse("index"))
     user = get_object_or_404(User, username=user)
@@ -27,7 +27,7 @@ def unread_user(request, user):
 
 
 @login_required
-def user_subscriptions(request, simple=False):
+def user_subscriptions(request: HttpRequest, simple=False):
     context = {}
     context["subscriptions"] = request.user.subscription_set.order_by("position")
     if simple:

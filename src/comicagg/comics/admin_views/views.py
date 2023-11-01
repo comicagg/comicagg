@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from typing import Optional
 from comicagg.comics.models import Comic, ComicHistory
 from comicagg.comics.update import update_comic
 from comicagg.utils import render
@@ -10,7 +8,9 @@ from django.utils.translation import gettext as _
 
 
 @login_required
-def admin_update_view(request: HttpRequest, admin_site: AdminSite, comic_id=None):
+def admin_update_view(
+    request: HttpRequest, admin_site: AdminSite, comic_id=0
+):
     """Trigger an an update for a comic.
     If a comic_id is passed as parameter it will update that comic.
     If no comic_id is passed, it will show the list of comics to update.
@@ -39,7 +39,10 @@ def admin_update_view(request: HttpRequest, admin_site: AdminSite, comic_id=None
     raise Http404
 
 
-def admin_reported(request: HttpRequest, admin_site: AdminSite, id_list: str):
+@login_required
+def admin_reported(
+    request: HttpRequest, admin_site: AdminSite, id_list: str
+):
     """See the strips reported.
     Present a page with the images of the reported strips.
     """

@@ -62,7 +62,7 @@ def _random_comic(user: User, xhtml=False, request=None):
 
 
 @login_required
-def random_comic_view(request):
+def random_comic_view(request: HttpRequest):
     if resp := _random_comic(request.user, xhtml=True, request=request):
         return resp
     else:
@@ -107,7 +107,7 @@ def _slugify_comic(comic: Comic) -> str:
 
 
 @login_required
-def hide_new_comics(request):
+def hide_new_comics(request: HttpRequest):
     """
     Hides the new comics alert
     """
@@ -123,7 +123,7 @@ def hide_new_comics(request):
 
 
 @login_required
-def request_index(request):
+def request_index(request: HttpRequest):
     if request.POST:
         form = RequestForm(request.POST)
         if form.is_valid():

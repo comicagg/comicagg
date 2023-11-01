@@ -1,6 +1,6 @@
-# -*- coding: utf-8 -*-
 import re
 
+from comicagg.utils import render
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,37 +8,28 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.forms.utils import ErrorList
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template import Context, loader
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 
-from comicagg.utils import render
-from comicagg.accounts.forms import (
+from .forms import (
     EmailChangeForm,
     LoginForm,
     PasswordChangeForm,
     PasswordResetForm,
-    ProfileForm,
     RegisterForm,
 )
 
 
-def index(request):
-    if request.user.is_authenticated:
-        return redirect("comics:read")
-    else:
-        return redirect("accounts:login")
-
-
-def logout_view(request):
+def logout_view(request: HttpRequest):
     logout(request)
     # Redirect to a success page.
     return redirect("index")
 
 
-def login_view(request):
+def login_view(request: HttpRequest):
     context = {}
     context["parent_template"] = "base.html"
     # If the user is authenticated redirect him to index
@@ -92,7 +83,7 @@ def login_view(request):
     return render(request, "accounts/login_form.html", context, "login")
 
 
-def register(request):
+def register(request: HttpRequest):
     logout(request)
     context = {}
     form = RegisterForm()
@@ -144,57 +135,56 @@ def register(request):
     return render(request, "accounts/register.html", context, "register")
 
 
-def done(request, kind):
+def done(request: HttpRequest, kind: str):
     try:
-        return render(request, "accounts/%s_done.html" % kind, {}, "account")
+        return render(request, f"accounts/{kind}_done.html", {}, "account")
     except:
         return redirect("index")
 
 
-def password_reset(request):
+def password_reset(request: HttpRequest):
     context = {}
     form = PasswordResetForm()
     if request.POST:
         form = PasswordResetForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data["data"]
+            username_or_password = form.cleaned_data["username_or_password"]
             # Check if there are valid email add
-            users_email = list(User.objects.filter(email__iexact=data))
+            users_email = list(User.objects.filter(email__iexact=username_or_password))
             # Check if there is a username
-            users_username = list(User.objects.filter(username__iexact=data))
+            users_username = list(
+                User.objects.filter(username__iexact=username_or_password)
+            )
             users = users_email + users_username
-            if users:
-                # Create new password and send email
-                for user in users:
-                    new_pass = User.objects.make_random_password()
-                    user.set_password(new_pass)
-                    user.save()
-                    template_file = loader.get_template(
-                        "accounts/password_reset_email.html"
-                    )
-                    template_context = {
-                        "new_password": new_pass,
-                        "email": user.email,
-                        "domain": settings.SITE_DOMAIN,
-                        "site_name": settings.SITE_NAME,
-                        "user": user,
-                    }
-                    subject = _("Password reset on %(site)s") % {
-                        "site": settings.SITE_NAME
-                    }
-                    send_mail(
-                        subject,
-                        template_file.render(Context(template_context)),
-                        None,
-                        [user.email],
-                    )
+            # Create new password and send email
+            for user in users:
+                new_pass = User.objects.make_random_password()
+                user.set_password(new_pass)
+                user.save()
+                template_file = loader.get_template(
+                    "accounts/password_reset_email.html"
+                )
+                template_context = {
+                    "new_password": new_pass,
+                    "email": user.email,
+                    "domain": settings.SITE_DOMAIN,
+                    "site_name": settings.SITE_NAME,
+                    "user": user,
+                }
+                subject = _("Password reset on %(site)s") % {"site": settings.SITE_NAME}
+                send_mail(
+                    subject,
+                    template_file.render(Context(template_context)),
+                    None,
+                    [user.email],
+                )
             return redirect("accounts:done", kind="password_reset")
     context["form"] = form
     return render(request, "accounts/password_reset_form.html", context, "account")
 
 
 @login_required
-def password_change(request):
+def password_change(request: HttpRequest):
     context = {}
     form = PasswordChangeForm()
     if request.POST:
@@ -217,7 +207,7 @@ def password_change(request):
 
 
 @login_required
-def email(request):
+def update_email(request: HttpRequest):
     context = {}
     form = EmailChangeForm()
     if request.POST:
@@ -236,51 +226,13 @@ def email(request):
 
 
 @login_required
-def edit_profile(request, saved=False):
+def view_profile(request: HttpRequest, saved=False):
     return render(request, "accounts/account.html", {}, "account")
 
 
 @login_required
-def save_profile(request):
-    if request.method == "POST":
-        form = ProfileForm(request.POST)
-        if form.is_valid():
-            user_profile = request.user.user_profile
-            user_profile.hide_read = form.cleaned_data["hide_read"]
-            #            p.sort_by_points = form.cleaned_data['sort_by_points']
-            user_profile.alert_new_comics = form.cleaned_data["alert_new_comics"]
-            nmc = form.cleaned_data["navigation_max_columns"]
-            if nmc > 0:
-                user_profile.navigation_max_columns = form.cleaned_data[
-                    "navigation_max_columns"
-                ]
-            nmpc = form.cleaned_data["navigation_max_per_column"]
-            if nmpc > 0:
-                user_profile.navigation_max_per_column = form.cleaned_data[
-                    "navigation_max_per_column"
-                ]
-            user_profile.save()
-    return redirect("accounts:profile_saved")
-
-
-@login_required
-def save_color(request):
-    if request.method == "POST":
-        try:
-            new_color = request.POST["new_color"]
-        except:
-            new_color = None
-        if new_color:
-            p = request.user.user_profile
-            p.css_color = new_color
-            p.save()
-            return HttpResponse("0")
-    raise Http404
-
-
-@login_required
-@csrf_exempt
-def activate(request):
+@csrf_exempt # TODO: Why?
+def activate(request: HttpRequest):
     if request.method == "POST":
         request.user.is_active = True
         request.user.save()

@@ -7,8 +7,6 @@ Response status:
 - Not found or no POST: 404
 """
 
-from typing import List
-
 from comicagg.comics.models import (
     Comic,
     ComicHistory,
@@ -21,13 +19,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
 from django.db.models import Count, Max
-from django.http import (
-    Http404,
-    HttpRequest,
-    HttpResponse,
-    HttpResponseBadRequest,
-    JsonResponse,
-)
+from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 

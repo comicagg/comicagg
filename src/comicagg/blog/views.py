@@ -1,36 +1,37 @@
-# -*- coding: utf-8 -*-
-from django.contrib.auth.decorators import login_required
-from comicagg.utils import render
+from comicagg.blog.models import NewBlog, Post
 from comicagg.comics.ajax.views import ok_response
-from comicagg.blog.models import Post, NewBlog
+from comicagg.utils import render
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import HttpRequest
 
-def index(request, archive=False):
+
+def index(request: HttpRequest, all=False):
     """It will render either the last 10 news items or all of them, depending on
-    the keyword archive.
+    the keyword all.
     """
-    context = {'archive':archive}
     posts = Post.objects.all()
-    if not archive:
-        posts = posts[:10]
-    context['posts'] = posts
-    if request.user.is_authenticated:
-        #These are the new news items the logged in user has
-        context['new_posts'] = NewBlog.objects.filter(user=request.user)
-    return render(request, 'blog/index.html', context)
+    context = {
+        "archive": all,
+        "posts": posts if all else posts[:10],
+        # These are the new news items the logged in user has
+        "new_posts": (
+            NewBlog.objects.filter(user=request.user)
+            if request.user.is_authenticated
+            else False
+        ),
+    }
+    return render(request, "blog/index.html", context)
+
 
 @login_required
-def forget_new_blogs(request):
-    """Will mark as read the new news items of the logged in user.
-    """
-    try:
-        user = request.user
-    except:
-        user = None
-    if user:
-        NewBlog.objects.filter(user=user).delete()
+def forget_new_blogs(request: HttpRequest):
+    """Will mark as read the new news items of the logged in user."""
+    if request.user:
+        NewBlog.objects.filter(user=request.user).delete()
     return ok_response(request)
 
-def is_new_for(post, user):
-    """Returns the NewBlog object for a user and a news item.
-    """
+
+def is_new_for(post: Post, user: User):
+    """Returns the NewBlog object for a user and a news item."""
     return NewBlog.objects.filter(user=user, post=post)

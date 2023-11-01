@@ -1,16 +1,10 @@
 """View classes to render API responses."""
 
 import logging
-import xml.etree.ElementTree as ET
 from typing import Dict, Type
 
-import comicagg.logs.tags as logtags
-from comicagg.api.decorators import body_not_empty, request_param, write_required
-from comicagg.api.forms import StripForm, SubscriptionForm, VoteForm
-from comicagg.api.serializer import Serializer
 from comicagg.comics.models import Comic, ComicHistory, active_comics
 from comicagg.comics.utils import ComicsService
-from comicagg.logs import logmsg
 from django.db import transaction
 from django.http import (
     HttpRequest,
@@ -23,6 +17,10 @@ from django.http import (
 )
 from django.views.generic import View
 from django.views.generic.edit import FormMixin
+
+from .decorators import body_not_empty, request_param, write_required
+from .forms import StripForm, SubscriptionForm, VoteForm
+from .serializer import Serializer
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +73,7 @@ class APIView(View, FormMixin):
         response = None
         try:
             response = super(APIView, self).dispatch(*args, **kwargs)
-        except Exception as exception:
+        except Exception:
             # TODO : log this exception
             response = self.response_error(
                 "Internal Server error", "ServerError", HttpResponseServerError
