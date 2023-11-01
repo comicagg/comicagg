@@ -15,18 +15,17 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    def save(self):
-        # Do we have to notify the users
-        notify = False
-        if not self.id:
-            # The object doesn't have an ID yet so it's new and then we want to notify the users
-            notify = True
-        super(Post, self).save()
-        if notify:
+    def save(self, *args, **kwargs):
+        # Do we have to notify the users?
+        # The object might not have an ID yet so it's new and then we want to notify the users
+        should_notify = not self.id
+        # Check before saving the actual object to check if it's new or not
+        super().save(*args, **kwargs)
+        if should_notify:
             users = User.objects.all()
             for user in users:
-                new = NewBlog(user=user, post=self)
-                new.save()
+                new_blog = NewBlog(user=user, post=self)
+                new_blog.save()
 
 
 class NewBlog(models.Model):

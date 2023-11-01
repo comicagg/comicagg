@@ -15,19 +15,6 @@ class UserProfile(models.Model):
     )
 
     last_read_access = models.DateTimeField()
-    new_comics = models.BooleanField(default=False)
-    new_blogs = models.BooleanField(default=False)
-
-    hide_read = models.BooleanField(default=True)
-    # sort_by_points = models.BooleanField(default=False)
-
-    alert_new_comics = models.BooleanField(default=True)
-    alert_new_blog = models.BooleanField(default=True)
-
-    navigation_max_columns = models.IntegerField(default=5)
-    navigation_max_per_column = models.IntegerField(default=20)
-
-    css_color = models.CharField(max_length=100, default="blue_white")
 
     class Meta:
         ordering = ["user"]
@@ -35,22 +22,20 @@ class UserProfile(models.Model):
         verbose_name_plural = _("User profiles")
 
     def __str__(self):
-        return "%s" % self.user
+        return self.user
 
     def is_active(self):
-        if self.user.is_active:
-            return True
-        return False
+        return bool(self.user.is_active)
 
     is_active.boolean = True
 
 
 def create_account(sender, **kwargs):
     if kwargs["created"]:
-        up = UserProfile(
+        user_profile = UserProfile(
             user=kwargs["instance"], last_read_access=datetime.now(timezone.utc)
         )
-        up.save()
+        user_profile.save()
 
 
 post_save.connect(create_account, sender=User)

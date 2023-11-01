@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
 import contextlib
 import logging
 import random
-from django.db.models import Max
+
 from comicagg.comics.models import (
     Comic,
     ComicHistory,
-    UnreadComic,
     NewComic,
+    UnreadComic,
     active_comics,
 )
+from django.db.models import Max
 
 logger = logging.getLogger(__name__)
 
@@ -157,9 +157,7 @@ class ComicsService:
 
     def unsubscribe_comics(self, id_list):
         """Remove the comics in the list from the user's subscriptions."""
-        if subscriptions := self.user.subscription_set.filter(
-            comic__id__in=id_list
-        ):
+        if subscriptions := self.user.subscription_set.filter(comic__id__in=id_list):
             logger.debug("Removing subscriptions")
             subscriptions.delete()
             self.user.unreadcomic_set.filter(comic__id__in=id_list).delete()

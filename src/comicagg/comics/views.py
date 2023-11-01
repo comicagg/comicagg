@@ -111,9 +111,9 @@ def hide_new_comics(request: HttpRequest):
     """
     Hides the new comics alert
     """
-    up = request.user.user_profile
-    up.new_comics = False
-    up.save()
+    user_profile = request.user.user_profile
+    user_profile.new_comics = False
+    user_profile.save()
     return HttpResponse("0")
 
 

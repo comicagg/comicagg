@@ -155,27 +155,23 @@ class Comic(models.Model):
         return self.get_rating() < other.get_rating()
 
     def save(self, *args, **kwargs):
-        notify = False
         # If the user saved this with the notify field to true
-        if self.notify:
-            notify = True
-            self.notify = False
-        super(Comic, self).save(*args, **kwargs)
-        if notify:
+        should_notify = self.notify
+        self.notify = False
+        super().save(*args, **kwargs)
+        if should_notify:
             # Create a NewComic object for each user
             users = User.objects.all()
             for user in users:
-                up = UserProfile.objects.get(user=user)
-                if up.alert_new_comics:
-                    up.new_comics = True
-                    new = NewComic(user=user, comic=self)
-                    new.save()
-                    up.save()
+                profile = UserProfile.objects.get(user=user)
+                profile.save()
+                new_comic = NewComic(user=user, comic=self)
+                new_comic.save()
 
     def get_rating(self, method="statistic_rating"):
         if not hasattr(self, "__rating"):
-            r = getattr(self, method)()
-            setattr(self, "__rating", r)
+            rating = getattr(self, method)()
+            setattr(self, "__rating", rating)
         return getattr(self, "__rating")
 
     def statistic_rating(self):
@@ -187,8 +183,10 @@ class Comic(models.Model):
         z = 3.95
         phat = 1.0 * pos / n
         return (
-            phat + z * z / (2 * n) - z * sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)
-        ) / (1 + z * z / n)
+            phat
+            + z**2 / (2 * n)
+            - z * sqrt((phat * (1 - phat) + z**2 / (4 * n)) / n)
+        ) / (1 + z**2 / n)
 
     def mi_rating(self):
         r = 0.5
@@ -268,7 +266,7 @@ class Subscription(models.Model):
     def delete(self, *args, **kwargs):
         # Delete the related unread comics
         UnreadComic.objects.filter(user=self.user, comic=self.comic).delete()
-        super(Subscription, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
 
 class Request(models.Model):
