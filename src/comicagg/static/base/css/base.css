@@ -7,7 +7,7 @@ body {
 	color:#333;
 	padding:0;
 	margin:0;
-	background:transparent url(/static/base/img/bg/trama.gif) top left;
+	background:transparent url(../img/bg/trama.gif) top left;
 	min-width:800px;
 }
 a {
@@ -59,7 +59,7 @@ button:hover {
 	color:white;
 	padding: 10px 1em 2px 1em;
 	height:28px; /*40-h*/
-	background:transparent url(/static/base/img/bg/background.png) top center repeat-x;
+	background:transparent url(../img/bg/background.png) top center repeat-x;
 	position:fixed;
 	left:0;
 	right:0;
@@ -320,10 +320,10 @@ button:hover {
 	background: #ededed;
 }
 #organize .dojoDndItemBefore {
-	background:url(/static/base/img/2leftarrow_bw10.png) #ccc left center no-repeat;
+	background:url(../img/2leftarrow_bw10.png) #ccc left center no-repeat;
 }
 #organize .dojoDndItemAfter {
-	background:url(/static/base/img/2rightarrow_bw10.png) #ccc right center no-repeat;
+	background:url(../img/2rightarrow_bw10.png) #ccc right center no-repeat;
 }
 #organize .dojoDndAvatar {
 	border:2px solid #ccc;
@@ -346,7 +346,7 @@ button:hover {
 	padding-right:50px;
 	float:right;
 	vertical-align:middle;
-	background:url(/static/base/img/trash.png) right center no-repeat transparent;
+	background:url(../img/trash.png) right center no-repeat transparent;
 	cursor:pointer;
 }
 #organize .save {
@@ -407,20 +407,20 @@ button:hover {
 	border-bottom:0;
 }
 #comic_list .added {
-	background:#ccddff /*url(/static/base/img/ok12.png)*/ right center no-repeat;
+	background:#ccddff /*url(../img/ok12.png)*/ right center no-repeat;
     font-weight:bolder;
 }
 #comic_list .working {
-    background:url(/static/base/img/loading12.gif) right center no-repeat;
+    background:url(../img/loading12.gif) right center no-repeat;
 }
 #comic_list .new {
-	background:#ddffcc /*url(/static/base/img/flag12.png)*/ right center no-repeat;
+	background:#ddffcc /*url(../img/flag12.png)*/ right center no-repeat;
 }
 #comic_list .error {
-    background:url(/static/base/img/error12.png) right center no-repeat;
+    background:url(../img/error12.png) right center no-repeat;
 }
 #comic_list .noimages:after {
-	content: url(/static/base/img/warning12.png);
+	content: url(../img/warning12.png);
 	vertical-align:middle;
 }
 #comic_new {

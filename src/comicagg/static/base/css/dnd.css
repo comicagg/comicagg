@@ -11,6 +11,7 @@
 	border:1px solid gray;
 	padding:2px 12px;
 	margin:0px 3px 3px 0px;
+	border-radius:5pt 5pt;
 	-moz-border-radius:5pt 5pt;
 	-webkit-border-radius:5pt 5pt;
 }
@@ -37,10 +38,10 @@
 }
 
 .dojoDndItemBefore {
-	background:url(/static/base/img/2leftarrow_bw10.png) #ccc left center no-repeat;
+	background:url(../img/2leftarrow_bw10.png) #ccc left center no-repeat;
 }
 .dojoDndItemAfter {
-	background:url(/static/base/img/2rightarrow_bw10.png) #ccc right center no-repeat;
+	background:url(../img/2rightarrow_bw10.png) #ccc right center no-repeat;
 }
 .dojoDndAvatar {
 	border:2px solid #ccc;
