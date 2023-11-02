@@ -38,12 +38,18 @@ COPY --from=builder /usr/src/app/wheels /wheels
 RUN pip install --upgrade pip && \
     pip install --no-cache /wheels/* && \
     mkdir /app && \
-    useradd app
+    mkdir -p /web/media && \
+    mkdir -p /web/static && \
+    useradd app && \
+    chown -R app:app /web
 
 COPY --chown=app:app src lib /app/
 COPY --chown=app:app ./entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//g' /entrypoint.sh
 
 WORKDIR /app
 USER app
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+EXPOSE 8000
+
+ENTRYPOINT [ "bash", "/entrypoint.sh" ]
