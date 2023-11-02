@@ -8,5 +8,6 @@
     "coblock.boxCharacter": "#",
     "coblock.boxWidth": 1,
     "coblock.spaceAround": 3,
-    "coblock.preferBlockComment": true
+    "coblock.preferBlockComment": true,
+    "todo-tree.highlights.enabled": false
 }
