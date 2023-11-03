@@ -22,7 +22,7 @@ class UserProfile(models.Model):
         verbose_name_plural = _("User profiles")
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
     def is_active(self):
         return bool(self.user.is_active)
