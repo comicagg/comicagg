@@ -115,22 +115,22 @@ class Comic(models.Model):
     )
 
     # Other settings
-    # FUTURE: Consider removing this and always use the first URL as referer
-    referer = models.URLField(
-        "Referer",
+    # FUTURE: Consider removing this and always use the first URL as referrer
+    referrer = models.URLField(
+        "Referrer",
         null=True,
         blank=True,
-        help_text="Set this to a URL that the web will accept as referer when getting an update.",
+        help_text="Set this to a URL that the web will accept as referrer when getting an update.",
     )
 
     # Last update
+    last_update = models.DateTimeField("Last successful update", blank=True, null=True)
     last_update_status = models.TextField(
         "Last update status",
         blank=True,
         null=True,
         help_text="Status of the last update run.",
     )
-    last_update = models.DateTimeField("Last successful update", blank=True, null=True)
     last_image = models.URLField("Last image URL", blank=True)
     last_image_alt_text = AltTextField("Last image alt text", blank=True, null=True)
 
@@ -230,7 +230,7 @@ class Comic(models.Model):
         """Return last_image or a reversed URL if a referrer is used."""
         return (
             reverse("comics:last_image_url", kwargs={"comic_id": self.id})
-            if self.referer
+            if self.referrer
             else self.last_image
         )
 
@@ -300,7 +300,7 @@ class ComicHistory(models.Model):
 
     def image_url(self):
         url = self.url
-        if self.comic.referer:
+        if self.comic.referrer:
             url = reverse("comics:history_url", kwargs={"history_id": self.id})
         return url
 

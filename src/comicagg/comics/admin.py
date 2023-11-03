@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 from django.contrib import admin
-from django.urls import path
 
 from comicagg.comics.models import (
     Comic,
@@ -42,7 +40,7 @@ class ComicAdmin(admin.ModelAdmin):
             "Image regex",
             {
                 "classes": ("wide",),
-                "fields": ("re1_url", "re1_base", "re1_re", "re1_backwards"),
+                "fields": ("re1_url", "re1_base", "re1_re", "re1_backwards", "referrer"),
             },
         ),
         (
@@ -59,7 +57,6 @@ class ComicAdmin(admin.ModelAdmin):
             "Custom update function",
             {"classes": ("collapse",), "fields": ("custom_func",)},
         ),
-        ("Other options", {"classes": ("collapse",), "fields": ("referer",)}),
         (
             "Votes",
             {"classes": ("collapse",), "fields": ("positive_votes", "total_votes")},
@@ -68,17 +65,14 @@ class ComicAdmin(admin.ModelAdmin):
             "Last update",
             {
                 "fields": (
-                    "last_update_status",
                     "last_update",
+                    "last_update_status",
                     "last_image",
                     "last_image_alt_text",
                 )
             },
         ),
     )
-
-    class Media:
-        css = {"all": ("css/admin.css",)}
 
 
 class ComicHistoryAdmin(admin.ModelAdmin):

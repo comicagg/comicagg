@@ -178,7 +178,7 @@ def last_image_url(request: HttpRequest, comic_id):
     """
     comic = get_object_or_404(Comic, pk=comic_id)
     url = comic.last_image
-    referrer = comic.referer or ""
+    referrer = comic.referrer or ""
     return _image_url(url, referrer)
 
 
@@ -188,7 +188,7 @@ def history_image_url(request: HttpRequest, history_id):
     """
     comic_history = get_object_or_404(ComicHistory, pk=history_id)
     url = comic_history.url
-    referrer = comic_history.comic.referer or ""
+    referrer = comic_history.comic.referrer or ""
     return _image_url(url, referrer)
 
 
