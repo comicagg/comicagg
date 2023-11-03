@@ -104,7 +104,7 @@ class SubscriptionTests(TestCase):
         self.assertTrue(random_history.comic.active)
         self.assertFalse(random_history.comic.ended)
         self.assertEqual(random_history.comic.id, suggested_id)
-        self.assertEqual(random_history.url, suggested_comic.last_strip().url)
+        self.assertEqual(random_history.url, suggested_comic.last_strip.url)
 
     # Tests for UserOperations.is_subscribed(comic)
     def test_is_subscribed(self):

@@ -185,7 +185,7 @@ class ComicsService:
                     random_comic = not_subscribed_comics[
                         random.randint(0, len(not_subscribed_comics) - 1)
                     ]
-                    history = random_comic.last_strip()
+                    history = random_comic.last_strip
         return history
 
     def new_comics(self):

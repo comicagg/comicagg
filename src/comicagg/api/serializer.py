@@ -81,7 +81,7 @@ class Serializer:
         }
         if last_strip:
             with contextlib.suppress(Exception):
-                out["last_strip"] = self.build_comichistory_dict(comic.last_strip())
+                out["last_strip"] = self.build_comichistory_dict(comic.last_strip)
         if unread_strips:
             out["unreads"] = [
                 self.build_comichistory_dict(h)

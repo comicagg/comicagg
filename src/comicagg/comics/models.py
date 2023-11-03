@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 from math import atan, sqrt
-
-from django.contrib.auth.models import User
-from django.db import models
-from django.urls import reverse
 
 from comicagg.accounts.models import UserProfile
 from comicagg.comics.fields import AltTextField, ComicNameField
+from django.contrib.auth.models import User
+from django.db import models
+from django.urls import reverse
+from django.utils.functional import cached_property
 
 
 class Comic(models.Model):
@@ -216,15 +215,13 @@ class Comic(models.Model):
     def negative_votes(self):
         return self.total_votes - self.positive_votes
 
+    @cached_property
     def reader_count(self):
-        if not self._reader_count:
-            self._reader_count = self.subscription_set.count()
-        return int(self._reader_count)
+        return int(self.subscription_set.count())
 
+    @cached_property
     def strip_count(self):
-        if not self._strip_count:
-            self._strip_count = self.comichistory_set.count()
-        return int(self._strip_count)
+        return int(self.comichistory_set.count())
 
     def last_image_url(self):
         """Return last_image or a reversed URL if a referrer is used."""
@@ -234,6 +231,7 @@ class Comic(models.Model):
             else self.last_image
         )
 
+    @cached_property
     def last_strip(self):
         return self.comichistory_set.all()[0]
 
