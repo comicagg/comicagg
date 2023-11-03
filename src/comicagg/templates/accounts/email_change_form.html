@@ -5,35 +5,35 @@
 {% block onload %}{% endblock %}
 {% block content %}
 <div class="box">
-    <h3>{% trans 'Change e-mail address'%}</h3>
-    <p class="info">{% trans 'Here you can change the e-mail of your account. Type your current password, and the new e-mail address.'%}</p>
-    {% if form.errors.incorrect_password %}
-    <div id="errorContainer">
-      <ul>
-        <li>{% trans 'The password is not valid.'%}</li>
-      </ul>
-    </div>
-    {% endif %}
-    <form action="{% url 'accounts:email_change' %}" method="post" class="text_left">{% csrf_token %}
-      <table style="margin-left:auto;margin-right:auto">
-        <tr {% if form.password.errors %}class="error_tr"{% endif %}>
-          <td><label>{% trans 'Current password'%}</label></td>
-          <td>{{ form.password }}</td>
-    {% if form.password.errors %}
-          <td>{{ form.password.errors }}</td>
-    {% endif %}
-        </tr>
-        <tr {% if form.email.errors %}class="error_tr"{% endif %}>
-          <td><label>{% trans 'New e-mail address'%}</label></td>
-          <td>{{ form.email }}</td>
-    {% if form.email.errors %}
-          <td>{{ form.email.errors }}</td>
-    {% endif %}
-        </tr>
-      </table>
-      <div class="text_center"><input type="submit" value="{% trans 'Change it'%}" /></div>
-    </form>
-    <br />
-    <a href="{% url 'accounts:profile' %}">{% trans 'Go back.'%}</a>
+  <h3>{% trans 'Change e-mail address'%}</h3>
+  <p class="info">{% trans 'Here you can change the e-mail of your account. Type your current password and the new e-mail address.' %}</p>
+  {% if form.errors.incorrect_password %}
+  <div id="errorContainer">
+    <ul>
+      <li>{% trans 'The password is not valid.'%}</li>
+    </ul>
+  </div>
+  {% endif %}
+  <form action="{% url 'accounts:email_change' %}" method="post" class="text_left">{% csrf_token %}
+    <table style="margin-left:auto;margin-right:auto">
+      <tr {% if form.password.errors %}class="error_tr"{% endif %}>
+        <td><label>{% trans 'Current password'%}</label></td>
+        <td>{{ form.password }}</td>
+        {% if form.password.errors %}
+        <td>{{ form.password.errors }}</td>
+        {% endif %}
+      </tr>
+      <tr {% if form.email.errors %}class="error_tr"{% endif %}>
+        <td><label>{% trans 'New e-mail address'%}</label></td>
+        <td>{{ form.email }}</td>
+        {% if form.email.errors %}
+        <td>{{ form.email.errors }}</td>
+        {% endif %}
+      </tr>
+    </table>
+    <div class="text_center"><input type="submit" value="{% trans 'Change it'%}" /></div>
+  </form>
+  <br />
+  <a href="{% url 'accounts:profile' %}">{% trans 'Go back.'%}</a>
 </div>
 {% endblock %}

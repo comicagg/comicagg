@@ -1,19 +1,19 @@
-# -*- coding: utf-8 -*-
 """Functions to check if the comics have been updated."""
+
+import contextlib
 import re
 from datetime import datetime, timezone
 from html import unescape
 
 import requests
+from comicagg.comics.models import Comic, ComicHistory, UnreadComic
 from django.conf import settings
-
-from comicagg.comics.models import ComicHistory, UnreadComic
 
 
 class NoMatchException(Exception):
     """To be thrown when updating a comic if we did not find the image in the page."""
 
-    def __init__(self, message):
+    def __init__(self, message: str):
         super(Exception, self).__init__(message)
         self.message = message
 
@@ -21,29 +21,27 @@ class NoMatchException(Exception):
         return repr(self.message)
 
 
-def update_comic(comic):
+def update_comic(comic: Comic):
     """Entry point to trigger an update in a comic."""
     has_changed = False
     # We may need to use a custom update function
     if comic.custom_func:
         has_changed = custom_update(comic)
-    else:
-        comic_history = default_update(comic)
-        if comic_history:
-            notify_subscribers(comic_history)
-            has_changed = True
+    elif comic_history := default_update(comic):
+        _notify_subscribers(comic_history)
+        has_changed = True
     return has_changed
 
 
-def custom_update(comic):
+def custom_update(comic: Comic):
     """Wrapper for the custom update function.
 
     A custom update function must fill in the list history_set with the ComicHistory objects it has found.
     The most recent strip found must be the first in the list."""
-    history_set = list()
 
     function_text = comic.custom_func.replace("\r", "")
     function_compiled = compile(function_text, "<string>", "exec")
+    history_set = []
     exec(function_compiled)
     if history_set:
         # If the first image of the list is the same as the comic's last_image, abandon ship
@@ -57,21 +55,18 @@ def custom_update(comic):
         # Persist the ComicHistory objects in the database
         for history in history_set:
             history.save()
-            notify_subscribers(history)
+            _notify_subscribers(history)
         return True
-    raise NoMatchException("%s" % comic.name)
+    raise NoMatchException(comic.name)
 
 
-def default_update(comic):
+def default_update(comic: Comic):
     """Default update function. Looks for just one image in the URL.
 
     If the comic doesn't use a redirection, then we will download the default URL and then search with the regex in that data.
     If it uses a redirection, then it will download the redirection URL and look for the final URL there.
     """
-    if comic.re2_url:
-        next_url = get_redirected_url(comic)
-    else:
-        next_url = comic.re1_url
+    next_url = get_redirected_url(comic) if comic.re2_url else comic.re1_url
 
     # Here next_url should be the URL where the comic strip is
     (last_image, alt_text) = get_one_image(comic, next_url)
@@ -89,7 +84,7 @@ def default_update(comic):
     return history
 
 
-def get_several_images(comic, history_set):
+def get_several_images(comic: Comic, history_set):
     """This function looks for several images in the same page."""
     lines = download_url(comic.re1_url)
     # for debugging
@@ -111,56 +106,48 @@ def download_url(url):
     # NOTE: why did we need the cookie jar before?
     headers = {"User-Agent": settings.USER_AGENT}
     response = requests.get(url, headers=headers)
-    lines = [line for line in response.iter_lines()]
-    return lines
+    return list(response.iter_lines())
 
 
 def find_match(remaining_lines, regexp, backwards=False):
     """Find a match in the remaining lines using the regex and returning a tuple containing the match object and the remaining lines to review."""
     # Set the pop index, depending on how we need to look for a match.
-    pop_index = 0
-    if backwards:
-        pop_index = -1
-
-    regex_text = r"%s" % regexp
-    regex_compiled = re.compile(regex_text)
+    pop_index = -1 if backwards else 0
+    regex_compiled = re.compile(regexp)
     match = None
     while len(remaining_lines) > 0:
         line = remaining_lines.pop(pop_index)
         # FUTURE: should we use django.utils.encoding.smart_text instead?
-        try:
+        with contextlib.suppress(Exception):
             line = line.decode("utf-8")
-        except:
-            pass
         match = regex_compiled.search(line)
         if match:
             break
     return (match, remaining_lines)
 
 
-def get_one_image(comic, url):
+def get_one_image(comic: Comic, url):
     """Find one image in this URL."""
     lines = download_url(url)
     # We use this field to be able to debug the NoMatchException in case it fails
     lines_debug = list(lines)
     (match, lines) = find_match(lines, comic.re1_re, comic.re1_backwards)
     if not match:
-        raise NoMatchException("%s" % comic.name)
+        raise NoMatchException(comic.name)
     image_url = comic.re1_base % url_from_match(match)
     alt_text = alt_from_match(match)
     return (image_url, alt_text)
 
 
-def get_redirected_url(comic):
+def get_redirected_url(comic: Comic):
     """Find the final URL using the redirection in the comic."""
     lines = download_url(comic.re2_url)
     # We use this field to be able to debug the NoMatchException in case it fails
     lines_debug = list(lines)
     (match, lines) = find_match(lines, comic.re2_re, comic.re2_backwards)
     if not match:
-        raise NoMatchException("%s" % comic.name)
-    next_url = comic.re2_base % url_from_match(match)
-    return next_url
+        raise NoMatchException(comic.name)
+    return comic.re2_base % url_from_match(match)
 
 
 def url_from_match(match):
@@ -182,18 +169,17 @@ def alt_from_match(match):
     except IndexError:
         alt = None
     if alt:
-        # FUTURE: should we use smart_text here?
         try:
+            # FIXME: unicode does not exist anymore. should we use smart_text here?
             alt = unicode(alt, "utf-8")
-        except:
-            try:
+        except Exception:
+            with contextlib.suppress(Exception):
+                # FIXME: unicode does not exist anymore
                 alt = unicode(alt, "iso-8859-1")
-            except:
-                pass
     return alt
 
 
-def notify_subscribers(history):
+def _notify_subscribers(history: ComicHistory):
     """Create one UnreadComic for each subscribed user."""
     subscribers = history.comic.subscription_set.all()
     for subscriber in subscribers:

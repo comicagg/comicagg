@@ -1,4 +1,8 @@
 from django import forms
+from django.utils.translation import gettext as _
+from django.core.exceptions import ValidationError
+
+from .validators import *
 
 
 class LoginForm(forms.Form):
@@ -24,8 +28,21 @@ class PasswordResetForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={"size": "30"}))
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={"size": "30"}),
+        validators=[validate_username, validate_user_exists],
+    )
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
     email = forms.EmailField(widget=forms.TextInput(attrs={"size": "50"}))
-    captcha = forms.CharField(widget=forms.TextInput(attrs={"size": "10"}))
+    captcha = forms.CharField(
+        widget=forms.TextInput(attrs={"size": "10"}), validators=[validate_captcha]
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 != password2:
+            raise ValidationError(_("Passwords don't match!"))

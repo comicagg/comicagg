@@ -32,7 +32,9 @@
 				"ms-azuretools.vscode-docker",
 				"DavidAnson.vscode-markdownlint",
 				"vict0rsch.coblock",
-				"sourcery.sourcery"
+				"sourcery.sourcery",
+				"thebarkman.vscode-djaneiro",
+				"mrorz.language-gettext"
 			]
 		}
 	},
