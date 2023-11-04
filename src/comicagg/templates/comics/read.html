@@ -10,12 +10,12 @@
 	var titlei18n = "{% trans 'Read' %}";
 	var unreadComics = [];
 	var comics = [];
-{% for comic,unreadlist in unread_list %}
-	unreadComics[{{ comic.id }}] = true;
-{% endfor %}
+	{% for comic,unreadlist in unread_list %}unreadComics[{{ comic.id }}] = true;{% endfor %}
 {% for comic,unreadlist in comic_list %}
 	tmp = [];
-	{% if not comic.no_images or perms.comics.all_images %}{% for unread in unreadlist %}tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.history.id }}, "url":"{{ unread.history.image_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});{% endfor %}{% endif %}
+	{% if not comic.no_images or perms.comics.all_images %}
+	{% for unread in unreadlist %}
+	tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.history.id }}, "url":"{{ unread.history.image_url|safe }}", "alt_text":"{{ unread.history.alt_text|default_if_none:"" }}"});{% endfor %}{% endif %}
 	c = {"name":"{{ comic.name }}", "id":{{ comic.id }}, {% if not comic.no_images or perms.comics.all_images %}"last_url":"{{ comic.last_image_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false, "last_ch":{{ comic.comichistory_set.all.0.id|default:0 }}};
 	comics[{{ comic.id }}] = c;
 {% endfor %}
@@ -41,15 +41,15 @@
 		{% if unreadlist %}<span id="newnotice{{ comic.id }}" class="newstripsnotice">{% trans "New strips!" %}</span>{% endif %}
 		<div class="striplist">
 		{% if comic.no_images and not perms.comics.all_images %}
-			{% blocktrans with comic.url as url %}The comic has been updated. <a href="{{ url }}">Click here</a> to go to the comic's website.{% endblocktrans %}
+			{% blocktrans with comic.website as url %}The comic has been updated. <a href="{{ url }}">Click here</a> to go to the comic's website.{% endblocktrans %}
 		{% else %}
 			{% for unread in unreadlist %}
 			{% ifchanged %}<h4>{{ unread.history.date|date:"d F Y" }}</h4>{% endifchanged %}
-			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgu{{ unread.id }}" src="{% static 'base/img/striploading.gif' %}" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/></a><br/>
+			<a onclick="openurl('{{ comic.website|safe }}')"><img id="imgu{{ unread.id }}" src="{% static 'base/img/striploading.gif' %}" alt="new - loading..." title="{{ unread.history.alt_text|default_if_none:""|safe }}"/></a><br/>
 			<div class="alttext">{{ unread.history.alt_text|default_if_none:""|safe }}</div>
 			{% empty %}
 			<h4>{{ comic.last_update|date:"d F Y" }}</h4>
-			<a onclick="openurl('{{ comic.url|safe }}')"><img id="imgl{{ comic.id }}" src="{% static 'base/img/striploading.gif' %}" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/></a>
+			<a onclick="openurl('{{ comic.website|safe }}')"><img id="imgl{{ comic.id }}" src="{% static 'base/img/striploading.gif' %}" alt="last - loading..." title="{{ comic.last_image_alt_text|default_if_none:""|safe }}"/></a>
 			<div class="alttext">{{ comic.last_image_alt_text|default_if_none:""|safe }}</div>
 			{% endfor %}
 		{% endif %}
