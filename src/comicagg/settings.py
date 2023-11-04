@@ -121,8 +121,6 @@ ROOT_URLCONF = "comicagg.urls"
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
-SESSION_COOKIE_NAME = "comicagg_session"
-
 # A list of strings representing the host/domain names that this Django site can serve.
 ALLOWED_HOSTS = django_env.list("ALLOWED_HOSTS")
 
@@ -149,7 +147,13 @@ TEMPLATES = [
 # #   Authentication   #
 # ######################
 
+SESSION_COOKIE_NAME = "comicagg_session"
+
 AUTHENTICATION_BACKENDS =  ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+
+# CSRF_TRUSTED_ORIGINS = []
+
+# CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 
 # ######################
 # #                    #

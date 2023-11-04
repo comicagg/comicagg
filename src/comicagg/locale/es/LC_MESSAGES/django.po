@@ -2,7 +2,7 @@
 # translation of django.po for Comic Aggregator to Español
 # Copyright (C) 2009 Jesús Fernández Sáez
 # This file is distributed under the same license as the comicagg package.
-# 
+#
 # Jesús Fernández <esu@proyectoanonimo.com>, 2009.
 # Jesus Fernandez <esu@proyectoanonimo.com>, 2009.
 # Jesús Fernández <esu@kumomi.es>, 2009.
@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-03 22:58+0000\n"
+"POT-Creation-Date: 2023-11-04 09:03+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
@@ -45,8 +45,7 @@ msgstr "Algunas letras no valen."
 
 #: comicagg/accounts/validators.py:20
 msgid "That username is not valid, sorry. Please choose another."
-msgstr ""
-"El nombre de usuario no es válido. Por favor, elige otro."
+msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 
 #: comicagg/accounts/views.py:84
 msgid "Username or password not valid!"
@@ -96,13 +95,13 @@ msgstr "Activar cuenta"
 #: comicagg/templates/accounts/activate.html:8
 #, python-format
 msgid ""
-"Your account was inactivated because you didn't read your comics for, at "
-"least, %(days)s days. You can reactivate it here."
+"Your account was inactivated because you didn't read your comics for "
+"%(days)s days. You can reactivate it here."
 msgstr ""
-"Tu cuenta ha sido desactivada porque no has leído tus comics en, al menos, "
+"Tu cuenta ha sido desactivada porque no has leído tus comics en "
 "%(days)s días. La puedes reactivar aquí."
 
-#: comicagg/templates/accounts/activate.html:11
+#: comicagg/templates/accounts/activate.html:12
 msgid "Reactivate"
 msgstr "Reactivar"
 
@@ -375,8 +374,7 @@ msgstr "Usuario"
 
 #: comicagg/templates/accounts/register.html:15
 msgid "The following chars are valid: letters, digits, _ and ."
-msgstr "Sólo se permiten los siguientes carácteres: letras, "
-"números, _ y ."
+msgstr "Sólo se permiten los siguientes carácteres: letras, números, _ y ."
 
 #: comicagg/templates/accounts/register.html:20
 msgid "Password"

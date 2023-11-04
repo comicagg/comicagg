@@ -207,7 +207,6 @@ class UpdateEmail(View):
 
 
 @login_required
-@csrf_exempt  # TODO: Why?
 def activate(request: HttpRequest):
     if request.method == "POST":
         request.user.is_active = True
