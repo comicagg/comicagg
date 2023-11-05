@@ -1,4 +1,3 @@
-import re
 from typing import Any
 
 from comicagg.utils import render
@@ -154,7 +153,7 @@ class PasswordResetView(View):
             subject = _("Password reset on %(site)s") % {"site": settings.SITE_NAME}
             send_mail(
                 subject,
-                email_template.render(Context(email_context)),
+                email_template.render(email_context),
                 None,
                 [user.email],
             )

@@ -233,6 +233,7 @@ email = django_env.url("EMAIL_HOST")
 EMAIL_HOST = email.hostname
 EMAIL_HOST_USER = email.username
 EMAIL_HOST_PASSWORD = email.password
+EMAIL_PORT = email.port
 
 # Default email address to use for various automated correspondence from the site manager(s).
 # This doesn’t include error messages sent to ADMINS and MANAGERS
