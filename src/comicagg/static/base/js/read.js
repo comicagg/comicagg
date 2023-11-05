@@ -245,7 +245,7 @@ function onReadLoad() {
         if (unreadCounter) {
             initLoadImages();
         } else {
-            //TODO mostrar comic aleatorio
+            //TODO: mostrar comic aleatorio
             $("no_unread_comics").show();
             return 0;
         }

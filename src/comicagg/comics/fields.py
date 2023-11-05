@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import contextlib
 from django.db import models
 
 class ComicNameField(models.CharField):
@@ -20,9 +21,7 @@ class AltTextField(models.TextField):
 def try_encodings(value):
     try:
         value = unicode(value, 'utf-8')
-    except:
-        try:
+    except Exception:
+        with contextlib.suppress(Exception):
             value = unicode(value, 'iso-8859-1')
-        except:
-            pass
-    return value 
+    return value

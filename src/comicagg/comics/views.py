@@ -135,7 +135,7 @@ def request_index(request: HttpRequest):
             try:
                 mail_managers("Nuevo request", message)
             except Exception:
-                # TODO log the error
+                # TODO: log the error
                 pass
             messages.info(request, _("Your request has been saved. Thanks!"))
             return redirect("comics:requests")

@@ -137,7 +137,7 @@ def report_comic(request: HttpRequest):
     try:
         mail_managers("Imagen rota: " + comic.name, message)
     except Exception:
-        # TODO log this error
+        # TODO: log this error
         pass
     return ok_response(request)
 

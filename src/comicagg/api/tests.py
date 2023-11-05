@@ -223,7 +223,7 @@ class SubscriptionTests(LoggedInTestCase):
         response = self.putForm("/api/subscriptions", "subscriptions")
         self.assertEqual(response.status_code, 400)
 
-    # TODO test cases with already subscribed comics to test order and added/removed
+    # TODO: test cases with already subscribed comics to test order and added/removed
     def test_put_one(self):
         """Subscribe to one comic."""
         response = self.putForm("/api/subscriptions", "subscriptions=1")
@@ -262,7 +262,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(len(operations.subscribed_all()), 0)
 
 
-# TODO
+# TODO:
 class UnreadTests(LoggedInTestCase):
     """Tests for unread comics related operations."""
 
