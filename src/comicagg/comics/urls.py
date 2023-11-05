@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.urls import include, path, re_path
 
 from . import views
@@ -13,6 +12,8 @@ urlpatterns = [
 
     re_path(r"^li/(?P<comic_id>\d+)/", views.last_image_url, name="last_image_url"),
     re_path(r"^hi/(?P<history_id>\d+)/", views.history_image_url, name="history_url"),
+
+    path("stats/",views.stats, name="stats"),
 
     path("ajax/", include("comicagg.comics.ajax.urls", namespace="ajax")),
 ]

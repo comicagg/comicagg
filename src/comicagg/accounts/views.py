@@ -184,7 +184,7 @@ class PasswordChangeView(LoginRequiredMixin, View):
         return render(request, "accounts/password_change_form.html", context, "account")
 
 
-class UpdateEmail(View):
+class UpdateEmail(LoginRequiredMixin, View):
     def get(self, request: HttpRequest, *args, **kwargs):
         form = EmailChangeForm()
         context = {"form": form}
