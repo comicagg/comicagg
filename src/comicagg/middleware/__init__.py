@@ -2,9 +2,9 @@ import logging
 import sys
 from datetime import datetime, timezone
 
-from comicagg.utils import render
 from django.conf import settings
 from django.http import HttpRequest
+from django.shortcuts import render
 from django.views.debug import technical_500_response
 
 logger = logging.getLogger(__name__)

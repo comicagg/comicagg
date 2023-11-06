@@ -133,11 +133,13 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                # TODO: create a new context processor to fill up the context for templates for the menu
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "comicagg.comics.context_processors.comic_counters",
+                "django.template.context_processors.static",
+                "comicagg.common.context_processors.comicagg_vars"
             ],
         },
     },

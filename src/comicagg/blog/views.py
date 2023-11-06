@@ -1,9 +1,9 @@
 from comicagg.blog.models import NewBlog, Post
 from comicagg.comics.ajax.views import ok_response
-from comicagg.utils import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest
+from django.shortcuts import render
 
 
 def index(request: HttpRequest, all=False):

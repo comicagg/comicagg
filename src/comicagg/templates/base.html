@@ -30,7 +30,6 @@
             var static_url = '{% static 'base/' %}';
 
 			{% if user.is_authenticated %}
-            var unreadCounter = {{ unread_count }};
             var url_add = '{% url 'comics:ajax:add_comic' %}';
             var url_forget_new_blogs = '{% url 'news:ajax:forget_new_blogs' %}';
             var url_forget_new_comic = '{% url 'comics:ajax:forget_new_comic' %}';
@@ -40,6 +39,7 @@
             var url_remove_list = '{% url 'comics:ajax:remove_comic_list' %}';
             var url_report = '{% url 'comics:ajax:report_comic' %}';
             var url_save_selection = '{% url 'comics:ajax:save' %}';
+            var unreadCounter = {{ unread_count }};
             var comicCounter = {{ comic_count }};
             var newComicCounter = {{ newcomic_count }};			
             var newsCounter = {{ news_count }};     
@@ -49,7 +49,7 @@
 	</head>
 	<body onload="{% block onload %}{% endblock %}">
 		<div id="head">
-			{% if user.is_superuser or not settings.MAINTENANCE %}
+			{% if user.is_superuser or not MAINTENANCE %}
 			{% if user.is_authenticated %}
 			<div id="head_right">
 				<a href="{% url 'accounts:profile' %}"><i><b>{{ user.username }}</b></i></a>&nbsp;&nbsp;-&nbsp;&nbsp;<span class=""><a href="{% url 'news:index' %}">{% trans "news" %}<span id="menuNewsCounter">{% if news_count %} ({{ news_count}}){% endif %}</a></span>&nbsp;&nbsp;{% if user.is_staff %}<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;&nbsp;{% endif %}<span class=""><a href="{% url 'contact' %}">{% trans "contact" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'accounts:logout' %}">{% trans "logout" %}</a></span>
@@ -66,7 +66,7 @@
 			{% endif %}
 			<div id="branding">
 				<a href="/">Comic Aggregator</a>
-{% if settings.MAINTENANCE and user.is_superuser %}&nbsp;DB: {{ settings.DATABASES.default.NAME }}{% endif %}
+{% if MAINTENANCE and user.is_superuser %}&nbsp;DB: {{ DATABASES_NAME }}{% endif %}
 			</div>
 		</div>
 		<div id="content">
