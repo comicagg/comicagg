@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
-from comicagg.views import robots_txt, index
+
 from comicagg.common.views import BaseTemplateView
+from comicagg.views import index, robots_txt
 
 urlpatterns = [
     path("", index, name="index"),
@@ -13,13 +14,6 @@ urlpatterns = [
     path("api/", include("comicagg.api.urls")),
     path("oauth2/", include("provider.oauth2.urls", namespace="oauth2")),
     path("robots.txt", robots_txt, name="robots"),
-    path(
-        "docs/custom_func/",
-        admin.site.admin_view(
-            BaseTemplateView.as_view(template_name="admin/custom_func.html")
-        ),
-        name="docs_custom",
-    ),
     path(
         "contact/",
         BaseTemplateView.as_view(template_name="contact.html"),

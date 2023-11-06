@@ -20,20 +20,14 @@
   {% endif %}
 {% endblock %}
 
-{% block breadcrumbs %}
-  <div class="breadcrumbs">
-    <a href="/admin/">Inicio</a> &rsaquo; {% trans 'Reported broken images' %}
-  </div>
-{% endblock %}
-
 {% block content %}
   <div id="content-main">
-    {% for k, ch in chs.items %}
-      {% if ch %}
-        <a href="/admin/comics/comichistory/{{ ch.id }}/">comic history id={{ ch.id }}</a><br />
-        <img src="{{ ch.image_url }}" style="width:500px" title="{{ ch.alt_text }}" /><br />
+    {% for id, strip in strips.items %}
+      {% if strip %}
+        <a href="/admin/comics/comichistory/{{ strip.id }}/">Comic strip id={{ strip.id }}</a><br />
+        <img src="{{ strip.image_url }}" style="width:500px" title="{{ strip.alt_text }}" /><br />
       {% else %}
-        comic history id={{ k }} no existe
+        Comic strip id={{ id }} no existe
       {% endif %}
       <hr />
     {% endfor %}

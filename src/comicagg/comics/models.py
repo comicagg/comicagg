@@ -1,11 +1,12 @@
 from math import atan, sqrt
 
-from comicagg.accounts.models import UserProfile
-from comicagg.comics.fields import AltTextField, ComicNameField
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
+
+from comicagg.accounts.models import UserProfile
+from comicagg.comics.fields import AltTextField, ComicNameField
 
 
 class Comic(models.Model):
