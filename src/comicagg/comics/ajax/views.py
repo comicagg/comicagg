@@ -39,7 +39,6 @@ def ok_response(request: HttpRequest):
         "unreads": unread_count,
         "news": news_count,
     }
-    # TODO: Use JsonResponse?
     return JsonResponse(response_data)
 
 

@@ -11,7 +11,17 @@
 	</head>
 	<body>
 		<table>
-			<tr><th class="left">n</th><th class="left">Comic</th><th>Lectores</th><th>Tiras</th><th>Total</th><th>Votos pos</th><th>Votos neg</th><th>% pos</th><th>Alg 1</th><th>Alg est.</th></tr>
+			<tr>
+				<th class="left">n</th>
+				<th class="left">Comic</th>
+				<th>Lectores</th>
+				<th>Tiras</th>
+				<th>Total</th>
+				<th>Votos pos</th>
+				<th>Votos neg</th>
+				<th>% pos</th>
+				<th>Alg 1</th>
+				<th>Alg est.</th></tr>
 {% for comic in comics %}
 			<tr>
 				<td class="left">{{ forloop.counter }}</td>
@@ -21,9 +31,9 @@
 				<td>{{ comic.total_votes }}</td>
 				<td>{{ comic.positive_votes }}</td>
 				<td>{{ comic.negative_votes }}</td>
-				<td>{{ comic.positive_votes_perc|perc:3 }}</td>
-				<td>{{ comic.mi_rating|perc:3 }}</td>
-				<td>{{ comic.get_rating|perc:3 }}</td>
+				<td>{{ comic.positive_votes_perc|as_percent:0|to_int }} %</td>
+				<td>{{ comic.mi_rating|as_percent:0|to_int }} %</td>
+				<td>{{ comic.get_rating|as_percent:0|to_int }} %</td>
 			</tr>
 {% endfor %}
 		</table>

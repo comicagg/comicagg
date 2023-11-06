@@ -2,14 +2,9 @@ import contextlib
 import logging
 import random
 
-from comicagg.comics.models import (
-    Comic,
-    ComicHistory,
-    NewComic,
-    UnreadComic,
-    active_comics,
-)
 from django.db.models import Max
+
+from .models import Comic, ComicHistory, NewComic, UnreadComic, active_comics
 
 logger = logging.getLogger(__name__)
 
