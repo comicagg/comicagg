@@ -5,14 +5,13 @@ from urllib.error import HTTPError
 from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 
-from comicagg.utils import render
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.mail import mail_managers
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
@@ -41,7 +40,7 @@ def read_view(request: HttpRequest):
     ]
     random = _random_comic(request.user)
     context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
-    return render(request, "comics/read.html", context, "read")
+    return render(request, "comics/read.html", context)
 
 
 def _random_comic(user: User, xhtml=False, request=None):

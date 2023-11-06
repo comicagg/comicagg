@@ -1,6 +1,5 @@
 from typing import Any
 
-from comicagg.utils import render
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,11 +7,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import HttpRequest, HttpResponseRedirect
-from django.shortcuts import redirect
-from django.template import Context, loader
+from django.shortcuts import redirect, render
+from django.template import loader
 from django.utils.translation import gettext as _
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 
 from .forms import (
     EmailChangeForm,
@@ -24,13 +22,13 @@ from .forms import (
 
 
 @login_required
-def view_profile(request: HttpRequest, saved=False):
-    return render(request, "accounts/account.html", {}, "account")
+def view_profile(request: HttpRequest):
+    return render(request, "accounts/account.html", {})
 
 
 def done(request: HttpRequest, kind: str):
     try:
-        return render(request, f"accounts/{kind}_done.html", {}, "account")
+        return render(request, f"accounts/{kind}_done.html", {})
     except Exception:
         return redirect("index")
 
@@ -52,7 +50,7 @@ class LoginView(View):
             context["oauth2"] = True
             form = LoginForm(initial={"next": next_url, "oauth2": True})
         context["form"] = form
-        return render(request, "accounts/login_form.html", context, "login")
+        return render(request, "accounts/login_form.html", context)
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = LoginForm(request.POST)
@@ -84,7 +82,7 @@ class LoginView(View):
             "oauth2": oauth2,
             "form": LoginForm(initial=form_initial),
         }
-        return render(request, "accounts/login_form.html", context, "login")
+        return render(request, "accounts/login_form.html", context)
 
 
 class RegisterView(View):
@@ -94,7 +92,7 @@ class RegisterView(View):
         logout(request)
         form = RegisterForm()
         context = {"form": form}
-        return render(request, "accounts/register.html", context, "register")
+        return render(request, "accounts/register.html", context)
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = RegisterForm(request.POST)
@@ -105,7 +103,7 @@ class RegisterView(View):
             User.objects.create_user(username, email, password)
             return redirect("accounts:done", kind="register")
         context = {"form": form}
-        return render(request, "accounts/register.html", context, "register")
+        return render(request, "accounts/register.html", context)
 
 
 """
@@ -119,15 +117,13 @@ class PasswordResetView(View):
     def get(self, request: HttpRequest, *args, **kwargs):
         form = PasswordResetForm()
         context = {"form": form}
-        return render(request, "accounts/password_reset_form.html", context, "account")
+        return render(request, "accounts/password_reset_form.html", context)
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = PasswordResetForm(request.POST)
         if not form.is_valid():
             context = {"form": form}
-            return render(
-                request, "accounts/password_reset_form.html", context, "account"
-            )
+            return render(request, "accounts/password_reset_form.html", context)
         # TODO: We should send a code or something and then the user can set the password in the site
         username_or_password = form.cleaned_data["username_or_password"]
         # Check if there are valid email add
@@ -164,7 +160,7 @@ class PasswordChangeView(LoginRequiredMixin, View):
     def get(self, request: HttpRequest, *args, **kwargs):
         form = PasswordChangeForm()
         context = {"form": form}
-        return render(request, "accounts/password_change_form.html", context, "account")
+        return render(request, "accounts/password_change_form.html", context)
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = PasswordChangeForm(request.POST)
@@ -181,14 +177,14 @@ class PasswordChangeView(LoginRequiredMixin, View):
                 request.user.save()
                 return redirect("accounts:done", kind="password_change")
         context = {"form": form}
-        return render(request, "accounts/password_change_form.html", context, "account")
+        return render(request, "accounts/password_change_form.html", context)
 
 
 class UpdateEmail(LoginRequiredMixin, View):
     def get(self, request: HttpRequest, *args, **kwargs):
         form = EmailChangeForm()
         context = {"form": form}
-        return render(request, "accounts/email_change_form.html", context, "account")
+        return render(request, "accounts/email_change_form.html", context)
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = EmailChangeForm(request.POST)
@@ -202,7 +198,7 @@ class UpdateEmail(LoginRequiredMixin, View):
                 request.user.save()
                 return redirect("accounts:done", kind="email_change")
         context = {"form": form}
-        return render(request, "accounts/email_change_form.html", context, "account")
+        return render(request, "accounts/email_change_form.html", context)
 
 
 @login_required
@@ -211,4 +207,4 @@ def activate(request: HttpRequest):
         request.user.is_active = True
         request.user.save()
         return redirect("index")
-    return render(request, "accounts/activate.html", {}, "account")
+    return render(request, "accounts/activate.html", {})

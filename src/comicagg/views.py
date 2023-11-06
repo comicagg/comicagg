@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from comicagg.utils import render
+from django.shortcuts import render
 from django.http import HttpRequest
 
 
@@ -11,4 +11,4 @@ def index(request: HttpRequest):
 
 
 def robots_txt(request: HttpRequest):
-    return render(request, "robots.txt", {}, mime='text/plain; charset="utf-8"')
+    return render(request, "robots.txt", {}, content_type="text/plain")

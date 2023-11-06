@@ -1,6 +1,6 @@
 {% extends 'ws/base_xml.html' %}
 {% block content %}{% spaceless %}
-<unread_comics user="{{ username }}" count="{{ count }}">
+<unread_comics user="{{ user.username }}" count="{{ unread_list|length }}">
 {% for comic, counter in unread_list %}
 <comic comic_id="{{ comic.id }}" name="{{ comic.name }}" count="{{ counter }}" />
 {% endfor %}
