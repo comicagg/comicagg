@@ -5,7 +5,7 @@
   {% for item in posts %}
     {% if new_posts %}
       <div class="post {% if item|new:user %}new_post{% endif %}" id="p{{ item.id }}">
-        <h4>{% if item|new:user %}<img src="{{ settings.MEDIA_URL}}images/new.png" alt=""/>{% endif %} {{ item.title }}</h4>
+        <h4>{% if item|new:user %}<img src="{{ STATIC_URL}}base/img/new.png" alt=""/>{% endif %} {{ item.title }}</h4>
     {% else %}
       <div class="post" id="p{{ item.id }}">
         <h4>{{ item.title }}</h4>
