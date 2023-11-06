@@ -1,4 +1,5 @@
 User-Agent: *
+Disallow: /.media
+Disallow: /.static
 Disallow: /ws
-Disallow: /media
 Disallow: /api
