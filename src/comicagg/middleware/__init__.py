@@ -6,6 +6,9 @@ from django.conf import settings
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.views.debug import technical_500_response
+from django.core.exceptions import ObjectDoesNotExist
+
+from comicagg.accounts.models import UserProfile
 
 logger = logging.getLogger(__name__)
 
@@ -57,9 +60,14 @@ class ActiveUserMiddleware:
         if request.user.is_authenticated:
             # Update the user's profile last access time
             # We do it here so all requests can be traced (api, web, etc)
-            request.user.user_profile.last_read_access = datetime.now(timezone.utc)
-            request.user.user_profile.save()
-
+            try:
+                request.user.user_profile.last_read_access = datetime.now(timezone.utc)
+                request.user.user_profile.save()
+            except ObjectDoesNotExist:
+                user_profile = UserProfile(
+                    user=request.user, last_read_access=datetime.now(timezone.utc)
+                )
+                user_profile.save()
             # Check if the user is active or not and redirect to the reactivate page.
             if not request.user.is_active:
                 try:

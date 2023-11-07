@@ -153,6 +153,16 @@ SESSION_COOKIE_NAME = "comicagg_session"
 
 AUTHENTICATION_BACKENDS =  ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.ScryptPasswordHasher",
+    # SHA1 was deprecated but it's needed for password auto-migration
+    "django.contrib.auth.hashers.SHA1PasswordHasher",
+]
+
 # CSRF_TRUSTED_ORIGINS = []
 
 # CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
