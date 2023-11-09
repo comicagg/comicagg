@@ -7,7 +7,6 @@ from comicagg.comics.models import Comic, ComicHistory, active_comics
 from comicagg.comics.utils import ComicsService
 from django.db import transaction
 from django.http import (
-    HttpRequest,
     HttpResponse,
     HttpResponseBadRequest,
     HttpResponseNotAllowed,
@@ -21,6 +20,7 @@ from django.views.generic.edit import FormMixin
 from .decorators import body_not_empty, request_param, write_required
 from .forms import StripForm, SubscriptionForm, VoteForm
 from .serializer import Serializer
+from .typings import OAuth2HttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -124,7 +124,7 @@ class APIView(View, FormMixin):
 class IndexView(APIView):
     """Welcome view."""
 
-    def get(self, request: HttpRequest):
+    def get(self, request: OAuth2HttpRequest):
         data = {
             "message": f"Hello {request.user.username}.",
             "message2": "This is the comicagg API.",
@@ -138,7 +138,7 @@ class ComicsView(APIView):
     Get information about all the comics available in the service."""
 
     @request_param("comic_id")  # url path
-    def get(self, request: HttpRequest, **kwargs):
+    def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get information about a specific comic or all the comics
         and optionally return the last strip fetched of the comics."""
         # if self.comic_id is not None:
@@ -168,7 +168,7 @@ class StripsView(APIView):
         self.form_class = StripForm
 
     @request_param("strip_id")  # url path
-    def get(self, request: HttpRequest, **kwargs):
+    def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get information about a certain strip."""
         try:
             strip = ComicHistory.objects.get(pk=getattr(self, "strip_id"))
@@ -179,7 +179,7 @@ class StripsView(APIView):
 
     @write_required
     @request_param("strip_id")  # url path
-    def put(self, request: HttpRequest, **kwargs):
+    def put(self, request: OAuth2HttpRequest, **kwargs):
         """Mark this strip as unread for the user doing the request."""
         try:
             strip = ComicHistory.objects.get(pk=getattr(self, "strip_id"))
@@ -194,7 +194,7 @@ class StripsView(APIView):
 
     @write_required
     @request_param("strip_id")  # url path
-    def delete(self, request: HttpRequest, **kwargs):
+    def delete(self, request: OAuth2HttpRequest, **kwargs):
         """Mark this strip as read for the user doing the request."""
         try:
             strip_id = getattr(self, "strip_id")
@@ -214,7 +214,7 @@ class SubscriptionsView(APIView):
         super(SubscriptionsView, self).__init__(**kwargs)
         self.form_class = SubscriptionForm
 
-    def get(self, request: HttpRequest, **kwargs):
+    def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get all the comics the user is following including the last strip fetched."""
         subs = ComicsService(request.user).subscribed_comics()
         body = self.serialize(subs, include_last_strip=True, identifier="subscriptions")
@@ -223,7 +223,7 @@ class SubscriptionsView(APIView):
     @write_required
     @body_not_empty
     @request_param("subscribe")  # form
-    def post(self, request: HttpRequest, **kwargs):
+    def post(self, request: OAuth2HttpRequest, **kwargs):
         """Subscribe to several comics.
 
         The comics will be added at the end of the list of subscriptions.
@@ -243,7 +243,7 @@ class SubscriptionsView(APIView):
     @write_required
     @body_not_empty
     @request_param("subscriptions")  # PUT body
-    def put(self, request: HttpRequest, **kwargs):
+    def put(self, request: OAuth2HttpRequest, **kwargs):
         """Modify the order of the subscribed comics.
 
         All the subscriptions will be ordered with the same order
@@ -310,7 +310,7 @@ class SubscriptionsView(APIView):
         return self.response_no_content()
 
     @write_required
-    def delete(self, request: HttpRequest, **kwargs):
+    def delete(self, request: OAuth2HttpRequest, **kwargs):
         """Remove all the subscriptions, returning a list with the IDs of the comics
         the user used to follow."""
         subscribed_idx = [c.id for c in ComicsService(request.user).subscribed_comics()]
@@ -331,7 +331,7 @@ class UnreadsView(APIView):
 
     @request_param("comic_id")  # url path
     @request_param("with_strips")  # url path
-    def get(self, request: HttpRequest, **kwargs):
+    def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get the unread comics followed by the user."""
         if hasattr(self, "comic_id"):
             try:
@@ -355,7 +355,7 @@ class UnreadsView(APIView):
 
     @write_required
     @request_param("comic_id")  # url path
-    def post(self, request: HttpRequest, **kwargs):
+    def post(self, request: OAuth2HttpRequest, **kwargs):
         """Mark a comic as unread."""
         # Do not allow POST if there is not comic id
         if not hasattr(self, "comic_id"):
@@ -380,7 +380,7 @@ class UnreadsView(APIView):
     @body_not_empty
     @request_param("comic_id")  # url path
     @request_param("vote")  # form
-    def put(self, request: HttpRequest, **kwargs):
+    def put(self, request: OAuth2HttpRequest, **kwargs):
         """Mark a comic as read and optionally including a vote in the body."""
         # Do not allow PUT if there is not comic id
         if not hasattr(self, "comic_id"):
@@ -405,7 +405,7 @@ class UnreadsView(APIView):
 
     @write_required
     @request_param("comic_id")  # url path
-    def delete(self, request: HttpRequest, **kwargs):
+    def delete(self, request: OAuth2HttpRequest, **kwargs):
         """Mark all comics as read."""
         if not hasattr(self, "comic_id"):
             # Mark all comics as read
@@ -423,7 +423,7 @@ class UnreadsView(APIView):
 class UserView(APIView):
     """Handles some user information."""
 
-    def get(self, request: HttpRequest, **kwargs):
+    def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get some user information."""
         body = self.serialize()
         return self.response_content(body)

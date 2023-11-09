@@ -9,6 +9,7 @@ from django.views.debug import technical_500_response
 from django.core.exceptions import ObjectDoesNotExist
 
 from comicagg.accounts.models import UserProfile
+from comicagg.typings import AuthenticatedHttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class UserBasedExceptionMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def process_exception(self, request: HttpRequest, exception):
+    def process_exception(self, request: AuthenticatedHttpRequest, exception):
         try:
             user = request.user
         except Exception:
@@ -37,7 +38,7 @@ class MaintenanceMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request: HttpRequest):
+    def __call__(self, request: AuthenticatedHttpRequest):
         if (
             settings.MAINTENANCE
             and request.user.is_authenticated
@@ -56,7 +57,7 @@ class ActiveUserMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request: HttpRequest):
+    def __call__(self, request: AuthenticatedHttpRequest):
         if request.user.is_authenticated:
             # Update the user's profile last access time
             # We do it here so all requests can be traced (api, web, etc)

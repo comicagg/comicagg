@@ -1,19 +1,18 @@
-# -*- coding: utf-8 -*-
-from datetime import datetime, timezone
-import json
 import logging
 import re
 import sys
-import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpResponse
+
+import comicagg.logs.tags as logtags
+from comicagg.logs import logmsg
 from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
 
-import comicagg.logs.tags as logtags
-from comicagg.logs import logmsg
+from .typings import OAuth2HttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ class OAuth2Middleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request: HttpRequest):
+    def __call__(self, request: OAuth2HttpRequest):
         request.access_token = None
         if not request.user.is_authenticated:
             if not request.path.startswith("/api"):
