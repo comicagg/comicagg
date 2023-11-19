@@ -75,6 +75,7 @@ INSTALLED_APPS = (
     "comicagg.comics",
     "provider",
     "provider.oauth2",
+    "mailer",
 )
 
 MIDDLEWARE = [
@@ -139,7 +140,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "comicagg.comics.context_processors.comic_counters",
                 "django.template.context_processors.static",
-                "comicagg.common.context_processors.comicagg_vars"
+                "comicagg.common.context_processors.comicagg_vars",
             ],
         },
     },
@@ -151,7 +152,7 @@ TEMPLATES = [
 
 SESSION_COOKIE_NAME = "comicagg_session"
 
-AUTHENTICATION_BACKENDS =  ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.AllowAllUsersModelBackend"]
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -230,6 +231,9 @@ SITE_ID = 1
 # #   Email   #
 # #           #
 # #############
+
+# The backend to use for sending emails.
+EMAIL_BACKEND = "mailer.backend.DbBackend"
 
 # A list of all the people who get code error notifications.
 # When DEBUG=False and AdminEmailHandler is configured in LOGGING (done by default),
@@ -325,6 +329,7 @@ LOGGING = {
         },
         "comicagg": {"handlers": ["console"], "level": "WARNING"},
         "provider": {"handlers": ["console"], "level": "WARNING"},
+        "mailer": {"level": "INFO", "propagate": True},
     },
 }
 
