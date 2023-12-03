@@ -344,7 +344,7 @@ SITE_NAME = "Comic Aggregator"
 # Without trailing slash, used in the password reset email and ws index page
 SITE_DOMAIN = django_env.get("SITE_DOMAIN")
 
-INACTIVE_DAYS = 30
+INACTIVE_DAYS = 60
 MAX_UNREADS_PER_USER = 20
 
 # #################

@@ -2,12 +2,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Django",
+            "name": "Django",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/manage.py",
             "args": [
                 "runserver"
+            ],
+            "django": true,
+            "justMyCode": false
+        },
+        {
+            "name": "Django Command",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/manage.py",
+            "args": [
+                "${fileBasenameNoExtension}"
             ],
             "django": true,
             "justMyCode": false
