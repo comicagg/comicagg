@@ -1,9 +1,9 @@
 import sys
+
 from celery import shared_task
 from celery.utils.log import get_task_logger
-from django.core.mail import mail_managers
-from comicagg.comics.update import update_comic, NoMatchException
 from comicagg.comics.models import Comic
+from comicagg.comics.update import NoMatchException, update_comic
 
 task_logger = get_task_logger(__name__)
 
@@ -21,20 +21,18 @@ def update_comics():
 
 
 @shared_task
-def update_comic_task(comic_id: int) -> bool:
+def update_comic_task(comic_id: int) -> dict[str, bool | str]:
     comic = Comic.objects.get(pk=comic_id)
     updated = False
     error = False
     try:
         updated = update_comic(comic)
+        comic.last_update_status = "Success"
     except NoMatchException:
         comic.last_update_status = "No match during update"
-        error = True
     except:
         comic.last_update_status = f"Error: {sys.exc_info()[1]}"
-        error = True
     finally:
-        if error:
-            comic.save()
+        comic.save()
 
     return {"updated": updated, "status": comic.last_update_status if error else ""}
