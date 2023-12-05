@@ -1,9 +1,11 @@
+ARG PY_VERSION="3.12"
+
 ###########
 # BUILDER #
 ###########
 
 # Pull official base image
-FROM python:3.11-bookworm as builder
+FROM python:${PY_VERSION}-bookworm as builder
 
 WORKDIR /tmp
 
@@ -18,7 +20,7 @@ RUN pip install --upgrade pip && \
 #########
 
 # Pull official base image
-FROM python:3.11-bookworm as final
+FROM python:${PY_VERSION}-bookworm as final
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
