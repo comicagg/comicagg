@@ -1,4 +1,8 @@
+from typing import Any
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 
 from comicagg.comics.models import (
     Comic,
@@ -10,6 +14,10 @@ from comicagg.comics.models import (
     UnreadComic,
 )
 
+# ##############
+# #   Comics   #
+# ##############
+
 
 class TagInline(admin.TabularInline):
     model = Tag
@@ -17,6 +25,24 @@ class TagInline(admin.TabularInline):
         "name",
         "comic",
     )
+    extra = 0
+
+
+class HasCustomFunction(admin.SimpleListFilter):
+    title = _("custom function")
+    parameter_name = "custom"
+
+    def lookups(self, request: Any, model_admin: Any) -> list[tuple[Any, str]]:
+        return [
+            ("true", "Custom function"),
+            ("false", "Default function"),
+        ]
+
+    def queryset(self, request: Any, queryset: QuerySet[Any]) -> QuerySet[Any] | None:
+        if self.value() == "true":
+            return queryset.exclude(Q(custom_func__isnull=True) | Q(custom_func=""))
+        elif self.value() == "false":
+            return queryset.filter(Q(custom_func__isnull=True) | Q(custom_func=""))
 
 
 class ComicAdmin(admin.ModelAdmin):
@@ -40,7 +66,13 @@ class ComicAdmin(admin.ModelAdmin):
             "Image regex",
             {
                 "classes": ("wide",),
-                "fields": ("re1_url", "re1_base", "re1_re", "re1_backwards", "referrer"),
+                "fields": (
+                    "re1_url",
+                    "re1_base",
+                    "re1_re",
+                    "re1_backwards",
+                    "referrer",
+                ),
             },
         ),
         (
@@ -73,8 +105,10 @@ class ComicAdmin(admin.ModelAdmin):
             },
         ),
     )
+    list_filter = ["active", HasCustomFunction]
 
 
+# TODO: inline with comics?
 class ComicHistoryAdmin(admin.ModelAdmin):
     list_display = (
         "comic",
@@ -85,6 +119,7 @@ class ComicHistoryAdmin(admin.ModelAdmin):
     ordering = ("-date",)
 
 
+# TODO: inline with users?
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = (
         "user",
@@ -97,6 +132,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     )
 
 
+# TODO: inline with users?
 class UnreadComicAdmin(admin.ModelAdmin):
     list_display = (
         "user",
@@ -106,6 +142,7 @@ class UnreadComicAdmin(admin.ModelAdmin):
     search_fields = ["user__username"]
 
 
+# TODO: inline with users?
 class NewComicAdmin(admin.ModelAdmin):
     ordering = (
         "user",

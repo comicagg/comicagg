@@ -51,7 +51,7 @@ class Comic(models.Model):
         "Custom update function",
         null=True,
         blank=True,
-        help_text='Check the <a href="/docs/custom_func/">docs</a> for reference.',
+        help_text='Check the <a href="/admin/docs/custom_update/">docs</a> for reference.',
     )
 
     # First regex section

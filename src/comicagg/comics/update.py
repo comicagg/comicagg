@@ -20,28 +20,38 @@ class NoMatchException(Exception):
     def __str__(self):
         return repr(self.message)
 
+class InvalidParameterException(Exception):
+    def __init__(self, parameters: list[str]):
+        message = f"Invalid parameters: {", ".join(parameters)}"
+        super(Exception, self).__init__(message)
+        self.message = message
 
-def update_comic(comic: Comic):
+    def __str__(self):
+        return repr(self.message)
+
+def update_comic(comic: Comic) -> bool:
     """Entry point to trigger an update in a comic."""
     has_changed = False
     # We may need to use a custom update function
     if comic.custom_func:
-        has_changed = custom_update(comic)
-    elif comic_history := default_update(comic):
+        has_changed = _custom_update(comic)
+    elif comic_history := _default_update(comic):
         _notify_subscribers(comic_history)
         has_changed = True
     return has_changed
 
 
-def custom_update(comic: Comic):
+def _custom_update(comic: Comic) -> bool:
+    # sourcery skip: move-assign-in-block, use-named-expression
     """Wrapper for the custom update function.
 
     A custom update function must fill in the list history_set with the ComicHistory objects it has found.
     The most recent strip found must be the first in the list."""
-
+    if not comic.custom_func:
+        return False
     function_text = comic.custom_func.replace("\r", "")
     function_compiled = compile(function_text, "<string>", "exec")
-    history_set = []
+    history_set: list[ComicHistory] = []
     exec(function_compiled)
     if history_set:
         # If the first image of the list is the same as the comic's last_image, abandon ship
@@ -60,16 +70,18 @@ def custom_update(comic: Comic):
     raise NoMatchException(comic.name)
 
 
-def default_update(comic: Comic):
+def _default_update(comic: Comic) -> ComicHistory | None:
     """Default update function. Looks for just one image in the URL.
 
     If the comic doesn't use a redirection, then we will download the default URL and then search with the regex in that data.
     If it uses a redirection, then it will download the redirection URL and look for the final URL there.
     """
-    next_url = get_redirected_url(comic) if comic.re2_url else comic.re1_url
+    if not comic.re1_url:
+        return None
+    next_url = _get_redirected_url(comic) if comic.re2_url else comic.re1_url
 
     # Here next_url should be the URL where the comic strip is
-    (last_image, alt_text) = get_one_image(comic, next_url)
+    (last_image, alt_text) = _get_one_image(comic, next_url)
 
     # At this point, last_image should be completely clean,
     # meaning that it should be URL encoded if needed
@@ -84,98 +96,90 @@ def default_update(comic: Comic):
     return history
 
 
-def get_several_images(comic: Comic, history_set):
+def _get_several_images(comic: Comic, history_set: list[ComicHistory]):
     """This function looks for several images in the same page."""
-    lines = download_url(comic.re1_url)
-    # for debugging
-    lines_debug = list(lines)
-    (match, lines) = find_match(comic, lines, comic.re1_re, comic.re1_backwards)
+    if not comic.re1_url or not comic.re1_base or not comic.re1_re or not comic.re1_backwards:
+        return
+    lines = _download_url(comic.re1_url)
+    (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
     while match:
-        image_url = comic.re1_base % url_from_match(match)
-        alt_text = alt_from_match(match)
+        image_url = comic.re1_base % _url_from_match(match)
+        alt_text = _alt_from_match(match)
         history = ComicHistory(comic=comic, url=image_url, alt_text=alt_text)
         history_set.append(history)
-        (match, lines) = find_match(lines, comic.re1_re, comic.re1_backwards)
+        (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
 
 
 # Auxiliary functions needed during update operations
-def download_url(url):
+def _download_url(url: str) -> list[str]:
     """Download the data from the URL and return the lines of the response."""
     # Clean the URL
     url = unescape(url)
     # NOTE: why did we need the cookie jar before?
     headers = {"User-Agent": settings.USER_AGENT}
     response = requests.get(url, headers=headers)
-    return list(response.iter_lines())
+    return list(response.iter_lines(decode_unicode=True))
 
 
-def find_match(remaining_lines, regexp, backwards=False):
-    """Find a match in the remaining lines using the regex and returning a tuple containing the match object and the remaining lines to review."""
+def _find_match(
+    remaining_lines: list[str], regexp: str, backwards=False
+) -> tuple[re.Match[str] | None, list[str]]:
+    """Find a match in the remaining lines using the regex
+    and return a tuple containing the match object and the remaining lines to review."""
     # Set the pop index, depending on how we need to look for a match.
     pop_index = -1 if backwards else 0
     regex_compiled = re.compile(regexp)
     match = None
-    while len(remaining_lines) > 0:
+    while remaining_lines:
         line = remaining_lines.pop(pop_index)
-        # FUTURE: should we use django.utils.encoding.smart_text instead?
-        with contextlib.suppress(Exception):
-            line = line.decode("utf-8")
         match = regex_compiled.search(line)
         if match:
             break
     return (match, remaining_lines)
 
 
-def get_one_image(comic: Comic, url):
+def _get_one_image(comic: Comic, url) -> tuple[str, str]:
     """Find one image in this URL."""
-    lines = download_url(url)
+    if not comic.re1_base or not comic.re1_re:
+        raise InvalidParameterException(["re1_base", "re1_re"])
+    lines = _download_url(url)
     # We use this field to be able to debug the NoMatchException in case it fails
-    lines_debug = list(lines)
-    (match, lines) = find_match(lines, comic.re1_re, comic.re1_backwards)
+    (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
     if not match:
         raise NoMatchException(comic.name)
-    image_url = comic.re1_base % url_from_match(match)
-    alt_text = alt_from_match(match)
+    image_url = comic.re1_base % _url_from_match(match)
+    alt_text = _alt_from_match(match)
     return (image_url, alt_text)
 
 
-def get_redirected_url(comic: Comic):
+def _get_redirected_url(comic: Comic) -> str:
     """Find the final URL using the redirection in the comic."""
-    lines = download_url(comic.re2_url)
+    if not comic.re2_url or not comic.re2_base or not comic.re2_re:
+        raise InvalidParameterException(["re1_base", "re1_re"])
+    lines = _download_url(comic.re2_url)
     # We use this field to be able to debug the NoMatchException in case it fails
-    lines_debug = list(lines)
-    (match, lines) = find_match(lines, comic.re2_re, comic.re2_backwards)
+    (match, lines) = _find_match(lines, comic.re2_re, comic.re2_backwards)
     if not match:
         raise NoMatchException(comic.name)
-    return comic.re2_base % url_from_match(match)
+    return comic.re2_base % _url_from_match(match)
 
 
-def url_from_match(match):
+def _url_from_match(match: re.Match) -> str:
     """Return the URL from the match object.
 
     The URL should be on the named group. We check the first group too, just in case."""
     try:
-        url = match.group("url")
+        url = match["url"]
     except IndexError:
-        url = match.group(1)
-    # Unescape the URL
+        url = match[1]
     return unescape(url)
 
 
-def alt_from_match(match):
+def _alt_from_match(match) -> str:
     """Return the alternative text if the named group exists."""
-    try:
+    alt = ""
+    with contextlib.suppress():
         alt = match.group("alt")
-    except IndexError:
-        alt = None
-    if alt:
-        try:
-            # FIXME: unicode does not exist anymore. should we use smart_text here?
-            alt = unicode(alt, "utf-8")
-        except Exception:
-            with contextlib.suppress(Exception):
-                # FIXME: unicode does not exist anymore
-                alt = unicode(alt, "iso-8859-1")
     return alt
 
 
