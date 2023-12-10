@@ -3,7 +3,7 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from django.utils.translation import gettext as _
 
-from comicagg.comics.models import Comic, ComicHistory
+from comicagg.comics.models import Comic, Strip
 from comicagg.comics.update import update_comic
 
 
@@ -48,7 +48,7 @@ def admin_reported(request: HttpRequest, id_list: str):
     context = dict(admin.site.each_context(request))
     context["title"] = _("Review reported images")
     strip_list_url = list(map(int, id_list.split("-")))
-    strips = ComicHistory.objects.in_bulk(strip_list_url)
+    strips = Strip.objects.in_bulk(strip_list_url)
     strip_ids = {id: strips.get(id, None) for id in strip_list_url}
     context["strips"] = strip_ids
     return render(request, "admin/reported.html", context)

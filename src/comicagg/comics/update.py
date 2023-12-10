@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from html import unescape
 
 import requests
-from comicagg.comics.models import Comic, ComicHistory, UnreadComic
+from comicagg.comics.models import Comic, Strip, UnreadComic
 from django.conf import settings
 
 
@@ -20,6 +20,7 @@ class NoMatchException(Exception):
     def __str__(self):
         return repr(self.message)
 
+
 class InvalidParameterException(Exception):
     def __init__(self, parameters: list[str]):
         message = f"Invalid parameters: {", ".join(parameters)}"
@@ -29,14 +30,15 @@ class InvalidParameterException(Exception):
     def __str__(self):
         return repr(self.message)
 
+
 def update_comic(comic: Comic) -> bool:
     """Entry point to trigger an update in a comic."""
     has_changed = False
     # We may need to use a custom update function
     if comic.custom_func:
         has_changed = _custom_update(comic)
-    elif comic_history := _default_update(comic):
-        _notify_subscribers(comic_history)
+    elif comic_strip := _default_update(comic):
+        _notify_subscribers(comic_strip)
         has_changed = True
     return has_changed
 
@@ -45,32 +47,32 @@ def _custom_update(comic: Comic) -> bool:
     # sourcery skip: move-assign-in-block, use-named-expression
     """Wrapper for the custom update function.
 
-    A custom update function must fill in the list history_set with the ComicHistory objects it has found.
+    A custom update function must fill in the list strip_set with the Strip objects it has found.
     The most recent strip found must be the first in the list."""
     if not comic.custom_func:
         return False
     function_text = comic.custom_func.replace("\r", "")
     function_compiled = compile(function_text, "<string>", "exec")
-    history_set: list[ComicHistory] = []
+    strip_set: list[Strip] = []
     exec(function_compiled)
-    if history_set:
+    if strip_set:
         # If the first image of the list is the same as the comic's last_image, abandon ship
-        if comic.last_image == history_set[0].url:
+        if comic.last_image == strip_set[0].url:
             return False
         # Update the comic
-        comic.last_image = history_set[0].url
-        comic.last_image_alt_text = history_set[0].alt_text
+        comic.last_image = strip_set[0].url
+        comic.last_image_alt_text = strip_set[0].alt_text
         comic.last_update = datetime.now(timezone.utc)
         comic.save()
-        # Persist the ComicHistory objects in the database
-        for history in history_set:
-            history.save()
-            _notify_subscribers(history)
+        # Persist the Strip objects in the database
+        for strip in strip_set:
+            strip.save()
+            _notify_subscribers(strip)
         return True
     raise NoMatchException(comic.name)
 
 
-def _default_update(comic: Comic) -> ComicHistory | None:
+def _default_update(comic: Comic) -> Strip | None:
     """Default update function. Looks for just one image in the URL.
 
     If the comic doesn't use a redirection, then we will download the default URL and then search with the regex in that data.
@@ -90,23 +92,28 @@ def _default_update(comic: Comic) -> ComicHistory | None:
     comic.last_image = last_image
     comic.last_image_alt_text = alt_text
     comic.last_update = datetime.now(timezone.utc)
-    history = ComicHistory(comic=comic, url=comic.last_image, alt_text=alt_text)
-    history.save()
+    strip = Strip(comic=comic, url=comic.last_image, alt_text=alt_text)
+    strip.save()
     comic.save()
-    return history
+    return strip
 
 
-def _get_several_images(comic: Comic, history_set: list[ComicHistory]):
+def _get_several_images(comic: Comic, strips: list[Strip]):
     """This function looks for several images in the same page."""
-    if not comic.re1_url or not comic.re1_base or not comic.re1_re or not comic.re1_backwards:
+    if (
+        not comic.re1_url
+        or not comic.re1_base
+        or not comic.re1_re
+        or not comic.re1_backwards
+    ):
         return
     lines = _download_url(comic.re1_url)
     (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
     while match:
         image_url = comic.re1_base % _url_from_match(match)
         alt_text = _alt_from_match(match)
-        history = ComicHistory(comic=comic, url=image_url, alt_text=alt_text)
-        history_set.append(history)
+        strip = Strip(comic=comic, url=image_url, alt_text=alt_text)
+        strips.append(strip)
         (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
 
 
@@ -175,19 +182,19 @@ def _url_from_match(match: re.Match) -> str:
     return unescape(url)
 
 
-def _alt_from_match(match) -> str:
+def _alt_from_match(match: re.Match) -> str:
     """Return the alternative text if the named group exists."""
     alt = ""
-    with contextlib.suppress():
-        alt = match.group("alt")
+    with contextlib.suppress(IndexError):
+        alt = match["alt"]
     return alt
 
 
-def _notify_subscribers(history: ComicHistory):
+def _notify_subscribers(strip: Strip):
     """Create one UnreadComic for each subscribed user."""
-    subscribers = history.comic.subscription_set.all()
+    subscribers = strip.comic.subscription_set.all()
     for subscriber in subscribers:
         if subscriber.user.is_active:
             UnreadComic.objects.get_or_create(
-                user=subscriber.user, history=history, comic=subscriber.comic
+                user=subscriber.user, strip=strip, comic=subscriber.comic
             )

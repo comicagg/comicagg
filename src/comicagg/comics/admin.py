@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from comicagg.comics.models import (
     Comic,
-    ComicHistory,
+    Strip,
     NewComic,
     Request,
     Subscription,
@@ -109,7 +109,7 @@ class ComicAdmin(admin.ModelAdmin):
 
 
 # TODO: inline with comics?
-class ComicHistoryAdmin(admin.ModelAdmin):
+class StripAdmin(admin.ModelAdmin):
     list_display = (
         "comic",
         "date",
@@ -137,7 +137,7 @@ class UnreadComicAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "comic",
-        "history",
+        "strip",
     )
     search_fields = ["user__username"]
 
@@ -159,6 +159,6 @@ class RequestAdmin(admin.ModelAdmin):
 admin.site.register(Comic, ComicAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Request, RequestAdmin)
-admin.site.register(ComicHistory, ComicHistoryAdmin)
+admin.site.register(Strip, StripAdmin)
 admin.site.register(UnreadComic, UnreadComicAdmin)
 admin.site.register(NewComic, NewComicAdmin)

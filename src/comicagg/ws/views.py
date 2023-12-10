@@ -1,4 +1,4 @@
-from comicagg.comics.utils import ComicsService
+from comicagg.comics.services import AggregatorService
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest, HttpResponseRedirect
@@ -14,7 +14,7 @@ def unread_user(request: HttpRequest, user: User):
         return HttpResponseRedirect(reverse("index"))
     user = get_object_or_404(User, username=user)
 
-    unreads = ComicsService(user).unread_comics_count()
+    unreads = AggregatorService(user).unread_comics_count()
     context = {"unread_list": unreads}
     return render(request, "ws/unread_user.html", context, content_type="text/xml")
 

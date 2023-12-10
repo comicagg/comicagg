@@ -11,7 +11,7 @@ urlpatterns = [
     path("request/", views.request_index, name="requests"),
 
     re_path(r"^li/(?P<comic_id>\d+)/", views.last_image_url, name="last_image_url"),
-    re_path(r"^hi/(?P<history_id>\d+)/", views.history_image_url, name="history_url"),
+    re_path(r"^strip/(?P<strip_id>\d+)/", views.strip_image_url, name="strip_url"),
 
     path("stats/",views.stats, name="stats"),
 

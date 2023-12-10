@@ -9,12 +9,12 @@ Response status:
 
 from comicagg.comics.models import (
     Comic,
-    ComicHistory,
+    Strip,
     NewComic,
     Subscription,
     UnreadComic,
 )
-from comicagg.comics.utils import ComicsService
+from comicagg.comics.services import AggregatorService
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
@@ -31,7 +31,7 @@ def ok_response(request: HttpRequest):
     unread_count = request.user.unreadcomic_set.exclude(
         comic__active=False, comic__ended=False
     ).aggregate(Count("comic", distinct=True))["comic__count"]
-    new_comics_count = ComicsService(request.user).new_comics().count()
+    new_comics_count = AggregatorService(request.user).new_comics().count()
     news_count = request.user.newblog_set.count()
     response_data = {
         "comics": comic_count,
@@ -60,8 +60,8 @@ def add_comic(request: HttpRequest):
     next_pos = max_position + 1
     request.user.subscription_set.create(comic=comic, position=next_pos)
     # add the last strip to the user's unread list
-    if history := ComicHistory.objects.filter(comic=comic):
-        UnreadComic.objects.create(user=request.user, comic=comic, history=history[0])
+    if strip := Strip.objects.filter(comic=comic):
+        UnreadComic.objects.create(user=request.user, comic=comic, strip=strip[0])
     return ok_response(request)
 
 

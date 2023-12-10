@@ -1,5 +1,5 @@
 """Test suite for HTTP request to the API."""
-from comicagg.comics.utils import ComicsService
+from comicagg.comics.services import AggregatorService
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -29,7 +29,7 @@ class AnonTests(TestCase):
 
 
 class LoggedInTestCase(TestCase):
-    fixtures = ["users.json", "comics.json", "comichistory.json"]
+    fixtures = ["users.json", "comics.json", "strips.json"]
 
     def setUp(self):
         login_ok = self.client.login(username=test_user, password=test_pwd)
@@ -107,7 +107,7 @@ class SubscriptionTests(LoggedInTestCase):
     def test_get_with_subscriptions(self):
         """This get should return a subscriptions set with 2 results."""
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         operations.subscribe_comics([1, 2, 9])  # E, A, D
 
         response = self.client.get("/api/subscriptions")
@@ -145,7 +145,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 1)
 
     def test_post_one_ended(self):
@@ -154,13 +154,13 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 1)
 
     def test_post_one_disabled(self):
         """Subscribe the user to one disabled comic."""
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 0)
 
         response = self.postForm("/api/subscriptions", "subscribe=9")
@@ -175,7 +175,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 4)
 
     # Subscribe to several with messed up but accepted values
@@ -185,7 +185,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 4)
 
     def test_post_format2(self):
@@ -194,7 +194,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 4)
 
     def test_post_duplicate(self):
@@ -203,7 +203,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 201)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 4)
 
     # PUT cases
@@ -230,7 +230,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 204)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 1)
 
     def test_put_several(self):
@@ -239,7 +239,7 @@ class SubscriptionTests(LoggedInTestCase):
         self.assertEqual(response.status_code, 204)
 
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         self.assertEqual(len(operations.subscribed_all()), 4)
 
     # DELETE cases
@@ -251,7 +251,7 @@ class SubscriptionTests(LoggedInTestCase):
     def test_delete_with(self):
         """Remove all subscriptions."""
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         operations.subscribe_comics([1, 2, 3, 4])
 
         response = self.client.delete("/api/subscriptions")
@@ -274,7 +274,7 @@ class UnreadTests(LoggedInTestCase):
     def test_get_one(self):
         """Get info of all the comics, get a 200."""
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         operations.subscribe_comics([1])
 
         r = self.client.get("/api/unreads/1")
@@ -372,7 +372,7 @@ class StripTests(LoggedInTestCase):
     def test_put_subscribed(self):
         """Mark unread a strip of a subscribed comic, get a 204."""
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         operations.subscribe_comics([7])
 
         r = self.client.put("/api/strips/1")
@@ -388,7 +388,7 @@ class StripTests(LoggedInTestCase):
     def test_delete(self):
         """Mark read a strip of a subscribed comic, get a 204."""
         user = User.objects.get(pk=1)
-        operations = ComicsService(user)
+        operations = AggregatorService(user)
         operations.subscribe_comics([7])
 
         r = self.client.delete("/api/strips/1")
@@ -405,7 +405,7 @@ class StripTests(LoggedInTestCase):
 class UserTests(TestCase):
     """Tests for user related operations."""
 
-    fixtures = ["comics.json", "users.json", "comichistory.json"]
+    fixtures = ["comics.json", "users.json", "strips.json"]
 
     def setUp(self):
         login_ok = self.client.login(username=test_user, password=test_pwd)

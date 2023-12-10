@@ -19,7 +19,7 @@ code {
 {% block content %}
   <div id="content-main">
     <p>
-      La función custom debe crear objetos ComicHistory y añadirlos a la lista <i>history_set</i>. Esto es lo único que debe hacer. Para ello se dispone del objeto del comic en la variable <i>comic</i>. Los objetos ComicHistory se crean y añaden así:<pre>h = ComicHistory(comic, url, alt_text)<br/>history_set.append(h)</pre>
+      La función custom debe crear objetos Strip y añadirlos a la lista <i>strip_set</i>. Esto es lo único que debe hacer. Para ello se dispone del objeto del comic en la variable <i>comic</i>. Los objetos Strip se crean y añaden así:<pre>h = Strip(comic, url, alt_text)<br/>strip_set.append(h)</pre>
     </p>
     <p>Cuando se usa la función personalizada el resto de campos (re1_url, re1_base, re1_re, re1_backwards, re2_url, re2_base, re2_re y re2_backwards) dejan de tener sentido y se pueden usar para guardar lo que haga falta en ellos.</p>
     <p>Se disponen de varias funciones para ayudar:</p>
@@ -46,14 +46,14 @@ code {
     <p>Además se pueden usar una de estas funciones que hacen cosas más complejas (se escriben tal y como están en el campo de la función):</p>
     <ul>
       <li>
-        <code>_get_several_images(comic: Comic, history_set: list[ComicHistory]) -> None</code>: busca varias imagenes en la misma página. Los campos re1_url, re1_base y re1_re del comic deben estar rellenos.
+        <code>_get_several_images(comic: Comic, strip_set: list[Strip]) -> None</code>: busca varias imagenes en la misma página. Los campos re1_url, re1_base y re1_re del comic deben estar rellenos.
       </li>
     </ul>
     <p>NO hay que:</p>
     <ul>
-      <li>Guardar los objetos ComicHistory.</li>
+      <li>Guardar los objetos Strip.</li>
       <li>
-        Comprobar si se ha encontrado alguna imagen. La excepción NoMathException se lanzará automáticamente si no se ha rellenado el array <i>history_set</i>.
+        Comprobar si se ha encontrado alguna imagen. La excepción NoMathException se lanzará automáticamente si no se ha rellenado el array <i>strip_set</i>.
       </li>
       <li>Notificar a los usuarios de las nuevas tiras.</li>
       <li>Modificar el objeto del comic con la última tira o la fecha de actualización.</li>

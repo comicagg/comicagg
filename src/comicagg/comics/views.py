@@ -17,10 +17,10 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
 
 from .forms import RequestForm
-from .models import Comic, ComicHistory
+from .models import Comic, Strip
 from .models import Request as ComicRequest
 from .models import Subscription
-from .utils import ComicsService
+from .services import AggregatorService
 
 # ##########################
 # #   Reading page views   #
@@ -32,11 +32,11 @@ def read_view(request: HttpRequest):
     # comic_list and unread_list are lists of tuples of (comic, QuerySet of UnreadComic)
     comic_list = [
         (comic, comic.unread_comics_for(request.user))
-        for comic in ComicsService(request.user).subscribed_comics()
+        for comic in AggregatorService(request.user).subscribed_comics()
     ]
     unread_list = [
         (comic, comic.unread_comics_for(request.user))
-        for comic in ComicsService(request.user).unread_comics()
+        for comic in AggregatorService(request.user).unread_comics()
     ]
     random = _random_comic(request.user)
     context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
@@ -50,13 +50,13 @@ def _random_comic(user: User, xhtml=False, request=None):
     ):
         try:
             comic = not_in_list[random.randint(0, len(not_in_list) - 1)]
-            history = comic.comichistory_set.all()
-            history = history[random.randint(0, len(history) - 1)]
+            strip = comic.strip_set.all()
+            strip = strip[random.randint(0, len(strip) - 1)]
         except Exception:
-            history = None
-        if xhtml and history:
-            return render(request, "comics/read_random.html", {"random_comic": history})
-        return history
+            strip = None
+        if xhtml and strip:
+            return render(request, "comics/read_random.html", {"random_comic": strip})
+        return strip
     return None
 
 
@@ -91,7 +91,7 @@ def organize(request: HttpRequest, add=False):
         user_comics.append(sub.comic)
     context = {"user_comics": user_comics}
     if add:
-        context["new_comics"] = ComicsService(request.user).new_comics()
+        context["new_comics"] = AggregatorService(request.user).new_comics()
         context["all_comics"] = all_comics
         # quitar aviso de nuevos comics
         hide_new_comics(request)
@@ -173,7 +173,7 @@ STRIPS_FOLDER = ""
 
 def last_image_url(request: HttpRequest, comic_id):
     """
-    Redirecciona a la url de la ultima imagen de  un comic
+    Redirect to the URL of a comic's last image.
     """
     comic = get_object_or_404(Comic, pk=comic_id)
     url = comic.last_image
@@ -181,13 +181,13 @@ def last_image_url(request: HttpRequest, comic_id):
     return _image_url(url, referrer)
 
 
-def history_image_url(request: HttpRequest, history_id):
+def strip_image_url(request: HttpRequest, strip_id):
     """
-    Redirecciona a la url de un objeto comic_history
+    Redirect to the URL of a Strip object.
     """
-    comic_history = get_object_or_404(ComicHistory, pk=history_id)
-    url = comic_history.url
-    referrer = comic_history.comic.referrer or ""
+    strip = get_object_or_404(Strip, pk=strip_id)
+    url = strip.url
+    referrer = strip.comic.referrer or ""
     return _image_url(url, referrer)
 
 

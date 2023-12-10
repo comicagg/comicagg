@@ -2,8 +2,8 @@ import contextlib
 import time
 from email import utils
 
-from comicagg.comics.models import Comic, ComicHistory
-from comicagg.comics.utils import ComicsService
+from comicagg.comics.models import Comic, Strip
+from comicagg.comics.services import AggregatorService
 
 
 class Serializer:
@@ -23,7 +23,7 @@ class Serializer:
         include_unread_strips=False,
         identifier=None,
     ):
-        """Serializes an instance of Comic, ComicHistory, a list of Comic instances or a dictionary.
+        """Serializes an instance of Comic, Strip, a list of Comic instances or a dictionary.
 
         If object_to_serialize is a list or a dict, then identifier will be used as the container name.
         """
@@ -33,9 +33,9 @@ class Serializer:
             result["comic"] = self.build_comic_dict(
                 object_to_serialize, include_last_strip, include_unread_strips
             )
-        elif isinstance(object_to_serialize, ComicHistory):
-            # Serialize a ComicHistory object (strip)
-            result["strip"] = self.build_comichistory_dict(object_to_serialize)
+        elif isinstance(object_to_serialize, Strip):
+            # Serialize a Strip object (strip)
+            result["strip"] = self.build_strip_dict(object_to_serialize)
         elif isinstance(object_to_serialize, list) and identifier:
             # Serialize a list of Comic objects using identifier as the parent element
             if len(object_to_serialize) == 0:
@@ -68,7 +68,7 @@ class Serializer:
             raise ValueError("This is not a comic")
         if not self.user:
             raise ValueError("To serialize a comic you need a user")
-        user_operations = ComicsService(self.user)
+        user_operations = AggregatorService(self.user)
         out = {
             "id": comic.id,
             "name": comic.name,
@@ -81,25 +81,25 @@ class Serializer:
         }
         if last_strip:
             with contextlib.suppress(Exception):
-                out["last_strip"] = self.build_comichistory_dict(comic.last_strip)
+                out["last_strip"] = self.build_strip_dict(comic.last_strip)
         if unread_strips:
             out["unreads"] = [
-                self.build_comichistory_dict(h)
+                self.build_strip_dict(h)
                 for h in user_operations.unread_comic_strips(comic)
             ]
         return out
 
-    def build_comichistory_dict(self, history):
+    def build_strip_dict(self, strip):
         return {
-            "id": history.id,
-            "url": history.image_url(),
-            "text": history.alt_text or "",
-            "date": _datetime_to_rfc2822(history.date),
-            "timestamp": _datetime_to_timestamp(history.date),
+            "id": strip.id,
+            "url": strip.image_url(),
+            "text": strip.alt_text or "",
+            "date": _datetime_to_rfc2822(strip.date),
+            "timestamp": _datetime_to_timestamp(strip.date),
         }
 
     def build_user_dict(self):
-        user_operations = ComicsService(self.user)
+        user_operations = AggregatorService(self.user)
         return {
             "username": self.user.username,
             "email": self.user.email,

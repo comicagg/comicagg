@@ -8,11 +8,11 @@
 		"is_active": true,
 		"is_superuser": false,
 		"is_staff": false,
-		"last_login": "2013-03-26T23:25:44",
+		"last_login": "2013-03-26T23:25:44Z",
 		"groups": [],
 		"user_permissions": [],
 		"password": "pbkdf2_sha256$12000$E6BSOyLzfmrl$Y6tdMBw8rp/ktNnbRwWEPbtRyGqtsFgNbGlJ+mFiwEQ=",
 		"email": "test@fake.com",
-		"date_joined": "2012-07-04T10:52:40"
+		"date_joined": "2012-07-04T10:52:40Z"
 	}
 }]

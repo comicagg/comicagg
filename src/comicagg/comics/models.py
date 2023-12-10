@@ -5,8 +5,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 
-from comicagg.accounts.models import UserProfile
-from comicagg.comics.fields import AltTextField, ComicNameField
+from .fields import AltTextField, ComicNameField
+from .managers import ComicManager, UnreadStripManager, SubscriptionManager
 
 
 class Comic(models.Model):
@@ -138,14 +138,11 @@ class Comic(models.Model):
     positive_votes = models.IntegerField("Positive votes", default=0)
     total_votes = models.IntegerField("Total votes", default=0)
 
+    objects = ComicManager()
+
     class Meta:
         ordering = ["name"]
         permissions = (("all_images", "Can see all images"),)
-
-    def __init__(self, *args, **kwargs):
-        super(Comic, self).__init__(*args, **kwargs)
-        self._reader_count = None
-        self._strip_count = None
 
     def __str__(self):
         return self.name
@@ -163,8 +160,6 @@ class Comic(models.Model):
             # Create a NewComic object for each user
             users = User.objects.all()
             for user in users:
-                profile = UserProfile.objects.get(user=user)
-                profile.save()
                 new_comic = NewComic(user=user, comic=self)
                 new_comic.save()
 
@@ -213,6 +208,7 @@ class Comic(models.Model):
             r = 0.0
         return r
 
+    @property
     def negative_votes(self):
         return self.total_votes - self.positive_votes
 
@@ -222,7 +218,7 @@ class Comic(models.Model):
 
     @cached_property
     def strip_count(self):
-        return int(self.comichistory_set.count())
+        return int(self.strip_set.count())
 
     def last_image_url(self):
         """Return last_image or a reversed URL if a referrer is used."""
@@ -234,7 +230,7 @@ class Comic(models.Model):
 
     @cached_property
     def last_strip(self):
-        return self.comichistory_set.all()[0]
+        return self.strip_set.all()[0]
 
     # User related methods
     # FUTURE: Remove this? Still used in views
@@ -242,19 +238,14 @@ class Comic(models.Model):
         return UnreadComic.objects.filter(comic=self, user=user)
 
 
-# FUTURE: We may want to move this elsewhere
-def active_comics():
-    """Returns a QuerySet of Comic objects that a user can follow. Includes ended comics."""
-    # FUTURE: Should not include ended comics?
-    return Comic.objects.exclude(active=False)
-
-
 class Subscription(models.Model):
-    """A user follows a certain comic and the position of the comic in the reading list."""
+    """A comic followed by a user and its position in the reading list."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
     position = models.PositiveIntegerField(blank=True, default=0)
+
+    objects = SubscriptionManager()
 
     class Meta:
         ordering = ["user", "position"]
@@ -283,8 +274,7 @@ class Request(models.Model):
         return f"{self.user} - {self.url}"
 
 
-# FUTURE: Rename this to ComicStrip
-class ComicHistory(models.Model):
+class Strip(models.Model):
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
@@ -300,20 +290,26 @@ class ComicHistory(models.Model):
     def image_url(self):
         url = self.url
         if self.comic.referrer:
-            url = reverse("comics:history_url", kwargs={"history_id": self.id})
+            url = reverse("comics:strip_url", kwargs={"strip_id": self.id})
         return url
 
 
+# TODO: Rename to UnreadStrip
 class UnreadComic(models.Model):
+    """A strip that the user has not read yet."""
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    history = models.ForeignKey(ComicHistory, on_delete=models.CASCADE)
+    strip = models.ForeignKey(Strip, on_delete=models.CASCADE)
+    # TODO: This should probably be removed
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
 
+    objects = UnreadStripManager()
+
     class Meta:
-        ordering = ["user", "-history"]
+        ordering = ["user", "-strip"]
 
     def __str__(self):
-        return f"{self.user} {self.history}"
+        return f"{self.user} {self.strip}"
 
 
 class Tag(models.Model):
@@ -330,6 +326,8 @@ class Tag(models.Model):
 
 
 class NewComic(models.Model):
+    """Used to mark a comic as new for a user so that he can be notified."""
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comic = models.ForeignKey(
         Comic, on_delete=models.CASCADE, related_name="new_comics"

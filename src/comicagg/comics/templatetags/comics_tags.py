@@ -4,7 +4,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User
 
-from comicagg.comics.utils import ComicsService
+from comicagg.comics.services import AggregatorService
 
 register = template.Library()
 
