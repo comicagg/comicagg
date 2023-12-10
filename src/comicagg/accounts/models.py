@@ -1,9 +1,7 @@
 import logging
-from datetime import datetime, timezone
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
 from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger(__name__)
@@ -28,14 +26,3 @@ class UserProfile(models.Model):
         return bool(self.user.is_active)
 
     is_active.boolean = True
-
-
-def create_account(sender, **kwargs):
-    if kwargs["created"]:
-        user_profile = UserProfile(
-            user=kwargs["instance"], last_read_access=datetime.now(timezone.utc)
-        )
-        user_profile.save()
-
-
-post_save.connect(create_account, sender=User)
