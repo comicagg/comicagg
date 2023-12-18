@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.debug import technical_500_response
 from django.core.exceptions import ObjectDoesNotExist
 
-from comicagg.accounts.models import UserProfile
+from comicagg.accounts.models import User, UserProfile
 from comicagg.typings import AuthenticatedHttpRequest
 
 logger = logging.getLogger(__name__)
@@ -75,4 +75,16 @@ class ActiveUserMiddleware:
                     request.POST["activate"]
                 except Exception:
                     return render(request, "accounts/activate.html", {})
+        return self.get_response(request)
+
+
+class UserProxyOverwriteMiddleware:
+    """Overwrite the user object with our own User proxy model"""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request: HttpRequest):
+        if request.user.is_authenticated:
+            request.user = User.objects.get(pk=request.user.pk)
         return self.get_response(request)

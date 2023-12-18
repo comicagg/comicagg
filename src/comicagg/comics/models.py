@@ -1,4 +1,5 @@
 from math import atan, sqrt
+from typing import Any
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -18,7 +19,7 @@ class Comic(models.Model):
     F   1 3
     1. Active AND not Ended - all ok, ongoing
     2. Not active AND Ended - finished
-    3. Not active and not Ended - not working, needs fixing
+    3. Not active AND not Ended - not working, needs fixing
     So visible to the user should be 1 and 2
     """
 
@@ -138,6 +139,11 @@ class Comic(models.Model):
     positive_votes = models.IntegerField("Positive votes", default=0)
     total_votes = models.IntegerField("Total votes", default=0)
 
+    # Only for typing errors
+    id: int
+    subscription_set: SubscriptionManager
+    strip_set: Any
+
     objects = ComicManager()
 
     class Meta:
@@ -232,11 +238,6 @@ class Comic(models.Model):
     def last_strip(self):
         return self.strip_set.all()[0]
 
-    # User related methods
-    # FUTURE: Remove this? Still used in views
-    def unread_comics_for(self, user):
-        return UnreadComic.objects.filter(comic=self, user=user)
-
 
 class Subscription(models.Model):
     """A comic followed by a user and its position in the reading list."""
@@ -279,6 +280,9 @@ class Strip(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
     alt_text = AltTextField("Alternative text", blank=True, null=True)
+
+    # For type errors only
+    id: int
 
     class Meta:
         ordering = ["-id"]

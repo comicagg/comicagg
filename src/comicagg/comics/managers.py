@@ -6,19 +6,29 @@ class ComicManager(models.Manager):
     def available(self, include_ended=True):
         """Return only comics that should be visible to the users.
         Ended comics are included by default, but can be excluded if neccessary."""
-        return self.exclude(Q(active=False) | Q(ended=include_ended))
+        query = Q(active=True) & Q(ended=False)
+        if include_ended:
+            query = Q(active=True) | (Q(active=True) & Q(ended=True))
+        return self.filter(query)
 
 
 class SubscriptionManager(models.Manager):
     def available(self, include_ended=True):
-        """Return only comics that should be visible to the users.
-        Ended comics are included by default, but can be excluded if neccessary."""
-        return self.exclude(Q(comic__active=False) | Q(comic__ended=include_ended))
+        """Return only comics that should be visible to the users, including ended comic by default."""
+        query = Q(comic__active=True) & Q(comic__ended=False)
+        if include_ended:
+            query = Q(comic__active=True) | (
+                Q(comic__active=True) & Q(comic__ended=True)
+            )
+        return self.filter(query).select_related("comic")
 
 
 class UnreadStripManager(models.Manager):
     def available(self, include_ended=True):
         """Return only unread strips of comics that should be visible to the users."""
-        return self.exclude(
-            Q(strip__comic__active=False) | Q(strip__comic__ended=include_ended)
-        )
+        query = Q(strip__comic__active=True)
+        if include_ended:
+            query = Q(strip__comic__active=True) | (
+                Q(strip__comic__active=True) & Q(strip__comic__ended=True)
+            )
+        return self.filter(query)

@@ -1,13 +1,13 @@
 import contextlib
 import logging
 import random
+from typing_extensions import deprecated
 
 from django.db.models import Max
 
 from .models import Comic, NewComic, Strip, UnreadComic
 
 logger = logging.getLogger(__name__)
-
 
 class AggregatorService:
     """This class allows actions with comics and a certain user.
@@ -22,6 +22,7 @@ class AggregatorService:
     # #####################
     # #   Unread comics   #
     # #####################
+    @deprecated("Use the User or specific manager methods")
     def unread_strips(self):
         """Return the filtered UnreadComic QuerySet for the user."""
         return self.user.unreadcomic_set.exclude(
@@ -115,6 +116,7 @@ class AggregatorService:
         )
         return [s.comic for s in subscriptions]
 
+    @deprecated("Use accounts.User.is_subscribed")
     def is_subscribed(self, comic):
         """Check if the user is subscribed to a comic."""
         return self.user.subscription_set.filter(comic__id=comic.id).count() == 1

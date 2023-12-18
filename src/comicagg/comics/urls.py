@@ -6,7 +6,7 @@ app_name = "comics"
 urlpatterns = [
     path("", views.read_view, name="index"),
     path("read/", views.read_view, name="read"),
-    path("add/", views.organize, {"add": True}, name="add"),
+    path("add/", views.add_comics, name="add"),
     path("organize/", views.organize, name="organize"),
     path("request/", views.request_index, name="requests"),
 

@@ -6,32 +6,26 @@ Response status:
 - Bad parameters: 400
 - Not found or no POST: 404
 """
-
-from comicagg.comics.models import (
-    Comic,
-    Strip,
-    NewComic,
-    Subscription,
-    UnreadComic,
-)
-from comicagg.comics.services import AggregatorService
+import logging
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
 from django.db.models import Count, Max
-from django.http import HttpRequest, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
+from comicagg.comics.models import Comic, NewComic, Strip, Subscription, UnreadComic
+from comicagg.typings import AuthenticatedHttpRequest
 
-def ok_response(request: HttpRequest):
-    comic_count = request.user.subscription_set.exclude(
-        comic__active=False, comic__ended=False
-    ).count()
-    unread_count = request.user.unreadcomic_set.exclude(
-        comic__active=False, comic__ended=False
-    ).aggregate(Count("comic", distinct=True))["comic__count"]
-    new_comics_count = AggregatorService(request.user).new_comics().count()
+logger = logging.getLogger(__name__)
+
+
+@login_required
+def ok_response(request: AuthenticatedHttpRequest):
+    comic_count = request.user.subscriptions_active().count()
+    unread_count = request.user.comics_unread_count()
+    new_comics_count = len(request.user.comics_new())
     news_count = request.user.newblog_set.count()
     response_data = {
         "comics": comic_count,
@@ -43,30 +37,18 @@ def ok_response(request: HttpRequest):
 
 
 @login_required
-def add_comic(request: HttpRequest):
+def add_comic(request: AuthenticatedHttpRequest):
     try:
         comic_id = int(request.POST["id"])
     except Exception:
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
-    if request.user.subscription_set.filter(comic=comic):
-        # the comic is already added, finish here
-        return ok_response(request)
-    # continue adding the comic
-    # calculate position for the comic, it'll be the last
-    max_position = (
-        request.user.subscription_set.aggregate(pos=Max("position"))["pos"] or 0
-    )
-    next_pos = max_position + 1
-    request.user.subscription_set.create(comic=comic, position=next_pos)
-    # add the last strip to the user's unread list
-    if strip := Strip.objects.filter(comic=comic):
-        UnreadComic.objects.create(user=request.user, comic=comic, strip=strip[0])
+    request.user.subscribe(comic)
     return ok_response(request)
 
 
 @login_required
-def forget_new_comic(request: HttpRequest):
+def forget_new_comic(request: AuthenticatedHttpRequest):
     try:
         comic_id = int(request.POST["id"])
     except Exception:
@@ -77,7 +59,7 @@ def forget_new_comic(request: HttpRequest):
 
 
 @login_required
-def mark_read(request: HttpRequest):
+def mark_read(request: AuthenticatedHttpRequest):
     try:
         comic_id = request.POST["id"]
         value = int(request.POST["value"])
@@ -91,13 +73,13 @@ def mark_read(request: HttpRequest):
 
 
 @login_required
-def mark_all_read(request: HttpRequest):
+def mark_all_read(request: AuthenticatedHttpRequest):
     UnreadComic.objects.filter(user=request.user).delete()
     return ok_response(request)
 
 
 @login_required
-def remove_comic(request: HttpRequest):
+def remove_comic(request: AuthenticatedHttpRequest):
     try:
         comic_id = int(request.POST["id"])
     except Exception:
@@ -109,7 +91,7 @@ def remove_comic(request: HttpRequest):
 
 
 @login_required
-def remove_comic_list(request: HttpRequest):
+def remove_comic_list(request: AuthenticatedHttpRequest):
     try:
         ids = request.POST["ids"].split(",")
     except Exception:
@@ -120,7 +102,7 @@ def remove_comic_list(request: HttpRequest):
 
 
 @login_required
-def report_comic(request: HttpRequest):
+def report_comic(request: AuthenticatedHttpRequest):
     try:
         comic_id = int(request.POST["id"])
         id_list = request.POST.getlist("id_list[]")
@@ -134,15 +116,14 @@ def report_comic(request: HttpRequest):
     url = reverse("admin:reported", kwargs={"id_list": "-".join(id_list)})
     message += f"{settings.SITE_DOMAIN}{url}"
     try:
-        mail_managers("Imagen rota: " + comic.name, message)
+        mail_managers(f"Imagen rota: {comic.name}", message)
     except Exception:
-        # TODO: log this error
-        pass
+        logger.error("Failure sending email: Broken image")
     return ok_response(request)
 
 
 @login_required
-def save_selection(request: HttpRequest):
+def save_selection(request: AuthenticatedHttpRequest):
     try:
         selected_raw = request.POST["selected"]
         if not isinstance(selected_raw, str):
@@ -206,7 +187,7 @@ def save_selection(request: HttpRequest):
 
 
 @login_required
-def rate_comic(request: HttpRequest):
+def rate_comic(request: AuthenticatedHttpRequest):
     try:
         comic_id = int(request.POST["id"])
         value = int(request.POST["value"])

@@ -1,17 +1,17 @@
 import contextlib
-from django import template
-from django.template.defaultfilters import stringfilter
-from django.utils.translation import gettext as _
-from django.contrib.auth.models import User
 
-from comicagg.comics.services import AggregatorService
+from django import template
+from django.utils.translation import gettext as _
 
 register = template.Library()
 
 
 @register.filter()
 def as_percent(number, decimals=0):
-    return round(float(number) * 100, decimals)
+    a_number = 0.0
+    with contextlib.suppress(ValueError):
+        a_number = float(number)
+    return round(a_number * 100, decimals)
 
 
 @register.filter()

@@ -1,3 +1,4 @@
+import logging
 import os
 import random
 from hashlib import md5
@@ -8,46 +9,30 @@ from urllib.request import Request, urlopen
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.mail import mail_managers
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
 
+from comicagg.typings import AuthenticatedHttpRequest
+
 from .forms import RequestForm
-from .models import Comic, Strip
+from .models import Comic
 from .models import Request as ComicRequest
-from .models import Subscription
-from .services import AggregatorService
+from .models import Strip
+
+logger = logging.getLogger(__name__)
 
 # ##########################
 # #   Reading page views   #
 # ##########################
 
 
-@login_required
-def read_view(request: HttpRequest):
-    # comic_list and unread_list are lists of tuples of (comic, QuerySet of UnreadComic)
-    comic_list = [
-        (comic, comic.unread_comics_for(request.user))
-        for comic in AggregatorService(request.user).subscribed_comics()
-    ]
-    unread_list = [
-        (comic, comic.unread_comics_for(request.user))
-        for comic in AggregatorService(request.user).unread_comics()
-    ]
-    random = _random_comic(request.user)
-    context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
-    return render(request, "comics/read.html", context)
-
-
-def _random_comic(user: User, xhtml=False, request=None):
-    subscribed_ids = [s.comic.id for s in Subscription.objects.filter(user=user)]
-    if not_in_list := Comic.objects.exclude(active=False).exclude(
-        id__in=subscribed_ids
-    ):
+def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
+    subscribed_ids = [comic.id for comic in request.user.comics_subscribed()]
+    if not_in_list := Comic.objects.available().exclude(id__in=subscribed_ids):
         try:
             comic = not_in_list[random.randint(0, len(not_in_list) - 1)]
             strip = comic.strip_set.all()
@@ -61,8 +46,27 @@ def _random_comic(user: User, xhtml=False, request=None):
 
 
 @login_required
-def random_comic_view(request: HttpRequest):
-    if resp := _random_comic(request.user, xhtml=True, request=request):
+def read_view(request: AuthenticatedHttpRequest):
+    comics = list(request.user.comics_subscribed())
+    unread_strips_db = (
+        request.user.unread_strips()
+        .select_related("strip")
+        .select_related("strip__comic")
+    )
+    unread_strips = {comic.id: [] for comic in comics}
+    unread_list: set[int] = set()
+    for strip in unread_strips_db:
+        unread_strips[strip.comic_id].append(strip)
+        unread_list.add(strip.comic_id)
+    comic_list = [(comic, unread_strips[comic.id]) for comic in comics]
+    random = _find_random_comic(request)
+    context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
+    return render(request, "comics/read.html", context)
+
+
+@login_required
+def random_comic_view(request: AuthenticatedHttpRequest):
+    if resp := _find_random_comic(request, xhtml=True):
         return resp
     else:
         raise Http404
@@ -74,46 +78,40 @@ def random_comic_view(request: HttpRequest):
 
 
 @login_required
-def organize(request: HttpRequest, add=False):
+def add_comics(request: AuthenticatedHttpRequest):
     # all of the comics
-    all_comics = list(Comic.objects.exclude(active=False))
+    all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
     all_comics.sort(key=_slugify_comic)
 
     # build the available list depending on selected comics
-    user_subs = request.user.subscription_set.all().exclude(
-        comic__active=False, comic__ended=False
-    )
-    user_comics = []
-    for sub in user_subs:
-        lst = request.user.unreadcomic_set.filter(comic=sub.comic)
-        if not lst and sub.comic.ended:
+    user_comics = list(request.user.comics_subscribed())
+    new_comics = request.user.comics_new()
+    context = {
+        "all_comics": all_comics,
+        "user_comics": user_comics,
+        "new_comics": new_comics,
+    }
+    return render(request, "comics/add.html", context)
+
+
+@login_required
+def organize(request: AuthenticatedHttpRequest):
+    """Comics shown in the organize page are those that are active or ended with unread strips."""
+    comics_with_unread_strips = request.user.comics_unread()
+    subscriptions = request.user.subscriptions()
+    visible_comics = []
+    for subscription in subscriptions:
+        # Remove ended comics without unread strips
+        has_unread_strips = subscription.comic in comics_with_unread_strips
+        if not has_unread_strips and subscription.comic.ended:
             continue
-        user_comics.append(sub.comic)
-    context = {"user_comics": user_comics}
-    if add:
-        context["new_comics"] = AggregatorService(request.user).new_comics()
-        context["all_comics"] = all_comics
-        # quitar aviso de nuevos comics
-        hide_new_comics(request)
-        template = "comics/organize_add.html"
-    else:
-        template = "comics/organize_organize.html"
-    return render(request, template, context)
+        visible_comics.append(subscription.comic)
+    context = {"user_comics": visible_comics}
+    return render(request, "comics/organize.html", context)
 
 
 def _slugify_comic(comic: Comic) -> str:
     return slugify(str(comic))
-
-
-@login_required
-def hide_new_comics(request: HttpRequest):
-    """
-    Hides the new comics alert
-    """
-    user_profile = request.user.user_profile
-    user_profile.new_comics = False
-    user_profile.save()
-    return HttpResponse("0")
 
 
 # ############################
@@ -122,7 +120,7 @@ def hide_new_comics(request: HttpRequest):
 
 
 @login_required
-def request_index(request: HttpRequest):
+def request_index(request: AuthenticatedHttpRequest):
     if request.POST:
         form = RequestForm(request.POST)
         if form.is_valid():
@@ -134,8 +132,7 @@ def request_index(request: HttpRequest):
             try:
                 mail_managers("Nuevo request", message)
             except Exception:
-                # TODO: log the error
-                pass
+                logger.error("Failure sending mail to managers")
             messages.info(request, _("Your request has been saved. Thanks!"))
             return redirect("comics:requests")
     else:

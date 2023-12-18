@@ -8,16 +8,15 @@
 {% block content %}
 <script language="javascript">
 	var titlei18n = "{% trans 'Read' %}";
-	var unreadComics = [];
+	var unreadComics = [];{% for comic in unread_list %}
+	unreadComics[{{ comic }}] = true;{% endfor %}
 	var comics = [];
-	{% for comic,unreadlist in unread_list %}unreadComics[{{ comic.id }}] = true;{% endfor %}
+	var tmp = [];
 {% for comic,unreadlist in comic_list %}
-	tmp = [];
-	{% if not comic.no_images or perms.comics.all_images %}
-	{% for unread in unreadlist %}
-	tmp.push({"unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.strip.id }}, "url":"{{ unread.strip.image_url|safe }}", "alt_text":"{{ unread.strip.alt_text|default_if_none:"" }}"});{% endfor %}{% endif %}
-	c = {"name":"{{ comic.name }}", "id":{{ comic.id }}, {% if not comic.no_images or perms.comics.all_images %}"last_url":"{{ comic.last_image_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false, "last_ch":{{ comic.strip_set.all.0.id|default:0 }}};
-	comics[{{ comic.id }}] = c;
+	comics[{{ comic.id }}] = {"name":"{{ comic.name }}", "id":{{ comic.id }}, {% if not comic.no_images or perms.comics.all_images %}"last_url":"{{ comic.last_image_url|safe }}", "last_alt_text":"{{ comic.last_image_alt_text|default_if_none:"" }}", "list":tmp, {% endif %}"error":false, "loaded":false, "last_ch":{{ comic.strip_set.all.0.id|default:0 }}};
+	{% if not comic.no_images or perms.comics.all_images %}{% for unread in unreadlist %}
+	tmp.push({ "unreadid":{{ unread.id }}, "comicid":{{ comic.id }}, "chid":{{ unread.strip.id }}, "url":"{{ unread.strip.image_url|safe }}", "alt_text":"{{ unread.strip.alt_text|default_if_none:"" }}" });
+	{% endfor %}{% endif %}
 {% endfor %}
 </script>
 <div id="read">

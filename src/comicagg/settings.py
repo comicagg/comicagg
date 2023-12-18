@@ -58,7 +58,7 @@ FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
 # #            #
 # ##############
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.messages",
@@ -76,7 +76,7 @@ INSTALLED_APPS = (
     "provider",
     "provider.oauth2",
     "mailer",
-)
+]
 
 MIDDLEWARE = [
     # ##########################
@@ -99,6 +99,8 @@ MIDDLEWARE = [
     # ######################
     # Adds the user attribute, representing the currently-logged-in user, to every incoming HttpRequest object.
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Overwrite the user object with our own User proxy model
+    "comicagg.middleware.UserProxyOverwriteMiddleware",
     # OAuth2 authentication
     "comicagg.api.middleware.OAuth2Middleware",
     # ###########################
@@ -140,7 +142,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "comicagg.comics.context_processors.comic_counters",
                 "django.template.context_processors.static",
-                "comicagg.common.context_processors.comicagg_vars",
+                "comicagg.common.context_processors.add_settings",
             ],
         },
     },
@@ -373,3 +375,28 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60  # seconds
 CELERY_RESULT_EXTENDED = True
+
+# ############################
+# #   django-debug-toolbar   #
+# ############################
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+
+    MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+    import socket  # only if you haven't already imported this
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+        "127.0.0.1",
+        "10.0.2.2",
+    ]
+
+    # https://timonweb.com/django/fixing-the-data-for-this-panel-isnt-available-anymore-error-in-django-debug-toolbar/
+    RESULTS_CACHE_SIZE = 1000
+    hide_toolbar_patterns = ["/media/", "/static/", "/comics/strip/"]
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": lambda request: not any(
+            request.path.startswith(p) for p in hide_toolbar_patterns
+        ),
+    }

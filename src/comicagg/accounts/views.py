@@ -12,6 +12,8 @@ from django.template import loader
 from django.utils.translation import gettext as _
 from django.views import View
 
+from comicagg.typings import AuthenticatedHttpRequest
+
 from .forms import (
     EmailChangeForm,
     LoginForm,
@@ -19,11 +21,6 @@ from .forms import (
     PasswordResetForm,
     RegisterForm,
 )
-
-
-@login_required
-def view_profile(request: HttpRequest):
-    return render(request, "accounts/account.html", {})
 
 
 def done(request: HttpRequest, kind: str):
@@ -156,13 +153,27 @@ class PasswordResetView(View):
         return redirect("accounts:done", kind="password_reset")
 
 
+@login_required
+def activate(request: AuthenticatedHttpRequest):
+    if request.method == "POST":
+        request.user.is_active = True
+        request.user.save()
+        return redirect("index")
+    return render(request, "accounts/activate.html", {})
+
+
+@login_required
+def view_profile(request: AuthenticatedHttpRequest):
+    return render(request, "accounts/account.html", {})
+
+
 class PasswordChangeView(LoginRequiredMixin, View):
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = PasswordChangeForm()
         context = {"form": form}
         return render(request, "accounts/password_change_form.html", context)
 
-    def post(self, request: HttpRequest, *args, **kwargs):
+    def post(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = PasswordChangeForm(request.POST)
         if form.is_valid():
             old = form.cleaned_data["old_password"]
@@ -181,12 +192,12 @@ class PasswordChangeView(LoginRequiredMixin, View):
 
 
 class UpdateEmail(LoginRequiredMixin, View):
-    def get(self, request: HttpRequest, *args, **kwargs):
+    def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = EmailChangeForm()
         context = {"form": form}
         return render(request, "accounts/email_change_form.html", context)
 
-    def post(self, request: HttpRequest, *args, **kwargs):
+    def post(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = EmailChangeForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data["email"]
@@ -199,12 +210,3 @@ class UpdateEmail(LoginRequiredMixin, View):
                 return redirect("accounts:done", kind="email_change")
         context = {"form": form}
         return render(request, "accounts/email_change_form.html", context)
-
-
-@login_required
-def activate(request: HttpRequest):
-    if request.method == "POST":
-        request.user.is_active = True
-        request.user.save()
-        return redirect("index")
-    return render(request, "accounts/activate.html", {})

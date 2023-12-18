@@ -5,7 +5,7 @@
     "fields": {
       "date": "2008-02-25T10:00:02Z",
       "url": "http://www.explosm.net/db/files/Comics/Kris/question.png",
-      "comic": 7,
+      "comic": 1,
       "alt_text": null
     }
   },
@@ -15,7 +15,7 @@
     "fields": {
       "date": "2008-02-25T10:00:02Z",
       "url": "http://imgs.xkcd.com/comics/fuck_grapefruit.png",
-      "comic": 6,
+      "comic": 2,
       "alt_text": null
     }
   },
@@ -25,7 +25,7 @@
     "fields": {
       "date": "2008-02-25T10:00:02Z",
       "url": "http://www.plushandblood.com/comics/080222.jpg",
-      "comic": 1,
+      "comic": 3,
       "alt_text": null
     }
   },
@@ -35,7 +35,7 @@
     "fields": {
       "date": "2008-02-26T22:00:05Z",
       "url": "http://www.plushandblood.com/comics/080226.jpg",
-      "comic": 1,
+      "comic": 4,
       "alt_text": null
     }
   },
@@ -45,7 +45,7 @@
     "fields": {
       "date": "2008-02-26T22:00:05Z",
       "url": "http://www.explosm.net/db/files/Comics/Dave/comicflies2.png",
-      "comic": 7,
+      "comic": 1,
       "alt_text": null
     }
   },
@@ -55,7 +55,7 @@
     "fields": {
       "date": "2008-02-26T22:00:05Z",
       "url": "http://www.megatokyo.com/strips/1092.png",
-      "comic": 5,
+      "comic": 2,
       "alt_text": null
     }
   },
@@ -65,7 +65,7 @@
     "fields": {
       "date": "2008-02-26T22:00:05Z",
       "url": "http://www.penny-arcade.com/images/2008/20080225.jpg",
-      "comic": 4,
+      "comic": 3,
       "alt_text": null
     }
   },
@@ -75,7 +75,7 @@
     "fields": {
       "date": "2008-02-26T22:00:05Z",
       "url": "http://www.geeksnextcomic.com/images/GND115.jpg",
-      "comic": 2,
+      "comic": 4,
       "alt_text": null
     }
   },
@@ -85,7 +85,7 @@
     "fields": {
       "date": "2008-02-27T13:00:07Z",
       "url": "http://www.explosm.net/db/files/Comics/Matt/ass-ass-ass-ass-ass-ass-ass-ass-ass-ass.png",
-      "comic": 9,
+      "comic": 1,
       "alt_text": null
     }
   }

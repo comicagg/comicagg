@@ -2,8 +2,11 @@ import contextlib
 import time
 from email import utils
 
+from comicagg.accounts.models import User
 from comicagg.comics.models import Comic, Strip
 from comicagg.comics.services import AggregatorService
+
+from ..comics.update import InvalidParameterException
 
 
 class Serializer:
@@ -13,7 +16,7 @@ class Serializer:
     Could be merged with the APIView class but like this it's easier to separate the work of both classes.
     """
 
-    def __init__(self, user=None):
+    def __init__(self, user: User | None = None):
         self.user = user
 
     def serialize(
@@ -99,6 +102,8 @@ class Serializer:
         }
 
     def build_user_dict(self):
+        if not self.user:
+            raise InvalidParameterException(["self.user"])
         user_operations = AggregatorService(self.user)
         return {
             "username": self.user.username,
