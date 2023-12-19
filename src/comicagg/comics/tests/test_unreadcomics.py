@@ -4,7 +4,7 @@ from comicagg.accounts.models import User
 from comicagg.comics.models import Comic
 
 
-class UnreadComicTestCase(TestCase):
+class UnreadStripTestCase(TestCase):
     fixtures = ["users.json", "comics.json", "strips.json"]
 
     def setUp(self):
@@ -34,12 +34,12 @@ class UnreadComicTestCase(TestCase):
         strip_ended = self.comic_ended.strip_set.first()
         strip_inactive = self.comic_inactive.strip_set.first()
         strip_inactiveended = self.comic_inactive_ended.strip_set.first()
-        self.user.unreadcomic_set.create(comic=self.comic_active, strip=strip_active)
-        self.user.unreadcomic_set.create(comic=self.comic_ended, strip=strip_ended)
-        self.user.unreadcomic_set.create(
+        self.user.unreadstrip_set.create(comic=self.comic_active, strip=strip_active)
+        self.user.unreadstrip_set.create(comic=self.comic_ended, strip=strip_ended)
+        self.user.unreadstrip_set.create(
             comic=self.comic_inactive, strip=strip_inactive
         )
-        self.user.unreadcomic_set.create(
+        self.user.unreadstrip_set.create(
             comic=self.comic_inactive_ended, strip=strip_inactiveended
         )
 
@@ -78,12 +78,12 @@ class UnreadComicTestCase(TestCase):
         strip_ended = self.comic_ended.strip_set.first()
         strip_inactive = self.comic_inactive.strip_set.first()
         strip_inactiveended = self.comic_inactive_ended.strip_set.first()
-        self.user.unreadcomic_set.create(comic=self.comic_active, strip=strip_active)
-        self.user.unreadcomic_set.create(comic=self.comic_ended, strip=strip_ended)
-        self.user.unreadcomic_set.create(
+        self.user.unreadstrip_set.create(comic=self.comic_active, strip=strip_active)
+        self.user.unreadstrip_set.create(comic=self.comic_ended, strip=strip_ended)
+        self.user.unreadstrip_set.create(
             comic=self.comic_inactive, strip=strip_inactive
         )
-        self.user.unreadcomic_set.create(
+        self.user.unreadstrip_set.create(
             comic=self.comic_inactive_ended, strip=strip_inactiveended
         )
 

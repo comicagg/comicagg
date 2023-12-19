@@ -21,4 +21,4 @@ def to_int(number):
 
 @register.filter()
 def unreads(comic, user_id):
-    return comic.unreadcomic_set.filter(user=user_id)
+    return comic.unreadstrip_set.filter(user=user_id)

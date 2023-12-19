@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from comicagg.comics.managers import SubscriptionManager, UnreadStripManager
 
-from comicagg.comics.models import Comic, Strip, UnreadComic
+from comicagg.comics.models import Comic, Strip, UnreadStrip
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class User(auth_models.User):
     """Proxy class of the default's User class.
     Adds helper class methods."""
 
-    unreadcomic_set: UnreadStripManager
+    unreadstrip_set: UnreadStripManager
     subscription_set: SubscriptionManager
     request_set: Any
     newblog_set: Any
@@ -63,18 +63,18 @@ class User(auth_models.User):
         next_pos = max_position + 1
         self.subscription_set.create(comic=comic, position=next_pos)
         if last_strip := Strip.objects.filter(comic=comic).last():
-            UnreadComic.objects.create(user=self, comic=comic, strip=last_strip)
+            UnreadStrip.objects.create(user=self, comic=comic, strip=last_strip)
 
     # #####################
     # #   Unread strips   #
     # #####################
     def unread_strips(self):
         """Return unread strips for all subscribed comics, including ended."""
-        return self.unreadcomic_set.available()
+        return self.unreadstrip_set.available()
 
     def unread_strips_for(self, comic: Comic):
         """Return available unread strips for a comic."""
-        return self.unreadcomic_set.available().filter(comic=comic, user=self)
+        return self.unreadstrip_set.available().filter(comic=comic, user=self)
 
     def comics_unread(self) -> list[Comic]:
         """Return a list of comics (possibly ended) that have unread strips

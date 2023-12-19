@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from html import unescape
 
 import requests
-from comicagg.comics.models import Comic, Strip, UnreadComic
+from comicagg.comics.models import Comic, Strip, UnreadStrip
 from django.conf import settings
 
 
@@ -191,10 +191,10 @@ def _alt_from_match(match: re.Match) -> str:
 
 
 def _notify_subscribers(strip: Strip):
-    """Create one UnreadComic for each subscribed user."""
+    """Create one UnreadStrip for each subscribed user."""
     subscribers = strip.comic.subscription_set.all()
     for subscriber in subscribers:
         if subscriber.user.is_active:
-            UnreadComic.objects.get_or_create(
+            UnreadStrip.objects.get_or_create(
                 user=subscriber.user, strip=strip, comic=subscriber.comic
             )

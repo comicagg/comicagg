@@ -1,6 +1,6 @@
 {% load comics_tags %}<?xml version="1.0" encoding="UTF-8" ?>
 {% spaceless %}
-<unreadcomics>
+<unreadstrips>
 {% for s in subscriptions %}
 	{% if s.comic|unreads:user %}
 		{% if withstrips %}
@@ -16,5 +16,5 @@
 		{% endif %}
 	{% endif %}
 {% endfor %}
-</unreadcomics>
+</unreadstrips>
 {% endspaceless %}

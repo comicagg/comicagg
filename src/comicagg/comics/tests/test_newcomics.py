@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from comicagg.accounts.models import User
-from comicagg.comics.models import Comic, NewComic, UnreadComic
+from comicagg.comics.models import Comic, NewComic, UnreadStrip
 
 
 class NewComicTestCase(TestCase):

@@ -11,7 +11,7 @@ from comicagg.comics.models import (
     Request,
     Subscription,
     Tag,
-    UnreadComic,
+    UnreadStrip,
 )
 
 # ##############
@@ -133,7 +133,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
 
 # TODO: inline with users?
-class UnreadComicAdmin(admin.ModelAdmin):
+class UnreadStripAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "comic",
@@ -160,5 +160,5 @@ admin.site.register(Comic, ComicAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Request, RequestAdmin)
 admin.site.register(Strip, StripAdmin)
-admin.site.register(UnreadComic, UnreadComicAdmin)
+admin.site.register(UnreadStrip, UnreadStripAdmin)
 admin.site.register(NewComic, NewComicAdmin)

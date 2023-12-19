@@ -188,7 +188,7 @@ class StripsView(APIView):
             return self.response_not_found("The strip does not exist")
         if not AggregatorService(request.user).is_subscribed(strip.comic):
             return self.response_error("You are not subscribed to this comic")
-        request.user.unreadcomic_set.create(
+        request.user.unreadstrip_set.create(
             user=request.user, comic=strip.comic, strip=strip
         )
         return self.response_no_content()
@@ -204,7 +204,7 @@ class StripsView(APIView):
             return self.response_not_found("The strip does not exist")
         if not AggregatorService(request.user).is_subscribed(strip.comic):
             return self.response_error("You are not subscribed to this comic")
-        request.user.unreadcomic_set.filter(strip__id=strip_id).delete()
+        request.user.unreadstrip_set.filter(strip__id=strip_id).delete()
         return self.response_no_content()
 
 

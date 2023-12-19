@@ -15,7 +15,7 @@ from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from comicagg.comics.models import Comic, NewComic, Strip, Subscription, UnreadComic
+from comicagg.comics.models import Comic, NewComic, Strip, Subscription, UnreadStrip
 from comicagg.typings import AuthenticatedHttpRequest
 
 logger = logging.getLogger(__name__)
@@ -68,13 +68,13 @@ def mark_read(request: AuthenticatedHttpRequest):
     if value != 0:
         rate_comic(request)
     comic = get_object_or_404(Comic, pk=comic_id)
-    UnreadComic.objects.filter(user=request.user, comic=comic).delete()
+    UnreadStrip.objects.filter(user=request.user, comic=comic).delete()
     return ok_response(request)
 
 
 @login_required
 def mark_all_read(request: AuthenticatedHttpRequest):
-    UnreadComic.objects.filter(user=request.user).delete()
+    UnreadStrip.objects.filter(user=request.user).delete()
     return ok_response(request)
 
 
@@ -86,7 +86,7 @@ def remove_comic(request: AuthenticatedHttpRequest):
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic, pk=comic_id)
     request.user.subscription_set.filter(comic=comic).delete()
-    request.user.unreadcomic_set.filter(comic=comic).delete()
+    request.user.unreadstrip_set.filter(comic=comic).delete()
     return ok_response(request)
 
 
@@ -97,7 +97,7 @@ def remove_comic_list(request: AuthenticatedHttpRequest):
     except Exception:
         return HttpResponseBadRequest("Check the parameters")
     request.user.subscription_set.filter(comic__id__in=ids).delete()
-    request.user.unreadcomic_set.filter(comic__id__in=ids).delete()
+    request.user.unreadstrip_set.filter(comic__id__in=ids).delete()
     return ok_response(request)
 
 
@@ -165,7 +165,7 @@ def save_selection(request: AuthenticatedHttpRequest):
         if subscription not in selection_clean
     ]:
         request.user.subscription_set.filter(comic__id__in=removed).delete()
-        request.user.unreadcomic_set.filter(comic__id__in=removed).delete()
+        request.user.unreadstrip_set.filter(comic__id__in=removed).delete()
 
     # Change the position of the selected comics
     # Make the list of subscriptions we want to change

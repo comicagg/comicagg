@@ -112,7 +112,7 @@ class SubscriptionsTestCase(TestCase):
         self.user.subscribe(self.comic_active)
 
         subscription_count = self.user.subscription_set.count()
-        strip_count = self.user.unreadcomic_set.count()
+        strip_count = self.user.unreadstrip_set.count()
 
         self.assertEqual(subscription_count, 1)
         self.assertEqual(strip_count, 1)
@@ -122,7 +122,7 @@ class SubscriptionsTestCase(TestCase):
         self.user.subscribe(self.comic_active)
 
         subscription_count = self.user.subscription_set.count()
-        strip_count = self.user.unreadcomic_set.count()
+        strip_count = self.user.unreadstrip_set.count()
         comics = [
             subscription.comic for subscription in self.user.subscription_set.all()
         ]

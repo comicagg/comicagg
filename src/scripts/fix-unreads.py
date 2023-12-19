@@ -18,7 +18,7 @@ import django
 django.setup()
 
 from django.contrib.auth.models import User
-from comicagg.comics.models import UnreadComic
+from comicagg.comics.models import UnreadStrip
 
 start_time = datetime.now(timezone.utc)
 if len(sys.argv) > 1:
@@ -36,6 +36,6 @@ for user in all_users:
     comics = []
     for sub in subs:
         comics.append(sub.comic.id)
-    unreads = UnreadComic.objects.filter(user__exact=user).exclude(comic__in=comics)
+    unreads = UnreadStrip.objects.filter(user__exact=user).exclude(comic__in=comics)
     unreads.delete()
     time.sleep(0.5)

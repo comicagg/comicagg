@@ -256,7 +256,7 @@ class Subscription(models.Model):
 
     def delete(self, *args, **kwargs):
         # Delete the related unread comics
-        UnreadComic.objects.filter(user=self.user, comic=self.comic).delete()
+        UnreadStrip.objects.filter(user=self.user, comic=self.comic).delete()
         super().delete(*args, **kwargs)
 
 
@@ -298,13 +298,11 @@ class Strip(models.Model):
         return url
 
 
-# TODO: Rename to UnreadStrip
-class UnreadComic(models.Model):
+class UnreadStrip(models.Model):
     """A strip that the user has not read yet."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     strip = models.ForeignKey(Strip, on_delete=models.CASCADE)
-    # TODO: This should probably be removed
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
 
     objects = UnreadStripManager()

@@ -32,7 +32,7 @@ def inactive_users(dry_run=False):
                 task_logger.info(f"Setting user {user} as inactive")
                 user.is_active = False
                 user.save()
-                user.unreadcomic_set.all().delete()
+                user.unreadstrip_set.all().delete()
     task_logger.info("Execution summary")
     task_logger.info(f"{len(users)} total users")
     

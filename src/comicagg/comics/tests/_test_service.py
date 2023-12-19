@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from comicagg.comics.models import Comic, Strip, UnreadComic
+from comicagg.comics.models import Comic, Strip, UnreadStrip
 from comicagg.comics.services import AggregatorService
 
 
@@ -176,13 +176,13 @@ class UnreadTests(TestCase):
         strip_active = self.comic_active.strip_set.first()
         strip_inactive = self.comic_inactive.strip_set.first()
         strip_ended = self.comic_ended.strip_set.first()
-        UnreadComic.objects.create(
+        UnreadStrip.objects.create(
             user=self.user, comic=self.comic_active, strip=strip_active
         )
-        UnreadComic.objects.create(
+        UnreadStrip.objects.create(
             user=self.user, comic=self.comic_inactive, strip=strip_inactive
         )
-        UnreadComic.objects.create(
+        UnreadStrip.objects.create(
             user=self.user, comic=self.comic_ended, strip=strip_ended
         )
         # Act
@@ -196,7 +196,7 @@ class UnreadTests(TestCase):
         """Test that the user does not have any unread strips."""
         # Arrange
         strip_inactive = self.comic_inactive.strip_set.first()
-        UnreadComic.objects.create(
+        UnreadStrip.objects.create(
             user=self.user, comic=self.comic_inactive, strip=strip_inactive
         )
         # Act

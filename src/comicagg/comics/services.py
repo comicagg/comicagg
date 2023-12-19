@@ -5,7 +5,7 @@ from typing_extensions import deprecated
 
 from django.db.models import Max
 
-from .models import Comic, NewComic, Strip, UnreadComic
+from .models import Comic, NewComic, Strip, UnreadStrip
 
 logger = logging.getLogger(__name__)
 
@@ -24,8 +24,8 @@ class AggregatorService:
     # #####################
     @deprecated("Use the User or specific manager methods")
     def unread_strips(self):
-        """Return the filtered UnreadComic QuerySet for the user."""
-        return self.user.unreadcomic_set.exclude(
+        """Return the filtered UnreadStrip QuerySet for the user."""
+        return self.user.unreadstrip_set.exclude(
             comic__active=False, comic__ended=False
         )
 
@@ -66,7 +66,7 @@ class AggregatorService:
         """Sets a comic as unread adding the last strip as unread for this user."""
         if self.user.is_subscribed(comic):
             if strip := comic.last():
-                self.user.unreadcomic_set.create(
+                self.user.unreadstrip_set.create(
                     user=self.user, comic=comic, strip=strip
                 )
                 return True
@@ -86,11 +86,11 @@ class AggregatorService:
         comic.total_votes += votes
         comic.positive_votes += value
         comic.save()
-        self.user.unreadcomic_set.filter(comic=comic).delete()
+        self.user.unreadstrip_set.filter(comic=comic).delete()
 
     def mark_all_read(self):
         """Mark all comics as read."""
-        self.user.unreadcomic_set.all().delete()
+        self.user.unreadstrip_set.all().delete()
 
     def unread_comic_strips_count(self, comic):
         """For a certain comic, how many unread strips does this user have?"""
@@ -134,7 +134,7 @@ class AggregatorService:
         self.user.subscription_set.create(comic=comic, position=next_pos)
         if strips := Strip.objects.filter(comic=comic):
             logger.debug("Found a strip to add")
-            UnreadComic.objects.create(user=self.user, comic=comic, strip=strips[0])
+            UnreadStrip.objects.create(user=self.user, comic=comic, strip=strips[0])
         else:
             logger.debug("Did not add any strip to the user")
 
@@ -149,7 +149,7 @@ class AggregatorService:
         if subscription := self.user.subscription_set.filter(comic=comic):
             logger.debug("Removing subscription")
             subscription.delete()
-            self.user.unreadcomic_set.filter(comic=comic).delete()
+            self.user.unreadstrip_set.filter(comic=comic).delete()
             self.user.newcomic_set.filter(comic=comic).delete()
 
     def unsubscribe_comics(self, id_list):
@@ -157,7 +157,7 @@ class AggregatorService:
         if subscriptions := self.user.subscription_set.filter(comic__id__in=id_list):
             logger.debug("Removing subscriptions")
             subscriptions.delete()
-            self.user.unreadcomic_set.filter(comic__id__in=id_list).delete()
+            self.user.unreadstrip_set.filter(comic__id__in=id_list).delete()
             self.user.newcomic_set.filter(comic__id__in=id_list).delete()
 
     def unsubscribe_all_comics(self):

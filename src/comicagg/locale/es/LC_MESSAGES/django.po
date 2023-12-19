@@ -691,10 +691,10 @@ msgstr ""
 
 #: comicagg/templates/comics/read.html:35
 msgid ""
-"Showing <b>all</b> comics. <a onclick=\"showUnreadComics()\">Click here</a> "
+"Showing <b>all</b> comics. <a onclick=\"showUnreadStrips()\">Click here</a> "
 "to show only unread comics."
 msgstr ""
-"Mostrando <b>todos</b> los comics. <a onclick=\"showUnreadComics()\">Pulsa "
+"Mostrando <b>todos</b> los comics. <a onclick=\"showUnreadStrips()\">Pulsa "
 "aquí</a> para ver sólo los que tienes sin leer."
 
 #: comicagg/templates/comics/read.html:41
