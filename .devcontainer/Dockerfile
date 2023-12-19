@@ -4,9 +4,10 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 # [Optional] If your requirements rarely change, uncomment this section to add them to the image.
-COPY src/requirements.txt /tmp/pip-tmp/
-RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-    && rm -rf /tmp/pip-tmp
+COPY src/requirements.txt /
+COPY .devcontainer/requirements.txt /requirements-dev.txt
+RUN cat /requirements-dev.txt >> /requirements.txt \
+    && pip3 --disable-pip-version-check --no-cache-dir install -r /requirements.txt
 
 COPY .devcontainer/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//g' /entrypoint.sh && \
