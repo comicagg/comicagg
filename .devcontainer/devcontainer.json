@@ -34,7 +34,8 @@
 				"vict0rsch.coblock",
 				"sourcery.sourcery",
 				"thebarkman.vscode-djaneiro",
-				"mrorz.language-gettext"
+				"mrorz.language-gettext",
+				"EditorConfig.EditorConfig"
 			]
 		}
 	},
