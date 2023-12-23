@@ -110,5 +110,33 @@
       "re2_re": "",
       "re2_backwards": false
     }
+  },
+  {
+    "pk": 5,
+    "model": "comics.comic",
+    "fields": {
+      "name": "Active2",
+      "active": true,
+      "ended": false,
+      "add_date": "2007-05-08T17:44:00Z",
+      "notify": false,
+      "total_votes": 428,
+      "positive_votes": 416,
+      "custom_func": "",
+      "website": "http://www.plushandblood.com/",
+      "no_images": false,
+      "referrer": "",
+      "last_update": "2014-04-17T12:02:11Z",
+      "last_image": "http://www.plushandblood.com/comics/140417.jpg",
+      "last_image_alt_text": null,
+      "re1_url": "http://www.plushandblood.com/Comic.php",
+      "re1_base": "http://www.plushandblood.com/%s",
+      "re1_re": "img src=\"(comics/\\d+.jpg)\" width=\"700\" height=\"1000\"",
+      "re1_backwards": false,
+      "re2_url": "",
+      "re2_base": "",
+      "re2_re": "",
+      "re2_backwards": false
+    }
   }
 ]

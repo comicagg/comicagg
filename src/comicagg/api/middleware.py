@@ -6,13 +6,14 @@ from datetime import datetime, timezone
 from django.conf import settings
 from django.http import HttpResponse
 
-import comicagg.logs.tags as logtags
-from comicagg.logs import logmsg
 from provider import constants
 from provider.forms import OAuthValidationError
 from provider.oauth2.models import AccessToken
 
-from .typings import OAuth2HttpRequest
+import comicagg.logs.tags as logtags
+from comicagg.logs import logmsg
+
+from .http import OAuth2HttpRequest
 
 logger = logging.getLogger(__name__)
 

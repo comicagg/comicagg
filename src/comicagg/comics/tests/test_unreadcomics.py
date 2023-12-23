@@ -13,6 +13,10 @@ class UnreadStripTestCase(TestCase):
         self.comic_ended = Comic.objects.get(name="Ended")
         self.comic_inactive = Comic.objects.get(name="Inactive")
         self.comic_inactive_ended = Comic.objects.get(name="InactiveEnded")
+        self.strip_active = self.comic_active.strip_set.first()
+        self.strip_ended = self.comic_ended.strip_set.first()
+        self.strip_inactive = self.comic_inactive.strip_set.first()
+        self.strip_inactiveended = self.comic_inactive_ended.strip_set.first()
 
     # ########################
     # #   Test User.strips   #
@@ -30,18 +34,10 @@ class UnreadStripTestCase(TestCase):
         self.user.subscription_set.create(comic=self.comic_ended)
         self.user.subscription_set.create(comic=self.comic_inactive)
         self.user.subscription_set.create(comic=self.comic_inactive_ended)
-        strip_active = self.comic_active.strip_set.first()
-        strip_ended = self.comic_ended.strip_set.first()
-        strip_inactive = self.comic_inactive.strip_set.first()
-        strip_inactiveended = self.comic_inactive_ended.strip_set.first()
-        self.user.unreadstrip_set.create(comic=self.comic_active, strip=strip_active)
-        self.user.unreadstrip_set.create(comic=self.comic_ended, strip=strip_ended)
-        self.user.unreadstrip_set.create(
-            comic=self.comic_inactive, strip=strip_inactive
-        )
-        self.user.unreadstrip_set.create(
-            comic=self.comic_inactive_ended, strip=strip_inactiveended
-        )
+        self.user.unreadstrip_set.create(comic=self.comic_active, strip=self.strip_active)
+        self.user.unreadstrip_set.create(comic=self.comic_ended, strip=self.strip_ended)
+        self.user.unreadstrip_set.create(comic=self.comic_inactive, strip=self.strip_inactive)
+        self.user.unreadstrip_set.create(comic=self.comic_inactive_ended, strip=self.strip_inactiveended)
 
         active_subscriptions = self.user.unread_strips().count()
 
@@ -74,18 +70,10 @@ class UnreadStripTestCase(TestCase):
         self.user.subscription_set.create(comic=self.comic_ended)
         self.user.subscription_set.create(comic=self.comic_inactive)
         self.user.subscription_set.create(comic=self.comic_inactive_ended)
-        strip_active = self.comic_active.strip_set.first()
-        strip_ended = self.comic_ended.strip_set.first()
-        strip_inactive = self.comic_inactive.strip_set.first()
-        strip_inactiveended = self.comic_inactive_ended.strip_set.first()
-        self.user.unreadstrip_set.create(comic=self.comic_active, strip=strip_active)
-        self.user.unreadstrip_set.create(comic=self.comic_ended, strip=strip_ended)
-        self.user.unreadstrip_set.create(
-            comic=self.comic_inactive, strip=strip_inactive
-        )
-        self.user.unreadstrip_set.create(
-            comic=self.comic_inactive_ended, strip=strip_inactiveended
-        )
+        self.user.unreadstrip_set.create(comic=self.comic_active, strip=self.strip_active)
+        self.user.unreadstrip_set.create(comic=self.comic_ended, strip=self.strip_ended)
+        self.user.unreadstrip_set.create(comic=self.comic_inactive, strip=self.strip_inactive)
+        self.user.unreadstrip_set.create(comic=self.comic_inactive_ended, strip=self.strip_inactiveended)
 
         unreads = self.user.comics_unread()
 

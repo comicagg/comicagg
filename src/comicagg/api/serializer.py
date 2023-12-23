@@ -4,9 +4,21 @@ from email import utils
 
 from comicagg.accounts.models import User
 from comicagg.comics.models import Comic, Strip
-from comicagg.comics.services import AggregatorService
+from comicagg.comics.update import InvalidParameterException
 
-from ..comics.update import InvalidParameterException
+
+# ########################
+# #   Helper functions   #
+# ########################
+
+
+def _datetime_to_timestamp(datetime):
+    time_tuple = datetime.timetuple()
+    return time.mktime(time_tuple)
+
+
+def _datetime_to_rfc2822(datetime):
+    return utils.formatdate(_datetime_to_timestamp(datetime))
 
 
 class Serializer:
@@ -42,7 +54,8 @@ class Serializer:
         elif isinstance(object_to_serialize, list) and identifier:
             # Serialize a list of Comic objects using identifier as the parent element
             if len(object_to_serialize) == 0:
-                # This clause could be joined with the next one with an or, but it's easier to read like this
+                # This clause could be joined with the next one with an or,
+                # but it's easier to read like this
                 result[identifier] = []
             elif isinstance(object_to_serialize[0], Comic):
                 # This is a list of comics
@@ -71,24 +84,22 @@ class Serializer:
             raise ValueError("This is not a comic")
         if not self.user:
             raise ValueError("To serialize a comic you need a user")
-        user_operations = AggregatorService(self.user)
         out = {
             "id": comic.id,
             "name": comic.name,
             "website": comic.website,
             "votes": comic.total_votes,
             "rating": comic.get_rating(),
-            "added": user_operations.is_subscribed(comic),
+            "added": self.user.is_subscribed(comic),
             "ended": comic.ended,
-            "unread_count": user_operations.unread_comic_strips_count(comic),
+            "unread_count": self.user.unread_strips_for(comic).count(),
         }
         if last_strip:
             with contextlib.suppress(Exception):
                 out["last_strip"] = self.build_strip_dict(comic.last_strip)
         if unread_strips:
             out["unreads"] = [
-                self.build_strip_dict(h)
-                for h in user_operations.unread_comic_strips(comic)
+                self.build_strip_dict(h) for h in self.user.unread_strips_for(comic)
             ]
         return out
 
@@ -104,25 +115,10 @@ class Serializer:
     def build_user_dict(self):
         if not self.user:
             raise InvalidParameterException(["self.user"])
-        user_operations = AggregatorService(self.user)
         return {
             "username": self.user.username,
             "email": self.user.email,
-            "total_comics": len(user_operations.subscribed_comics()),
-            "unread_comics": len(user_operations.unread_comics()),
-            "new_comics": user_operations.new_comics().count(),
+            "total_comics": self.user.subscriptions().count(),
+            "unread_comics": self.user.comics_unread_count(),
+            "new_comics": len(self.user.comics_new()),
         }
-
-
-# ########################
-# #   Helper functions   #
-# ########################
-
-
-def _datetime_to_timestamp(datetime):
-    time_tuple = datetime.timetuple()
-    return time.mktime(time_tuple)
-
-
-def _datetime_to_rfc2822(datetime):
-    return utils.formatdate(_datetime_to_timestamp(datetime))

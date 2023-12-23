@@ -9,6 +9,7 @@ from .models import Comic, NewComic, Strip, UnreadStrip
 
 logger = logging.getLogger(__name__)
 
+@deprecated("Use the User or specific manager methods")
 class AggregatorService:
     """This class allows actions with comics and a certain user.
 

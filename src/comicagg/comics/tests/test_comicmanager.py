@@ -22,9 +22,9 @@ class ComicManagerTestCase(TestCase):
     def test_comicmanager_available_all(self):
         comics = Comic.objects.available()
 
-        self.assertEqual(comics.count(), 2)
+        self.assertEqual(comics.count(), 3)
 
     def test_comicmanager_available_active(self):
         comics = Comic.objects.available(include_ended=False)
 
-        self.assertEqual(comics.count(), 1)
+        self.assertEqual(comics.count(), 2)
