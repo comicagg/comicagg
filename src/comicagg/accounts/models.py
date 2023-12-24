@@ -142,7 +142,6 @@ class User(auth_models.User):
 
     def mark_read(self, comic: Comic, vote=0) -> None:
         """Mark the comic as read, removing the unread strips and updating the votes."""
-        # TODO: Test
         if not self.is_subscribed(comic):
             return
         votes = 0

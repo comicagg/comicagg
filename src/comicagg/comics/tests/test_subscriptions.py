@@ -747,6 +747,45 @@ class SubscriptionsTestCase(TestCase):
 
         self.assertEqual(strip_count, 0)
 
+    def test_mark_read_vote_positive(self):
+        """Should add a positive vote to the comic."""
+        self.add_subscriptions()
+        self.add_unread_strips()
+        old_comic = Comic.objects.get(pk=self.comic_active.id)
+
+        self.user.mark_read(self.comic_active, 1)
+
+        updated_comic = Comic.objects.get(pk=self.comic_active.id)
+
+        self.assertEqual(updated_comic.total_votes, old_comic.total_votes + 1)
+        self.assertEqual(updated_comic.positive_votes, old_comic.positive_votes + 1)
+
+    def test_mark_read_vote_negative(self):
+        """Should add a negative vote to the comic."""
+        self.add_subscriptions()
+        self.add_unread_strips()
+        old_comic = Comic.objects.get(pk=self.comic_active.id)
+
+        self.user.mark_read(self.comic_active, -1)
+
+        updated_comic = Comic.objects.get(pk=self.comic_active.id)
+
+        self.assertEqual(updated_comic.total_votes, old_comic.total_votes + 1)
+        self.assertEqual(updated_comic.positive_votes, old_comic.positive_votes)
+
+    def test_mark_read_vote_zero(self):
+        """Should not add any votes to the comic."""
+        self.add_subscriptions()
+        self.add_unread_strips()
+        old_comic = Comic.objects.get(pk=self.comic_active.id)
+
+        self.user.mark_read(self.comic_active, 0)
+
+        updated_comic = Comic.objects.get(pk=self.comic_active.id)
+
+        self.assertEqual(updated_comic.total_votes, old_comic.total_votes)
+        self.assertEqual(updated_comic.positive_votes, old_comic.positive_votes)
+
     # ###############################
     # #   Test User.mark_read_all   #
     # ###############################
