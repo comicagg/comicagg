@@ -3,8 +3,8 @@ from datetime import datetime, timedelta, timezone
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.contrib.auth.models import User
 
+from comicagg.accounts.models import User
 from comicagg.accounts.utils import get_profile
 
 task_logger = get_task_logger(__name__)
@@ -35,7 +35,7 @@ def inactive_users(dry_run=False):
                 user.unreadstrip_set.all().delete()
     task_logger.info("Execution summary")
     task_logger.info(f"{len(users)} total users")
-    
+
     inactive_count = User.objects.filter(is_active__exact=0).count()
     task_logger.info(f"{inactive_count} inactive users")
 

@@ -1,10 +1,9 @@
 from django.test import TestCase
-from comicagg.accounts.models import InvalidComicError, User
 
+from comicagg.accounts.models import IncompleteListError, InvalidComicError, User
 from comicagg.comics.models import Comic, Subscription
 
 
-# TODO: Test the order of the subscriptions
 class SubscriptionsTestCase(TestCase):
     fixtures = ["users.json", "comics.json", "strips.json"]
 
@@ -594,239 +593,92 @@ class SubscriptionsTestCase(TestCase):
         self.assertEqual(subscription_count, 0)
         self.assertEqual(strip_count, 0)
 
-    # #############################
-    # #   Test User.mark_unread   #
-    # #############################
+    # #######################################
+    # #   Test User.subscriptions_reorder   #
+    # #######################################
 
-    def test_mark_unread_empty(self):
-        """Should not change anything since the user is not subscribed."""
-        self.user.mark_unread(self.comic_active)
+    # The method receives a list of comic ids and reorders the subscriptions in that order.
+    # The list must contain all the subscriptions, otherwise an exception is raised.
+    # The list can contain duplicates, but they are ignored.
+    # The list cannot contain comics that are not subscribed or an exception will be raised.
 
-        strip_count = self.user.unreadstrip_set.count()
+    def test_subscriptions_reorder_empty(self):
+        """Should not change anything since the user has no subscriptions."""
+        self.user.subscriptions_reorder([])
 
-        self.assertEqual(strip_count, 0)
+        subscription_count = self.user.subscription_set.count()
+        comics = [
+            subscription.comic for subscription in self.user.subscription_set.all()
+        ]
 
-    def test_mark_unread_not_subscribed(self):
-        """Should not change anything since the user is not subscribed."""
-        self.add_subscriptions()
-        self.add_unread_strips()
+        self.assertEqual(subscription_count, 0)
+        self.assertListEqual(comics, [])
 
-        self.user.mark_unread(self.comic_active2)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 4)
-
-    def test_mark_unread(self):
-        """Should mark the comic as unread."""
-        self.add_subscriptions()
-
-        self.user.mark_unread(self.comic_active)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 1)
-
-    def test_mark_unread_ended(self):
-        """Should mark the comic as unread."""
+    def test_subscriptions_reorder_incomplete(self):
+        """Should raise an exception since there are more subscriptions in the database
+        than in the call."""
         self.add_subscriptions()
 
-        self.user.mark_unread(self.comic_ended)
+        with self.assertRaises(IncompleteListError):
+            self.user.subscriptions_reorder(
+                [self.comic_active.id, self.comic_inactive.id]
+            )
 
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 1)
-
-    def test_mark_unread_inactive(self):
-        """Should not change anything since the comic is inactive."""
+    def test_subscriptions_reorder(self):
+        """Should reorder the subscriptions."""
         self.add_subscriptions()
 
-        self.user.mark_unread(self.comic_inactive)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_unread_inactive_ended(self):
-        """Should not change anything since the comic is inactive and ended."""
-        self.add_subscriptions()
-
-        self.user.mark_unread(self.comic_inactive_ended)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_unread_already_unread(self):
-        """Should mark the comic as unread."""
-        self.add_subscriptions()
-        self.user.unreadstrip_set.create(
-            comic=self.comic_active, strip=self.strip_active
+        self.user.subscriptions_reorder(
+            [
+                self.comic_inactive_ended.id,
+                self.comic_active.id,
+                self.comic_inactive.id,
+                self.comic_ended.id,
+            ]
         )
 
-        self.user.mark_unread(self.comic_active)
+        comics = [
+            subscription.comic for subscription in self.user.subscription_set.all()
+        ]
+        first_subscription: Subscription = self.user.subscription_set.all()[0]
 
-        strip_count = self.user.unreadstrip_set.count()
+        self.assertListEqual(
+            comics,
+            [
+                self.comic_inactive_ended,
+                self.comic_active,
+                self.comic_inactive,
+                self.comic_ended,
+            ],
+        )
+        self.assertEqual(first_subscription.position, 1)
 
-        self.assertEqual(strip_count, 1)
-
-    # ###########################
-    # #   Test User.mark_read   #
-    # ###########################
-
-    def test_mark_read_empty(self):
-        """Should not change anything since the user is not subscribed."""
-        self.user.mark_read(self.comic_active)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_read_not_subscribed(self):
-        """Should not change anything since the user is not subscribed."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-
-        self.user.mark_read(self.comic_active2)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 4)
-
-    def test_mark_read(self):
-        """Should mark the comic as read."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-
-        self.user.mark_read(self.comic_active)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 3)
-
-    def test_mark_read_ended(self):
-        """Should mark the comic as read."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-
-        self.user.mark_read(self.comic_ended)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 3)
-
-    def test_mark_read_inactive(self):
-        """Should not change anything since the comic is inactive."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-
-        self.user.mark_read(self.comic_inactive)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 4)
-
-    def test_mark_read_inactive_ended(self):
-        """Should not change anything since the comic is inactive and ended."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-
-        self.user.mark_read(self.comic_inactive_ended)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 4)
-
-    def test_mark_read_already_read(self):
-        """Should not change anything since the comic is already read."""
+    def test_subscriptions_reorder_duplicates(self):
+        """Should reorder the subscriptions."""
         self.add_subscriptions()
 
-        self.user.mark_read(self.comic_active)
+        self.user.subscriptions_reorder(
+            [
+                self.comic_inactive_ended.id,
+                self.comic_active.id,
+                self.comic_inactive.id,
+                self.comic_ended.id,
+                self.comic_active.id,
+            ]
+        )
 
-        strip_count = self.user.unreadstrip_set.count()
+        comics = [
+            subscription.comic for subscription in self.user.subscription_set.all()
+        ]
+        first_subscription: Subscription = self.user.subscription_set.all()[0]
 
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_read_vote_positive(self):
-        """Should add a positive vote to the comic."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-        old_comic = Comic.objects.get(pk=self.comic_active.id)
-
-        self.user.mark_read(self.comic_active, 1)
-
-        updated_comic = Comic.objects.get(pk=self.comic_active.id)
-
-        self.assertEqual(updated_comic.total_votes, old_comic.total_votes + 1)
-        self.assertEqual(updated_comic.positive_votes, old_comic.positive_votes + 1)
-
-    def test_mark_read_vote_negative(self):
-        """Should add a negative vote to the comic."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-        old_comic = Comic.objects.get(pk=self.comic_active.id)
-
-        self.user.mark_read(self.comic_active, -1)
-
-        updated_comic = Comic.objects.get(pk=self.comic_active.id)
-
-        self.assertEqual(updated_comic.total_votes, old_comic.total_votes + 1)
-        self.assertEqual(updated_comic.positive_votes, old_comic.positive_votes)
-
-    def test_mark_read_vote_zero(self):
-        """Should not add any votes to the comic."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-        old_comic = Comic.objects.get(pk=self.comic_active.id)
-
-        self.user.mark_read(self.comic_active, 0)
-
-        updated_comic = Comic.objects.get(pk=self.comic_active.id)
-
-        self.assertEqual(updated_comic.total_votes, old_comic.total_votes)
-        self.assertEqual(updated_comic.positive_votes, old_comic.positive_votes)
-
-    # ###############################
-    # #   Test User.mark_read_all   #
-    # ###############################
-
-    def test_mark_read_all_empty(self):
-        """Should not change anything since the user is not subscribed."""
-        self.user.mark_read_all()
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_read_all(self):
-        """Should mark all comics as read."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-
-        self.user.mark_read_all()
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_read_all_already_read(self):
-        """Should not change anything since all comics are already read."""
-        self.add_subscriptions()
-
-        self.user.mark_read_all()
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_read_all_mixed(self):
-        """Should mark all comics as read."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-        self.user.mark_read(self.comic_active)
-
-        self.user.mark_read_all()
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
+        self.assertListEqual(
+            comics,
+            [
+                self.comic_inactive_ended,
+                self.comic_active,
+                self.comic_inactive,
+                self.comic_ended,
+            ],
+        )
+        self.assertEqual(first_subscription.position, 1)

@@ -48,6 +48,7 @@ class HasCustomFunction(admin.SimpleListFilter):
 class ComicAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+        "status",
         "active",
         "ended",
         "last_update",
@@ -60,7 +61,17 @@ class ComicAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Comic details",
-            {"fields": ("name", "website", "active", "ended", "notify", "no_images")},
+            {
+                "fields": (
+                    "name",
+                    "website",
+                    "status",
+                    "active",
+                    "ended",
+                    "notify",
+                    "no_images",
+                )
+            },
         ),
         (
             "Image regex",

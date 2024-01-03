@@ -9,5 +9,9 @@
     "coblock.boxWidth": 1,
     "coblock.spaceAround": 3,
     "coblock.preferBlockComment": true,
-    "todo-tree.highlights.enabled": false
+    "todo-tree.highlights.enabled": false,
+    "python.analysis.include": [
+        "src/**"
+    ],
+    "python.analysis.diagnosticMode": "workspace"
 }

@@ -1,5 +1,3 @@
-from django.db.models import Count
-
 from comicagg.typings import AuthenticatedHttpRequest
 
 
@@ -12,7 +10,7 @@ def comic_counters(request: AuthenticatedHttpRequest):
     }
     if request.user.is_authenticated:
         add_context["unread_count"] = request.user.comics_unread_count()
-        add_context["newcomic_count"] = len(request.user.comics_new())
-        add_context["news_count"] = request.user.newblog_set.count()
+        add_context["newcomic_count"] = request.user.comics_new_count()
+        add_context["news_count"] = request.user.blogs_new_count()
         add_context["comic_count"] = request.user.subscriptions_active().count()
     return add_context

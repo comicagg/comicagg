@@ -3,11 +3,10 @@ from typing import Any
 
 from django.contrib.auth import models as auth_models
 from django.db import models
-from django.db.models import Max, Count
+from django.db.models import Count, Max
 from django.utils.translation import gettext_lazy as _
 
 from comicagg.comics.managers import SubscriptionManager, UnreadStripManager
-
 from comicagg.comics.models import Comic, Strip, UnreadStrip
 
 logger = logging.getLogger(__name__)
@@ -19,6 +18,33 @@ class InvalidComicError(Exception):
     pass
 
 
+class IncompleteListError(Exception):
+    """Exception raised when a list of comics is incomplete."""
+
+    pass
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        auth_models.User, related_name="user_profile", on_delete=models.CASCADE
+    )
+
+    last_read_access = models.DateTimeField()
+
+    class Meta:
+        ordering = ["user"]
+        verbose_name = _("User profile")
+        verbose_name_plural = _("User profiles")
+
+    def __str__(self):
+        return str(self.user)
+
+    def is_active(self):
+        return bool(self.user.is_active)
+
+    is_active.boolean = True
+
+
 class User(auth_models.User):
     """Proxy class of the default's User class.
     Adds helper class methods."""
@@ -28,6 +54,8 @@ class User(auth_models.User):
     request_set: Any
     newblog_set: Any
     newcomic_set: Any
+
+    user_profile: UserProfile
 
     class Meta:
         proxy = True
@@ -43,10 +71,10 @@ class User(auth_models.User):
         """Returns all subscribed comics, excluding ended."""
         return self.subscription_set.available(include_ended=False)
 
-    def comics_subscribed(self) -> SubscriptionManager:
+    def comics_subscribed(self) -> list[Comic]:
         """Return the ordered list of comics that the user is subscribed."""
         comic_ids = [subscription.comic.id for subscription in self.subscriptions()]
-        return (
+        return list(
             Comic.objects.available()
             .prefetch_related("subscription_set")
             .prefetch_related("strip_set")
@@ -70,6 +98,7 @@ class User(auth_models.User):
         self.subscription_set.create(comic=comic, position=next_pos)
         if last_strip := Strip.objects.filter(comic=comic).last():
             UnreadStrip.objects.create(user=self, comic=comic, strip=last_strip)
+        # TODO: return next_pos so that the following subscription can be used with a known position?
 
     def subscribe_list(self, comic_id_list: list[int]) -> None:
         """Add the comics from the list. Ignores comics that are already subscribed,
@@ -94,6 +123,21 @@ class User(auth_models.User):
         """Remove all of the user's subscriptions."""
         self.unreadstrip_set.all().delete()
         self.subscription_set.all().delete()
+
+    def subscriptions_reorder(self, comic_id_list: list[int]) -> None:
+        """Reorder the subscriptions according to the list of comic ids."""
+        # TODO: test
+        # TODO: implement
+        clean_id_list = set(comic_id_list)
+        subscriptions = self.subscription_set.all()
+        if subscriptions.count() != len(clean_id_list):
+            raise IncompleteListError(
+                "The list of comics is incomplete or contains invalid comics"
+            )
+
+        for subscription in subscriptions:
+            subscription.position = comic_id_list.index(subscription.comic.id) + 1
+            subscription.save()
 
     def subscriptions_recalculate_positions(self) -> None:
         """Recalculate the position of each subscription."""
@@ -169,29 +213,34 @@ class User(auth_models.User):
         """Return the list of comics that are new for this user, including ended ones."""
         new_comics = self.newcomic_set.select_related("comic")
         new_comics_ids = [newcomic.comic.id for newcomic in new_comics]
-        return (
+        return list(
             Comic.objects.available()
             .prefetch_related("subscription_set")
             .filter(pk__in=new_comics_ids)
         )
 
+    def comics_new_count(self) -> int:
+        """Return the number of new comics for this user."""
+        return self.newcomic_set.count()
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(
-        auth_models.User, related_name="user_profile", on_delete=models.CASCADE
-    )
+    def comics_new_forget(self, comic: Comic) -> None:
+        """Forget all new comics for this user."""
+        # TODO: test
+        self.newcomic_set.filter(comic=comic).delete()
 
-    last_read_access = models.DateTimeField()
+    def comics_new_forget_all(self) -> None:
+        """Forget all new comics for this user."""
+        # TODO: test
+        self.newcomic_set.all().delete()
 
-    class Meta:
-        ordering = ["user"]
-        verbose_name = _("User profile")
-        verbose_name_plural = _("User profiles")
+    def comic_is_new(self, comic: Comic) -> bool:
+        """Check if a comic is new for this user."""
+        return self.newcomic_set.filter(comic=comic).count() == 1
 
-    def __str__(self):
-        return str(self.user)
+    # #################
+    # #   New blogs   #
+    # #################
 
-    def is_active(self):
-        return bool(self.user.is_active)
-
-    is_active.boolean = True
+    def blogs_new_count(self):
+        """Return the list of new blogs for this user."""
+        return self.newblog_set.count()

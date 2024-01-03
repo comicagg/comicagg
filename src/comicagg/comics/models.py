@@ -11,6 +11,19 @@ from .managers import ComicManager, UnreadStripManager, SubscriptionManager
 
 
 class Comic(models.Model):
+    class ComicStatus(models.IntegerChoices):
+        """
+        Comics can be:
+        - Active: comic gets updated regularly.
+        - Ended: comic has ended. Does not get updates.
+        - Broken: does not work. Must be reconfigured by an admin.
+        """
+
+        INACTIVE = 0, "Inactive. Never shown"
+        ACTIVE = 1, "Active"
+        ENDED = 2, "Ended"
+        BROKEN = 3, "Broken"
+
     """
     Comics can be: A active, E ended
 
@@ -25,25 +38,31 @@ class Comic(models.Model):
 
     name = ComicNameField("Name", max_length=255)
     website = models.URLField("Website")
+    status = models.IntegerField(
+        "Status",
+        default=ComicStatus.INACTIVE,
+        choices=ComicStatus.choices,
+        help_text="An inactive comic is never shown. The rest, depends on the case.",
+    )
     active = models.BooleanField(
         "Is active?",
         default=False,
         help_text="The comic is ongoing and gets updated regularly.",
     )
-    notify = models.BooleanField(
-        "Notify the users?",
-        default=False,
-        help_text="""This is always disabled. If it's enabled when saving the comic, the users will be notified of the new comic.""",
-    )
     ended = models.BooleanField(
         "Has ended?",
         default=False,
-        help_text="Check this if the comic has ended. Also mark it as inactive.",
+        help_text="Check this if the comic has ended.",
     )
     no_images = models.BooleanField(
         "Don't show images?",
         default=False,
         help_text="Use it to hide the images of the comic, but allow a notification to the users.",
+    )
+    notify = models.BooleanField(
+        "Notify the users?",
+        default=False,
+        help_text="""This is always disabled. If it's enabled when saving the comic, the users will be notified of the new comic.""",
     )
     add_date = models.DateTimeField(auto_now_add=True)
 

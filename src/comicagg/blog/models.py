@@ -9,6 +9,9 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     html = models.BooleanField("Is the text HTML or plain text?", default=False)
 
+    # For type errors only
+    id: int
+
     class Meta:
         ordering = ["-date"]
 

@@ -47,7 +47,7 @@ def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
 
 @login_required
 def read_view(request: AuthenticatedHttpRequest):
-    comics = list(request.user.comics_subscribed())
+    comics = request.user.comics_subscribed()
     unread_strips_db = (
         request.user.unread_strips()
         .select_related("strip")
@@ -84,7 +84,7 @@ def add_comics(request: AuthenticatedHttpRequest):
     all_comics.sort(key=_slugify_comic)
 
     # build the available list depending on selected comics
-    user_comics = list(request.user.comics_subscribed())
+    user_comics = request.user.comics_subscribed()
     new_comics = request.user.comics_new()
     context = {
         "all_comics": all_comics,

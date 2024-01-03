@@ -30,7 +30,7 @@ def update_comic_task(comic_id: int) -> dict[str, bool | str]:
         comic.last_update_status = "Success"
     except NoMatchException:
         comic.last_update_status = "No match during update"
-    except:
+    except Exception:
         comic.last_update_status = f"Error: {sys.exc_info()[1]}"
     finally:
         comic.save()

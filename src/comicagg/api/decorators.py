@@ -61,7 +61,7 @@ def request_param(param_name):
             request = args[1]
             value = None
             # Search in kwargs
-            if param_name in kwargs.keys():
+            if param_name in kwargs:
                 value = kwargs[param_name]
             # Search in query string
             elif param_name in request.GET.keys():

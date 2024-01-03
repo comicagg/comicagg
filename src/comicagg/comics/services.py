@@ -9,6 +9,7 @@ from .models import Comic, NewComic, Strip, UnreadStrip
 
 logger = logging.getLogger(__name__)
 
+
 @deprecated("Use the User or specific manager methods")
 class AggregatorService:
     """This class allows actions with comics and a certain user.
@@ -166,7 +167,7 @@ class AggregatorService:
         self.user.subscription_set.all().delete()
         self.mark_all_read()
 
-    def random_comic(self):
+    def random_comic(self) -> Strip | None:
         """Get a random Strip of a Comic that the user is not following.
 
         The comic must be active and the Strip returned must be the most recent.
@@ -174,18 +175,19 @@ class AggregatorService:
         subscribed_ids = [
             subscription.comic.id for subscription in self.subscribed_all()
         ]
-        not_subscribed_comics = list(
+        non_subscribed_comics = list(
             Comic.objects.available().exclude(id__in=subscribed_ids)
         )
         strip = None
-        if not_subscribed_comics:
-            while not strip:
-                # Find the first not subscribed comic with a Strip
-                with contextlib.suppress(Exception):
-                    random_comic = not_subscribed_comics[
-                        random.randint(0, len(not_subscribed_comics) - 1)
-                    ]
-                    strip = random_comic.last_strip
+        if not non_subscribed_comics:
+            return None
+        while not strip:
+            # Find the first not subscribed comic with a Strip
+            with contextlib.suppress(Exception):
+                random_comic = non_subscribed_comics[
+                    random.randint(0, len(non_subscribed_comics) - 1)
+                ]
+                strip = random_comic.last_strip
         return strip
 
     def new_comics(self):

@@ -1,7 +1,8 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.contrib.auth.models import User
+
+from comicagg.accounts.models import User
 
 task_logger = get_task_logger(__name__)
 
@@ -11,7 +12,7 @@ def max_unreads_per_user():
     """Limit the maximum number of unread comics a user can have."""
     users = User.objects.all()
     for user in users:
-        user_subscriptions = user.subscription_set.all()
+        user_subscriptions = user.subscription_set.all().select_related("comic")
         for subscription in user_subscriptions:
             unreads = user.unreadstrip_set.filter(
                 comic__exact=subscription.comic
