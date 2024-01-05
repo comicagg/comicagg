@@ -138,13 +138,9 @@ def request_index(request: AuthenticatedHttpRequest):
     context = {
         "form": form,
         "count": ComicRequest.objects.all().count(),
-        "accepted": request.user.request_set.filter(done__exact=1).filter(
-            rejected__exact=0
-        ),
-        "rejected": request.user.request_set.filter(rejected__exact=1),
-        "pending": request.user.request_set.filter(done__exact=0).filter(
-            rejected__exact=0
-        ),
+        "accepted": request.user.requests_accepted_count(),
+        "rejected": request.user.requests_rejected_count(),
+        "pending": request.user.requests_pending_count(),
     }
     return render(request, "comics/request_index.html", context)
 

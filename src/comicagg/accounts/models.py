@@ -245,3 +245,19 @@ class User(auth_models.User):
     def blogs_new_count(self):
         """Return the list of new blogs for this user."""
         return self.newblog_set.count()
+
+    # ################
+    # #   Requests   #
+    # ################
+
+    def requests_accepted_count(self) -> int:
+        """Return the count of accepted requests for this user."""
+        return self.request_set.filter(done__exact=1).filter(rejected__exact=0)
+
+    def requests_rejected_count(self) -> int:
+        """Return the count of rejected requests for this user."""
+        return self.request_set.filter(rejected__exact=1)
+
+    def requests_pending_count(self) -> int:
+        """Return the count of pending requests for this user."""
+        return self.request_set.filter(done__exact=0).filter(rejected__exact=0)
