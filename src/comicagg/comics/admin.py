@@ -49,8 +49,6 @@ class ComicAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "status",
-        "active",
-        "ended",
         "last_update",
     )
     search_fields = ["name"]
@@ -66,10 +64,8 @@ class ComicAdmin(admin.ModelAdmin):
                     "name",
                     "website",
                     "status",
-                    "active",
-                    "ended",
-                    "notify",
                     "no_images",
+                    "notify",
                 )
             },
         ),
@@ -116,10 +112,9 @@ class ComicAdmin(admin.ModelAdmin):
             },
         ),
     )
-    list_filter = ["active", HasCustomFunction]
+    list_filter = ["status", "no_images", HasCustomFunction]
 
 
-# TODO: inline with comics?
 class StripAdmin(admin.ModelAdmin):
     list_display = (
         "comic",
@@ -130,7 +125,6 @@ class StripAdmin(admin.ModelAdmin):
     ordering = ("-date",)
 
 
-# TODO: inline with users?
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = (
         "user",
@@ -143,7 +137,6 @@ class SubscriptionAdmin(admin.ModelAdmin):
     )
 
 
-# TODO: inline with users?
 class UnreadStripAdmin(admin.ModelAdmin):
     list_display = (
         "user",
@@ -153,7 +146,6 @@ class UnreadStripAdmin(admin.ModelAdmin):
     search_fields = ["user__username"]
 
 
-# TODO: inline with users?
 class NewComicAdmin(admin.ModelAdmin):
     ordering = (
         "user",

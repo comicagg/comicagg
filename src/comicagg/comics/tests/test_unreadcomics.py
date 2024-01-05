@@ -13,17 +13,17 @@ class UnreadStripTestCase(TestCase):
         self.comic_active2 = Comic.objects.get(name="Active2")
         self.comic_ended = Comic.objects.get(name="Ended")
         self.comic_inactive = Comic.objects.get(name="Inactive")
-        self.comic_inactive_ended = Comic.objects.get(name="InactiveEnded")
+        self.comic_broken = Comic.objects.get(name="Broken")
         self.strip_active = self.comic_active.strip_set.first()
         self.strip_ended = self.comic_ended.strip_set.first()
         self.strip_inactive = self.comic_inactive.strip_set.first()
-        self.strip_inactiveended = self.comic_inactive_ended.strip_set.first()
+        self.strip_broken = self.comic_broken.strip_set.first()
 
     def add_subscriptions(self):
         self.user.subscription_set.create(comic=self.comic_active, position=1)
         self.user.subscription_set.create(comic=self.comic_ended, position=2)
         self.user.subscription_set.create(comic=self.comic_inactive, position=3)
-        self.user.subscription_set.create(comic=self.comic_inactive_ended, position=4)
+        self.user.subscription_set.create(comic=self.comic_broken, position=4)
 
     def add_unread_strips(self):
         self.user.unreadstrip_set.create(
@@ -34,7 +34,7 @@ class UnreadStripTestCase(TestCase):
             comic=self.comic_inactive, strip=self.strip_inactive
         )
         self.user.unreadstrip_set.create(
-            comic=self.comic_inactive_ended, strip=self.strip_inactiveended
+            comic=self.comic_broken, strip=self.strip_broken
         )
 
     # ########################
@@ -52,7 +52,7 @@ class UnreadStripTestCase(TestCase):
         self.user.subscription_set.create(comic=self.comic_active)
         self.user.subscription_set.create(comic=self.comic_ended)
         self.user.subscription_set.create(comic=self.comic_inactive)
-        self.user.subscription_set.create(comic=self.comic_inactive_ended)
+        self.user.subscription_set.create(comic=self.comic_broken)
         self.user.unreadstrip_set.create(
             comic=self.comic_active, strip=self.strip_active
         )
@@ -61,12 +61,12 @@ class UnreadStripTestCase(TestCase):
             comic=self.comic_inactive, strip=self.strip_inactive
         )
         self.user.unreadstrip_set.create(
-            comic=self.comic_inactive_ended, strip=self.strip_inactiveended
+            comic=self.comic_broken, strip=self.strip_broken
         )
 
         active_subscriptions = self.user.unread_strips().count()
 
-        self.assertEqual(active_subscriptions, 2)
+        self.assertEqual(active_subscriptions, 3)
 
     # ###############################
     # #   Test User.unread_comics   #
@@ -83,7 +83,7 @@ class UnreadStripTestCase(TestCase):
         self.user.subscription_set.create(comic=self.comic_active)
         self.user.subscription_set.create(comic=self.comic_ended)
         self.user.subscription_set.create(comic=self.comic_inactive)
-        self.user.subscription_set.create(comic=self.comic_inactive_ended)
+        self.user.subscription_set.create(comic=self.comic_broken)
 
         unreads = self.user.comics_unread()
 
@@ -94,7 +94,7 @@ class UnreadStripTestCase(TestCase):
         self.user.subscription_set.create(comic=self.comic_active)
         self.user.subscription_set.create(comic=self.comic_ended)
         self.user.subscription_set.create(comic=self.comic_inactive)
-        self.user.subscription_set.create(comic=self.comic_inactive_ended)
+        self.user.subscription_set.create(comic=self.comic_broken)
         self.user.unreadstrip_set.create(
             comic=self.comic_active, strip=self.strip_active
         )
@@ -103,12 +103,12 @@ class UnreadStripTestCase(TestCase):
             comic=self.comic_inactive, strip=self.strip_inactive
         )
         self.user.unreadstrip_set.create(
-            comic=self.comic_inactive_ended, strip=self.strip_inactiveended
+            comic=self.comic_broken, strip=self.strip_broken
         )
 
         unreads = self.user.comics_unread()
 
-        self.assertEqual(len(unreads), 2)
+        self.assertEqual(len(unreads), 3)
 
     # #############################
     # #   Test User.mark_unread   #
@@ -153,21 +153,21 @@ class UnreadStripTestCase(TestCase):
 
         self.assertEqual(strip_count, 1)
 
+    def test_mark_unread_broken(self):
+        """Should mark the comic as unread."""
+        self.add_subscriptions()
+
+        self.user.mark_unread(self.comic_broken)
+
+        strip_count = self.user.unreadstrip_set.count()
+
+        self.assertEqual(strip_count, 1)
+
     def test_mark_unread_inactive(self):
         """Should not change anything since the comic is inactive."""
         self.add_subscriptions()
 
         self.user.mark_unread(self.comic_inactive)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 0)
-
-    def test_mark_unread_inactive_ended(self):
-        """Should not change anything since the comic is inactive and ended."""
-        self.add_subscriptions()
-
-        self.user.mark_unread(self.comic_inactive_ended)
 
         strip_count = self.user.unreadstrip_set.count()
 
@@ -231,23 +231,23 @@ class UnreadStripTestCase(TestCase):
 
         self.assertEqual(strip_count, 3)
 
+    def test_mark_read_broken(self):
+        """Should mark the comic as read."""
+        self.add_subscriptions()
+        self.add_unread_strips()
+
+        self.user.mark_read(self.comic_broken)
+
+        strip_count = self.user.unreadstrip_set.count()
+
+        self.assertEqual(strip_count, 3)
+
     def test_mark_read_inactive(self):
         """Should not change anything since the comic is inactive."""
         self.add_subscriptions()
         self.add_unread_strips()
 
         self.user.mark_read(self.comic_inactive)
-
-        strip_count = self.user.unreadstrip_set.count()
-
-        self.assertEqual(strip_count, 4)
-
-    def test_mark_read_inactive_ended(self):
-        """Should not change anything since the comic is inactive and ended."""
-        self.add_subscriptions()
-        self.add_unread_strips()
-
-        self.user.mark_read(self.comic_inactive_ended)
 
         strip_count = self.user.unreadstrip_set.count()
 

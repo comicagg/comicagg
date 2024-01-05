@@ -6,24 +6,11 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 
-from .fields import AltTextField, ComicNameField
-from .managers import ComicManager, UnreadStripManager, SubscriptionManager
+from .fields import AltTextField, ComicNameField, ComicStatus
+from .managers import ComicManager, SubscriptionManager, UnreadStripManager
 
 
 class Comic(models.Model):
-    class ComicStatus(models.IntegerChoices):
-        """
-        Comics can be:
-        - Active: comic gets updated regularly.
-        - Ended: comic has ended. Does not get updates.
-        - Broken: does not work. Must be reconfigured by an admin.
-        """
-
-        INACTIVE = 0, "Inactive. Never shown"
-        ACTIVE = 1, "Active"
-        ENDED = 2, "Ended"
-        BROKEN = 3, "Broken"
-
     """
     Comics can be: A active, E ended
 
@@ -38,24 +25,15 @@ class Comic(models.Model):
 
     name = ComicNameField("Name", max_length=255)
     website = models.URLField("Website")
+    # FIXME: Create logic so that a comic cannot be marked as inactive
     status = models.IntegerField(
         "Status",
         default=ComicStatus.INACTIVE,
         choices=ComicStatus.choices,
         help_text="An inactive comic is never shown. The rest, depends on the case.",
     )
-    active = models.BooleanField(
-        "Is active?",
-        default=False,
-        help_text="The comic is ongoing and gets updated regularly.",
-    )
-    ended = models.BooleanField(
-        "Has ended?",
-        default=False,
-        help_text="Check this if the comic has ended.",
-    )
     no_images = models.BooleanField(
-        "Don't show images?",
+        "Hide images in Strips",
         default=False,
         help_text="Use it to hide the images of the comic, but allow a notification to the users.",
     )
@@ -180,7 +158,9 @@ class Comic(models.Model):
         # If the user saved this with the notify field to true
         should_notify = self.notify
         self.notify = False
+
         super().save(*args, **kwargs)
+
         if should_notify:
             # Create a NewComic object for each user
             users = User.objects.all()
@@ -299,6 +279,7 @@ class Strip(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
     alt_text = AltTextField("Alternative text", blank=True, null=True)
+    # FUTURE: Add a field so that Strips can be grouped
 
     # For type errors only
     id: int

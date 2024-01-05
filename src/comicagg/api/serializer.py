@@ -91,7 +91,7 @@ class Serializer:
             "votes": comic.total_votes,
             "rating": comic.get_rating(),
             "added": self.user.is_subscribed(comic),
-            "ended": comic.ended,
+            "ended": comic.status == Comic.ComicStatus.ENDED,
             "unread_count": self.user.unread_strips_for(comic).count(),
         }
         if last_strip:
@@ -118,7 +118,7 @@ class Serializer:
         return {
             "username": self.user.username,
             "email": self.user.email,
-            "total_comics": self.user.subscriptions().count(),
+            "total_comics": self.user.subscription_count(),
             "unread_comics": self.user.comics_unread_count(),
-            "new_comics": len(self.user.comics_new()),
+            "new_comics": self.user.comics_new_count(),
         }

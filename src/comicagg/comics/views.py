@@ -6,6 +6,7 @@ from urllib.error import HTTPError
 from urllib.parse import urljoin
 from urllib.request import Request, urlopen
 
+from comicagg.typings import AuthenticatedHttpRequest
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,12 +17,9 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
 
-from comicagg.typings import AuthenticatedHttpRequest
-
 from .forms import RequestForm
-from .models import Comic
+from .models import Comic, Strip
 from .models import Request as ComicRequest
-from .models import Strip
 
 logger = logging.getLogger(__name__)
 

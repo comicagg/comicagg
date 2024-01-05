@@ -30,7 +30,7 @@ class Post(models.Model):
                 new_blog = NewBlog(user=user, post=self)
                 new_blog.save()
 
-
+# FUTURE: Rename to NewPost
 class NewBlog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="new_posts")

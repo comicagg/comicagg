@@ -1,52 +1,52 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/postgres
 {
-	"name": "Comicagg Development",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// This can be used to network with other containers or the host.
-	,
-	"forwardPorts": [
-		8000,
-		5432,
-		5555,
-		8080
-	],
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"tal7aouy.indent-colorizer",
-				"ms-python.black-formatter",
-				"jgclark.vscode-todo-highlight",
-				"Gruntfuggly.todo-tree",
-				"tushortz.python-extended-snippets",
-				"ms-python.isort",
-				"twixes.pypi-assistant",
-				"batisteo.vscode-django",
-				"junstyle.vscode-django-support",
-				"ahmadalli.vscode-nginx-conf",
-				"ms-azuretools.vscode-docker",
-				"DavidAnson.vscode-markdownlint",
-				"vict0rsch.coblock",
-				"sourcery.sourcery",
-				"thebarkman.vscode-djaneiro",
-				"mrorz.language-gettext",
-				"EditorConfig.EditorConfig"
-			]
-		}
-	},
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip install --user -r requirements.txt",
-	// Configure tool-specific properties.
-	// "customizations": {},
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "root",
-	"mounts": [
-		"source=profile,target=/root,type=volume",
-		"target=/root/.vscode-server,type=volume"
-	]
+  "name": "Comicagg Development",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  // "features": {},
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // This can be used to network with other containers or the host.
+  ,
+  "forwardPorts": [
+    8000,
+    5432,
+    5555,
+    8080
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "tal7aouy.indent-colorizer",
+        "ms-python.black-formatter",
+        "jgclark.vscode-todo-highlight",
+        "Gruntfuggly.todo-tree",
+        "tushortz.python-extended-snippets",
+        "ms-python.isort",
+        "twixes.pypi-assistant",
+        "batisteo.vscode-django",
+        "junstyle.vscode-django-support",
+        "ahmadalli.vscode-nginx-conf",
+        "ms-azuretools.vscode-docker",
+        "DavidAnson.vscode-markdownlint",
+        "vict0rsch.coblock",
+        "sourcery.sourcery",
+        "thebarkman.vscode-djaneiro",
+        "mrorz.language-gettext",
+        "EditorConfig.EditorConfig"
+      ]
+    }
+  },
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "pip install --user -r requirements.txt",
+  // Configure tool-specific properties.
+  // "customizations": {},
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  "remoteUser": "root",
+  "mounts": [
+    "source=profile,target=/root,type=volume",
+    "target=/root/.vscode-server,type=volume"
+  ]
 }

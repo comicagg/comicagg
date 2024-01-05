@@ -11,12 +11,11 @@ import logging
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
-from django.db.models import Count, Max
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from comicagg.comics.models import Comic, NewComic, Strip, Subscription, UnreadStrip
+from comicagg.comics.models import Comic, Subscription
 from comicagg.typings import AuthenticatedHttpRequest
 
 logger = logging.getLogger(__name__)
@@ -24,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def ok_response(request: AuthenticatedHttpRequest):
-    comic_count = request.user.subscriptions_active().count()
+    comic_count = request.user.subscription_count()
     unread_count = request.user.comics_unread_count()
     new_comics_count = request.user.comics_new_count()
     news_count = request.user.blogs_new_count()

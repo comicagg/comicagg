@@ -13,23 +13,23 @@ class SubscriptionsTestCase(TestCase):
         self.comic_active2 = Comic.objects.get(name="Active2")
         self.comic_ended = Comic.objects.get(name="Ended")
         self.comic_inactive = Comic.objects.get(name="Inactive")
-        self.comic_inactive_ended = Comic.objects.get(name="InactiveEnded")
+        self.comic_broken = Comic.objects.get(name="Broken")
         self.strip_active = self.comic_active.strip_set.first()
         self.strip_ended = self.comic_ended.strip_set.first()
         self.strip_inactive = self.comic_inactive.strip_set.first()
-        self.strip_inactiveended = self.comic_inactive_ended.strip_set.first()
+        self.strip_broken = self.comic_broken.strip_set.first()
         # Set up a second user
         self.user2 = User.objects.get(pk=2)
         self.user2.subscription_set.create(comic=self.comic_active, position=1)
         self.user2.subscription_set.create(comic=self.comic_ended, position=2)
         self.user2.subscription_set.create(comic=self.comic_inactive, position=3)
-        self.user2.subscription_set.create(comic=self.comic_inactive_ended, position=4)
+        self.user2.subscription_set.create(comic=self.comic_broken, position=4)
 
     def add_subscriptions(self):
         self.user.subscription_set.create(comic=self.comic_active, position=1)
         self.user.subscription_set.create(comic=self.comic_ended, position=2)
         self.user.subscription_set.create(comic=self.comic_inactive, position=3)
-        self.user.subscription_set.create(comic=self.comic_inactive_ended, position=4)
+        self.user.subscription_set.create(comic=self.comic_broken, position=4)
 
     def add_unread_strips(self):
         self.user.unreadstrip_set.create(
@@ -40,7 +40,7 @@ class SubscriptionsTestCase(TestCase):
             comic=self.comic_inactive, strip=self.strip_inactive
         )
         self.user.unreadstrip_set.create(
-            comic=self.comic_inactive_ended, strip=self.strip_inactiveended
+            comic=self.comic_broken, strip=self.strip_broken
         )
 
     # ###############################
@@ -56,30 +56,12 @@ class SubscriptionsTestCase(TestCase):
         self.assertFalse(is_subscribed, "Comic cannot be subscribed")
 
     def test_subscriptions(self):
-        """Should return active and ended comics."""
+        """Should return active, ended and broken comics."""
         self.add_subscriptions()
 
         all_subscriptions = self.user.subscriptions().count()
 
-        self.assertEqual(all_subscriptions, 2)
-
-    # ######################################
-    # #   Test User.subscriptions_active   #
-    # ######################################
-
-    def test_active_subscriptions_empty(self):
-        """Should return an empty list."""
-        subscriptions = self.user.subscriptions_active().count()
-
-        self.assertEqual(subscriptions, 0)
-
-    def test_active_subscriptions(self):
-        """Should only return active comics."""
-        self.add_subscriptions()
-
-        active_subscriptions = self.user.subscriptions_active().count()
-
-        self.assertEqual(active_subscriptions, 1)
+        self.assertEqual(all_subscriptions, 3)
 
     # ###################################
     # #   Test User.comics_subscribed   #
@@ -97,9 +79,11 @@ class SubscriptionsTestCase(TestCase):
 
         comics = list(self.user.comics_subscribed())
 
-        self.assertEqual(len(comics), 2)
+        self.assertEqual(len(comics), 3)
         self.assertIsInstance(comics[0], Comic)
-        self.assertListEqual(comics, [self.comic_active, self.comic_ended])
+        self.assertListEqual(
+            comics, [self.comic_active, self.comic_broken, self.comic_ended]
+        )
 
     # ###################################
     # #   Test User.is_subscribed   #
@@ -117,12 +101,12 @@ class SubscriptionsTestCase(TestCase):
         active = self.user.is_subscribed(self.comic_active)
         ended = self.user.is_subscribed(self.comic_ended)
         inactive = self.user.is_subscribed(self.comic_inactive)
-        inactive_ended = self.user.is_subscribed(self.comic_inactive_ended)
+        broken = self.user.is_subscribed(self.comic_broken)
 
         self.assertTrue(active)
         self.assertTrue(ended)
+        self.assertTrue(broken)
         self.assertFalse(inactive)
-        self.assertFalse(inactive_ended)
 
     # ###########################
     # #   Test User.subscribe   #
@@ -152,22 +136,38 @@ class SubscriptionsTestCase(TestCase):
         self.assertListEqual(comics, [self.comic_ended, self.comic_active])
 
     def test_subscribe_comic_ended(self):
-        with self.assertRaises(
-            InvalidComicError, msg="Cannot subscribe to ended comics"
-        ):
-            self.user.subscribe(self.comic_ended)
+        self.user.subscription_set.create(comic=self.comic_active, position=1)
+        self.user.subscribe(self.comic_ended)
+
+        subscription_count = self.user.subscription_set.count()
+        strip_count = self.user.unreadstrip_set.count()
+        comics = [
+            subscription.comic for subscription in self.user.subscription_set.all()
+        ]
+
+        self.assertEqual(subscription_count, 2)
+        self.assertEqual(strip_count, 1)
+        self.assertListEqual(comics, [self.comic_active, self.comic_ended])
+
+    def test_subscribe_comic_broken(self):
+        self.user.subscription_set.create(comic=self.comic_active, position=1)
+        self.user.subscribe(self.comic_broken)
+
+        subscription_count = self.user.subscription_set.count()
+        strip_count = self.user.unreadstrip_set.count()
+        comics = [
+            subscription.comic for subscription in self.user.subscription_set.all()
+        ]
+
+        self.assertEqual(subscription_count, 2)
+        self.assertEqual(strip_count, 1)
+        self.assertListEqual(comics, [self.comic_active, self.comic_broken])
 
     def test_subscribe_comic_inactive(self):
         with self.assertRaises(
             InvalidComicError, msg="Cannot subscribe to inactive comics"
         ):
             self.user.subscribe(self.comic_inactive)
-
-    def test_subscribe_comic_inactive_ended(self):
-        with self.assertRaises(
-            InvalidComicError, msg="Cannot subscribe to inactive and ended comics"
-        ):
-            self.user.subscribe(self.comic_inactive_ended)
 
     # ################################
     # #   Test User.subscribe_list   #
@@ -198,28 +198,28 @@ class SubscriptionsTestCase(TestCase):
         self.assertListEqual(comics, [self.comic_active, self.comic_active2])
 
     def test_subscribe_list_ended(self):
-        """Should not create subscriptions for ended comics."""
+        """Should create subscriptions for ended comics."""
         self.user.subscribe_list([self.comic_ended.id])
 
         subscription_count = self.user.subscription_set.count()
         strip_count = self.user.unreadstrip_set.count()
 
-        self.assertEqual(subscription_count, 0)
-        self.assertEqual(strip_count, 0)
+        self.assertEqual(subscription_count, 1)
+        self.assertEqual(strip_count, 1)
 
-    def test_subscribe_list_inactive(self):
-        """Should not create subscriptions for inactive comics."""
-        self.user.subscribe_list([self.comic_inactive.id])
+    def test_subscribe_list_broken(self):
+        """Should not create subscriptions for inactive and ended comics."""
+        self.user.subscribe_list([self.comic_broken.id])
 
         subscription_count = self.user.subscription_set.count()
         strip_count = self.user.unreadstrip_set.count()
 
-        self.assertEqual(subscription_count, 0)
-        self.assertEqual(strip_count, 0)
+        self.assertEqual(subscription_count, 1)
+        self.assertEqual(strip_count, 1)
 
-    def test_subscribe_list_inactive_ended(self):
-        """Should not create subscriptions for inactive and ended comics."""
-        self.user.subscribe_list([self.comic_inactive_ended.id])
+    def test_subscribe_list_inactive(self):
+        """Should not create subscriptions for inactive comics."""
+        self.user.subscribe_list([self.comic_inactive.id])
 
         subscription_count = self.user.subscription_set.count()
         strip_count = self.user.unreadstrip_set.count()
@@ -244,13 +244,13 @@ class SubscriptionsTestCase(TestCase):
         self.assertListEqual(comics, [self.comic_active, self.comic_active2])
 
     def test_subscribe_list_mixed(self):
-        """Should not create subscriptions for inactive and ended comics."""
+        """Should not create subscriptions for inactive comics."""
         self.user.subscribe_list(
             [
                 self.comic_active.id,
                 self.comic_ended.id,
+                self.comic_broken.id,
                 self.comic_inactive.id,
-                self.comic_inactive_ended.id,
                 self.comic_active2.id,
             ]
         )
@@ -261,9 +261,17 @@ class SubscriptionsTestCase(TestCase):
             subscription.comic for subscription in self.user.subscription_set.all()
         ]
 
-        self.assertEqual(subscription_count, 2)
-        self.assertEqual(strip_count, 1)
-        self.assertListEqual(comics, [self.comic_active, self.comic_active2])
+        self.assertEqual(subscription_count, 4)
+        self.assertEqual(strip_count, 3)
+        self.assertListEqual(
+            comics,
+            [
+                self.comic_active,
+                self.comic_ended,
+                self.comic_broken,
+                self.comic_active2,
+            ],
+        )
 
     # #############################
     # #   Test User.unsubscribe   #
@@ -295,7 +303,7 @@ class SubscriptionsTestCase(TestCase):
         self.assertEqual(subscription_count, 3)
         self.assertEqual(strip_count, 3)
         self.assertListEqual(
-            comics, [self.comic_ended, self.comic_inactive, self.comic_inactive_ended]
+            comics, [self.comic_ended, self.comic_inactive, self.comic_broken]
         )
 
     def test_unsubscribe_comic_ended(self):
@@ -314,7 +322,7 @@ class SubscriptionsTestCase(TestCase):
         self.assertEqual(subscription_count, 3)
         self.assertEqual(strip_count, 3)
         self.assertListEqual(
-            comics, [self.comic_active, self.comic_inactive, self.comic_inactive_ended]
+            comics, [self.comic_active, self.comic_inactive, self.comic_broken]
         )
 
     def test_unsubscribe_comic_inactive(self):
@@ -338,7 +346,7 @@ class SubscriptionsTestCase(TestCase):
             [
                 self.comic_active,
                 self.comic_ended,
-                self.comic_inactive_ended,
+                self.comic_broken,
             ],
         )
 
@@ -348,7 +356,7 @@ class SubscriptionsTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.unsubscribe(self.comic_inactive_ended)
+        self.user.unsubscribe(self.comic_broken)
 
         subscription_count = self.user.subscription_set.count()
         strip_count = self.user.unreadstrip_set.count()
@@ -388,7 +396,7 @@ class SubscriptionsTestCase(TestCase):
                 self.comic_active,
                 self.comic_ended,
                 self.comic_inactive,
-                self.comic_inactive_ended,
+                self.comic_broken,
             ],
         )
 
@@ -421,7 +429,7 @@ class SubscriptionsTestCase(TestCase):
 
         self.assertEqual(subscription_count, 2)
         self.assertEqual(strip_count, 2)
-        self.assertListEqual(comics, [self.comic_inactive, self.comic_inactive_ended])
+        self.assertListEqual(comics, [self.comic_inactive, self.comic_broken])
 
     def test_unsubscribe_list_ended(self):
         """Should remove the subscriptions and unread strips."""
@@ -443,7 +451,7 @@ class SubscriptionsTestCase(TestCase):
             [
                 self.comic_active,
                 self.comic_inactive,
-                self.comic_inactive_ended,
+                self.comic_broken,
             ],
         )
 
@@ -468,7 +476,7 @@ class SubscriptionsTestCase(TestCase):
             [
                 self.comic_active,
                 self.comic_ended,
-                self.comic_inactive_ended,
+                self.comic_broken,
             ],
         )
 
@@ -478,7 +486,7 @@ class SubscriptionsTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.unsubscribe_list([self.comic_inactive_ended.id])
+        self.user.unsubscribe_list([self.comic_broken.id])
 
         subscription_count = self.user.subscription_set.count()
         strip_count = self.user.unreadstrip_set.count()
@@ -518,7 +526,7 @@ class SubscriptionsTestCase(TestCase):
                 self.comic_active,
                 self.comic_ended,
                 self.comic_inactive,
-                self.comic_inactive_ended,
+                self.comic_broken,
             ],
         )
 
@@ -539,7 +547,7 @@ class SubscriptionsTestCase(TestCase):
 
         self.assertEqual(subscription_count, 2)
         self.assertEqual(strip_count, 2)
-        self.assertListEqual(comics, [self.comic_inactive, self.comic_inactive_ended])
+        self.assertListEqual(comics, [self.comic_inactive, self.comic_broken])
 
     def test_unsubscribe_list_mixed(self):
         """Should remove the subscriptions and unread strips."""
@@ -551,7 +559,7 @@ class SubscriptionsTestCase(TestCase):
                 self.comic_active.id,
                 self.comic_ended.id,
                 self.comic_inactive.id,
-                self.comic_inactive_ended.id,
+                self.comic_broken.id,
                 self.comic_active2.id,
             ]
         )
@@ -630,7 +638,7 @@ class SubscriptionsTestCase(TestCase):
 
         self.user.subscriptions_reorder(
             [
-                self.comic_inactive_ended.id,
+                self.comic_broken.id,
                 self.comic_active.id,
                 self.comic_inactive.id,
                 self.comic_ended.id,
@@ -645,7 +653,7 @@ class SubscriptionsTestCase(TestCase):
         self.assertListEqual(
             comics,
             [
-                self.comic_inactive_ended,
+                self.comic_broken,
                 self.comic_active,
                 self.comic_inactive,
                 self.comic_ended,
@@ -659,7 +667,7 @@ class SubscriptionsTestCase(TestCase):
 
         self.user.subscriptions_reorder(
             [
-                self.comic_inactive_ended.id,
+                self.comic_broken.id,
                 self.comic_active.id,
                 self.comic_inactive.id,
                 self.comic_ended.id,
@@ -675,7 +683,7 @@ class SubscriptionsTestCase(TestCase):
         self.assertListEqual(
             comics,
             [
-                self.comic_inactive_ended,
+                self.comic_broken,
                 self.comic_active,
                 self.comic_inactive,
                 self.comic_ended,

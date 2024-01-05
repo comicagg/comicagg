@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Count, Max
 from django.utils.translation import gettext_lazy as _
 
+from comicagg.comics.fields import ComicStatus
 from comicagg.comics.managers import SubscriptionManager, UnreadStripManager
 from comicagg.comics.models import Comic, Strip, UnreadStrip
 
@@ -67,9 +68,9 @@ class User(auth_models.User):
         """Returns all subscribed comics, including ended."""
         return self.subscription_set.available()
 
-    def subscriptions_active(self) -> SubscriptionManager:
-        """Returns all subscribed comics, excluding ended."""
-        return self.subscription_set.available(include_ended=False)
+    def subscription_count(self) -> int:
+        """Returns all subscribed comics, including ended."""
+        return self.subscription_set.available().count()
 
     def comics_subscribed(self) -> list[Comic]:
         """Return the ordered list of comics that the user is subscribed."""
@@ -89,8 +90,8 @@ class User(auth_models.User):
         """Subscribe the user to this comic, adding it last to his list."""
         if self.is_subscribed(comic):
             return
-        if not comic.active or comic.ended:
-            raise InvalidComicError("Cannot subscribe to an ended or inactive comic")
+        if comic.status in [ComicStatus.INACTIVE]:
+            raise InvalidComicError("Cannot subscribe to this comic")
         # Calculate the position for the comic, it'll be the last
         # max_position can be None if there are no comics
         max_position = self.subscriptions().aggregate(pos=Max("position"))["pos"] or 0
@@ -98,12 +99,12 @@ class User(auth_models.User):
         self.subscription_set.create(comic=comic, position=next_pos)
         if last_strip := Strip.objects.filter(comic=comic).last():
             UnreadStrip.objects.create(user=self, comic=comic, strip=last_strip)
-        # TODO: return next_pos so that the following subscription can be used with a known position?
+        # FUTURE: return next_pos so that the following subscription can be used with a known position?
 
     def subscribe_list(self, comic_id_list: list[int]) -> None:
         """Add the comics from the list. Ignores comics that are already subscribed,
         ended or inactive."""
-        comics = Comic.objects.available(include_ended=False).in_bulk(comic_id_list)
+        comics = Comic.objects.available().in_bulk(comic_id_list)
         for comic in comics.values():
             self.subscribe(comic)
 
@@ -210,7 +211,7 @@ class User(auth_models.User):
     # ##################
 
     def comics_new(self) -> list[Comic]:
-        """Return the list of comics that are new for this user, including ended ones."""
+        """Return the list of comics that are new for this user."""
         new_comics = self.newcomic_set.select_related("comic")
         new_comics_ids = [newcomic.comic.id for newcomic in new_comics]
         return list(

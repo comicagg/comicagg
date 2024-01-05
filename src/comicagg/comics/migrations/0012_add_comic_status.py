@@ -4,16 +4,21 @@ from django.db import migrations, models
 
 
 def migrate_status(apps, schema_editor):
+    INACTIVE = 0  # Inactive. Never shown
+    ACTIVE = 1  # Active
+    ENDED = 2  # Ended
+    BROKEN = 3  # Broken
+
     Comic = apps.get_model("comics", "Comic")
     db_alias = schema_editor.connection.alias
     all_comics = Comic.objects.using(db_alias).all()
     for comic in all_comics:
-        if not comic.active:
-            continue
-        if comic.ended:
-            comic.status = 2
+        if comic.ended and not comic.active:
+            comic.status = ENDED
         elif comic.active:
-            comic.status = 1
+            comic.status = ACTIVE
+        else:
+            comic.status = BROKEN
         comic.save()
 
 
@@ -47,6 +52,5 @@ class Migration(migrations.Migration):
                 verbose_name="Has ended?",
             ),
         ),
-
-        migrations.RunPython(migrate_status)
+        migrations.RunPython(migrate_status),
     ]

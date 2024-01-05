@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from comicagg.accounts.models import User
-from comicagg.comics.models import Comic, NewComic, UnreadStrip
+from comicagg.comics.models import Comic, NewComic
 
 
 class NewComicTestCase(TestCase):
@@ -12,7 +12,7 @@ class NewComicTestCase(TestCase):
         self.comic_active = Comic.objects.get(name="Active")
         self.comic_ended = Comic.objects.get(name="Ended")
         self.comic_inactive = Comic.objects.get(name="Inactive")
-        self.comic_inactive_ended = Comic.objects.get(name="InactiveEnded")
+        self.comic_broken = Comic.objects.get(name="Broken")
 
     # ############################
     # #   Test User.comics_new   #
@@ -50,8 +50,8 @@ class NewComicTestCase(TestCase):
 
     def test_comics_new_inactive_ended(self):
         """Should return no new comics."""
-        NewComic.objects.create(user=self.user, comic=self.comic_inactive_ended)
+        NewComic.objects.create(user=self.user, comic=self.comic_broken)
 
         new_comics = self.user.comics_new()
 
-        self.assertEqual(len(new_comics), 0)
+        self.assertEqual(len(new_comics), 1)
