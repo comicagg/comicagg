@@ -63,6 +63,7 @@ class ActiveUserMiddleware:
             # We do it here so all requests can be traced (api, web, etc)
             try:
                 request.user.user_profile.last_read_access = datetime.now(timezone.utc)
+                # FUTURE: can this be saved async?
                 request.user.user_profile.save()
             except ObjectDoesNotExist:
                 user_profile = UserProfile(

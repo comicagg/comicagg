@@ -17,8 +17,10 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
 
+from comicagg.comics.fields import ComicStatus
+
 from .forms import RequestForm
-from .models import Comic, Strip
+from .models import Comic, Strip, Subscription
 from .models import Request as ComicRequest
 
 logger = logging.getLogger(__name__)
@@ -98,10 +100,11 @@ def organize(request: AuthenticatedHttpRequest):
     comics_with_unread_strips = request.user.comics_unread()
     subscriptions = request.user.subscriptions()
     visible_comics = []
+    subscription: Subscription
     for subscription in subscriptions:
         # Remove ended comics without unread strips
         has_unread_strips = subscription.comic in comics_with_unread_strips
-        if not has_unread_strips and subscription.comic.ended:
+        if not has_unread_strips and subscription.comic.status == ComicStatus.ENDED:
             continue
         visible_comics.append(subscription.comic)
     context = {"user_comics": visible_comics}

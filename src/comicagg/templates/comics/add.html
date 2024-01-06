@@ -6,13 +6,16 @@
 		<script src="{% static 'base/js/organize_add.js' %}" type="text/javascript"></script>
 		<script type="text/javascript">
 var availablecomics = [
-{% for comic in all_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|as_percent:2|to_int }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe }}"},{% endfor %}
+{% for comic in all_comics %}
+{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|as_percent:2|to_int }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe }}"},{% endfor %}
 ];
 var availablecomics_new = [
-{% for comic in new_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|as_percent:2|to_int }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe }}"},{% endfor %}
+{% for comic in new_comics %}
+{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|as_percent:2|to_int }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe }}"},{% endfor %}
 ];
 var usercomics = [
-{% for comic in user_comics %}{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|as_percent:2|to_int }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe}}"},{% endfor %}
+{% for comic in user_comics %}
+{'id':{{ comic.id}}, 'name':"{{ comic.name|escape }}", 'slug':"{{ comic.name|slugify }}", 'score':"{{ comic.get_rating|as_percent:2|to_int }}", 'total_votes':{{ comic.total_votes }}, 'no_images':{{ comic.no_images|lower }}, 'url': "{{ comic.website }}", 'updated':"{{ comic.last_update|date:"j F, Y" }}", 'readers':{{ comic.reader_count }}, 'last':"{{ comic.last_image_url|safe}}"},{% endfor %}
 ];
 dojo.addOnLoad(initAdd);
 		</script>
@@ -44,7 +47,7 @@ dojo.addOnLoad(initAdd);
 		<input id="filterReal" type="text" value="" class="filter" style="display:none" onblur="switchFilter(true)" onkeyup="filter(this.value)"/>
 		<ul id="comic_list">
 {% for comic in all_comics %}
-			<li id="comic_{{ comic.id }}" class="comic {% if forloop.last %}last{% endif %} {% if comic.no_images %}no_images{% endif %}" {% if comic.no_images %}title="{% trans "You won't see the images of this comic" %}"{% endif %}>{{ comic }}</li>
+			<li id="comic_{{ comic.id }}" class="comic{% if forloop.last %} last{% endif %}{% if comic.no_images %} no_images{% endif %}" {% if comic.no_images %}title="{% trans "You won't see the images of this comic" %}"{% endif %}>{{ comic }}</li>
 {% endfor %}
 		</ul>
 	</div>

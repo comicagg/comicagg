@@ -199,6 +199,7 @@ class User(auth_models.User):
             value = 1
         comic.total_votes += votes
         comic.positive_votes += value
+        # FUTURE: this will block the comic row. Maybe votes can be stored in their own table?
         comic.save()
         self.unreadstrip_set.filter(comic=comic).delete()
 

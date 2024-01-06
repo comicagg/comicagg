@@ -11,21 +11,8 @@ from .managers import ComicManager, SubscriptionManager, UnreadStripManager
 
 
 class Comic(models.Model):
-    """
-    Comics can be: A active, E ended
-
-    E/A T F
-    T   - 2
-    F   1 3
-    1. Active AND not Ended - all ok, ongoing
-    2. Not active AND Ended - finished
-    3. Not active AND not Ended - not working, needs fixing
-    So visible to the user should be 1 and 2
-    """
-
     name = ComicNameField("Name", max_length=255)
     website = models.URLField("Website")
-    # FIXME: Create logic so that a comic cannot be marked as inactive
     status = models.IntegerField(
         "Status",
         default=ComicStatus.INACTIVE,

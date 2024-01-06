@@ -24,7 +24,7 @@ function onClickComic(event) {
     elem.addClassName('working');
     elem.removeClassName('error');
     if ((comic = containsComicId(usercomics, id))) {
-        //comic is selected, remove it!
+        // comic is selected, remove it!
         params = {'id': id};
         startRequest(url_remove, {
             method: 'post',
@@ -33,7 +33,7 @@ function onClickComic(event) {
             onSuccess: function (counters) {
                 elem.removeClassName('working');
                 elem.removeClassName('added');
-                //remove it from the users comic list
+                // remove it from the users comic list
                 if (removeComicId(usercomics, id)) {
                     usercomics = usercomics.compact();
                 }
@@ -46,7 +46,7 @@ function onClickComic(event) {
         });
     }
     else {
-        //comic is not selected, add it!
+        // comic is not selected, add it!
         comic = containsComicId(availablecomics, id);
         params = {'id': id};
         startRequest(url_add, {
@@ -57,13 +57,13 @@ function onClickComic(event) {
                 elem.removeClassName('working');
                 elem.removeClassName('new');
                 elem.addClassName('added');
-                //remove it from the new comics list
+                // remove it from the new comics list
                 if (removeComicId(availablecomics_new, id)) {
                     availablecomics_new = availablecomics_new.compact();
                 }
-                //add it to the user comics list
+                // add it to the user comics list
                 usercomics.push(comic);
-                //FIXME not always working?
+                // FIXME: not always working?
                 updateCounters(counters);
             },
             onFailure: function (response) {
@@ -79,18 +79,18 @@ function mouseOverAction() {
     id = parseInt(elem.id.substring(6), 10);
     currentid = id;
     if ((comic = containsComicId(availablecomics_new, id))) {
-        //es un comic nuevo
+        // es un comic nuevo
         $('comic_new').show();
-        //forget as new comic
+        // forget as new comic
         params = {'id': id};
         startRequest(url_forget_new_comic, {
             method: 'post',
             parameters: params,
             dataType: "json",
             onSuccess: function (counters) {
-                //remove green label
+                // remove green label
                 $('comic_' + id).removeClassName("new");
-                //remove it from the new comic list
+                // remove it from the new comic list
                 if (removeComicId(availablecomics_new, currentid)) {
                     availablecomics_new = availablecomics_new.compact();
                 }
@@ -135,7 +135,7 @@ function mouseOverAction() {
             $('comic_last').style.height = this.height + "px";
             w = this.width;
             h = this.height;
-            if (r > 1) { //horiz
+            if (r > 1) { // horiz
                 if (w > maxw) {
                     h = parseInt(maxw / r, 10);
                     $('comic_last').style.width = maxw + "px";
