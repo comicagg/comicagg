@@ -69,6 +69,8 @@ class Comic(models.Model):
         help_text="Read the page backwards by line (last line first).",
     )
 
+    # FUTURE: Add a field to scan for the alternative text
+
     # Second regex section
     re2_url = models.URLField(
         "URL where the page of the image can be found",

@@ -70,11 +70,11 @@ INSTALLED_APPS = [
     # Instead of 'django.contrib.admin'
     "comicagg.apps.ComicaggAdminConfig",
     "comicagg.accounts",
-    "comicagg.api",
+    # "comicagg.api",
     "comicagg.blog",
     "comicagg.comics",
-    "provider",
-    "provider.oauth2",
+    # "provider",
+    # "provider.oauth2",
     "mailer",
 ]
 
@@ -102,7 +102,7 @@ MIDDLEWARE = [
     # Overwrite the user object with our own User proxy model
     "comicagg.middleware.UserProxyOverwriteMiddleware",
     # OAuth2 authentication
-    "comicagg.api.middleware.OAuth2Middleware",
+    # "comicagg.api.middleware.OAuth2Middleware",
     # ###########################
     # #   Post-authentication   #
     # ###########################
