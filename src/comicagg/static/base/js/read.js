@@ -10,7 +10,7 @@ var alreadyUpdating = false;
 var cdivInView = [];
 //real number of current comics in the viewport
 var cdivInViewCount = 0;
-//list of comic <div> that will be checked for the viewport 
+//list of comic <div> that will be checked for the viewport
 var divlist = [];
 //controls whether to show the next comic bar or not
 var showNextComicBar = false;
@@ -92,7 +92,7 @@ function inViewport(cdiv, vmin, vmax) {
  */
 function updateViewport(loadImages) {
     var extras, viewp, vmin, vmax, i, len, cdiv, comic;
-    //semaphore so we don't run this function more than once at a time' 
+    //semaphore so we don't run this function more than once at a time
     if (alreadyUpdating) {
         return 0;
     }
@@ -158,7 +158,7 @@ function updateViewport(loadImages) {
             $('next_comic_bar').update(el);
             $('next_comic_bar').show();
         } catch (e) {
-            $('next_comic_bar').hide();            
+            $('next_comic_bar').hide();
         }
     } else {
         $('next_comic_bar').hide();
@@ -221,7 +221,7 @@ function showUnreadComics() {
     updateViewport(true);
 }
 /* Function to handle the scroll event.
- * 10 ms after the event has been launched it will update the viewport information 
+ * 10 ms after the event has been launched it will update the viewport information
  */
 function onScrollHandler(e) {
     setTimeout(function () {
@@ -392,7 +392,7 @@ function mark_all_read() {
             //update counters and arrays
             updateCounters(counters);
             for (i = 0; i < unreadComics.length; i = i + 1) {
-                unreadComics[i] = false; 
+                unreadComics[i] = false;
             }
             //now we hide every comic
             showUnreadComics();
