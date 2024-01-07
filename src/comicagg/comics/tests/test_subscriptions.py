@@ -49,7 +49,7 @@ class SubscriptionsTestCase(TestCase):
 
     def test_subscriptions_empty(self):
         """Should return an empty list."""
-        subscriptions = self.user.subscriptions().count()
+        subscriptions = self.user.subscriptions.count()
         is_subscribed = self.user.is_subscribed(self.comic_active)
 
         self.assertEqual(subscriptions, 0)
@@ -59,7 +59,7 @@ class SubscriptionsTestCase(TestCase):
         """Should return active, ended and broken comics."""
         self.add_subscriptions()
 
-        all_subscriptions = self.user.subscriptions().count()
+        all_subscriptions = self.user.subscriptions.count()
 
         self.assertEqual(all_subscriptions, 3)
 
@@ -69,7 +69,7 @@ class SubscriptionsTestCase(TestCase):
 
     def test_comics_subscribed_all_empty(self):
         """Should return an empty list."""
-        comics = list(self.user.comics_subscribed())
+        comics = list(self.user.comics_subscribed)
 
         self.assertEqual(len(comics), 0)
 
@@ -77,7 +77,7 @@ class SubscriptionsTestCase(TestCase):
         """Should return active and ended comics."""
         self.add_subscriptions()
 
-        comics = list(self.user.comics_subscribed())
+        comics = list(self.user.comics_subscribed)
 
         self.assertEqual(len(comics), 3)
         self.assertIsInstance(comics[0], Comic)

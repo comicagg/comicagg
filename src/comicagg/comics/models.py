@@ -224,7 +224,7 @@ class Comic(models.Model):
 
     @cached_property
     def last_strip(self):
-        return self.strip_set.all()[0]
+        return self.strip_set.first()
 
 
 class Subscription(models.Model):

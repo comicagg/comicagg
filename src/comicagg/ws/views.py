@@ -20,7 +20,7 @@ def unread_user(request: HttpRequest, user: User):
     unread_list = list(
         # This returns a query set like
         # <QuerySet [{'comic': 8, 'unread_strips': 4}, {'comic': 532, 'unread_strips': 29}]>
-        user.unread_strips()
+        user.unread_strips
         .values("comic")
         .annotate(unread_strips=Count("comic"))
     )
@@ -32,7 +32,7 @@ def unread_user(request: HttpRequest, user: User):
 
 @login_required
 def user_subscriptions(request: AuthenticatedHttpRequest, simple=False):
-    context = {"subscriptions": request.user.subscriptions()}
+    context = {"subscriptions": request.user.subscriptions}
     if simple:
         template = "ws/user_subscriptions_simple.html"
     else:

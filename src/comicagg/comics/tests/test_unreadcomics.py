@@ -43,7 +43,7 @@ class UnreadStripTestCase(TestCase):
 
     def test_strips_no_subscriptions(self):
         """No subscriptions means no unread comics."""
-        strips = self.user.unread_strips().count()
+        strips = self.user.unread_strips.count()
 
         self.assertEqual(strips, 0)
 
@@ -64,7 +64,7 @@ class UnreadStripTestCase(TestCase):
             comic=self.comic_broken, strip=self.strip_broken
         )
 
-        active_subscriptions = self.user.unread_strips().count()
+        active_subscriptions = self.user.unread_strips.count()
 
         self.assertEqual(active_subscriptions, 3)
 

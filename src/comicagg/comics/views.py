@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
-    subscribed_ids = [comic.id for comic in request.user.comics_subscribed()]
+    subscribed_ids = [comic.id for comic in request.user.comics_subscribed]
     if not_in_list := Comic.objects.available().exclude(id__in=subscribed_ids):
         try:
             comic = not_in_list[random.randint(0, len(not_in_list) - 1)]
@@ -47,9 +47,9 @@ def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
 
 @login_required
 def read_view(request: AuthenticatedHttpRequest):
-    comics = request.user.comics_subscribed()
+    comics = request.user.comics_subscribed
     unread_strips_db = (
-        request.user.unread_strips()
+        request.user.unread_strips
         .select_related("strip")
         .select_related("strip__comic")
     )
@@ -84,7 +84,7 @@ def add_comics(request: AuthenticatedHttpRequest):
     all_comics.sort(key=_slugify_comic)
 
     # build the available list depending on selected comics
-    user_comics = request.user.comics_subscribed()
+    user_comics = request.user.comics_subscribed
     new_comics = request.user.comics_new()
     context = {
         "all_comics": all_comics,
@@ -98,7 +98,7 @@ def add_comics(request: AuthenticatedHttpRequest):
 def organize(request: AuthenticatedHttpRequest):
     """Comics shown in the organize page are those that are active or ended with unread strips."""
     comics_with_unread_strips = request.user.comics_unread()
-    subscriptions = request.user.subscriptions()
+    subscriptions = request.user.subscriptions
     visible_comics = []
     subscription: Subscription
     for subscription in subscriptions:

@@ -23,10 +23,10 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def ok_response(request: AuthenticatedHttpRequest):
-    comic_count = request.user.subscription_count()
-    unread_count = request.user.comics_unread_count()
-    new_comics_count = request.user.comics_new_count()
-    news_count = request.user.blogs_new_count()
+    comic_count = request.user.subscription_count
+    unread_count = request.user.comics_unread_count
+    new_comics_count = request.user.comics_new_count
+    news_count = request.user.blogs_new_count
     response_data = {
         "comics": comic_count,
         "new_comics": new_comics_count,
@@ -149,7 +149,7 @@ def save_selection(request: AuthenticatedHttpRequest):
     subsc_dict = dict(
         [
             (subscription.comic.id, subscription.id)
-            for subscription in request.user.subscriptions()
+            for subscription in request.user.subscriptions
         ]
     )
     # subscriptions is the list of comic ids already added

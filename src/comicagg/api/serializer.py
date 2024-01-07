@@ -118,7 +118,7 @@ class Serializer:
         return {
             "username": self.user.username,
             "email": self.user.email,
-            "total_comics": self.user.subscription_count(),
-            "unread_comics": self.user.comics_unread_count(),
-            "new_comics": self.user.comics_new_count(),
+            "total_comics": self.user.subscription_count,
+            "unread_comics": self.user.comics_unread_count,
+            "new_comics": self.user.comics_new_count,
         }

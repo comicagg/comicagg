@@ -4,6 +4,7 @@ from typing import Any
 from django.contrib.auth import models as auth_models
 from django.db import models
 from django.db.models import Count, Max
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from comicagg.comics.fields import ComicStatus
@@ -64,17 +65,20 @@ class User(auth_models.User):
     # #####################
     # #   Subscriptions   #
     # #####################
+    @cached_property
     def subscriptions(self) -> SubscriptionManager:
         """Returns all subscribed comics, including ended."""
         return self.subscription_set.available()
 
+    @cached_property
     def subscription_count(self) -> int:
         """Returns all subscribed comics, including ended."""
-        return self.subscription_set.available().count()
+        return self.subscriptions.count()
 
+    @cached_property
     def comics_subscribed(self) -> list[Comic]:
         """Return the ordered list of comics that the user is subscribed."""
-        comic_ids = [subscription.comic.id for subscription in self.subscriptions()]
+        comic_ids = [subscription.comic.id for subscription in self.subscriptions]
         return list(
             Comic.objects.available()
             .prefetch_related("subscription_set")
@@ -84,7 +88,7 @@ class User(auth_models.User):
 
     def is_subscribed(self, comic: Comic) -> bool:
         """Check if the user is subscribed to a comic."""
-        return self.subscriptions().filter(comic__id=comic.id).count() == 1
+        return self.subscriptions.filter(comic__id=comic.id).count() == 1
 
     def subscribe(self, comic: Comic) -> None:
         """Subscribe the user to this comic, adding it last to his list."""
@@ -94,7 +98,7 @@ class User(auth_models.User):
             raise InvalidComicError("Cannot subscribe to this comic")
         # Calculate the position for the comic, it'll be the last
         # max_position can be None if there are no comics
-        max_position = self.subscriptions().aggregate(pos=Max("position"))["pos"] or 0
+        max_position = self.subscriptions.aggregate(pos=Max("position"))["pos"] or 0
         next_pos = max_position + 1
         self.subscription_set.create(comic=comic, position=next_pos)
         if last_strip := Strip.objects.filter(comic=comic).last():
@@ -150,6 +154,7 @@ class User(auth_models.User):
     # #####################
     # #   Unread strips   #
     # #####################
+    @cached_property
     def unread_strips(self) -> UnreadStripManager:
         """Return unread strips for all subscribed comics, including ended."""
         return self.unreadstrip_set.available()
@@ -161,17 +166,18 @@ class User(auth_models.User):
     def comics_unread(self) -> list[Comic]:
         """Return a list of comics (possibly ended) that have unread strips
         ordered by subscription position."""
-        unreads = self.unread_strips().select_related("comic")
+        unreads = self.unread_strips.select_related("comic")
         unread_comic_ids = list({unread.comic.id for unread in unreads})
         return [
             subscription.comic
-            for subscription in self.subscriptions()
+            for subscription in self.subscriptions
             if subscription.comic.id in unread_comic_ids
         ]
 
+    @cached_property
     def comics_unread_count(self) -> int:
         """Return the number of comics with unread strips."""
-        return self.unread_strips().aggregate(Count("comic", distinct=True))[
+        return self.unread_strips.aggregate(Count("comic", distinct=True))[
             "comic__count"
         ]
 
@@ -221,6 +227,7 @@ class User(auth_models.User):
             .filter(pk__in=new_comics_ids)
         )
 
+    @cached_property
     def comics_new_count(self) -> int:
         """Return the number of new comics for this user."""
         return self.newcomic_set.count()
@@ -243,6 +250,7 @@ class User(auth_models.User):
     # #   New blogs   #
     # #################
 
+    @cached_property
     def blogs_new_count(self):
         """Return the list of new blogs for this user."""
         return self.newblog_set.count()

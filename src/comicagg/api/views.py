@@ -208,7 +208,7 @@ class SubscriptionsView(APIView):
 
     def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get all the comics the user is following including the last strip fetched."""
-        subscriptions = request.user.comics_subscribed()
+        subscriptions = request.user.comics_subscribed
         body = self.serialize(
             subscriptions, include_last_strip=True, identifier="subscriptions"
         )
@@ -263,7 +263,7 @@ class SubscriptionsView(APIView):
         ]
 
         # 2. Get the comics the user is currently following
-        current_active_idx = [comic.id for comic in request.user.comics_subscribed()]
+        current_active_idx = [comic.id for comic in request.user.comics_subscribed]
 
         # 3. Find comics to be removed
         if deleted_idx := [
@@ -283,7 +283,7 @@ class SubscriptionsView(APIView):
 
         # 5. Update the position of the subcriptions
         # TODO: Might not be needed or extracted to a new method in User?
-        subscribed_all = request.user.subscriptions()
+        subscribed_all = request.user.subscriptions
         subscribed_all_dict = dict(
             [(subscription.comic.id, subscription) for subscription in subscribed_all]
         )
@@ -307,7 +307,7 @@ class SubscriptionsView(APIView):
     def delete(self, request: OAuth2HttpRequest, **kwargs):
         """Remove all the subscriptions, returning a list with the IDs of the comics
         the user used to follow."""
-        subscribed_idx = [comic.id for comic in request.user.comics_subscribed()]
+        subscribed_idx = [comic.id for comic in request.user.comics_subscribed]
         body = self.serialize(subscribed_idx, identifier="removed_subscriptions")
         request.user.unsubscribe_all()
         return self.response_content(body)
