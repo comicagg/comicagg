@@ -1,5 +1,5 @@
 """Test suite for HTTP request to the API."""
-# FIXME: all this tests are broken, they need to be fixed
+# FIXME: all these tests are broken, they need to be fixed
 from comicagg.comics.services import AggregatorService
 from django.contrib.auth.models import User
 from django.test import TestCase

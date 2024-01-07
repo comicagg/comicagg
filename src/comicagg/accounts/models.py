@@ -88,7 +88,7 @@ class User(auth_models.User):
 
     def is_subscribed(self, comic: Comic) -> bool:
         """Check if the user is subscribed to a comic."""
-        return self.subscriptions.filter(comic__id=comic.id).count() == 1
+        return self.subscriptions.filter(comic__id=comic.id).exists()
 
     def subscribe(self, comic: Comic) -> None:
         """Subscribe the user to this comic, adding it last to his list."""
