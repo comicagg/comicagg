@@ -102,6 +102,16 @@ function mouseOverAction() {
     } else if ((comic = containsComicId(availablecomics, id))) {
         $('comic_new').hide();
     }
+    if (comic.broken) {
+        $('comic_broken').show();
+    } else {
+        $('comic_broken').hide();
+    }
+    if (comic.ended) {
+        $('comic_ended').show();
+    } else {
+        $('comic_ended').hide();
+    }
     $('comic_info_wrap').show();
     $('comic_name').innerHTML = comic.name;
     $('comic_score').innerHTML = comic.score;

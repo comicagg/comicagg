@@ -22,3 +22,8 @@ def to_int(number):
 @register.filter()
 def unreads(comic, user_id):
     return comic.unreadstrip_set.filter(user=user_id)
+
+@register.filter()
+def equals(value, equals_to):
+    return str(value) == equals_to
+
