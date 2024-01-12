@@ -25,6 +25,11 @@ MAINTENANCE = django_env.int("MAINTENANCE", 0)
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = django_env.get("SECRET_KEY")
 
+# The ID, as an integer, of the current site in the django_site database table.
+# This is used so that application data can hook into specific sites
+# and a single database can manage content for multiple sites.
+SITE_ID = 1
+
 # ################
 # #              #
 # #   Database   #
@@ -149,8 +154,6 @@ TEMPLATES = [
     },
 ]
 
-LOCALE_PATHS = [os.path.join(ROOT, "locale")]
-
 # ######################
 # #   Authentication   #
 # ######################
@@ -200,11 +203,9 @@ STATIC_URL = django_env.get("STATIC_URL")
 # This should be set to a list of strings that contain full paths to your additional files directory(ies)
 STATICFILES_DIRS = (os.path.join(ROOT, "static"),)
 
-# ######################################
-# #                                    #
-# #   Dates and internationalization   #
-# #                                    #
-# ######################################
+# #############
+# #   Dates   #
+# #############
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -212,7 +213,17 @@ STATICFILES_DIRS = (os.path.join(ROOT, "static"),)
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = "UTC"
+
+# A boolean that specifies if datetimes will be timezone-aware by default or not.
+# If this is set to True, Django will use timezone-aware datetimes internally.
+# When USE_TZ is False, Django will use naive datetimes in local time,
+# except when parsing ISO 8601 formatted strings, where timezone information will always be retained if present.
 USE_TZ = True
+
+
+# ########################################
+# #   Internalization and localization   #
+# ########################################
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -226,10 +237,8 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-# The ID, as an integer, of the current site in the django_site database table.
-# This is used so that application data can hook into specific sites
-# and a single database can manage content for multiple sites.
-SITE_ID = 1
+# A list of directories where Django looks for translation files.
+LOCALE_PATHS = [os.path.join(ROOT, "locale")]
 
 # #############
 # #           #
