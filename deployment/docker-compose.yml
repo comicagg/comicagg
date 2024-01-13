@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: postgres:latest
+    image: postgres:16-alpine
     env_file:
       - .env
     volumes:
