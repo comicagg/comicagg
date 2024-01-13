@@ -6,12 +6,12 @@ from django.db.models import Q
 
 from comicagg.comics.models import (
     Comic,
-    ComicHistory,
+    Strip,
     NewComic,
     Request,
     Subscription,
     Tag,
-    UnreadComic,
+    UnreadStrip,
 )
 
 # ##############
@@ -48,8 +48,7 @@ class HasCustomFunction(admin.SimpleListFilter):
 class ComicAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "active",
-        "ended",
+        "status",
         "last_update",
     )
     search_fields = ["name"]
@@ -60,7 +59,15 @@ class ComicAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Comic details",
-            {"fields": ("name", "website", "active", "ended", "notify", "no_images")},
+            {
+                "fields": (
+                    "name",
+                    "website",
+                    "status",
+                    "no_images",
+                    "notify",
+                )
+            },
         ),
         (
             "Image regex",
@@ -105,11 +112,10 @@ class ComicAdmin(admin.ModelAdmin):
             },
         ),
     )
-    list_filter = ["active", HasCustomFunction]
+    list_filter = ["status", "no_images", HasCustomFunction]
 
 
-# TODO: inline with comics?
-class ComicHistoryAdmin(admin.ModelAdmin):
+class StripAdmin(admin.ModelAdmin):
     list_display = (
         "comic",
         "date",
@@ -119,7 +125,6 @@ class ComicHistoryAdmin(admin.ModelAdmin):
     ordering = ("-date",)
 
 
-# TODO: inline with users?
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = (
         "user",
@@ -132,17 +137,15 @@ class SubscriptionAdmin(admin.ModelAdmin):
     )
 
 
-# TODO: inline with users?
-class UnreadComicAdmin(admin.ModelAdmin):
+class UnreadStripAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "comic",
-        "history",
+        "strip",
     )
     search_fields = ["user__username"]
 
 
-# TODO: inline with users?
 class NewComicAdmin(admin.ModelAdmin):
     ordering = (
         "user",
@@ -159,6 +162,6 @@ class RequestAdmin(admin.ModelAdmin):
 admin.site.register(Comic, ComicAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Request, RequestAdmin)
-admin.site.register(ComicHistory, ComicHistoryAdmin)
-admin.site.register(UnreadComic, UnreadComicAdmin)
+admin.site.register(Strip, StripAdmin)
+admin.site.register(UnreadStrip, UnreadStripAdmin)
 admin.site.register(NewComic, NewComicAdmin)

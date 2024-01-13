@@ -8,14 +8,15 @@
 # Jesús Fernández <esu@kumomi.es>, 2009.
 # Jesus Fernandez <esu@kumomi.es>, 2009, 2010.
 # Jesús Fernández <jesusfs@gmail.com>, 2010, 2011, 2012.
+# Jesús Fernández <jesus@nublar.net>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-04 09:03+0000\n"
+"POT-Creation-Date: 2024-01-11 17:12+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
-"Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
+"Language-Team: Spanish <contact@comicagg.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,11 +28,11 @@ msgstr ""
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: comicagg/accounts/models.py:21
+#: comicagg/accounts/models.py:38
 msgid "User profile"
 msgstr "Perfil de usuario"
 
-#: comicagg/accounts/models.py:22
+#: comicagg/accounts/models.py:39
 msgid "User profiles"
 msgstr "Perfiles de usuario"
 
@@ -47,21 +48,35 @@ msgstr "Algunas letras no valen."
 msgid "That username is not valid, sorry. Please choose another."
 msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 
-#: comicagg/accounts/views.py:84
+#: comicagg/accounts/views.py:78
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: comicagg/accounts/views.py:154
+#: comicagg/accounts/views.py:146
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
 
-#: comicagg/comics/admin_views/views.py:37
+#: comicagg/comics/admin.py:32
+msgid "custom function"
+msgstr "función personalizada"
+
+#: comicagg/comics/admin_views/views.py:15
+msgid "Docs - Custom update"
+msgstr "Docs - Actualización personalizada"
+
+#: comicagg/comics/admin_views/views.py:26
 #: comicagg/templates/admin/update_comic.html:25
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: comicagg/comics/views.py:140
+#: comicagg/comics/admin_views/views.py:50
+#, fuzzy
+#| msgid "Reported broken images"
+msgid "Review reported images"
+msgstr "Imágenes rotas"
+
+#: comicagg/comics/views.py:137
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
@@ -76,7 +91,6 @@ msgstr "Aquí puedes cambiar tu contraseña o tu correo electrónico."
 
 #: comicagg/templates/accounts/account.html:11
 #: comicagg/templates/accounts/password_change_done.html:6
-#: comicagg/templates/admin/base.html:57
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
@@ -98,8 +112,8 @@ msgid ""
 "Your account was inactivated because you didn't read your comics for "
 "%(days)s days. You can reactivate it here."
 msgstr ""
-"Tu cuenta ha sido desactivada porque no has leído tus comics en "
-"%(days)s días. La puedes reactivar aquí."
+"Tu cuenta ha sido desactivada porque no has leído tus comics en %(days)s "
+"días. La puedes reactivar aquí."
 
 #: comicagg/templates/accounts/activate.html:12
 msgid "Reactivate"
@@ -317,15 +331,15 @@ msgstr "Tu nueva contraseña es: %(new_password)s"
 msgid "Feel free to change this password by going to this page:"
 msgstr "Cambia esta contraseña yendo a esta página:"
 
-#: comicagg/templates/accounts/password_reset_email.html:11
+#: comicagg/templates/accounts/password_reset_email.html:9
 msgid "Your username, in case you've forgotten:"
 msgstr "Tu usuario es, por si lo habías olvidado:"
 
-#: comicagg/templates/accounts/password_reset_email.html:13
+#: comicagg/templates/accounts/password_reset_email.html:11
 msgid "Thanks for using our site!"
 msgstr "¡Gracias por usar nuestro sitio! =)"
 
-#: comicagg/templates/accounts/password_reset_email.html:15
+#: comicagg/templates/accounts/password_reset_email.html:13
 #, python-format
 msgid "The %(site_name)s team"
 msgstr "El equipo de %(site_name)s"
@@ -451,42 +465,9 @@ msgstr "Actualizar un comic"
 msgid "You don’t have permission to view or edit anything."
 msgstr "No tienes permiso para editar nada."
 
-#: comicagg/templates/admin/base.html:28
-msgid "Skip to main content"
-msgstr "Ir al contenido principal"
-
-#: comicagg/templates/admin/base.html:43
-msgid "Welcome,"
-msgstr "Bienvenido,"
-
-#: comicagg/templates/admin/base.html:48
-msgid "View site"
-msgstr "Página web"
-
-#: comicagg/templates/admin/base.html:53
-msgid "Documentation"
-msgstr "Documentación"
-
-#: comicagg/templates/admin/base.html:61
-msgid "Log out"
-msgstr "Desconectar"
-
-#: comicagg/templates/admin/base.html:63
-msgid "Back to website"
-msgstr "Volver a la web"
-
-#: comicagg/templates/admin/base.html:75
-msgid "Breadcrumbs"
-msgstr "Navegación"
-
-#: comicagg/templates/admin/base.html:78
 #: comicagg/templates/admin/update_comic.html:25
 msgid "Home"
 msgstr "Inicio"
-
-#: comicagg/templates/admin/reported.html:25
-msgid "Reported broken images"
-msgstr "Imágenes rotas"
 
 #: comicagg/templates/admin/update_comic.html:34
 msgid "was updated."
@@ -552,43 +533,51 @@ msgstr "Todos los posts"
 msgid "Recent posts"
 msgstr "Posts recientes"
 
-#: comicagg/templates/comics/organize_add.html:3
+#: comicagg/templates/comics/add.html:3
 msgid "Choose"
 msgstr "Elegir"
 
-#: comicagg/templates/comics/organize_add.html:23
+#: comicagg/templates/comics/add.html:26
 msgid "Add comics"
 msgstr "Añadir comics"
 
-#: comicagg/templates/comics/organize_add.html:24
+#: comicagg/templates/comics/add.html:27
 msgid "Click on a comic to add or remove it."
 msgstr "Haz click en un comic para añadirlo o quitarlo."
 
-#: comicagg/templates/comics/organize_add.html:26
+#: comicagg/templates/comics/add.html:29
 msgid "Hover over a comic to see details."
 msgstr "Pasa por encima de un comic para ver detalles."
 
-#: comicagg/templates/comics/organize_add.html:30
+#: comicagg/templates/comics/add.html:33
 msgid "New comic!"
 msgstr "¡Nuevo!"
 
-#: comicagg/templates/comics/organize_add.html:31
+#: comicagg/templates/comics/add.html:34
+msgid "This comic is broken :( We're working on getting it working!"
+msgstr "Este comic está roto :( ¡Estamos trabajando en hacerlo funcionar!"
+
+#: comicagg/templates/comics/add.html:35
+msgid "This comic has ended!"
+msgstr "¡Este comic ha terminado!"
+
+#: comicagg/templates/comics/add.html:36
 msgid "Score"
 msgstr "Puntuación"
 
-#: comicagg/templates/comics/organize_add.html:31
+#: comicagg/templates/comics/add.html:36
 msgid "votes"
 msgstr "votos"
 
-#: comicagg/templates/comics/organize_add.html:31
+#: comicagg/templates/comics/add.html:36
 msgid "readers"
 msgstr "lectores"
 
-#: comicagg/templates/comics/organize_add.html:32
+#: comicagg/templates/comics/add.html:37
 msgid "Link to its website"
 msgstr "Enlace a su web"
 
-#: comicagg/templates/comics/organize_add.html:37
+#: comicagg/templates/comics/add.html:42
 msgid ""
 "<b>Warning!</b> Instead of showing the images of this comic, you will see a "
 "link to its website when the comic updates."
@@ -596,39 +585,39 @@ msgstr ""
 "<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en "
 "lace a su página web cuando se actualice."
 
-#: comicagg/templates/comics/organize_add.html:42
+#: comicagg/templates/comics/add.html:47
 msgid "Show:"
 msgstr "Ver:"
 
-#: comicagg/templates/comics/organize_add.html:42
+#: comicagg/templates/comics/add.html:47
 msgid "all"
 msgstr "todos"
 
-#: comicagg/templates/comics/organize_add.html:42
+#: comicagg/templates/comics/add.html:47
 msgid "new"
 msgstr "nuevos"
 
-#: comicagg/templates/comics/organize_add.html:42
+#: comicagg/templates/comics/add.html:47
 msgid "added"
 msgstr "añadidos"
 
-#: comicagg/templates/comics/organize_add.html:47
+#: comicagg/templates/comics/add.html:52
 msgid "You won't see the images of this comic"
 msgstr "No verás las imágenes de este comic."
 
-#: comicagg/templates/comics/organize_organize.html:3
+#: comicagg/templates/comics/organize.html:3
 msgid "Organize"
 msgstr "Organizar"
 
-#: comicagg/templates/comics/organize_organize.html:27
+#: comicagg/templates/comics/organize.html:27
 msgid "Organize your comics"
 msgstr "Organiza tus comics"
 
-#: comicagg/templates/comics/organize_organize.html:29
+#: comicagg/templates/comics/organize.html:29
 msgid "Drop comics here<br/>to delete them"
 msgstr "Suelta comics aquí<br/>para borrarlos"
 
-#: comicagg/templates/comics/organize_organize.html:31
+#: comicagg/templates/comics/organize.html:31
 msgid ""
 "Here you can sort your comics. Just select one or some of them (holding the "
 "Ctrl/Meta key) and drag them around."
@@ -636,19 +625,19 @@ msgstr ""
 "Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
 "Ctrl/Meta) y múevelos."
 
-#: comicagg/templates/comics/organize_organize.html:35
+#: comicagg/templates/comics/organize.html:35
 msgid "retry"
 msgstr "intentar de nuevo"
 
-#: comicagg/templates/comics/organize_organize.html:39
+#: comicagg/templates/comics/organize.html:39
 msgid "Alternatively, you can sort them:"
 msgstr "También puedes ordernarlos:"
 
-#: comicagg/templates/comics/organize_organize.html:40
+#: comicagg/templates/comics/organize.html:40
 msgid "by name"
 msgstr "por nombre"
 
-#: comicagg/templates/comics/organize_organize.html:41
+#: comicagg/templates/comics/organize.html:41
 msgid "by score"
 msgstr "por puntuación"
 
@@ -656,12 +645,12 @@ msgstr "por puntuación"
 msgid "Read"
 msgstr "Leer"
 
-#: comicagg/templates/comics/read.html:28
-#: comicagg/templates/comics/read.html:90
+#: comicagg/templates/comics/read.html:27
+#: comicagg/templates/comics/read.html:89
 msgid "Mark all comics as read"
 msgstr "Marcar todos como leídos"
 
-#: comicagg/templates/comics/read.html:32
+#: comicagg/templates/comics/read.html:31
 #, python-format
 msgid ""
 "You are reading <b id=\"unreadCountersTotal\">%(comic_count)s</b> comics and "
@@ -672,7 +661,7 @@ msgstr ""
 "id=\"unreadCountersUnread\">%(unread_count)s</b> de ellos tienen nuevas "
 "tiras sin leer."
 
-#: comicagg/templates/comics/read.html:33
+#: comicagg/templates/comics/read.html:32
 #, python-format
 msgid ""
 "You are reading <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics "
@@ -681,7 +670,7 @@ msgstr ""
 "Estás leyendo <b id=\"noUnreadCountersTotal\">%(comic_count)s</b> comics y "
 "ninguno de ellos tienen nuevas tiras sin leer."
 
-#: comicagg/templates/comics/read.html:34
+#: comicagg/templates/comics/read.html:33
 msgid ""
 "Showing only <b>unread</b> comics. <a onclick=\"showAllComics()\">Click "
 "here</a> to show all comics."
@@ -689,19 +678,23 @@ msgstr ""
 "Mostrando sólo comics <b>sin leer</b>. <a onclick=\"showAllComics()\">Pulsa "
 "aquí</a> para ver todos los comics."
 
-#: comicagg/templates/comics/read.html:35
+#: comicagg/templates/comics/read.html:34
+#, fuzzy
+#| msgid ""
+#| "Showing <b>all</b> comics. <a onclick=\"showUnreadStrips()\">Click here</"
+#| "a> to show only unread comics."
 msgid ""
 "Showing <b>all</b> comics. <a onclick=\"showUnreadComics()\">Click here</a> "
 "to show only unread comics."
 msgstr ""
-"Mostrando <b>todos</b> los comics. <a onclick=\"showUnreadComics()\">Pulsa "
+"Mostrando <b>todos</b> los comics. <a onclick=\"showUnreadStrips()\">Pulsa "
 "aquí</a> para ver sólo los que tienes sin leer."
 
-#: comicagg/templates/comics/read.html:41
+#: comicagg/templates/comics/read.html:40
 msgid "New strips!"
 msgstr "¡Nuevas tiras!"
 
-#: comicagg/templates/comics/read.html:44
+#: comicagg/templates/comics/read.html:43
 #, python-format
 msgid ""
 "The comic has been updated. <a href=\"%(url)s\">Click here</a> to go to the "
@@ -710,36 +703,36 @@ msgstr ""
 "El cómic ha sido actualizado. <a href=\"%(url)s\">Haz click aquí</a> para ir "
 "a la página del comic."
 
-#: comicagg/templates/comics/read.html:66
+#: comicagg/templates/comics/read.html:65
 msgid "Reload images"
 msgstr "Recargar"
 
-#: comicagg/templates/comics/read.html:69
+#: comicagg/templates/comics/read.html:68
 msgid "Mark as read"
 msgstr "Marcar como leída"
 
-#: comicagg/templates/comics/read.html:70
+#: comicagg/templates/comics/read.html:69
 msgid "Vote"
 msgstr "Vota"
 
-#: comicagg/templates/comics/read.html:77
+#: comicagg/templates/comics/read.html:76
 msgid "Visit its website"
 msgstr "Visitar su web"
 
-#: comicagg/templates/comics/read.html:78
+#: comicagg/templates/comics/read.html:77
 msgid "Report broken image"
 msgstr "Avisar imagen rota"
 
-#: comicagg/templates/comics/read.html:79
+#: comicagg/templates/comics/read.html:78
 msgid "Remove this comic"
 msgstr "Quitar este comic"
 
-#: comicagg/templates/comics/read.html:86
+#: comicagg/templates/comics/read.html:85
 msgid "No comics to show here. Use the menu in the top to add comics."
 msgstr ""
 "No hay comics que mostrar aquí. Usa el menú superior para añadir comics."
 
-#: comicagg/templates/comics/read.html:95
+#: comicagg/templates/comics/read.html:94
 msgid "You don't have any new unread comics"
 msgstr "No tienes nuevos comics sin leer"
 
@@ -747,7 +740,7 @@ msgstr "No tienes nuevos comics sin leer"
 msgid "Requests"
 msgstr "Solicitudes"
 
-#: comicagg/templates/comics/request_index.html:7
+#: comicagg/templates/comics/request_index.html:6
 msgid "Request a comic"
 msgstr "Solicitar un comic"
 
@@ -759,7 +752,7 @@ msgstr ""
 "Escribe aquí la dirección web del comic que te gustaría leer e intentaremos "
 "añadirlo lo antes posible (si es posible)."
 
-#: comicagg/templates/comics/request_index.html:10
+#: comicagg/templates/comics/request_index.html:12
 #, python-format
 msgid ""
 "Currently there are %(count)s requests waiting to be added. We have to add "
@@ -768,19 +761,19 @@ msgstr ""
 "Ahora mismo hay %(count)s peticiones esperando. Tenemos que añadirlas a mano "
 "una a una, así que ten un poco de paciencia. ¡Gracias!"
 
-#: comicagg/templates/comics/request_index.html:14
+#: comicagg/templates/comics/request_index.html:17
 msgid "The comic's Url"
 msgstr "La dirección del comic"
 
-#: comicagg/templates/comics/request_index.html:18
+#: comicagg/templates/comics/request_index.html:21
 msgid "Any comment?"
 msgstr "¿Algún comentario?"
 
-#: comicagg/templates/comics/request_index.html:19
+#: comicagg/templates/comics/request_index.html:22
 msgid "Send"
 msgstr "Enviar"
 
-#: comicagg/templates/comics/request_index.html:30
+#: comicagg/templates/comics/request_index.html:33
 msgid ""
 "There are a number of authors that don't want their comics in this website "
 "so please don't ask for the following comics as we won't add the to the "
@@ -790,31 +783,31 @@ msgstr ""
 "favor no pids los siguientes comics ya que no los añadiremos a la lista. "
 "¡Gracias!"
 
-#: comicagg/templates/comics/request_index.html:92
+#: comicagg/templates/comics/request_index.html:95
 msgid "Pending requests"
 msgstr "Solicitudes pendientes"
 
-#: comicagg/templates/comics/request_index.html:96
+#: comicagg/templates/comics/request_index.html:99
 msgid "Your comment:"
 msgstr "Tu comentario:"
 
-#: comicagg/templates/comics/request_index.html:97
-#: comicagg/templates/comics/request_index.html:106
-#: comicagg/templates/comics/request_index.html:115
+#: comicagg/templates/comics/request_index.html:100
+#: comicagg/templates/comics/request_index.html:109
+#: comicagg/templates/comics/request_index.html:118
 msgid "Our comment:"
 msgstr "Nuestro comentario:"
 
-#: comicagg/templates/comics/request_index.html:99
-#: comicagg/templates/comics/request_index.html:108
-#: comicagg/templates/comics/request_index.html:117
+#: comicagg/templates/comics/request_index.html:102
+#: comicagg/templates/comics/request_index.html:111
+#: comicagg/templates/comics/request_index.html:120
 msgid "Nothing here."
 msgstr "No hay nada aquí."
 
-#: comicagg/templates/comics/request_index.html:102
+#: comicagg/templates/comics/request_index.html:105
 msgid "Rejected requests"
 msgstr "Solicitudes rechazadas"
 
-#: comicagg/templates/comics/request_index.html:111
+#: comicagg/templates/comics/request_index.html:114
 msgid "Accepted requests"
 msgstr "Solicitudes aceptadas"
 
@@ -846,886 +839,3 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: comicagg/templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
-
-#~ msgid "Too short."
-#~ msgstr "Muy corto."
-
-#~ msgid "That long? Really?"
-#~ msgstr "¿Tan largo? ¿De verdad?"
-
-#~ msgid "NEW!"
-#~ msgstr "¡NUEVO!"
-
-#~ msgid "Open"
-#~ msgstr "Abierto"
-
-#~ msgid "Closed"
-#~ msgstr "Cerrado"
-
-#~ msgid "Title"
-#~ msgstr "Título"
-
-#~ msgid "Text"
-#~ msgstr "Texto"
-
-#~ msgid "Comic Aggregator site admin"
-#~ msgstr "Sitio de administración de Comic Aggregator"
-
-#~ msgid "Comic Aggregator administration"
-#~ msgstr "Administración de Comic Aggregator"
-
-#, python-format
-#~ msgid "%(name)s"
-#~ msgstr "%(name)s"
-
-#~ msgid "Recent Actions"
-#~ msgstr "Acciones recientes"
-
-#~ msgid "My Actions"
-#~ msgstr "Mis acciones"
-
-#~ msgid "None available"
-#~ msgstr "Ninguna disponible"
-
-#~ msgid "Sort them:"
-#~ msgstr "Ordenar por:"
-
-#~ msgid "A secure connection is required."
-#~ msgstr "Se requiere una conexión segura."
-
-#~ msgid "An unauthorized client tried to access your resources."
-#~ msgstr "Un cliente no autorizado ha intentado acceder a tus datos."
-
-#~ msgid "Only POST requests allowed."
-#~ msgstr "Solo se permiten peticiones POST."
-
-#~ msgid "No 'grant_type' included in the request."
-#~ msgstr "No se ha incluído 'grant_type' en la petición."
-
-#~ msgid "Client could not be validated with key pair."
-#~ msgstr "El cliente no pudo ser validado con la pareja de claves."
-
-#~ msgid "'%s' is not a valid scope."
-#~ msgstr "'%s' no es un scope válido."
-
-#~ msgid "The requested redirect didn't match the client settings."
-#~ msgstr "La dirección de redirección no se corresponde con la configurada."
-
-#~ msgid "Authorize an application"
-#~ msgstr "Autorizar una aplicación"
-
-#~ msgid ""
-#~ "<b>%(client__name)s</b> would like to access your data with the following "
-#~ "permissions:"
-#~ msgstr ""
-#~ "La aplicación <b>%(client__name)s</b> quiere acceder a tus datos con los "
-#~ "siguientes permisos:"
-
-#~ msgid "Read your data"
-#~ msgstr "Leer tus datos"
-
-#~ msgid "Write your data"
-#~ msgstr "Escribir en tus datos"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "Authorize"
-#~ msgstr "Permitir"
-
-#~ msgid "An error has occurred"
-#~ msgstr "Un error ha ocurrido"
-
-#~ msgid "Error code:"
-#~ msgstr "Código de error:"
-
-#~ msgid "Message:"
-#~ msgstr "Mensaje:"
-
-#~ msgid "Comic Aggregator authorization page"
-#~ msgstr "Página de autorización de Comic Aggregator"
-
-#~ msgid ""
-#~ "You can review here your settings. Use this page to change your e-mail "
-#~ "address or password."
-#~ msgstr ""
-#~ "Aquí puedes revisar la configuración de tu cuenta. Úsala para cambiar tu "
-#~ "dirección de correo electrónico o tu contraseña."
-
-#~ msgid "Change settings:"
-#~ msgstr "Cambiar configuración:"
-
-#~ msgid ""
-#~ "Alert new comics.<br/>A box will appear in the read page everytime a new "
-#~ "comic is added to the database."
-#~ msgstr ""
-#~ "Avisar sobre nuevos comics añadidos.<br/>Un mensaje aparecerá en la "
-#~ "sección de lectura cuando un nuevo comic sea añadido a la base de datos."
-
-#~ msgid "Reading comics"
-#~ msgstr "Leyendo comics"
-
-#~ msgid ""
-#~ "Hide read comics.<br/>Up-to-date comics will be hidden so the page will "
-#~ "load faster. If you click in the name of the comic in the navigation box, "
-#~ "the comic will show up in the read page. Also, if you have no new comics "
-#~ "a random strip will be shown."
-#~ msgstr ""
-#~ "Ocultar los comics ya leídos.<br/>De este modo los comics leídos no se "
-#~ "mostrarán y la página cargará más rápido. Si en la barra de navegación "
-#~ "eliges un comic oculto, éste se mostrará de nuevo. Además, si no tienes "
-#~ "ningún comic nuevo se mostrará una tira aleatoria."
-
-#~ msgid "Navigation box"
-#~ msgstr "Caja de navegación"
-
-#~ msgid ""
-#~ "Max number of columns.<br/>This is the maximum number of columns to "
-#~ "display the list. It's got preference over the maximum number of elements "
-#~ "per column."
-#~ msgstr ""
-#~ "Número máximo de columnas.<br/>Este es el máximo número de columnas que "
-#~ "puede tener la lista. Tiene preferencia sobre el número máximo de "
-#~ "elementos por columna."
-
-#~ msgid ""
-#~ "Max number of elements per column.<br/>This is the maximum number of "
-#~ "elements a column can have. It may be increased to fit the max number of "
-#~ "columns."
-#~ msgstr ""
-#~ "Número máximo de elementos por columna.<br/>Es el número máximo de "
-#~ "elementos que puede tener cada columna de la lista. Puede ser aumentado "
-#~ "para ajustar el número máximo de columnas."
-
-#~ msgid "Save"
-#~ msgstr "Guardar"
-
-#~ msgid "Saved."
-#~ msgstr "Guardado."
-
-#~ msgid "Web colors"
-#~ msgstr "Colores de la web"
-
-#~ msgid "Password, e-mail"
-#~ msgstr "Contraseña, correo electrónico"
-
-#~ msgid "Current password."
-#~ msgstr "Contraseña actual."
-
-#~ msgid "Your have to activate your user first"
-#~ msgstr "Tienes que activar tu usuario primero"
-
-#~ msgid "You haven't selected any comics!"
-#~ msgstr "¡No has seleccionado ningún comic!"
-
-#~ msgid "Mark all comics as unread"
-#~ msgstr "Marcar todos como leídos"
-
-#~ msgid "Saved =)"
-#~ msgstr "Guardado =)"
-
-#~ msgid "Invalid distribution algorithm specified: %s."
-#~ msgstr "Algoritmo de distribución inválido: %s."
-
-#~ msgid "Server error"
-#~ msgstr "Error en el servidor"
-
-#~ msgid "It seems that server is having issues. Try again in a few minutes."
-#~ msgstr ""
-#~ "Parece que el servidor está teniendo algún problema ahora mismo. "
-#~ "Inténtalo de nuevo dentro de un rato."
-
-#~ msgid "Back to home."
-#~ msgstr "Volver a principal."
-
-#~ msgid "Read it in the forum"
-#~ msgstr "Leerlo en el foro"
-
-#~ msgid ""
-#~ "Showing only <b>unread</b> comics. <a href=\"http://google.com\">Click "
-#~ "here</a> to show all comics."
-#~ msgstr ""
-#~ "Mostrando comics <b>sin leer</b>. <a href=\"#\" "
-#~ "onclick=\"showAllComics()\">Pulsa aquí</a> para ver todos los comics."
-
-#~ msgid "Saving..."
-#~ msgstr "Guardando..."
-
-#~ msgid "how it was saved"
-#~ msgstr "como está guardado"
-
-#~ msgid "Not Found"
-#~ msgstr "No encontrado"
-
-#~ msgid "I can't find what you are looking for."
-#~ msgstr "No encuentro lo que has pedido :/"
-
-#~ msgid "Logged in as "
-#~ msgstr "Conectado como "
-
-#~ msgid "Read comics"
-#~ msgstr "Leer comics"
-
-#~ msgid "Choose comics"
-#~ msgstr "Elegir comics"
-
-#~ msgid "Comic list"
-#~ msgstr "Lista de comics"
-
-#~ msgid "Account"
-#~ msgstr "Perfil"
-
-#~ msgid "Help"
-#~ msgstr "Ayuda"
-
-#~ msgid "Logout"
-#~ msgstr "Desconectar"
-
-#~ msgid "Register"
-#~ msgstr "Registrarse"
-
-#~ msgid ""
-#~ "All comics are property (and are all probably copyrighted) of their "
-#~ "owners. For more information visit each comic website."
-#~ msgstr ""
-#~ "Todos los comics y sus imágenes son propiedad, y, probablemente estén "
-#~ "registradas, de sus autores. Para más información visita la página web de "
-#~ "cada comic."
-
-#~ msgid "Forums"
-#~ msgstr "Foro"
-
-#~ msgid "Blog"
-#~ msgstr "Blog"
-
-#~ msgid "Welcome"
-#~ msgstr "Bienvenido"
-
-#~ msgid "User: "
-#~ msgstr "Usuario: "
-
-#~ msgid "Password: "
-#~ msgstr "Contraseña: "
-
-#~ msgid "Lost password?"
-#~ msgstr "¿Contraseña perdida?"
-
-#~ msgid "Welcome to Comic Aggregator"
-#~ msgstr "Bienvenido a Comic Aggregator"
-
-#~ msgid ""
-#~ "Comic Aggregator is just what its name says, a website to put all your "
-#~ "favorite webcomics in the same page!"
-#~ msgstr ""
-#~ "Comic Aggregator es un agregador de comics, es decir, aquí puedes leer "
-#~ "tus webcomics favoritos, ¡todos en la misma página!"
-
-#~ msgid ""
-#~ "Log in to read your new comics or create a new account and start choosing "
-#~ "your own list."
-#~ msgstr ""
-#~ "Entra para leer los nuevos comics o crea una cuenta y elige qué comics "
-#~ "leer."
-
-#~ msgid ""
-#~ "Here</a> is the list of comics we currently have in the database. If you "
-#~ "can't find a webcomic you like just ask for it!"
-#~ msgstr ""
-#~ "Aquí</a> hay una lista con todos los comics que tenemos ahora mismo. Si "
-#~ "no encuentras uno que te gusta, ¡pídelo!"
-
-#~ msgid "These are the last added comics:"
-#~ msgstr "Estos han sido los últimos comics añadidos:"
-
-#~ msgid "Full list"
-#~ msgstr "Lista completa"
-
-#~ msgid "This are all the comics in the database"
-#~ msgstr "Estos son todos los comics que tenemos"
-
-#~ msgid "Jump to:"
-#~ msgstr "Saltar a:"
-
-#~ msgid "Active comics"
-#~ msgstr "Comics activos"
-
-#~ msgid "inactive comics"
-#~ msgstr "comics desactivados"
-
-#~ msgid "ended comics"
-#~ msgstr "comics terminados"
-
-#~ msgid "Tag cloud"
-#~ msgstr "Nube de etiquetas"
-
-#~ msgid "Sorted by"
-#~ msgstr "Ordenados por"
-
-#~ msgid "name"
-#~ msgstr "nombre"
-
-#~ msgid "rating"
-#~ msgstr "puntuación"
-
-#~ msgid "and filtering with the tag "
-#~ msgstr "y filtrando con la etiqueta "
-
-#~ msgid "remove filter"
-#~ msgstr "quitar filtro"
-
-#~ msgid "Sort by:"
-#~ msgstr "Ordenar por:"
-
-#~ msgid "vote"
-#~ msgstr "voto"
-
-#~ msgid "positive"
-#~ msgstr "positivos"
-
-#~ msgid "Inactive comics"
-#~ msgstr "Comics desactivados"
-
-#~ msgid "go up"
-#~ msgstr "subir"
-
-#~ msgid ""
-#~ "This comics are inactive in the database. That means that even though "
-#~ "they were added to the database they were found not to work properly and "
-#~ "therefore they were deactivated. In the future they may be active again."
-#~ msgstr ""
-#~ "Estos comics han sido desactivados. Esto significa que aunque estén en la "
-#~ "base de datos parece que no funcionan bien. Quizá en el futuro vuelvan a "
-#~ "activarse de nuevo si se encuentra una solución."
-
-#~ msgid "Ended comics"
-#~ msgstr "Comics terminados"
-
-#~ msgid ""
-#~ "Either <i>The End</i> was written in their last strip or the author "
-#~ "decided to put the comic in an indefinite hiatus so there won't be more "
-#~ "updates anytime soon. We don't like to delete comics from the database so "
-#~ "they will be kept here so they won't fade away in History."
-#~ msgstr ""
-#~ "O bien <i>The End</i> fue escrito en la última tira, o bien el autor ha "
-#~ "decidido poner el comic en un hiatus por un tiempo indefinido por lo que "
-#~ "no habrá más actualizaciones durante un tiempo. No nos gusta borrar "
-#~ "comics de la base de datos así que los dejamos aquí para que no se "
-#~ "pierdan en la Historia."
-
-#~ msgid "Tag cloud:"
-#~ msgstr "Nube de etiquetas:"
-
-#~ msgid "Last update: "
-#~ msgstr "Última actualización: "
-
-#~ msgid "Show last strip"
-#~ msgstr "Ver la última tira"
-
-#~ msgid "Hide last strip"
-#~ msgstr "Ocultar la tira"
-
-#~ msgid "You are reading this comic."
-#~ msgstr "Estás leyendo este comic."
-
-#~ msgid "Remove it from my list"
-#~ msgstr "Quitarlo de mi lista"
-
-#~ msgid "Add this comic to my list"
-#~ msgstr "Añadirlo a mi lista"
-
-#~ msgid ""
-#~ "Use these two boxes to choose the comics you want to read. To choose a "
-#~ "comic just drag it's name from the left box to the right box. If you move "
-#~ "one in the right to the left it won't appear in the read page. So blue "
-#~ "ones won't show, green ones will.<br/>Also, the order matters!<br/><br/"
-#~ ">If you want to read a comic that it's not in the list, "
-#~ msgstr ""
-#~ "Usa estas dos cajas para elegir los comics que vas a leer en la página "
-#~ "principal. En la caja derecha tienes que poner los comics que quieres "
-#~ "leer. Para elegir un comic arrástralo de la caja izquierda a la caja "
-#~ "derecha y al revés si quieres dejar de leer ese comic.<br/>¡También "
-#~ "importa el orden en el que los coloques!<br/><br/>Si te apetece leer "
-#~ "algún otro comic que no esté en la lista, "
-
-#~ msgid "let me know"
-#~ msgstr "pídelo"
-
-#~ msgid "Here</a> is the full comic list."
-#~ msgstr "Aquí</a> está la lista completa de comics."
-
-#~ msgid "Filter the available list using this tag cloud"
-#~ msgstr "Filtrar los comics disponibles con la nube de etiquetas"
-
-#~ msgid "Loading the lists..."
-#~ msgstr "Cargando las listas..."
-
-#~ msgid "You have "
-#~ msgstr "Tienes "
-
-#~ msgid " new comics. "
-#~ msgstr " comics nuevos. "
-
-#~ msgid "Forget new comics."
-#~ msgstr "Olvidar los comics nuevos."
-
-#~ msgid "Show only new comics"
-#~ msgstr "Mostrar sólo comics nuevos"
-
-#~ msgid "Available strips"
-#~ msgstr "Tiras disponibles"
-
-#~ msgid "tag: "
-#~ msgstr "etiqueta: "
-
-#~ msgid "Filter: "
-#~ msgstr "Filtro: "
-
-#~ msgid "Selected strips "
-#~ msgstr "Tiras seleccionadas "
-
-#~ msgid "Working..."
-#~ msgstr "Trabajando..."
-
-#~ msgid "Sort selected by name"
-#~ msgstr "Ordenarlos por nombre"
-
-#~ msgid "Sort selected by user rating"
-#~ msgstr "Ordenarlos por puntuaciones"
-
-#~ msgid "Add all"
-#~ msgstr "Añadir todos"
-
-#~ msgid "Remove all"
-#~ msgstr "Quitar todas"
-
-#~ msgid "Reorder available list"
-#~ msgstr "Reordenar comics disponibles"
-
-#~ msgid "Add to my list"
-#~ msgstr "Añadir a mi lista"
-
-#~ msgid "Remove from list"
-#~ msgstr "Quitarlo de mi lista"
-
-#~ msgid "Forget this comic"
-#~ msgstr "Olvidar este comic"
-
-#~ msgid "Go to comic's website"
-#~ msgstr "Ir a la web del comic"
-
-#~ msgid "Drag and drop a comic here"
-#~ msgstr "Arrastra y suelta un comic aquí"
-
-#~ msgid "Showing: "
-#~ msgstr "Mostrando: "
-
-#~ msgid "unread"
-#~ msgstr "sin leer"
-
-#~ msgid "Display all"
-#~ msgstr "Mostrar todas"
-
-#~ msgid "show unread"
-#~ msgstr "mostrar sin leer"
-
-#~ msgid "More"
-#~ msgstr "Más"
-
-#~ msgid "Go up"
-#~ msgstr "Subir"
-
-#~ msgid "Up to date"
-#~ msgstr "Al día"
-
-#~ msgid "Rate it!"
-#~ msgstr "¡Puntúalo!"
-
-#~ msgid "Tags"
-#~ msgstr "Etiquetas"
-
-#~ msgid "Hide tags"
-#~ msgstr "Ocultar etiquetas"
-
-#~ msgid "Reload"
-#~ msgstr "Recargar"
-
-#~ msgid "No new comics to read! Wanna "
-#~ msgstr "¡No hay nuevos comics que leer! ¿Quieres "
-
-#~ msgid "add some more"
-#~ msgstr "añadir alguno más"
-
-#~ msgid ""
-#~ "You haven't chosen comics yet. Use the configure option in the menu and "
-#~ "choose some comics."
-#~ msgstr ""
-#~ "No has elegido ninguna tira aún. Usa la opción de elegir comics del menú "
-#~ "para ver algo aquí."
-
-#~ msgid "There are new entries in the blog."
-#~ msgstr "Hay nuevas entradas en el blog."
-
-#~ msgid "Remove the notice"
-#~ msgstr "Quitar el aviso"
-
-#~ msgid " or "
-#~ msgstr " o "
-
-#~ msgid "take me to the blog."
-#~ msgstr "llévame al blog."
-
-#~ msgid "There are %(new_comic_count)s new comics in the database."
-#~ msgstr "Hay %(new_comic_count)s nuevos comics en la base de datos."
-
-#~ msgid ""
-#~ ", <a href=\"%(conf_url)s\">go to the lists</a> or <a "
-#~ "onclick=\"forget_new_comics()\">forget the new comics."
-#~ msgstr ""
-#~ ", <a href=\"%(conf_url)s\">ir a las listas</a> u <a "
-#~ "onclick=\"forget_new_comics()\">olvidar los comics nuevos."
-
-#~ msgid "Updates in the blog!<br/>Go check it"
-#~ msgstr "¡Novedades en el blog!<br/>Para ir al blog haz click"
-
-#~ msgid "here!"
-#~ msgstr "aquí"
-
-#~ msgid "Hide"
-#~ msgstr "Ocultar"
-
-#~ msgid ""
-#~ "New comics have been added since your last visit!<br/>Go check them in "
-#~ "the lists =)"
-#~ msgstr ""
-#~ "¡Nuevos comics han sido añadidos a la base de datos!<br/>Mira si te "
-#~ "interesa alguno en la página de elección."
-
-#~ msgid "This is a random strip of a comic you haven't added =)"
-#~ msgstr ""
-#~ "Aquí tienes una tira aleatoria de un comic que no estás siguiendo =)"
-
-#~ msgid "Did you like it?"
-#~ msgstr "¿Te ha gustado?"
-
-#~ msgid "Add it to my list!"
-#~ msgstr "¡Añádelo a mi lista!"
-
-#~ msgid "Request sent"
-#~ msgstr "Solicitud enviada"
-
-#~ msgid "Thanks for your request!"
-#~ msgstr "¡Gracias!"
-
-#~ msgid "No tags to show yet."
-#~ msgstr "No hay etiquetas para mostrar aún."
-
-#~ msgid "Your tags: "
-#~ msgstr "Tus etiquetas: "
-
-#~ msgid "Saved :)"
-#~ msgstr "Guardado =)"
-
-#~ msgid "Status:"
-#~ msgstr "Estado:"
-
-#~ msgid "Close"
-#~ msgstr "Cerrar"
-
-#~ msgid "Reopen"
-#~ msgstr "Reabrir"
-
-#~ msgid "Initial message"
-#~ msgstr "Mensaje original"
-
-#~ msgid "Date:"
-#~ msgstr "Fecha:"
-
-#~ msgid "From you"
-#~ msgstr "De ti"
-
-#~ msgid "From help desk"
-#~ msgstr "De la ayuda"
-
-#~ msgid "Reply"
-#~ msgstr "Contestar"
-
-#~ msgid "Go back to help index."
-#~ msgstr "Volver al índice de la ayuda."
-
-#~ msgid "Frequently Asked Questions"
-#~ msgstr "Preguntas Frecuentes"
-
-#~ msgid "Index"
-#~ msgstr "Índice"
-
-#~ msgid "Q:"
-#~ msgstr "P:"
-
-#~ msgid "A:"
-#~ msgstr "R:"
-
-#~ msgid "Useful links"
-#~ msgstr "Enlaces útiles"
-
-#~ msgid ""
-#~ "If you need help (either for the website or the firefox add-on) the best "
-#~ "way to get it is to go to our forums and ask there. There is also an <a "
-#~ "href=\"mailto:contact at comicagg dot com\">e-mail address</a> but the "
-#~ "forums is the preferred place to ask."
-#~ msgstr ""
-#~ "Si necesitas ayuda, bien para la web o para la extensión de Firefox, lo "
-#~ "mejor es que te pases por el foro y preguntes ahí. También existe una <a "
-#~ "href=\"mailto:contact at comicagg dot com\">dirección de correo "
-#~ "electrónico</a>, pero el foro es el sitio preferido para preguntar."
-
-#~ msgid "Where you can read news about the site, updates or known issues."
-#~ msgstr ""
-#~ "Donde puedes seguir noticias acerca del sitio, actualizaciones o "
-#~ "problemas conocidos."
-
-#~ msgid "Request page"
-#~ msgstr "Página de solicitud"
-
-#~ msgid "Where you can ask for a comic to be added to the database."
-#~ msgstr "Donde puedes pedir que se añada un comic a la base de datos."
-
-#~ msgid ""
-#~ "First <a href=\"#choose\">choose some comics</a>. Then, your read page "
-#~ "will have the list of comics, sorted as you did in the choose page. By "
-#~ "default only comics with new strips will be shown (you can disable this "
-#~ "in your profile page). After each comic you have some options, like "
-#~ "voting, tag cloud, report broken images and possibly other options. To "
-#~ "mark a comic a read, you can either click on the <i>Mark as read</i> link "
-#~ "or vote the comic. When you have no new strips in a comic you will be "
-#~ "able to read the last one."
-#~ msgstr ""
-#~ "Primero <a href=\"#choose\">elige algunos comics</a>. Entonces en tu "
-#~ "página de lectura tendrás la lista de comics seleccionados ordenados "
-#~ "según lo hayas hecho. Por defecto sólo los comics con nuevas tiras se "
-#~ "mostrarán (puedes controlar este comportamiento en la página del perfil). "
-#~ "Después de cada comic tienes algunas opciones: darle votos, etiquetas, "
-#~ "avisar de imágenes rotas y alguna opción más. Para marcar un comic como "
-#~ "leído puedes hacer click en la opción <i>Marcar como leído</i> o darle un "
-#~ "voto. Cuando no tienes una tira nueva en un comic aparecerá será la "
-#~ "última la que aparezca."
-
-#~ msgid ""
-#~ "There is also a menu in the bottom left of the page to quick jump to the "
-#~ "comic you want. In this menu you can show only unread comics or the full "
-#~ "list. Options for configuring this menu are available in your profile too."
-#~ msgstr ""
-#~ "También hay un menú en la parte de abajo a la izquierda para saltar "
-#~ "rápidamente al comic que quieras. En este menú se pueden mostrar sólo los "
-#~ "comics sin leer o la lista completa. Tienes opciones para configurar este "
-#~ "menú en el perfil."
-
-#~ msgid "Choosing comics"
-#~ msgstr "Eligiendo comics"
-
-#~ msgid ""
-#~ "First thing you have to do after registering is select what comics you "
-#~ "want to read. To do so, first go to <i>Choose comics</i> in the menu "
-#~ "above."
-#~ msgstr ""
-#~ "Lo primero que tienes que hacer después de registrarte es seleccionar los "
-#~ "comics que quieres leer. Para hacer esto ver a <i>Elegir comics</i> en el "
-#~ "menú de arriba."
-
-#~ msgid ""
-#~ "Once in it you will have two columns. In the left blue one you will have "
-#~ "the comics available to read and in the right green one the ones you have "
-#~ "selected. If it's your first time it will be empty."
-#~ msgstr ""
-#~ "Una vez ahí se muestran dos columnas. La de la izquierda de color azul "
-#~ "contiene los comics disponibles en la base de datos y la de la derecha de "
-#~ "color verde aquéllos que has seleccionado. Evidentemente la primera vez "
-#~ "que la uses estará vacia."
-
-#~ msgid ""
-#~ "Each comic is represented by a box in each column and to select/deselect "
-#~ "the only thing you have to do is drag it from one column to the other. "
-#~ "Every time you make changes in the selected column (add/remove comics or "
-#~ "ordering), those changes are saved."
-#~ msgstr ""
-#~ "Cada comic está representado por una caja en cada columna y para "
-#~ "seleccionar/quitar uno lo que tienes que hacer es arrastrarlo de una "
-#~ "columna a la otra. Cada vez que haces un cambio en la columna derecha "
-#~ "(añadir/quitar comics o ordenarlos) éste se guardará automáticamente."
-
-#~ msgid ""
-#~ "To filter the available list you can use either the tag cloud or the "
-#~ "input box. If you filter using the input box you can type the name of a "
-#~ "comic, an user rating or even a number of votes. Write the special "
-#~ "keyword <i>@new</i> to filter new comics. There is a similar input box in "
-#~ "the available list.<br/>Also, there are options to sort the comics (by "
-#~ "name or by user ratings), and to add/remove all the comics."
-#~ msgstr ""
-#~ "Para filtrar la lista de comics disponibles puedes usar la nube de "
-#~ "etiquetas o el filtro por texto que está encima de la columna. En este "
-#~ "filtro puedes usar tanto el nombre del comic, como la puntuación de los "
-#~ "usuarios como el número de votos. Escribe la palabra especial <i>@new</i> "
-#~ "para mostrar sólo los comics nuevos.<br/>También dispones de varias "
-#~ "opciones para ordenar los comics seleccionados (por nombre o por "
-#~ "puntuación) y para añadir o quitar todos los comics."
-
-#~ msgid ""
-#~ "You have three lists here: active, inactive and ended comics. It's all "
-#~ "very self-explanatory. Every comic has a few statistics, it's own tag "
-#~ "cloud and also a button to view the last strip. You have here another big "
-#~ "tag cloud to filter the comics in the active list and some sorting "
-#~ "options too."
-#~ msgstr ""
-#~ "Aquí tienes tres listas: activos, desactivados y terminados. Se explica "
-#~ "todo solo. Cada comic tiene algunas estadísticas, su propia nube de tags "
-#~ "y también un botón para ver la última tira. Hay una nube de etiquetas "
-#~ "grande al comienzo de la página para filtrar los comics de la lista "
-#~ "activa, además de algunas opciones para ordenarlos."
-
-#~ msgid ""
-#~ "You can assign any number of tags for every comic. To tag any comic "
-#~ "follow this steps: </p><ul><li>Add it to your list.</li><li>Then go to "
-#~ "the read page and below the last strip you will find an option called <i>"
-#~ msgstr ""
-#~ "Puedes poner las etiquetas que quieras a cada comic. Para etiquetar un "
-#~ "comic sigue estos pasos:</p><ul><li>Primero tienes que añadirlo a tu "
-#~ "lista de seguimiento.</li><li>Después ve a la página para leer las tiras "
-#~ "y debajo de la tira aparecerá una opción llamada <i>"
-
-#~ msgid "Tags for this comic"
-#~ msgstr "Etiquetas para este comic"
-
-#~ msgid ""
-#~ "</i>. Click on it and a tag cloud for that comic will appear and a form "
-#~ "to add the tags.</li><li>Write there the tags separated by commas.</li></"
-#~ "ul><p class=\"info\">Notice that there&apos;s a minimum number of times "
-#~ "that a tag must be assigned to a comic to appear in the tag clouds. This "
-#~ "number can change in time. The current minimum is "
-#~ msgstr ""
-#~ "</i>. Haz clic en ella y aparecerá la nube de etiquetas y un formulario "
-#~ "para añadir las etiquetas.</li><li>Escribe todas las etiquetas que "
-#~ "quieras separadas por comas.</li></ul><p class=\"info\">Para que las "
-#~ "etiquetas se muestren en la nube tiene que ser asignada un número "
-#~ "determinado de veces por distintos usuarios. Este número puede cambiar "
-#~ "con el tiempo. El mínimo actual es "
-
-#~ msgid ""
-#~ ". Of course, you can't assign the same tag to a comic more than once."
-#~ msgstr ""
-#~ ". Por supuesto, no puedes asignar la misma etiqueta a un comic varias "
-#~ "veces."
-
-#~ msgid "Firefox Add-on: Comic Aggregator Notifier"
-#~ msgstr "Extensión para Firefox: Comic Aggregator Notifier"
-
-#~ msgid ""
-#~ "Our admin Korosu Itai has developed a Firefox add-on to keep you updated "
-#~ "of the number of unread comics you have. This is <a href=\"https://addons."
-#~ "mozilla.org/en-US/firefox/addon/9171\">the entry</a> in the official "
-#~ "Firefox add-ons website. As it is marked as experimental you will have to "
-#~ "signup to be able to install it. You can also install it <a href=\"http://"
-#~ "www.comicagg.com/addon/comic_aggregator_notifier.xpi\">from our server</"
-#~ "a> without having to sign up anywhere."
-#~ msgstr ""
-#~ "Nuestro administrador Korosu Itai ha desarrollado un complemento para el "
-#~ "navegador Firefox para mantenerte al día sobre los comics sin leer que "
-#~ "tengas. Esta es <a href=\"https://addons.mozilla.org/en-US/firefox/"
-#~ "addon/9171\">la entrada</a> en la página de complementos oficial de "
-#~ "Firefox. Como está marcada como experimental tendrás que registrarte "
-#~ "antes de poder descargarla. También la puedes instalar <a href=\"http://"
-#~ "www.comicagg.com/addon/comic_aggregator_notifier.xpi\">desde nuestro "
-#~ "servidor</a> sin tener que estar registrado en ningún sitio."
-
-#~ msgid "If you want to link us..."
-#~ msgstr "Si quieres enlazarnos..."
-
-#~ msgid "... you can use this image :)"
-#~ msgstr "... puedes usar la siguiente imagen :)"
-
-#~ msgid "New help ticket"
-#~ msgstr "Nuevo ticket"
-
-#~ msgid "New ticket"
-#~ msgstr "Nuevo ticket"
-
-#~ msgid "Comentario"
-#~ msgstr "Comentario"
-
-#~ msgid ""
-#~ "If you don't have an account to log in you can easily create one "
-#~ "following this link:"
-#~ msgstr "Si no tienes una cuenta es muy fácil crearla siguiendo este enlace:"
-
-#~ msgid "create a new account."
-#~ msgstr "crear una nueva cuenta."
-
-#~ msgid ""
-#~ "If you can't remember your password follow this link to get a new "
-#~ "password:"
-#~ msgstr ""
-#~ "Si no recuerdas tu contraseña sigue este enlace para cambiar tu "
-#~ "contraseña:"
-
-#~ msgid "reset my password."
-#~ msgstr "borrar mi contraseña."
-
-#~ msgid "Your username/email. "
-#~ msgstr "Tu usuario/correo. "
-
-#~ msgid "There were some errors:"
-#~ msgstr "Hubo algún error:"
-
-#~ msgid "Passwords do not match"
-#~ msgstr "Las contraseñas no coinciden"
-
-#~ msgid ""
-#~ "The username you selected is already taken. Please choose another one."
-#~ msgstr ""
-#~ "El usuario que has elegido ya está siendo usado. Por favor, elige otro."
-
-#~ msgid "You have to write \"comic\" in the field."
-#~ msgstr "Tienes que escribir \"comic\" en el último campo."
-
-#~ msgid ""
-#~ "30 characters max. Alphanumeric characters only (letters, digits and "
-#~ "underscores)."
-#~ msgstr ""
-#~ "30 caracteres máximo. Caracteres alfanuméricos sólo (letras, números y _)."
-
-#~ msgid "Readers"
-#~ msgstr "Lectores"
-
-#~ msgid "Last update:"
-#~ msgstr "Última actualización:"
-
-#~ msgid "comics"
-#~ msgstr "comics"
-
-#~ msgid "There is one new news item."
-#~ msgstr "Hay una nueva noticia."
-
-#~ msgid "There are %(new_blog_count)s new news items."
-#~ msgstr "Hay %(new_blog_count)s nuevas noticias."
-
-#~ msgid "There is one new comic in the database."
-#~ msgstr "Hay un nuevo comic en la base de datos."
-
-#~ msgid "There is %(new_comic_count)s new comic in the database."
-#~ msgstr "Hay %(new_comic_count)s nuevos comics en la base de datos."
-
-#~ msgid "profile"
-#~ msgstr "perfil"
-
-#~ msgid "help"
-#~ msgstr "ayuda"
-
-#~ msgid "list"
-#~ msgstr "lista"
-
-#~ msgid "More options"
-#~ msgstr "Más acciones"
-
-#~ msgid "votos"
-#~ msgstr "votos"
-
-#~ msgid "Sort your comics"
-#~ msgstr "Organiza tus comics"

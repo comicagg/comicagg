@@ -1,10 +1,8 @@
-"""View classes to render API responses."""
+"""API endpoints."""
 
 import logging
-from typing import Dict, Type
+from typing import Type
 
-from comicagg.comics.models import Comic, ComicHistory, active_comics
-from comicagg.comics.utils import ComicsService
 from django.db import transaction
 from django.http import (
     HttpResponse,
@@ -17,29 +15,18 @@ from django.http import (
 from django.views.generic import View
 from django.views.generic.edit import FormMixin
 
+from comicagg.comics.models import Comic, Strip
+
+from .http import *
 from .decorators import body_not_empty, request_param, write_required
 from .forms import StripForm, SubscriptionForm, VoteForm
 from .serializer import Serializer
-from .typings import OAuth2HttpRequest
 
 logger = logging.getLogger(__name__)
 
-# Helper classes
-
-
-class HttpResponseUnauthorized(HttpResponse):
-    status_code = 401
-
-
-class HttpResponseCreated(HttpResponse):
-    status_code = 201
-
-
-class HttpResponseNoContent(HttpResponse):
-    status_code = 204
-
-
-# Views
+# ########################
+# #   Generic API view   #
+# ########################
 
 
 class APIView(View, FormMixin):
@@ -73,8 +60,8 @@ class APIView(View, FormMixin):
         response = None
         try:
             response = super(APIView, self).dispatch(*args, **kwargs)
-        except Exception:
-            # TODO : log this exception
+        except Exception as exc:
+            logger.exception("Server error", exc_info=exc)
             response = self.response_error(
                 "Internal Server error", "ServerError", HttpResponseServerError
             )
@@ -109,16 +96,21 @@ class APIView(View, FormMixin):
         return HttpResponseCreated(content_type=self.content_type)
 
     def response_content(
-        self, data: Dict, response_class: Type[HttpResponse] = JsonResponse
+        self, data: dict, response_class: Type[HttpResponse] = JsonResponse
     ):
         """Helper method to wrap the response data."""
         # FUTURE: we may want to change this so that we can change the status code in meta
         final_data = self.wrap_data(data)
         return response_class(final_data)
 
-    def wrap_data(self, data: Dict):
+    def wrap_data(self, data: dict):
         """In case we want to do JSONP in the future."""
         return {"meta": {"status": 200, "text": "OK", "response": data}}
+
+
+# #################
+# #   Endpoints   #
+# #################
 
 
 class IndexView(APIView):
@@ -144,16 +136,14 @@ class ComicsView(APIView):
         # if self.comic_id is not None:
         if hasattr(self, "comic_id"):
             try:
-                data = Comic.objects.get(pk=getattr(self, "comic_id"))
-                if not data.active and not data.ended:
-                    return self.response_not_found("The comic is disabled")
+                data = Comic.objects.available().get(pk=getattr(self, "comic_id"))
             except Exception:
                 return self.response_not_found("The comic does not exist")
             body = self.serialize(data, include_last_strip=True)
         else:
             simple = "simple" in kwargs
             body = self.serialize(
-                list(active_comics()),
+                list(Comic.objects.available()),
                 include_last_strip=(not simple),
                 identifier="comics",
             )
@@ -171,7 +161,7 @@ class StripsView(APIView):
     def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get information about a certain strip."""
         try:
-            strip = ComicHistory.objects.get(pk=getattr(self, "strip_id"))
+            strip = Strip.objects.get(pk=getattr(self, "strip_id"))
         except Exception:
             return self.response_not_found("That strip does not exist")
         body = self.serialize(strip)
@@ -182,13 +172,15 @@ class StripsView(APIView):
     def put(self, request: OAuth2HttpRequest, **kwargs):
         """Mark this strip as unread for the user doing the request."""
         try:
-            strip = ComicHistory.objects.get(pk=getattr(self, "strip_id"))
+            strip = Strip.objects.select_related("comic").get(
+                pk=getattr(self, "strip_id")
+            )
         except Exception:
             return self.response_not_found("The strip does not exist")
-        if not ComicsService(request.user).is_subscribed(strip.comic):
+        if not request.user.is_subscribed(strip.comic):
             return self.response_error("You are not subscribed to this comic")
-        request.user.unreadcomic_set.create(
-            user=request.user, comic=strip.comic, history=strip
+        request.user.unreadstrip_set.create(
+            user=request.user, comic=strip.comic, strip=strip
         )
         return self.response_no_content()
 
@@ -198,12 +190,12 @@ class StripsView(APIView):
         """Mark this strip as read for the user doing the request."""
         try:
             strip_id = getattr(self, "strip_id")
-            strip = ComicHistory.objects.get(pk=strip_id)
+            strip = Strip.objects.get(pk=strip_id)
         except Exception:
             return self.response_not_found("The strip does not exist")
-        if not ComicsService(request.user).is_subscribed(strip.comic):
+        if not request.user.is_subscribed(strip.comic):
             return self.response_error("You are not subscribed to this comic")
-        request.user.unreadcomic_set.filter(history__id=strip_id).delete()
+        request.user.unreadstrip_set.filter(strip__id=strip_id).delete()
         return self.response_no_content()
 
 
@@ -216,8 +208,10 @@ class SubscriptionsView(APIView):
 
     def get(self, request: OAuth2HttpRequest, **kwargs):
         """Get all the comics the user is following including the last strip fetched."""
-        subs = ComicsService(request.user).subscribed_comics()
-        body = self.serialize(subs, include_last_strip=True, identifier="subscriptions")
+        subscriptions = request.user.comics_subscribed
+        body = self.serialize(
+            subscriptions, include_last_strip=True, identifier="subscriptions"
+        )
         return self.response_content(body)
 
     @write_required
@@ -237,7 +231,7 @@ class SubscriptionsView(APIView):
         # Remove possible duplicates
         id_list_clean = []
         [id_list_clean.append(x) for x in id_list if x not in id_list_clean]
-        ComicsService(request.user).subscribe_comics(id_list_clean)
+        request.user.subscribe_list(id_list_clean)
         return self.response_created()
 
     @write_required
@@ -269,9 +263,7 @@ class SubscriptionsView(APIView):
         ]
 
         # 2. Get the comics the user is currently following
-        current_active_idx = [
-            comic.id for comic in ComicsService(request.user).subscribed_comics()
-        ]
+        current_active_idx = [comic.id for comic in request.user.comics_subscribed]
 
         # 3. Find comics to be removed
         if deleted_idx := [
@@ -279,7 +271,7 @@ class SubscriptionsView(APIView):
             for comic_id in current_active_idx
             if comic_id not in requested_idx_clean
         ]:
-            ComicsService(request.user).unsubscribe_comics(deleted_idx)
+            request.user.unsubscribe_list(deleted_idx)
 
         # 4. Find comics to be added
         if added_idx := [
@@ -287,10 +279,11 @@ class SubscriptionsView(APIView):
             for comic_id in requested_idx_clean
             if comic_id not in current_active_idx
         ]:
-            ComicsService(request.user).subscribe_comics(added_idx)
+            request.user.subscribe_list(added_idx)
 
         # 5. Update the position of the subcriptions
-        subscribed_all = ComicsService(request.user).subscribed_all()
+        # TODO: Might not be needed or extracted to a new method in User?
+        subscribed_all = request.user.subscriptions
         subscribed_all_dict = dict(
             [(subscription.comic.id, subscription) for subscription in subscribed_all]
         )
@@ -298,6 +291,7 @@ class SubscriptionsView(APIView):
         if len(subscribed_all) < len(requested_idx_clean):
             # We have already added/removed the comics so this should never happen
             # something must have gone wrong
+            # TODO: log a proper error with an explanation
             return self.response_error(
                 "Internal server error", "ServerError", HttpResponseServerError
             )
@@ -313,9 +307,9 @@ class SubscriptionsView(APIView):
     def delete(self, request: OAuth2HttpRequest, **kwargs):
         """Remove all the subscriptions, returning a list with the IDs of the comics
         the user used to follow."""
-        subscribed_idx = [c.id for c in ComicsService(request.user).subscribed_comics()]
+        subscribed_idx = [comic.id for comic in request.user.comics_subscribed]
         body = self.serialize(subscribed_idx, identifier="removed_subscriptions")
-        ComicsService(request.user).unsubscribe_all_comics()
+        request.user.unsubscribe_all()
         return self.response_content(body)
 
 
@@ -335,16 +329,16 @@ class UnreadsView(APIView):
         """Get the unread comics followed by the user."""
         if hasattr(self, "comic_id"):
             try:
-                comic = Comic.objects.get(pk=getattr(self, "comic_id"))
+                comic = Comic.objects.available().get(pk=getattr(self, "comic_id"))
             except Exception:
                 return self.response_not_found("Comic does not exist")
 
-            if ComicsService(request.user).is_subscribed(comic):
+            if request.user.is_subscribed(comic):
                 body = self.serialize(comic, include_unread_strips=True)
             else:
                 return self.response_error("You are not subscribed to this comic")
         else:
-            unreads = ComicsService(request.user).unread_comics()
+            unreads = request.user.comics_unread()
             body = self.serialize(
                 unreads,
                 include_last_strip=getattr(self, "with_strips"),
@@ -362,14 +356,14 @@ class UnreadsView(APIView):
             return HttpResponseNotAllowed(["GET"])
 
         try:
-            comic = Comic.objects.get(pk=getattr(self, "comic_id"))
+            comic = Comic.objects.available().get(pk=getattr(self, "comic_id"))
         except Exception:
             return self.response_not_found("Comic does not exist")
 
-        if not ComicsService(request.user).is_subscribed(comic):
+        if not request.user.is_subscribed(comic):
             return self.response_error("You are not subscribed to this comic")
 
-        if ComicsService(request.user).mark_comic_unread(comic):
+        if request.user.mark_unread(comic):
             return self.response_created()
         else:
             return self.response_error(
@@ -391,16 +385,16 @@ class UnreadsView(APIView):
             return self.response_error("Invalid vote parameter")
 
         try:
-            comic = Comic.objects.get(pk=getattr(self, "comic_id"))
+            comic = Comic.objects.available().get(pk=getattr(self, "comic_id"))
         except Exception:
             return self.response_not_found("Comic does not exist")
 
-        if not ComicsService(request.user).is_subscribed(comic):
+        if not request.user.is_subscribed(comic):
             return self.response_error("You are not subscribed to this comic")
 
         # At this point we have confirmed that the comic exists and
         # that the user is subscribed to it
-        ComicsService(request.user).mark_comic_read(comic, vote=getattr(self, "vote"))
+        request.user.mark_read(comic, vote=getattr(self, "vote"))
         return self.response_no_content()
 
     @write_required
@@ -409,14 +403,14 @@ class UnreadsView(APIView):
         """Mark all comics as read."""
         if not hasattr(self, "comic_id"):
             # Mark all comics as read
-            ComicsService(request.user).mark_all_read()
+            request.user.mark_read_all()
         else:
             # Mark just the one comic
             try:
-                comic = Comic.objects.get(pk=getattr(self, "comic_id"))
+                comic = Comic.objects.available().get(pk=getattr(self, "comic_id"))
             except Exception:
                 return self.response_not_found("Comic does not exist")
-            ComicsService(request.user).mark_comic_read(comic)
+            request.user.mark_read(comic)
         return self.response_no_content()
 
 

@@ -9,6 +9,9 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     html = models.BooleanField("Is the text HTML or plain text?", default=False)
 
+    # For type errors only
+    id: int
+
     class Meta:
         ordering = ["-date"]
 
@@ -27,7 +30,7 @@ class Post(models.Model):
                 new_blog = NewBlog(user=user, post=self)
                 new_blog.save()
 
-
+# FUTURE: Rename to NewPost
 class NewBlog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="new_posts")

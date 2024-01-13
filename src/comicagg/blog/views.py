@@ -1,9 +1,13 @@
-from comicagg.blog.models import NewBlog, Post
-from comicagg.comics.ajax.views import ok_response
+from typing_extensions import deprecated
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.shortcuts import render
+
+from comicagg.blog.models import NewBlog, Post
+from comicagg.comics.ajax.views import ok_response
+from comicagg.typings import AuthenticatedHttpRequest
 
 
 def index(request: HttpRequest, all=False):
@@ -25,13 +29,15 @@ def index(request: HttpRequest, all=False):
 
 
 @login_required
-def forget_new_blogs(request: HttpRequest):
+def forget_new_blogs(request: AuthenticatedHttpRequest):
     """Will mark as read the new news items of the logged in user."""
     if request.user:
-        NewBlog.objects.filter(user=request.user).delete()
+        request.user.comics_new_forget_all()
     return ok_response(request)
 
 
+# TODO: Remove this function
+@deprecated("Use User.posts_new_forget() instead")
 def is_new_for(post: Post, user: User):
     """Returns the NewBlog object for a user and a news item."""
     return NewBlog.objects.filter(user=user, post=post)

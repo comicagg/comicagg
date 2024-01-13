@@ -1,48 +1,33 @@
 from math import atan, sqrt
+from typing import Any
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 
-from comicagg.accounts.models import UserProfile
-from comicagg.comics.fields import AltTextField, ComicNameField
+from .fields import AltTextField, ComicNameField, ComicStatus
+from .managers import ComicManager, SubscriptionManager, UnreadStripManager
 
 
 class Comic(models.Model):
-    """
-    Comics can be: A active, E ended
-
-    E/A T F
-    T   - 2
-    F   1 3
-    1. Active AND not Ended - all ok, ongoing
-    2. Not active AND Ended - finished
-    3. Not active and not Ended - not working, needs fixing
-    So visible to the user should be 1 and 2
-    """
-
     name = ComicNameField("Name", max_length=255)
     website = models.URLField("Website")
-    active = models.BooleanField(
-        "Is active?",
+    status = models.IntegerField(
+        "Status",
+        default=ComicStatus.INACTIVE,
+        choices=ComicStatus.choices,
+        help_text="An inactive comic is never shown. The rest, depends on the case.",
+    )
+    no_images = models.BooleanField(
+        "Hide images in Strips",
         default=False,
-        help_text="The comic is ongoing and gets updated regularly.",
+        help_text="Use it to hide the images of the comic, but allow a notification to the users.",
     )
     notify = models.BooleanField(
         "Notify the users?",
         default=False,
         help_text="""This is always disabled. If it's enabled when saving the comic, the users will be notified of the new comic.""",
-    )
-    ended = models.BooleanField(
-        "Has ended?",
-        default=False,
-        help_text="Check this if the comic has ended. Also mark it as inactive.",
-    )
-    no_images = models.BooleanField(
-        "Don't show images?",
-        default=False,
-        help_text="Use it to hide the images of the comic, but allow a notification to the users.",
     )
     add_date = models.DateTimeField(auto_now_add=True)
 
@@ -83,6 +68,8 @@ class Comic(models.Model):
         default=False,
         help_text="Read the page backwards by line (last line first).",
     )
+
+    # FUTURE: Add a field to scan for the alternative text
 
     # Second regex section
     re2_url = models.URLField(
@@ -138,14 +125,16 @@ class Comic(models.Model):
     positive_votes = models.IntegerField("Positive votes", default=0)
     total_votes = models.IntegerField("Total votes", default=0)
 
+    # Only for typing errors
+    id: int
+    subscription_set: SubscriptionManager
+    strip_set: Any
+
+    objects = ComicManager()
+
     class Meta:
         ordering = ["name"]
         permissions = (("all_images", "Can see all images"),)
-
-    def __init__(self, *args, **kwargs):
-        super(Comic, self).__init__(*args, **kwargs)
-        self._reader_count = None
-        self._strip_count = None
 
     def __str__(self):
         return self.name
@@ -158,13 +147,13 @@ class Comic(models.Model):
         # If the user saved this with the notify field to true
         should_notify = self.notify
         self.notify = False
+
         super().save(*args, **kwargs)
+
         if should_notify:
             # Create a NewComic object for each user
             users = User.objects.all()
             for user in users:
-                profile = UserProfile.objects.get(user=user)
-                profile.save()
                 new_comic = NewComic(user=user, comic=self)
                 new_comic.save()
 
@@ -213,6 +202,7 @@ class Comic(models.Model):
             r = 0.0
         return r
 
+    @property
     def negative_votes(self):
         return self.total_votes - self.positive_votes
 
@@ -222,7 +212,7 @@ class Comic(models.Model):
 
     @cached_property
     def strip_count(self):
-        return int(self.comichistory_set.count())
+        return int(self.strip_set.count())
 
     def last_image_url(self):
         """Return last_image or a reversed URL if a referrer is used."""
@@ -234,27 +224,17 @@ class Comic(models.Model):
 
     @cached_property
     def last_strip(self):
-        return self.comichistory_set.all()[0]
-
-    # User related methods
-    # FUTURE: Remove this? Still used in views
-    def unread_comics_for(self, user):
-        return UnreadComic.objects.filter(comic=self, user=user)
-
-
-# FUTURE: We may want to move this elsewhere
-def active_comics():
-    """Returns a QuerySet of Comic objects that a user can follow. Includes ended comics."""
-    # FUTURE: Should not include ended comics?
-    return Comic.objects.exclude(active=False)
+        return self.strip_set.first()
 
 
 class Subscription(models.Model):
-    """A user follows a certain comic and the position of the comic in the reading list."""
+    """A comic followed by a user and its position in the reading list."""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
     position = models.PositiveIntegerField(blank=True, default=0)
+
+    objects = SubscriptionManager()
 
     class Meta:
         ordering = ["user", "position"]
@@ -264,7 +244,7 @@ class Subscription(models.Model):
 
     def delete(self, *args, **kwargs):
         # Delete the related unread comics
-        UnreadComic.objects.filter(user=self.user, comic=self.comic).delete()
+        UnreadStrip.objects.filter(user=self.user, comic=self.comic).delete()
         super().delete(*args, **kwargs)
 
 
@@ -283,12 +263,15 @@ class Request(models.Model):
         return f"{self.user} - {self.url}"
 
 
-# FUTURE: Rename this to ComicStrip
-class ComicHistory(models.Model):
+class Strip(models.Model):
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
     alt_text = AltTextField("Alternative text", blank=True, null=True)
+    # FUTURE: Add a field so that Strips can be grouped
+
+    # For type errors only
+    id: int
 
     class Meta:
         ordering = ["-id"]
@@ -300,20 +283,24 @@ class ComicHistory(models.Model):
     def image_url(self):
         url = self.url
         if self.comic.referrer:
-            url = reverse("comics:history_url", kwargs={"history_id": self.id})
+            url = reverse("comics:strip_url", kwargs={"strip_id": self.id})
         return url
 
 
-class UnreadComic(models.Model):
+class UnreadStrip(models.Model):
+    """A strip that the user has not read yet."""
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    history = models.ForeignKey(ComicHistory, on_delete=models.CASCADE)
+    strip = models.ForeignKey(Strip, on_delete=models.CASCADE)
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
 
+    objects = UnreadStripManager()
+
     class Meta:
-        ordering = ["user", "-history"]
+        ordering = ["user", "-strip"]
 
     def __str__(self):
-        return f"{self.user} {self.history}"
+        return f"{self.user} {self.strip}"
 
 
 class Tag(models.Model):
@@ -330,6 +317,8 @@ class Tag(models.Model):
 
 
 class NewComic(models.Model):
+    """Used to mark a comic as new for a user so that he can be notified."""
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comic = models.ForeignKey(
         Comic, on_delete=models.CASCADE, related_name="new_comics"

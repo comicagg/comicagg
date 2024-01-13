@@ -2,8 +2,9 @@
 
 import os
 
-from comicagg.utils import Env
 from django.core.management.commands.runserver import Command as runserver
+
+from comicagg.utils import Env
 
 # Change default Django runserver address and port
 runserver.default_addr = "0.0.0.0"
@@ -23,6 +24,11 @@ MAINTENANCE = django_env.int("MAINTENANCE", 0)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = django_env.get("SECRET_KEY")
+
+# The ID, as an integer, of the current site in the django_site database table.
+# This is used so that application data can hook into specific sites
+# and a single database can manage content for multiple sites.
+SITE_ID = 1
 
 # ################
 # #              #
@@ -58,7 +64,7 @@ FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
 # #            #
 # ##############
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.messages",
@@ -70,13 +76,13 @@ INSTALLED_APPS = (
     # Instead of 'django.contrib.admin'
     "comicagg.apps.ComicaggAdminConfig",
     "comicagg.accounts",
-    "comicagg.api",
+    # "comicagg.api",
     "comicagg.blog",
     "comicagg.comics",
-    "provider",
-    "provider.oauth2",
+    # "provider",
+    # "provider.oauth2",
     "mailer",
-)
+]
 
 MIDDLEWARE = [
     # ##########################
@@ -99,8 +105,10 @@ MIDDLEWARE = [
     # ######################
     # Adds the user attribute, representing the currently-logged-in user, to every incoming HttpRequest object.
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Overwrite the user object with our own User proxy model
+    "comicagg.middleware.UserProxyOverwriteMiddleware",
     # OAuth2 authentication
-    "comicagg.api.middleware.OAuth2Middleware",
+    # "comicagg.api.middleware.OAuth2Middleware",
     # ###########################
     # #   Post-authentication   #
     # ###########################
@@ -140,7 +148,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "comicagg.comics.context_processors.comic_counters",
                 "django.template.context_processors.static",
-                "comicagg.common.context_processors.comicagg_vars",
+                "comicagg.common.context_processors.add_settings",
             ],
         },
     },
@@ -195,11 +203,9 @@ STATIC_URL = django_env.get("STATIC_URL")
 # This should be set to a list of strings that contain full paths to your additional files directory(ies)
 STATICFILES_DIRS = (os.path.join(ROOT, "static"),)
 
-# ######################################
-# #                                    #
-# #   Dates and internationalization   #
-# #                                    #
-# ######################################
+# #############
+# #   Dates   #
+# #############
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -207,7 +213,17 @@ STATICFILES_DIRS = (os.path.join(ROOT, "static"),)
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = "UTC"
+
+# A boolean that specifies if datetimes will be timezone-aware by default or not.
+# If this is set to True, Django will use timezone-aware datetimes internally.
+# When USE_TZ is False, Django will use naive datetimes in local time,
+# except when parsing ISO 8601 formatted strings, where timezone information will always be retained if present.
 USE_TZ = True
+
+
+# ########################################
+# #   Internalization and localization   #
+# ########################################
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -221,10 +237,8 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-# The ID, as an integer, of the current site in the django_site database table.
-# This is used so that application data can hook into specific sites
-# and a single database can manage content for multiple sites.
-SITE_ID = 1
+# A list of directories where Django looks for translation files.
+LOCALE_PATHS = [os.path.join(ROOT, "locale")]
 
 # #############
 # #           #
@@ -373,3 +387,28 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60  # seconds
 CELERY_RESULT_EXTENDED = True
+
+# ############################
+# #   django-debug-toolbar   #
+# ############################
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
+
+    MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+    import socket  # only if you haven't already imported this
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+        "127.0.0.1",
+        "10.0.2.2",
+    ]
+
+    # https://timonweb.com/django/fixing-the-data-for-this-panel-isnt-available-anymore-error-in-django-debug-toolbar/
+    RESULTS_CACHE_SIZE = 1000
+    hide_toolbar_patterns = ["/media/", "/static/", "/comics/strip/"]
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": lambda request: not any(
+            request.path.startswith(p) for p in hide_toolbar_patterns
+        ),
+    }

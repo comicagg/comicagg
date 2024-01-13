@@ -1,9 +1,9 @@
+import logging
 from collections import namedtuple
 from datetime import datetime, timedelta, timezone
 
-import logging
 from django.core.management.base import BaseCommand, no_translations
-from django_celery_beat.models import HOURS, IntervalSchedule, PeriodicTask, DAYS
+from django_celery_beat.models import DAYS, HOURS, IntervalSchedule, PeriodicTask
 
 task_logger = logging.getLogger(__name__)
 

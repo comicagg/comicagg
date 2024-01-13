@@ -15,3 +15,9 @@ docker build . -t comicagg:latest
 docker compose exec app python manage.py migrate
 docker compose exec app python manage.py collectstatic
 ```
+
+## Taggin for deployment
+
+```shell
+docker tag comicagg:latest nublar.azurecr.io/comicagg/app:stable
+```

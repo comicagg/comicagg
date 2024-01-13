@@ -10,6 +10,3 @@ django-celery-beat==2.5.0
 django_celery_results==2.5.1
 flower==2.0.1
 django-mailer==2.3
-
-# Development only
-pylint-django==2.5.5

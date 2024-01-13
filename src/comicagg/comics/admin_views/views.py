@@ -3,11 +3,12 @@ from django.http import HttpRequest
 from django.shortcuts import render
 from django.utils.translation import gettext as _
 
-from comicagg.comics.models import Comic, ComicHistory
+from comicagg.comics.models import Comic, Strip
 from comicagg.comics.update import update_comic
+from comicagg.typings import AuthenticatedHttpRequest
 
 
-def docs_custom_update(request: HttpRequest):
+def docs_custom_update(request: AuthenticatedHttpRequest):
     """Show the custom update function documentation."""
     request.current_app = "comics"
     context = dict(admin.site.each_context(request))
@@ -15,7 +16,7 @@ def docs_custom_update(request: HttpRequest):
     return render(request, "admin/custom_func.html", context)
 
 
-def admin_update_view(request: HttpRequest, comic_id=0):
+def admin_update_view(request: AuthenticatedHttpRequest, comic_id=0):
     """Trigger an an update for a comic.
     If a comic_id is passed as parameter it will update that comic.
     If no comic_id is passed, it will show the list of comics to update.
@@ -42,13 +43,13 @@ def admin_update_view(request: HttpRequest, comic_id=0):
     return render(request, "admin/update_comic.html", context)
 
 
-def admin_reported(request: HttpRequest, id_list: str):
+def admin_reported(request: AuthenticatedHttpRequest, id_list: str):
     """Show a page with the images of the reported strips."""
     request.current_app = "comics"
     context = dict(admin.site.each_context(request))
     context["title"] = _("Review reported images")
     strip_list_url = list(map(int, id_list.split("-")))
-    strips = ComicHistory.objects.in_bulk(strip_list_url)
+    strips = Strip.objects.in_bulk(strip_list_url)
     strip_ids = {id: strips.get(id, None) for id in strip_list_url}
     context["strips"] = strip_ids
     return render(request, "admin/reported.html", context)

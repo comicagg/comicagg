@@ -2,8 +2,23 @@ import contextlib
 import time
 from email import utils
 
-from comicagg.comics.models import Comic, ComicHistory
-from comicagg.comics.utils import ComicsService
+from comicagg.accounts.models import User
+from comicagg.comics.models import Comic, Strip
+from comicagg.comics.update import InvalidParameterException
+
+
+# ########################
+# #   Helper functions   #
+# ########################
+
+
+def _datetime_to_timestamp(datetime):
+    time_tuple = datetime.timetuple()
+    return time.mktime(time_tuple)
+
+
+def _datetime_to_rfc2822(datetime):
+    return utils.formatdate(_datetime_to_timestamp(datetime))
 
 
 class Serializer:
@@ -13,7 +28,7 @@ class Serializer:
     Could be merged with the APIView class but like this it's easier to separate the work of both classes.
     """
 
-    def __init__(self, user=None):
+    def __init__(self, user: User | None = None):
         self.user = user
 
     def serialize(
@@ -23,7 +38,7 @@ class Serializer:
         include_unread_strips=False,
         identifier=None,
     ):
-        """Serializes an instance of Comic, ComicHistory, a list of Comic instances or a dictionary.
+        """Serializes an instance of Comic, Strip, a list of Comic instances or a dictionary.
 
         If object_to_serialize is a list or a dict, then identifier will be used as the container name.
         """
@@ -33,13 +48,14 @@ class Serializer:
             result["comic"] = self.build_comic_dict(
                 object_to_serialize, include_last_strip, include_unread_strips
             )
-        elif isinstance(object_to_serialize, ComicHistory):
-            # Serialize a ComicHistory object (strip)
-            result["strip"] = self.build_comichistory_dict(object_to_serialize)
+        elif isinstance(object_to_serialize, Strip):
+            # Serialize a Strip object (strip)
+            result["strip"] = self.build_strip_dict(object_to_serialize)
         elif isinstance(object_to_serialize, list) and identifier:
             # Serialize a list of Comic objects using identifier as the parent element
             if len(object_to_serialize) == 0:
-                # This clause could be joined with the next one with an or, but it's easier to read like this
+                # This clause could be joined with the next one with an or,
+                # but it's easier to read like this
                 result[identifier] = []
             elif isinstance(object_to_serialize[0], Comic):
                 # This is a list of comics
@@ -68,56 +84,41 @@ class Serializer:
             raise ValueError("This is not a comic")
         if not self.user:
             raise ValueError("To serialize a comic you need a user")
-        user_operations = ComicsService(self.user)
         out = {
             "id": comic.id,
             "name": comic.name,
             "website": comic.website,
             "votes": comic.total_votes,
             "rating": comic.get_rating(),
-            "added": user_operations.is_subscribed(comic),
-            "ended": comic.ended,
-            "unread_count": user_operations.unread_comic_strips_count(comic),
+            "added": self.user.is_subscribed(comic),
+            "ended": comic.status == Comic.ComicStatus.ENDED,
+            "unread_count": self.user.unread_strips_for(comic).count(),
         }
         if last_strip:
             with contextlib.suppress(Exception):
-                out["last_strip"] = self.build_comichistory_dict(comic.last_strip)
+                out["last_strip"] = self.build_strip_dict(comic.last_strip)
         if unread_strips:
             out["unreads"] = [
-                self.build_comichistory_dict(h)
-                for h in user_operations.unread_comic_strips(comic)
+                self.build_strip_dict(h) for h in self.user.unread_strips_for(comic)
             ]
         return out
 
-    def build_comichistory_dict(self, history):
+    def build_strip_dict(self, strip):
         return {
-            "id": history.id,
-            "url": history.image_url(),
-            "text": history.alt_text or "",
-            "date": _datetime_to_rfc2822(history.date),
-            "timestamp": _datetime_to_timestamp(history.date),
+            "id": strip.id,
+            "url": strip.image_url(),
+            "text": strip.alt_text or "",
+            "date": _datetime_to_rfc2822(strip.date),
+            "timestamp": _datetime_to_timestamp(strip.date),
         }
 
     def build_user_dict(self):
-        user_operations = ComicsService(self.user)
+        if not self.user:
+            raise InvalidParameterException(["self.user"])
         return {
             "username": self.user.username,
             "email": self.user.email,
-            "total_comics": len(user_operations.subscribed_comics()),
-            "unread_comics": len(user_operations.unread_comics()),
-            "new_comics": user_operations.new_comics().count(),
+            "total_comics": self.user.subscription_count,
+            "unread_comics": self.user.comics_unread_count,
+            "new_comics": self.user.comics_new_count,
         }
-
-
-# ########################
-# #   Helper functions   #
-# ########################
-
-
-def _datetime_to_timestamp(datetime):
-    time_tuple = datetime.timetuple()
-    return time.mktime(time_tuple)
-
-
-def _datetime_to_rfc2822(datetime):
-    return utils.formatdate(_datetime_to_timestamp(datetime))

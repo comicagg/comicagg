@@ -1,13 +1,20 @@
 {
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
-    "python.formatting.provider": "none",
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.typeCheckingMode": "basic",
-    "coblock.boxCharacter": "#",
-    "coblock.boxWidth": 1,
-    "coblock.spaceAround": 3,
-    "coblock.preferBlockComment": true,
-    "todo-tree.highlights.enabled": false
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "coblock.boxCharacter": "#",
+  "coblock.boxWidth": 1,
+  "coblock.spaceAround": 3,
+  "coblock.preferBlockComment": true,
+  "todo-tree.highlights.enabled": false,
+  "python.formatting.provider": "none",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.include": [
+    "src/**"
+  ],
+  "python.analysis.addImport.exactMatchOnly": true,
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.enablePytestExtra": false,
+  "python.analysis.stubPath": "src"
 }

@@ -6,7 +6,7 @@
 {% for subscription in subscriptions %}
 <comic id="{{ subscription.comic.id }}" name="{{ subscription.comic.name }}">
 {% for unread in subscription.comic|unreads:user.id %}
-<unread id="{{ unread.history.id }}" date="{{ unread.history.date|date:"r" }}"/>
+<unread id="{{ unread.strip.id }}" date="{{ unread.strip.date|date:'c' }}"/>
 {% endfor %}
 </comic>
 {% endfor %}
