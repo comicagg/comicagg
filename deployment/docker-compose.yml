@@ -1,27 +1,24 @@
 name: comicagg
 services:
-  redis:
-    image: redis:7-alpine
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-
-  db:
-    image: postgres:16-alpine
-    env_file:
-      - .env
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-
   app:
-    image: nublar.azurecr.io/comicagg/app:stable
+    image: nublar.azurecr.io/comicagg/app
     env_file:
       - .env
     volumes:
       - app_static:/web/static
       - app_media:/web/media
     restart: unless-stopped
+    command: [ "app" ]
+    depends_on:
+      - redis
+      - db
+
+  tasks:
+    image: nublar.azurecr.io/comicagg/app
+    env_file:
+      - .env
+    restart: unless-stopped
+    command: [ "tasks" ]
     depends_on:
       - redis
       - db
@@ -34,6 +31,22 @@ services:
       - app_static:/web/static
       - app_media:/web/media
       - ./nginx:/etc/nginx/conf.d:ro
+    restart: unless-stopped
+    depends_on:
+      - app
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
 
   pgadmin:

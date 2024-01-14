@@ -50,7 +50,7 @@ class Env:
         return [parseaddr(email) for email in self.list(key)]
 
     def db(self, key: str):
-        """Expected value: psycopg2://user:password@host:port/name"""
+        """Expected value: postgresql://user:password@host:port/name"""
 
         result = self.url(key)
         result = result._replace(scheme=f"django.db.backends.{result.scheme}")
