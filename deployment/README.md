@@ -13,7 +13,7 @@ These are the tasks needed to get an environment up and running:
 2. Prepare the database:
 
    ```shell
-   docker compose create app
+   docker compose up -d app
    docker compose exec app python manage.py migrate
    ```
 
