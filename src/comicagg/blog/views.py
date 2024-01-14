@@ -1,5 +1,3 @@
-from typing_extensions import deprecated
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpRequest
@@ -37,7 +35,6 @@ def forget_new_blogs(request: AuthenticatedHttpRequest):
 
 
 # TODO: Remove this function
-@deprecated("Use User.posts_new_forget() instead")
 def is_new_for(post: Post, user: User):
     """Returns the NewBlog object for a user and a news item."""
     return NewBlog.objects.filter(user=user, post=post)
