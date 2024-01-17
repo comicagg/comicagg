@@ -155,6 +155,18 @@ TEMPLATES = [
     },
 ]
 
+# ################
+# #   Security   #
+# ################
+
+# A list of trusted origins for unsafe requests (e.g. POST).
+CSRF_TRUSTED_ORIGINS = django_env.list("CSRF_TRUSTED_ORIGINS")
+
+# A dotted path to the view function to be used
+# when an incoming request is rejected by the CSRF protection.
+# CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
+
+
 # ######################
 # #   Authentication   #
 # ######################
@@ -172,10 +184,6 @@ PASSWORD_HASHERS = [
     # SHA1 was deprecated but it's needed for password auto-migration
     "django.contrib.auth.hashers.SHA1PasswordHasher",
 ]
-
-# CSRF_TRUSTED_ORIGINS = []
-
-# CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 
 # ######################
 # #                    #
