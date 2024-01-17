@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "django_celery_results",
     # Instead of 'django.contrib.admin'
+    "comicagg.management",
     "comicagg.apps.ComicaggAdminConfig",
     "comicagg.accounts",
     # "comicagg.api",
@@ -264,6 +265,7 @@ EMAIL_HOST = email.hostname
 EMAIL_HOST_USER = email.username
 EMAIL_HOST_PASSWORD = email.password
 EMAIL_PORT = email.port
+EMAIL_USE_TLS = django_env.int("EMAIL_USE_TLS", 0)
 
 # Default email address to use for various automated correspondence from the site manager(s).
 # This doesn’t include error messages sent to ADMINS and MANAGERS

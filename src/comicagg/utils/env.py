@@ -19,25 +19,26 @@ class Env:
 
     # Generic methods
 
-    def get(self, key: str) -> str:
-        """Get an env var raising an Error if it doesn't exist"""
-        var_name = f"{self.namespace}_{key}"
-        var = os.environ.get(var_name)
-        if var is None:
-            raise EnvVarMissingError(f"Missing env var: {var_name}")
-        return var
-
     def getn(self, key: str) -> str | None:
         """Get an env var returning None if it doesn't exist"""
         var_name = f"{self.namespace}_{key}"
         return os.environ.get(var_name)
+
+    def get(self, key: str) -> str:
+        """Get an env var raising an Error if it doesn't exist"""
+        var = self.getn(key)
+        if var is None:
+            raise EnvVarMissingError(f"Missing env var: {self.namespace}_{key}")
+        return var
 
     def int(self, key: str, default: int) -> int:
         var = self.getn(key)
         return int(var) if var is not None else default
 
     def list(self, key: str) -> list[str]:
-        return self.get(key).split(",")
+        """Get an env var as a list of strings separated by commas."""
+        value = self.getn(key)
+        return [] if value is None else value.split(",")
 
     def url(self, key: str) -> parse.ParseResult:
         # scheme://netloc/path;parameters?query#fragment
