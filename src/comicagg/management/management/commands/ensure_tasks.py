@@ -3,7 +3,13 @@ from collections import namedtuple
 from datetime import datetime, timedelta, timezone
 
 from django.core.management.base import BaseCommand, no_translations
-from django_celery_beat.models import DAYS, HOURS, IntervalSchedule, PeriodicTask
+from django_celery_beat.models import (
+    DAYS,
+    HOURS,
+    MINUTES,
+    IntervalSchedule,
+    PeriodicTask,
+)
 
 task_logger = logging.getLogger(__name__)
 
@@ -20,11 +26,25 @@ TASKS = [
         period_every=4,
     ),
     TaskDescription(
-        task="comicagg.comics.tasks.inactive_users.inactive_users",
+        task="comicagg.accounts.tasks.inactive_users.inactive_users",
         name="Disable inactive users",
         description="Disable inactive users",
         period=DAYS,
         period_every=1,
+    ),
+    TaskDescription(
+        task="comicagg.tasks.send_pending_emails",
+        name="Send emails - 1st try",
+        description="Send all pending emails. First try.",
+        period=MINUTES,
+        period_every=1,
+    ),
+    TaskDescription(
+        task="comicagg.tasks.retry_deferred",
+        name="Send emails - Deferred",
+        description="Send all pending emails. Retries.",
+        period=MINUTES,
+        period_every=20,
     ),
 ]
 
@@ -45,15 +65,11 @@ class Command(BaseCommand):
             self.ensure_task(task)
 
     def ensure_task(self, task: TaskDescription):
-        period = IntervalSchedule.objects.filter(
+        period, created = IntervalSchedule.objects.get_or_create(
             every=task.period_every, period=task.period
-        ).first()
-        if not period:
-            period = IntervalSchedule.objects.create(
-                every=task.period_every, period=task.period
-            )
+        )
+        if created:
             task_logger.info("Schedule created")
-
         try:
             PeriodicTask.objects.get(name=task.name, task=task.task)
         except PeriodicTask.DoesNotExist:
