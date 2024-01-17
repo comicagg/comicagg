@@ -78,13 +78,7 @@ class User(auth_models.User):
     @cached_property
     def comics_subscribed(self) -> list[Comic]:
         """Return the ordered list of comics that the user is subscribed."""
-        comic_ids = [subscription.comic.id for subscription in self.subscriptions]
-        return list(
-            Comic.objects.available()
-            .prefetch_related("subscription_set")
-            .prefetch_related("strip_set")
-            .filter(id__in=comic_ids)
-        )
+        return [subscription.comic for subscription in self.subscriptions]
 
     def is_subscribed(self, comic: Comic) -> bool:
         """Check if the user is subscribed to a comic."""

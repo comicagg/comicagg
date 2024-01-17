@@ -37,7 +37,7 @@ SITE_ID = 1
 # ################
 
 DATABASES = {
-    # psycopg2://user:password@server:5432/path
+    # postgresql://user:password@server:5432/path
     "default": django_env.db("DATABASE")
 }
 

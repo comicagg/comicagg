@@ -82,7 +82,7 @@ class SubscriptionsTestCase(TestCase):
         self.assertEqual(len(comics), 3)
         self.assertIsInstance(comics[0], Comic)
         self.assertListEqual(
-            comics, [self.comic_active, self.comic_broken, self.comic_ended]
+            comics, [self.comic_active, self.comic_ended, self.comic_broken]
         )
 
     # ###################################

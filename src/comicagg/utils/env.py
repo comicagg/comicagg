@@ -70,4 +70,7 @@ class Env:
             "USER": result.username,
             # Not used with sqlite3.
             "PASSWORD": result.password,
+            "TEST": {
+                "TEMPLATE": "template0",
+            }
         }
