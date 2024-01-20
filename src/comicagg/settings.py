@@ -65,24 +65,27 @@ FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
 # ##############
 
 INSTALLED_APPS = [
+    # Django apps
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.messages",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
+    # 3rd party
     "celery",
     "django_celery_beat",
     "django_celery_results",
-    # Instead of 'django.contrib.admin'
+    "mailer",
+    # Comicagg
     "comicagg.management",
+    # Instead of 'django.contrib.admin'
     "comicagg.apps.ComicaggAdminConfig",
     "comicagg.accounts",
-    # "comicagg.api",
     "comicagg.blog",
     "comicagg.comics",
+    # "comicagg.api",
     # "provider",
     # "provider.oauth2",
-    "mailer",
 ]
 
 MIDDLEWARE = [
@@ -147,8 +150,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "comicagg.comics.context_processors.comic_counters",
                 "django.template.context_processors.static",
+                "django.template.context_processors.i18n",
+                "comicagg.comics.context_processors.comic_counters",
                 "comicagg.common.context_processors.add_settings",
             ],
         },
@@ -367,6 +371,8 @@ SITE_NAME = "Comic Aggregator"
 
 # Without trailing slash, used in the password reset email and ws index page
 SITE_DOMAIN = django_env.get("SITE_DOMAIN")
+
+CODE_REPO = "https://github.com/comicagg/"
 
 INACTIVE_DAYS = 60
 MAX_UNREADS_PER_USER = 20

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 17:12+0000\n"
+"POT-Creation-Date: 2024-01-20 17:16+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -71,14 +71,78 @@ msgid "Update comic"
 msgstr "Actualizar comic"
 
 #: comicagg/comics/admin_views/views.py:50
-#, fuzzy
-#| msgid "Reported broken images"
 msgid "Review reported images"
-msgstr "Imágenes rotas"
+msgstr "Revisar imágenes rotas"
 
-#: comicagg/comics/views.py:137
+#: comicagg/comics/views.py:136
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
+
+#: comicagg/templates/about/cookies.html:5
+msgid "The following text is only available in English."
+msgstr "El siguiente texto solo está disponible en inglés."
+
+#: comicagg/templates/about/index.html:6
+msgid "About this site"
+msgstr "Acerca del sitio"
+
+#: comicagg/templates/about/index.html:7
+#: comicagg/templates/accounts/login_form.html:38
+msgid ""
+"Comic Aggregator allows you to read lots and lots of webcomics in the same "
+"page."
+msgstr ""
+"Comic Aggregator te permite leer un montón de webcomics en la misma página."
+
+#: comicagg/templates/about/index.html:8
+#, python-format
+msgid ""
+"<p>If you like the comics, PLEASE SUPPORT THE AUTHORS.</p>\n"
+"  <p>The site is free, it doesn't have ads and YOU are not the product. It "
+"is a pet project of mine and allows me to learn about web tecnologies, not "
+"generate revenue.</p>\n"
+"  <p>If you are interested in the code of the site, you can find it here: "
+"%(repo)s</p>"
+msgstr ""
+"<p>Si te gustan los comics, POR FAVOR APOYA A LOS AUTORES.</p>\n"
+"  <p>El sitio es gratuito, no tiene publicidad y TÚ no eres el producto. Es "
+"un projecto de juguete y me permite aprender sobre desarrollo web, no para "
+"generar ingresos.</p>\n"
+"  <p>Si estás interesado en el código del sitio, lo puedes encontrar aquí: "
+"%(repo)s</p>"
+
+#: comicagg/templates/about/index.html:11
+msgid "Policies"
+msgstr "Políticas"
+
+#: comicagg/templates/about/index.html:12
+msgid "These policies explain how your data is handled:"
+msgstr "Estas políticas explican cómo se manejan tus datos:"
+
+#: comicagg/templates/about/index.html:14
+msgid "Privacy policy"
+msgstr "Política de privacidad"
+
+#: comicagg/templates/about/index.html:15
+msgid "Cookie policy"
+msgstr "Política de cookies"
+
+#: comicagg/templates/about/index.html:18
+#| msgid "contact"
+msgid "Contact"
+msgstr "Contacto"
+
+#: comicagg/templates/about/index.html:19
+msgid ""
+"For any problem or suggestion reach me on Github. For anything else drop me "
+"an email at&nbsp;"
+msgstr ""
+"Para cualquier problema o sugerencia, escríbeme en Github. Para cualquier "
+"otra cosa, mándame un email a&nbsp;"
+
+#: comicagg/templates/about/privacy.html:5
+msgid "The following text is only available in English, sorry."
+msgstr "El siguiente texto solo está disponible en inglés."
 
 #: comicagg/templates/accounts/account.html:3
 #: comicagg/templates/accounts/account.html:8
@@ -217,13 +281,6 @@ msgstr "¿No recuerdas tu contraseña?"
 #: comicagg/templates/accounts/login_form.html:64
 msgid "Send me a new password"
 msgstr "Envíame una nueva contraseña"
-
-#: comicagg/templates/accounts/login_form.html:38
-msgid ""
-"Comic Aggregator allows you to read lots and lots of webcomics in the same "
-"page."
-msgstr ""
-"Comic Aggregator te permite leer un montón de webcomics en la misma página."
 
 #: comicagg/templates/accounts/login_form.html:40
 msgid "Login into your account"
@@ -490,8 +547,8 @@ msgid "admin"
 msgstr "admin"
 
 #: comicagg/templates/base.html:55 comicagg/templates/base.html:62
-msgid "contact"
-msgstr "contacto"
+msgid "about"
+msgstr "acerca de"
 
 #: comicagg/templates/base.html:55
 msgid "logout"
@@ -679,10 +736,6 @@ msgstr ""
 "aquí</a> para ver todos los comics."
 
 #: comicagg/templates/comics/read.html:34
-#, fuzzy
-#| msgid ""
-#| "Showing <b>all</b> comics. <a onclick=\"showUnreadStrips()\">Click here</"
-#| "a> to show only unread comics."
 msgid ""
 "Showing <b>all</b> comics. <a onclick=\"showUnreadComics()\">Click here</a> "
 "to show only unread comics."
@@ -811,15 +864,6 @@ msgstr "Solicitudes rechazadas"
 msgid "Accepted requests"
 msgstr "Solicitudes aceptadas"
 
-#: comicagg/templates/contact.html:5
-msgid "If you would like to contact us, write an email to this address:"
-msgstr "Si quieres contactar con nosotros, escribe a este email:"
-
-#: comicagg/templates/contact.html:7
-msgid ""
-"Problems, suggestions, hate mail, everything is welcome at that address :)"
-msgstr "Problemas, sugerencias, hate mail, todo es bienvenido ahí :)"
-
 #: comicagg/templates/maintenance.html:5
 msgid "Site is under maintenance."
 msgstr "Sitio en mantenimiento"
@@ -839,3 +883,10 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: comicagg/templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
+
+#~ msgid "If you would like to contact us, write an email to this address:"
+#~ msgstr "Si quieres contactar con nosotros, escribe a este email:"
+
+#~ msgid ""
+#~ "Problems, suggestions, hate mail, everything is welcome at that address :)"
+#~ msgstr "Problemas, sugerencias, hate mail, todo es bienvenido ahí :)"
