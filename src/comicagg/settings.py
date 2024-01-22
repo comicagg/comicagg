@@ -116,23 +116,25 @@ MIDDLEWARE = [
     # ###########################
     # #   Post-authentication   #
     # ###########################
+    # https://docs.djangoproject.com/en/4.2/ref/contrib/messages/
+    "django.contrib.messages.middleware.MessageMiddleware",
+    # Clickjacking Protection
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Show detailed error pages to super users.
     #'comicagg.middleware.UserBasedExceptionMiddleware',
     # Set up the user profile and user operations
     # "comicagg.middleware.UserProfileMiddleware",
+    # Cookie consent middleware
+    "comicagg.middleware.CookieConsentMiddleware",
     # Check if the user is active
     "comicagg.middleware.ActiveUserMiddleware",
     # Maintenance mode
     "comicagg.middleware.MaintenanceMiddleware",
-    # Django messages
-    "django.contrib.messages.middleware.MessageMiddleware",
-    # Clickjacking Protection
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "comicagg.urls"
 
-MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
+MESSAGE_STORAGE = "django.contrib.messages.storage.fallback.FallbackStorage"
 
 # A list of strings representing the host/domain names that this Django site can serve.
 ALLOWED_HOSTS = django_env.list("ALLOWED_HOSTS")
@@ -146,10 +148,10 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
                 "django.template.context_processors.static",
                 "django.template.context_processors.i18n",
                 "comicagg.comics.context_processors.comic_counters",
@@ -170,12 +172,15 @@ CSRF_TRUSTED_ORIGINS = django_env.list("CSRF_TRUSTED_ORIGINS")
 # when an incoming request is rejected by the CSRF protection.
 # CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 
+# The value of the SameSite flag on the CSRF cookie.
+# This flag prevents the cookie from being sent in cross-site requests.
+CSRF_COOKIE_SAMESITE = 'Strict'
 
 # ######################
 # #   Authentication   #
 # ######################
 
-SESSION_COOKIE_NAME = "comicagg_session"
+SESSION_COOKIE_NAME = "session"
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.AllowAllUsersModelBackend"]
 

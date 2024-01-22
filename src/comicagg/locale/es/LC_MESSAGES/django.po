@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 17:16+0000\n"
+"POT-Creation-Date: 2024-01-22 19:42+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -48,11 +48,11 @@ msgstr "Algunas letras no valen."
 msgid "That username is not valid, sorry. Please choose another."
 msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 
-#: comicagg/accounts/views.py:78
+#: comicagg/accounts/views.py:81
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: comicagg/accounts/views.py:146
+#: comicagg/accounts/views.py:149
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
@@ -78,6 +78,40 @@ msgstr "Revisar imágenes rotas"
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
+#: comicagg/templates/about/cookie_notice.html:2
+msgid ""
+"Yes, this is that annoying cookie notice! This site only uses <b>essential "
+"cookies</b> to work correctly. There are no tracking cookies, no advertising "
+"cookies, no analytics cookies, no social media cookies, no marketing "
+"cookies, no third party cookies, no cookies for the sake of cookies."
+msgstr ""
+"¡Sí, este es ese molesto aviso de cookies! Este sitio solo usa <b>cookies "
+"esenciales</b> para funcionar correctamente. No hay cookies de seguimiento, "
+"no hay cookies de publicidad, no hay cookies de análisis, no hay cookies de "
+"redes sociales, no hay cookies de marketing, no hay cookies de terceros, no "
+"hay cookies por el mero hecho de tener cookies."
+
+#: comicagg/templates/about/cookie_notice.html:6
+#, python-format
+msgid ""
+"<p>Here are the links to our <a href=\"%(privacy_url)s\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">privacy policy</a> and our <a "
+"href=\"%(cookies_url)s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">cookie policy</a>.</p>"
+msgstr ""
+"<p>Aquí están los enlaces para nuestra <a href=\"%(privacy_url)s\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">política de privacidad</a> y nuestra <a "
+"href=\"%(cookies_url)s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">política de cookies</a>.</p>"
+
+#: comicagg/templates/about/cookie_notice.html:8
+msgid "Accept"
+msgstr ""
+
+#: comicagg/templates/about/cookie_notice.html:9
+msgid "Reject"
+msgstr ""
+
 #: comicagg/templates/about/cookies.html:5
 msgid "The following text is only available in English."
 msgstr "El siguiente texto solo está disponible en inglés."
@@ -87,7 +121,6 @@ msgid "About this site"
 msgstr "Acerca del sitio"
 
 #: comicagg/templates/about/index.html:7
-#: comicagg/templates/accounts/login_form.html:38
 msgid ""
 "Comic Aggregator allows you to read lots and lots of webcomics in the same "
 "page."
@@ -128,7 +161,6 @@ msgid "Cookie policy"
 msgstr "Política de cookies"
 
 #: comicagg/templates/about/index.html:18
-#| msgid "contact"
 msgid "Contact"
 msgstr "Contacto"
 
@@ -281,6 +313,10 @@ msgstr "¿No recuerdas tu contraseña?"
 #: comicagg/templates/accounts/login_form.html:64
 msgid "Send me a new password"
 msgstr "Envíame una nueva contraseña"
+
+#: comicagg/templates/accounts/login_form.html:38
+msgid "Welcome to Comic Aggregator!"
+msgstr "¡Bienvenido a Comic Aggregator!"
 
 #: comicagg/templates/accounts/login_form.html:40
 msgid "Login into your account"
@@ -573,6 +609,10 @@ msgstr "solicita"
 #: comicagg/templates/base.html:62
 msgid "login"
 msgstr "entrar"
+
+#: comicagg/templates/base.html:82
+msgid "Sorry, you need to accept cookies to access this content"
+msgstr "Lo siento, necesitas aceptar las cookies para acceder a este contenido"
 
 #: comicagg/templates/blog/base.html:3
 msgid "News"

@@ -48,7 +48,7 @@
 {% block extra_head %}{% endblock %}
 	</head>
 	<body onload="{% block onload %}{% endblock %}">
-		<div id="head">
+    <div id="head">
 			{% if user.is_superuser or not MAINTENANCE %}
 			{% if user.is_authenticated %}
 			<div id="head_right">
@@ -70,8 +70,22 @@
 			</div>
 		</div>
 		<div id="content">
-{% block content %}
-{% endblock %}
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message.tags }}: {{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% if request.session.cookie_consent_required %}
+      <div id="cookie_consent_required" class="br mc w90 mb15px bg-red">
+        <p>{% trans 'Sorry, you need to accept cookies to access this content' %}</p>
+      </div>
+      {% endif %}
+      {% if request.session.show_cookie_consent %}
+        {% include 'about/cookie_notice.html' %}
+      {% endif %}
+{% block content %}{% endblock %}
 		</div>
 	</body>
 </html>

@@ -71,6 +71,22 @@ button:hover {
   margin: 0 auto 0 auto;
 }
 
+.mb15px {
+  margin-bottom: 15px;
+}
+
+.bg-red {
+  background-color: #ffcccc;
+}
+
+/****************/
+/* Cookie notice*/
+/****************/
+
+#cookie_notice input {
+  padding: 5px 10px;
+}
+
 /***********/
 /* Top Menu*/
 /***********/
@@ -569,8 +585,6 @@ input.filter {
 /********/
 
 #blog_wrapper {
-  width: 95%;
-  margin: 0px auto 0px auto;
   text-align: left;
 }
 #blog {

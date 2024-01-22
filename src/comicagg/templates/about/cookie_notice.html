@@ -1,0 +1,11 @@
+{% load i18n %}
+<div id="cookie_notice" class="br mc w90 mb15px">
+    <p>{% trans 'Yes, this is that annoying cookie notice! This site only uses <b>essential cookies</b> to work correctly. There are no tracking cookies, no advertising cookies, no analytics cookies, no social media cookies, no marketing cookies, no third party cookies, no cookies for the sake of cookies.' %}</p>
+
+    {% url 'about:privacy' as privacy_url %}
+    {% url 'about:cookies' as cookies_url %}
+    {% blocktrans %}<p>Here are the links to our <a href="{{ privacy_url }}" target="_blank" rel="noopener noreferrer">privacy policy</a> and our <a href="{{ cookies_url }}" target="_blank" rel="noopener noreferrer">cookie policy</a>.</p>{% endblocktrans %}
+
+    <input type="button" id="accept_cookies" value="{% trans 'Accept' %}" class="button" onclick="set_cookie_consent(1)">
+    <input type="button" id="reject_cookies" value="{% trans 'Reject' %}" class="button" onclick="set_cookie_consent(0)">
+</div>
