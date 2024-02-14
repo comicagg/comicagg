@@ -13,14 +13,14 @@
   {% endblocktrans %}
 
   <div class="cookie_notice_buttons">
-    <form id="cookie_notice_form" method="post" action="{% url 'about:consent' %}">
+    <form method="post" action="{% url 'about:consent' %}">
       {% csrf_token %}
-      <input type="hidden" name="cookie_consent" id="cookie_consent" value="1" />
+      <input type="hidden" name="cookie_consent" value="1" />
       <input type="submit" id="accept_cookies" value="{% trans 'Accept' %}" class="button" />
     </form>
-    <form id="cookie_notice_form" method="post" action="{% url 'about:consent' %}">
+    <form method="post" action="{% url 'about:consent' %}">
       {% csrf_token %}
-      <input type="hidden" name="cookie_consent" id="cookie_consent" value="0" />
+      <input type="hidden" name="cookie_consent" value="0" />
       <input type="submit" id="reject_cookies" value="{% trans 'Reject' %}" class="button" />
     </form>
   </div>
