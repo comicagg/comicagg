@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.http import HttpRequest
 from django.shortcuts import render
 from django.utils.translation import gettext as _
 

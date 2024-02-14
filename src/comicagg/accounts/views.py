@@ -14,6 +14,8 @@ from django.views import View
 
 from comicagg.typings import AuthenticatedHttpRequest
 
+from comicagg.about.utils import ConsentRequiredMixin, consent_required, consent_show
+
 from .forms import (
     EmailChangeForm,
     LoginForm,
@@ -36,6 +38,7 @@ def logout_view(request: HttpRequest):
 
 
 class LoginView(View):
+    @consent_show
     def get(self, request: HttpRequest, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("index")
@@ -49,6 +52,7 @@ class LoginView(View):
         context["form"] = form
         return render(request, "accounts/login_form.html", context)
 
+    @consent_required
     def post(self, request: HttpRequest, *args, **kwargs):
         form = LoginForm(request.POST)
         if not form.is_valid():
@@ -82,7 +86,7 @@ class LoginView(View):
         return render(request, "accounts/login_form.html", context)
 
 
-class RegisterView(View):
+class RegisterView(ConsentRequiredMixin, View):
     def get(self, request: HttpRequest, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("index")
@@ -110,7 +114,7 @@ class LoginView(View):
 """
 
 
-class PasswordResetView(View):
+class PasswordResetView(ConsentRequiredMixin, View):
     def get(self, request: HttpRequest, *args, **kwargs):
         form = PasswordResetForm()
         context = {"form": form}
@@ -153,6 +157,7 @@ class PasswordResetView(View):
         return redirect("accounts:done", kind="password_reset")
 
 
+@consent_required
 @login_required
 def activate(request: AuthenticatedHttpRequest):
     if request.method == "POST":
@@ -162,12 +167,13 @@ def activate(request: AuthenticatedHttpRequest):
     return render(request, "accounts/activate.html", {})
 
 
+@consent_required
 @login_required
 def view_profile(request: AuthenticatedHttpRequest):
     return render(request, "accounts/account.html", {})
 
 
-class PasswordChangeView(LoginRequiredMixin, View):
+class PasswordChangeView(ConsentRequiredMixin, LoginRequiredMixin, View):
     def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = PasswordChangeForm()
         context = {"form": form}
@@ -191,7 +197,7 @@ class PasswordChangeView(LoginRequiredMixin, View):
         return render(request, "accounts/password_change_form.html", context)
 
 
-class UpdateEmail(LoginRequiredMixin, View):
+class UpdateEmail(ConsentRequiredMixin, LoginRequiredMixin, View):
     def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = EmailChangeForm()
         context = {"form": form}

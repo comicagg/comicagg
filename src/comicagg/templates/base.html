@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 {% load i18n static %}
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ LANGUAGE_CODE }}">
 	<head>
         <!--
         Welcome to...
@@ -28,7 +28,6 @@
 		<script type="text/javascript">
 			var titlebase = " Comic Aggregator";
             var static_url = '{% static 'base/' %}';
-
 			{% if user.is_authenticated %}
             var url_add = '{% url 'comics:ajax:add_comic' %}';
             var url_forget_new_blogs = '{% url 'news:ajax:forget_new_blogs' %}';
@@ -41,25 +40,25 @@
             var url_save_selection = '{% url 'comics:ajax:save' %}';
             var unreadCounter = {{ unread_count }};
             var comicCounter = {{ comic_count }};
-            var newComicCounter = {{ newcomic_count }};			
-            var newsCounter = {{ news_count }};     
+            var newComicCounter = {{ newcomic_count }};
+            var newsCounter = {{ news_count }};
 			{% endif %}
 		</script>
 {% block extra_head %}{% endblock %}
 	</head>
 	<body onload="{% block onload %}{% endblock %}">
-		<div id="head">
+    <div id="head">
 			{% if user.is_superuser or not MAINTENANCE %}
 			{% if user.is_authenticated %}
 			<div id="head_right">
-				<a href="{% url 'accounts:profile' %}"><i><b>{{ user.username }}</b></i></a>&nbsp;&nbsp;-&nbsp;&nbsp;<span class=""><a href="{% url 'news:index' %}">{% trans "news" %}<span id="menuNewsCounter">{% if news_count %} ({{ news_count}}){% endif %}</a></span>&nbsp;&nbsp;{% if user.is_staff %}<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;&nbsp;{% endif %}<span class=""><a href="{% url 'contact' %}">{% trans "contact" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'accounts:logout' %}">{% trans "logout" %}</a></span>
+				<a href="{% url 'accounts:profile' %}"><i><b>{{ user.username }}</b></i></a>&nbsp;&nbsp;-&nbsp;&nbsp;<span class=""><a href="{% url 'news:index' %}">{% trans "news" %}<span id="menuNewsCounter">{% if news_count %} ({{ news_count}}){% endif %}</a></span>&nbsp;&nbsp;{% if user.is_staff %}<span class=""><a href="/admin/">{% trans "admin" %}</a></span>&nbsp;&nbsp;{% endif %}<span class=""><a href="{% url 'about:index' %}">{% trans "about" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'accounts:logout' %}">{% trans "logout" %}</a></span>
 			</div>
 			<div id="head_left">
 				Comics:&nbsp;&nbsp;<span class=""><a href="{% url 'comics:read' %}">{% trans "read" %}<span id="menuUnreadCounter">{% if unread_count %} ({{ unread_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<a href="{% url 'comics:add' %}">{% trans "choose" %}<span id="menuNewComicCounter">{% if newcomic_count %} ({{ newcomic_count}}){% endif %}</span></a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'comics:organize' %}">{% trans "organize" %}</a>&nbsp;&nbsp;<span class=""><a href="{% url 'comics:requests' %}">{% trans "request" %}</a></span>
 			</div>
 			{% else %}
       <div id="head_right">
-        <span class=""><a href="{% url 'news:index' %}">{% trans "news" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'contact' %}">{% trans "contact" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'accounts:login' %}">{% trans "login" %}</a></span>
+        <span class=""><a href="{% url 'news:index' %}">{% trans "news" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'about:index' %}">{% trans "about" %}</a></span>&nbsp;&nbsp;<span class=""><a href="{% url 'accounts:login' %}">{% trans "login" %}</a></span>
       </div>
       <div id="head_left">&nbsp;</div>
 			{% endif %}
@@ -70,8 +69,30 @@
 			</div>
 		</div>
 		<div id="content">
-{% block content %}
-{% endblock %}
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message.tags }}: {{ message }}</li>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% if request.consent.required %}
+      <div id="cookie_consent_required" class="br mc w90 mb15px bg-red">
+        <p>{% trans 'Sorry, you need to accept cookies to access this content' %}</p>
+      </div>
+      {% endif %}
+      {% if request.consent.show %}
+        {% include 'about/cookie_notice.html' %}
+      {% endif %}
+{% block content %}{% endblock %}
 		</div>
 	</body>
-</html>
+  </html>
+<!--
+África <3
+           __..--''``---....___   _..._    __
+ /// //_.-'    .-/";  `        ``<._  ``.''_ `. / // /
+///_.-' _..--.'_    \                    `( ) ) // //
+/ (_..-' // (< _     ;_..__               ; `' / ///
+ / // // //  `-._,_)' // / ``--...____..-' /// / //
+-->

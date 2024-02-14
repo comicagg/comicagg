@@ -65,24 +65,27 @@ FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
 # ##############
 
 INSTALLED_APPS = [
+    # Django apps
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.messages",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
+    # 3rd party
     "celery",
     "django_celery_beat",
     "django_celery_results",
-    # Instead of 'django.contrib.admin'
+    "mailer",
+    # Comicagg
     "comicagg.management",
+    # Instead of 'django.contrib.admin'
     "comicagg.apps.ComicaggAdminConfig",
     "comicagg.accounts",
-    # "comicagg.api",
     "comicagg.blog",
     "comicagg.comics",
+    # "comicagg.api",
     # "provider",
     # "provider.oauth2",
-    "mailer",
 ]
 
 MIDDLEWARE = [
@@ -93,14 +96,17 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.gzip
     "django.middleware.gzip.GZipMiddleware",
+    # Cookie consent
+    "comicagg.about.middleware.CookieConsentMiddleware",
     # https://docs.djangoproject.com/en/4.2/topics/http/sessions/
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # Enables language selection based on data from the request.
+    # https://docs.djangoproject.com/en/4.2/topics/i18n/translation/
     "django.middleware.locale.LocaleMiddleware",
     # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.common
     "django.middleware.common.CommonMiddleware",
     # https://docs.djangoproject.com/en/4.2/ref/csrf/
     "django.middleware.csrf.CsrfViewMiddleware",
+
     # ######################
     # #   Authentication   #
     # ######################
@@ -110,29 +116,27 @@ MIDDLEWARE = [
     "comicagg.middleware.UserProxyOverwriteMiddleware",
     # OAuth2 authentication
     # "comicagg.api.middleware.OAuth2Middleware",
+
     # ###########################
     # #   Post-authentication   #
     # ###########################
+    # https://docs.djangoproject.com/en/4.2/ref/contrib/messages/
+    "django.contrib.messages.middleware.MessageMiddleware",
+    # Clickjacking Protection
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Show detailed error pages to super users.
-    #'comicagg.middleware.UserBasedExceptionMiddleware',
+    # "comicagg.middleware.UserBasedExceptionMiddleware",
     # Set up the user profile and user operations
     # "comicagg.middleware.UserProfileMiddleware",
     # Check if the user is active
     "comicagg.middleware.ActiveUserMiddleware",
     # Maintenance mode
     "comicagg.middleware.MaintenanceMiddleware",
-    # Django messages
-    "django.contrib.messages.middleware.MessageMiddleware",
-    # Clickjacking Protection
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "comicagg.urls"
 
-MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
-
-# A list of strings representing the host/domain names that this Django site can serve.
-ALLOWED_HOSTS = django_env.list("ALLOWED_HOSTS")
+MESSAGE_STORAGE = "django.contrib.messages.storage.fallback.FallbackStorage"
 
 TEMPLATES = [
     {
@@ -143,12 +147,13 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "comicagg.comics.context_processors.comic_counters",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
                 "django.template.context_processors.static",
+                "django.template.context_processors.i18n",
+                "comicagg.comics.context_processors.comic_counters",
                 "comicagg.common.context_processors.add_settings",
             ],
         },
@@ -159,6 +164,9 @@ TEMPLATES = [
 # #   Security   #
 # ################
 
+# A list of strings representing the host/domain names that this Django site can serve.
+ALLOWED_HOSTS = django_env.list("ALLOWED_HOSTS")
+
 # A list of trusted origins for unsafe requests (e.g. POST).
 CSRF_TRUSTED_ORIGINS = django_env.list("CSRF_TRUSTED_ORIGINS")
 
@@ -166,12 +174,15 @@ CSRF_TRUSTED_ORIGINS = django_env.list("CSRF_TRUSTED_ORIGINS")
 # when an incoming request is rejected by the CSRF protection.
 # CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 
+# The value of the SameSite flag on the CSRF cookie.
+# This flag prevents the cookie from being sent in cross-site requests.
+CSRF_COOKIE_SAMESITE = 'Strict'
 
 # ######################
 # #   Authentication   #
 # ######################
 
-SESSION_COOKIE_NAME = "comicagg_session"
+SESSION_COOKIE_NAME = "session"
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.AllowAllUsersModelBackend"]
 
@@ -368,8 +379,14 @@ SITE_NAME = "Comic Aggregator"
 # Without trailing slash, used in the password reset email and ws index page
 SITE_DOMAIN = django_env.get("SITE_DOMAIN")
 
+CODE_REPO = "https://github.com/comicagg/"
+
+# Mark users as inactive if they haven't logged in in this amount of days
 INACTIVE_DAYS = 60
+# The maximum number of unread strips per user
 MAX_UNREADS_PER_USER = 20
+# Maximum number of unread comics a user can have
+COOKIE_CONSENT_COOKIE_NAME = "cookie_consent"
 
 # #################
 # #               #

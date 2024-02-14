@@ -3,10 +3,10 @@ import sys
 from datetime import datetime, timezone
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.views.debug import technical_500_response
-from django.core.exceptions import ObjectDoesNotExist
 
 from comicagg.accounts.models import User, UserProfile
 from comicagg.typings import AuthenticatedHttpRequest

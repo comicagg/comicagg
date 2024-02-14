@@ -9,4 +9,5 @@ def add_settings(request: HttpRequest):
         "DATABASE_NAME": settings.DATABASES["default"]["NAME"],
         "INACTIVE_DAYS": settings.INACTIVE_DAYS,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
+        "CODE_REPO": settings.CODE_REPO,
     }
