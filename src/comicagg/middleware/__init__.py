@@ -1,16 +1,12 @@
 import logging
 import sys
 from datetime import datetime, timezone
-from types import FunctionType
-from typing import Callable
-from xml.dom.expatbuilder import Rejecter
 
-from django.contrib import messages
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
-from django.views.debug import technical_500_response
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest
+from django.shortcuts import render
+from django.views.debug import technical_500_response
 
 from comicagg.accounts.models import User, UserProfile
 from comicagg.typings import AuthenticatedHttpRequest
@@ -92,38 +88,4 @@ class UserProxyOverwriteMiddleware:
     def __call__(self, request: HttpRequest):
         if request.user.is_authenticated:
             request.user = User.objects.get(pk=request.user.pk)
-        return self.get_response(request)
-
-
-class CookieConsentMiddleware:
-    """
-    If they have not accepted cookies, prompt them.
-    If they have rejected them, redirect to login and show them a message.
-    If they have accepted them, do nothing.
-    """
-
-    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
-        self.get_response = get_response
-
-    def __call__(self, request: HttpRequest):
-        response = None
-        consent = request.COOKIES.get("cookie_consent")
-        # 1, 0, None
-        accepted = consent == "1"
-        rejected = consent == "0"
-
-        if not request.session.get('cookie_consent_redirecting'):
-            request.session['show_cookie_consent'] = False
-            request.session['cookie_consent_accepted'] = False
-            request.session['cookie_consent_rejected'] = False
-            request.session['cookie_consent_required'] = False
-        request.session['cookie_consent_redirecting'] = False
-
-        if accepted:
-            request.session['cookie_consent_accepted'] = True
-        elif rejected:
-            request.session['cookie_consent_rejected'] = True
-        else:
-            # Cookie consent pending
-            request.session['show_cookie_consent'] = True
         return self.get_response(request)

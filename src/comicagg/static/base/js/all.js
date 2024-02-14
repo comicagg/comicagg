@@ -58,14 +58,14 @@ function focusOnLogin() {
   $("id_username").focus();
 }
 
-function openurl(url) {
-  window.open(url);
+function openurl(url, target = "_blank") {
+  window.open(url, target);
   return false;
 }
 
 function startRequest(url, options) {
   // set as default data type "json"
-  var dataType = options.dataType ? options.dataType : "json";
+  const dataType = options.dataType || "json";
   return jQuery.ajax(url, {
     type: options.method,
     data: options.parameters, //array, key-value
@@ -85,7 +85,7 @@ function removeComicId(array, comicid) {
     i,
     len,
     comic;
-  for (i = 0, len = array.length; i < len && !found; i = i + 1) {
+  for (i = 0, len = array.length; i < len && !found; i += 1) {
     comic = array[i];
     found = comic.id === comicid;
     if (found) {
@@ -102,7 +102,9 @@ function updateCounters(counters) {
     comicCounter = counters.comics;
     newComicCounter = counters.new_comics;
     newsCounter = counters.news;
-  } else return;
+  } else {
+    return;
+  }
   //first update the counters in the menu
   if (counters.unreads > 0) {
     $("menuUnreadCounter").innerHTML = " (" + counters.unreads + ")";
@@ -167,4 +169,16 @@ function set_cookie_consent(value) {
     $("cookie_consent_required").hide();
   }
   document.cookie = "cookie_consent=" + value + "; path=/; " + expires + ";";
+
+  if (value) {
+    const login_button = $("login_button");
+    if (value && login_button) {
+      login_button.type = "submit";
+    }
+  } else {
+    startRequest(url_set_cookie_consent, {
+      method: "post",
+      parameters: { cookie_consent: value },
+    });
+  }
 }

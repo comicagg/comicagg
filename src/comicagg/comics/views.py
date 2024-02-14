@@ -17,7 +17,7 @@ from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
 
-from comicagg.about.utils import cookie_consent_required
+from comicagg.about.utils import consent_required
 
 from .fields import ComicStatus
 from .forms import RequestForm
@@ -46,8 +46,8 @@ def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
     return None
 
 
-@cookie_consent_required
 @login_required
+@consent_required
 def read_view(request: AuthenticatedHttpRequest):
     comics = request.user.comics_subscribed
     unread_strips_db = (
@@ -65,7 +65,7 @@ def read_view(request: AuthenticatedHttpRequest):
     context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
     return render(request, "comics/read.html", context)
 
-@cookie_consent_required
+@consent_required
 @login_required
 def random_comic_view(request: AuthenticatedHttpRequest):
     if resp := _find_random_comic(request, xhtml=True):
@@ -78,7 +78,7 @@ def random_comic_view(request: AuthenticatedHttpRequest):
 # Organize page views #
 #######################
 
-@cookie_consent_required
+@consent_required
 @login_required
 def add_comics(request: AuthenticatedHttpRequest):
     # all of the comics
@@ -95,7 +95,7 @@ def add_comics(request: AuthenticatedHttpRequest):
     }
     return render(request, "comics/add.html", context)
 
-@cookie_consent_required
+@consent_required
 @login_required
 def organize(request: AuthenticatedHttpRequest):
     """Comics shown in the organize page are those that are active or ended with unread strips."""
@@ -121,7 +121,7 @@ def _slugify_comic(comic: Comic) -> str:
 # #   Request page related   #
 # ############################
 
-@cookie_consent_required
+@consent_required
 @login_required
 def request_index(request: AuthenticatedHttpRequest):
     if request.POST:
@@ -155,7 +155,7 @@ def request_index(request: AuthenticatedHttpRequest):
 # ##############
 
 
-@cookie_consent_required
+@consent_required
 @cache_page(24 * 3600)
 def stats(request: HttpRequest):
     """
@@ -168,7 +168,7 @@ def stats(request: HttpRequest):
 STRIPS_FOLDER = ""
 
 
-@cookie_consent_required
+@consent_required
 def last_image_url(request: HttpRequest, comic_id):
     """
     Redirect to the URL of a comic's last image.
@@ -179,7 +179,7 @@ def last_image_url(request: HttpRequest, comic_id):
     return _image_url(url, referrer)
 
 
-@cookie_consent_required
+@consent_required
 def strip_image_url(request: HttpRequest, strip_id):
     """
     Redirect to the URL of a Strip object.

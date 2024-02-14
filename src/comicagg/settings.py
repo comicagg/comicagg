@@ -96,14 +96,17 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.gzip
     "django.middleware.gzip.GZipMiddleware",
+    # Cookie consent
+    "comicagg.about.middleware.CookieConsentMiddleware",
     # https://docs.djangoproject.com/en/4.2/topics/http/sessions/
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # Enables language selection based on data from the request.
+    # https://docs.djangoproject.com/en/4.2/topics/i18n/translation/
     "django.middleware.locale.LocaleMiddleware",
     # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.common
     "django.middleware.common.CommonMiddleware",
     # https://docs.djangoproject.com/en/4.2/ref/csrf/
     "django.middleware.csrf.CsrfViewMiddleware",
+
     # ######################
     # #   Authentication   #
     # ######################
@@ -113,6 +116,7 @@ MIDDLEWARE = [
     "comicagg.middleware.UserProxyOverwriteMiddleware",
     # OAuth2 authentication
     # "comicagg.api.middleware.OAuth2Middleware",
+
     # ###########################
     # #   Post-authentication   #
     # ###########################
@@ -121,11 +125,9 @@ MIDDLEWARE = [
     # Clickjacking Protection
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Show detailed error pages to super users.
-    #'comicagg.middleware.UserBasedExceptionMiddleware',
+    # "comicagg.middleware.UserBasedExceptionMiddleware",
     # Set up the user profile and user operations
     # "comicagg.middleware.UserProfileMiddleware",
-    # Cookie consent middleware
-    "comicagg.middleware.CookieConsentMiddleware",
     # Check if the user is active
     "comicagg.middleware.ActiveUserMiddleware",
     # Maintenance mode
@@ -135,9 +137,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = "comicagg.urls"
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.fallback.FallbackStorage"
-
-# A list of strings representing the host/domain names that this Django site can serve.
-ALLOWED_HOSTS = django_env.list("ALLOWED_HOSTS")
 
 TEMPLATES = [
     {
@@ -164,6 +163,9 @@ TEMPLATES = [
 # ################
 # #   Security   #
 # ################
+
+# A list of strings representing the host/domain names that this Django site can serve.
+ALLOWED_HOSTS = django_env.list("ALLOWED_HOSTS")
 
 # A list of trusted origins for unsafe requests (e.g. POST).
 CSRF_TRUSTED_ORIGINS = django_env.list("CSRF_TRUSTED_ORIGINS")
@@ -379,8 +381,12 @@ SITE_DOMAIN = django_env.get("SITE_DOMAIN")
 
 CODE_REPO = "https://github.com/comicagg/"
 
+# Mark users as inactive if they haven't logged in in this amount of days
 INACTIVE_DAYS = 60
+# The maximum number of unread strips per user
 MAX_UNREADS_PER_USER = 20
+# Maximum number of unread comics a user can have
+COOKIE_CONSENT_COOKIE_NAME = "cookie_consent"
 
 # #################
 # #               #

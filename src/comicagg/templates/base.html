@@ -28,7 +28,6 @@
 		<script type="text/javascript">
 			var titlebase = " Comic Aggregator";
             var static_url = '{% static 'base/' %}';
-
 			{% if user.is_authenticated %}
             var url_add = '{% url 'comics:ajax:add_comic' %}';
             var url_forget_new_blogs = '{% url 'news:ajax:forget_new_blogs' %}';
@@ -77,15 +76,23 @@
           {% endfor %}
       </ul>
       {% endif %}
-      {% if request.session.cookie_consent_required %}
+      {% if request.consent.required %}
       <div id="cookie_consent_required" class="br mc w90 mb15px bg-red">
         <p>{% trans 'Sorry, you need to accept cookies to access this content' %}</p>
       </div>
       {% endif %}
-      {% if request.session.show_cookie_consent %}
+      {% if request.consent.show %}
         {% include 'about/cookie_notice.html' %}
       {% endif %}
 {% block content %}{% endblock %}
 		</div>
 	</body>
-</html>
+  </html>
+<!--
+África <3
+           __..--''``---....___   _..._    __
+ /// //_.-'    .-/";  `        ``<._  ``.''_ `. / // /
+///_.-' _..--.'_    \                    `( ) ) // //
+/ (_..-' // (< _     ;_..__               ; `' / ///
+ / // // //  `-._,_)' // / ``--...____..-' /// / //
+-->
