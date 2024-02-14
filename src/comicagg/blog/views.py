@@ -3,15 +3,15 @@ from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.shortcuts import render
 
-from comicagg.blog.models import NewBlog, Post
 from comicagg.comics.ajax.views import ok_response
 from comicagg.typings import AuthenticatedHttpRequest
+
+from .models import NewBlog, Post
 
 
 def index(request: HttpRequest, all=False):
     """It will render either the last 10 news items or all of them, depending on
-    the keyword all.
-    """
+    the keyword all."""
     posts = Post.objects.all()
     context = {
         "archive": all,

@@ -65,8 +65,8 @@ def read_view(request: AuthenticatedHttpRequest):
     context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
     return render(request, "comics/read.html", context)
 
-@consent_required
 @login_required
+@consent_required
 def random_comic_view(request: AuthenticatedHttpRequest):
     if resp := _find_random_comic(request, xhtml=True):
         return resp
@@ -78,8 +78,8 @@ def random_comic_view(request: AuthenticatedHttpRequest):
 # Organize page views #
 #######################
 
-@consent_required
 @login_required
+@consent_required
 def add_comics(request: AuthenticatedHttpRequest):
     # all of the comics
     all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
@@ -95,8 +95,8 @@ def add_comics(request: AuthenticatedHttpRequest):
     }
     return render(request, "comics/add.html", context)
 
-@consent_required
 @login_required
+@consent_required
 def organize(request: AuthenticatedHttpRequest):
     """Comics shown in the organize page are those that are active or ended with unread strips."""
     comics_with_unread_strips = request.user.comics_unread()
@@ -121,8 +121,8 @@ def _slugify_comic(comic: Comic) -> str:
 # #   Request page related   #
 # ############################
 
-@consent_required
 @login_required
+@consent_required
 def request_index(request: AuthenticatedHttpRequest):
     if request.POST:
         form = RequestForm(request.POST)
@@ -155,8 +155,8 @@ def request_index(request: AuthenticatedHttpRequest):
 # ##############
 
 
-@consent_required
 @cache_page(24 * 3600)
+@consent_required
 def stats(request: HttpRequest):
     """
     Genera una página de estadísticas para cada comic ordenada según la puntuación de cada comic

@@ -4,10 +4,13 @@ from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
+from comicagg.about.utils import consent_required
 from comicagg.accounts.models import User
 from comicagg.typings import AuthenticatedHttpRequest
 
 
+@login_required
+@consent_required
 def index(request: HttpRequest):
     return render(request, "ws/index.html", {})
 
