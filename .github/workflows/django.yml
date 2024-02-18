@@ -50,6 +50,6 @@ jobs:
       - name: Run Tests
         working-directory: ./src
         run: |
-          python manage.py test
+          python -Wa manage.py test --noinput --failfast comicagg.comics
       - name: Build the Docker image
         run: docker build . --file Dockerfile
