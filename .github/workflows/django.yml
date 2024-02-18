@@ -3,6 +3,8 @@ name: Build Django image
 on:
   push:
     branches: ["development"]
+  workflow_dispatch:
+
 #   pull_request:
 #     branches: [ "development" ]
 
