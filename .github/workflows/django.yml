@@ -26,20 +26,18 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Change to src folder
-        run: |
-          cd src
-          pwd
       - name: Install Dependencies
+        working-directory: ./src
         run: |
-          pwd
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           mkdir -p $DJANGO_STATIC_ROOT
       - name: Collect static files
+        working-directory: ./src
         run: |
           python manage.py collectstatic --noinput
       - name: Run Tests
+        working-directory: ./src
         run: |
           python manage.py test
       - name: Build the Docker image
