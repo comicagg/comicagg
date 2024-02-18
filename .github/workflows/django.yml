@@ -3,15 +3,15 @@ name: Build Django image
 on:
   push:
     branches: ["development"]
-  workflow_dispatch:
-
 #   pull_request:
 #     branches: [ "development" ]
+  workflow_dispatch:
+
 
 jobs:
   build:
     env:
-      DJANGO_STATIC_ROOT: /web/static/
+      DJANGO_STATIC_ROOT: /tmp/static/
       DJANGO_SECRET_KEY: this-is-just-for-building
 
     runs-on: ubuntu-latest
@@ -26,10 +26,19 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Change to src folder
+        run: |
+          cd src
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          mkdir -p $DJANGO_STATIC_ROOT
+      - name: Collect static files
+        run: |
+          python manage.py collectstatic --noinput
       - name: Run Tests
         run: |
           python manage.py test
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile
