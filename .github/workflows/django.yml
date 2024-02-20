@@ -96,6 +96,7 @@ jobs:
         run: |
           mkdir -p $DJANGO_STATIC_ROOT
           python manage.py collectstatic --noinput -v 2
+          ls -l /tmp/nginx/static/
           cp ../deployment/nginx/* /tmp/nginx/
       - name: Build and push proxy image
         id: build-and-push-nginx
