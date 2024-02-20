@@ -17,26 +17,19 @@ These are the tasks needed to get an environment up and running:
    docker compose exec app python manage.py migrate
    ```
 
-3. Start the proxy container and collect the static files:
-
-   ```shell
-   docker compose up -d proxy
-   docker compose exec app python manage.py collectstatic --no-input --clear
-   ```
-
-4. Start the rest of the containers:
+3. Start the rest of the containers:
 
    ```shell
    docker compose up -d
    ```
 
-5. Create tasks:
+4. Create tasks:
 
    ```shell
    docker compose exec app python manage.py ensure_tasks
    ```
 
-6. Add default list of comics
+5. Add default list of comics
 
    ```shell
    docker compose exec app python manage.py loaddata comics.Comic.json
@@ -74,20 +67,13 @@ These are the tasks needed to get an environment running and migrate the current
    docker compose exec app python manage.py migrate comics
    ```
 
-3. Start the proxy container and collect the static files:
-
-   ```shell
-   docker compose up -d proxy
-   docker compose exec app python manage.py collectstatic --no-input --clear
-   ```
-
-4. Start the rest of the containers:
+3. Start the rest of the containers:
 
    ```shell
    docker compose up -d
    ```
 
-5. Create tasks:
+4. Create tasks:
 
    ```shell
    docker compose exec app python manage.py ensure_tasks

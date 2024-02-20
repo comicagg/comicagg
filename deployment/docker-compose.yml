@@ -5,7 +5,6 @@ services:
     env_file:
       - .env
     volumes:
-      - app_static:/web/static
       - app_media:/web/media
     restart: unless-stopped
     command: [ "app" ]
@@ -24,13 +23,11 @@ services:
       - db
 
   proxy:
-    image: nginx:alpine
+    image: nublar.azurecr.io/comicagg/proxy
     ports:
       - 80:80
     volumes:
-      - app_static:/web/static
       - app_media:/web/media
-      - ./nginx:/etc/nginx/conf.d:ro
     restart: unless-stopped
     depends_on:
       - app
@@ -61,4 +58,3 @@ volumes:
   redis_data:
   postgres_data:
   app_media:
-  app_static:
