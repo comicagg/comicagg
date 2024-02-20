@@ -28,6 +28,8 @@ RUN pip install --upgrade pip && \
 # Final #
 #########
 
+ARG PY_VERSION
+
 # Pull official base image
 FROM python:${PY_VERSION}-alpine as final
 
