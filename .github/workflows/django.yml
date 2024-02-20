@@ -11,7 +11,7 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: nublar.azurecr.io
   # github.repository as <account>/<repo>
-  APP_APP_IMAGE_NAME: comicagg/app
+  APP_IMAGE_NAME: comicagg/app
   PROXY_IMAGE_NAME: comicagg/proxy
 
 jobs:
