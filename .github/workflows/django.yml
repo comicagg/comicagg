@@ -36,10 +36,6 @@ jobs:
     defaults:
       run:
         working-directory: ./src
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.12]
 
     steps:
       - uses: actions/checkout@v4
