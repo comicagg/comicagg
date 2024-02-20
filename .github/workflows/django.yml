@@ -95,7 +95,7 @@ jobs:
       - name: Collect static files and prepare nginx image
         run: |
           mkdir -p $DJANGO_STATIC_ROOT
-          python manage.py collectstatic --noinput
+          python manage.py collectstatic --noinput -v 2
           cp ../deployment/nginx/* /tmp/nginx/
       - name: Build and push proxy image
         id: build-and-push-nginx
