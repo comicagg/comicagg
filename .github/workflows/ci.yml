@@ -64,12 +64,15 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
-      - name: Extract metadata for Docker images
-        id: image-metadata
+      - name: Extract metadata for APP image
+        id: image-metadata-app
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.APP_IMAGE_NAME }}
           tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
             type=match,pattern=\d{6}\.\d+
 
       - name: Build and push APP
@@ -78,7 +81,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.image-metadata.outputs.tags }}
+          tags: ${{ steps.image-metadata-app.outputs.tags }}
           # tags: ${{ env.REGISTRY }}/${{ env.APP_IMAGE_NAME }}:test
           # labels: ${{ steps.image-metadata.outputs.labels }}
           cache-from: type=gha
@@ -91,13 +94,24 @@ jobs:
           ls -l /tmp/nginx/static/
           cp ../deployment/nginx/* /tmp/nginx/
 
+      - name: Extract metadata for PROXY image
+        id: image-metadata-proxy
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.PROXY_IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=match,pattern=\d{6}\.\d+
+
       - name: Build and push PROXY image
         id: build-and-push-nginx
         uses: docker/build-push-action@v5
         with:
           context: /tmp/nginx/
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.image-metadata.outputs.tags }}
+          tags: ${{ steps.image-metadata-proxy.outputs.tags }}
           # tags: ${{ env.REGISTRY }}/${{ env.PROXY_IMAGE_NAME }}:test
           # labels: ${{ steps.image-metadata.outputs.labels }}
           cache-from: type=gha
