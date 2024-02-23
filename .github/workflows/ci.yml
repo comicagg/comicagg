@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches: ["development"]
-    tags: ["v*"]
+    tags: ["2*"]
 #   pull_request:
 #     branches: [ "development" ]
   workflow_dispatch:
@@ -17,11 +17,13 @@ env:
 jobs:
   build:
     env:
+      NGINX_BUILD_DIR: /tmp/nginx/
+      DJANGO_STATIC_ROOT: /tmp/nginx/static/
+
       DJANGO_SECRET_KEY: this-is-just-for-building
       DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432/tmp/comicagg.db
       DJANGO_MEDIA_ROOT: /web/media/
       DJANGO_MEDIA_URL: /.media/
-      DJANGO_STATIC_ROOT: /tmp/nginx/static/
       DJANGO_STATIC_URL: /.static/
       DJANGO_ADMINS: Admin <admin@comicagg.com>
       DJANGO_MANAGERS: Admin <admin@comicagg.com>
@@ -65,23 +67,23 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Extract metadata for APP image
-        id: image-metadata-app
+        id: app-metadata
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.APP_IMAGE_NAME }}
-          tags: |
+          tags: &metadata-tags |
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
             type=match,pattern=\d{6}\.\d+
 
       - name: Build and push APP
-        id: build-and-push
+        id: build-and-push-app
         uses: docker/build-push-action@v5
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.image-metadata-app.outputs.tags }}
+          tags: ${{ steps.app-metadata.outputs.tags }}
           # tags: ${{ env.REGISTRY }}/${{ env.APP_IMAGE_NAME }}:test
           # labels: ${{ steps.image-metadata.outputs.labels }}
           cache-from: type=gha
@@ -91,27 +93,22 @@ jobs:
         run: |
           mkdir -p $DJANGO_STATIC_ROOT
           python manage.py collectstatic --noinput
-          ls -l /tmp/nginx/static/
-          cp ../deployment/nginx/* /tmp/nginx/
+          cp ../deployment/nginx/* ${{ env.NGINX_BUILD_DIR }}
 
       - name: Extract metadata for PROXY image
-        id: image-metadata-proxy
+        id: proxy-metadata
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.PROXY_IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=tag
-            type=ref,event=pr
-            type=match,pattern=\d{6}\.\d+
+          tags: *metadata-tags
 
       - name: Build and push PROXY image
         id: build-and-push-nginx
         uses: docker/build-push-action@v5
         with:
-          context: /tmp/nginx/
+          context: ${{ env.NGINX_BUILD_DIR }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.image-metadata-proxy.outputs.tags }}
+          tags: ${{ steps.proxy-metadata.outputs.tags }}
           # tags: ${{ env.REGISTRY }}/${{ env.PROXY_IMAGE_NAME }}:test
           # labels: ${{ steps.image-metadata.outputs.labels }}
           cache-from: type=gha
