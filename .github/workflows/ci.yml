@@ -71,7 +71,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.APP_IMAGE_NAME }}
-          tags: &metadata-tags |
+          tags: |
             type=ref,event=branch
             type=ref,event=tag
             type=ref,event=pr
@@ -100,7 +100,11 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.PROXY_IMAGE_NAME }}
-          tags: *metadata-tags
+          tags: |
+            type=ref,event=branch
+            type=ref,event=tag
+            type=ref,event=pr
+            type=match,pattern=\d{6}\.\d+
 
       - name: Build and push PROXY image
         id: build-and-push-nginx
