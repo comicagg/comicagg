@@ -28,6 +28,8 @@ RUN pip install --upgrade pip && \
 # Final #
 #########
 
+ARG PY_VERSION
+
 # Pull official base image
 FROM python:${PY_VERSION}-alpine as final
 
@@ -52,7 +54,7 @@ RUN apk update && \
     chown -R app:app /web
 
 COPY --chown=app:app src lib /app/
-COPY --chown=app:app ./entrypoint.sh /entrypoint.sh
+COPY --chown=app:app --chmod=744 ./entrypoint.sh /entrypoint.sh
 
 WORKDIR /app
 USER app
