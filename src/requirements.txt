@@ -11,3 +11,7 @@ django-celery-beat==2.5.0
 django_celery_results==2.5.1
 flower==2.0.1
 django-mailer==2.3
+
+# Debug
+django-debug-toolbar==4.2.0
+tblib==3.0.0
