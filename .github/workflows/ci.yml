@@ -17,6 +17,7 @@ env:
 jobs:
   build:
     env:
+      DJANGO_DEBUG: 1
       NGINX_BUILD_DIR: /tmp/nginx/
       DJANGO_STATIC_ROOT: /tmp/nginx/static/
 
