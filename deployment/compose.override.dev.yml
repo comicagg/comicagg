@@ -1,0 +1,22 @@
+
+services:
+  app:
+    image: nublar.azurecr.io/comicagg/app:${IMAGE_TAG:-development}
+    env_file:
+      - app.env
+  tasks:
+    image: nublar.azurecr.io/comicagg/app:${IMAGE_TAG:-development}
+    env_file:
+      - app.env
+  proxy:
+    image: nublar.azurecr.io/comicagg/proxy:${IMAGE_TAG:-development}
+    ports:
+      - 4000:80
+  db:
+    env_file:
+      - db.env
+  pgadmin:
+    env_file:
+      - pgadmin.env
+    ports:
+      - 4001:8080

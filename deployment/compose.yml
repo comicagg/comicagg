@@ -2,8 +2,8 @@ name: comicagg
 services:
   app:
     image: nublar.azurecr.io/comicagg/app
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     volumes:
       - app_media:/web/media
     restart: unless-stopped
@@ -11,47 +11,42 @@ services:
     depends_on:
       - redis
       - db
-
   tasks:
     image: nublar.azurecr.io/comicagg/app
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     restart: unless-stopped
     command: [ "tasks" ]
     depends_on:
       - redis
       - db
-
   proxy:
     image: nublar.azurecr.io/comicagg/proxy
-    ports:
-      - 80:80
+    # ports:
+    #   - 80:80
     volumes:
       - app_media:/web/media
     restart: unless-stopped
     depends_on:
       - app
-
   redis:
     image: redis:7-alpine
     volumes:
       - redis_data:/data
     restart: unless-stopped
-
   db:
     image: postgres:16-alpine
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
-
   pgadmin:
     image: dpage/pgadmin4:latest
-    env_file:
-      - .env
-    ports:
-      - 8080:8080
+    # env_file:
+    #   - .env
+    # ports:
+    #   - 8080:8080
     restart: unless-stopped
 
 volumes:
