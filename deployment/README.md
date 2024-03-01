@@ -1,10 +1,10 @@
-# Deployment steps
+# Deployment
 
 ## Compose files
 
 ### compose.yml
 
-Default compose file with service depencencies, etc. Does not map ports or loads environment files. These, and possibly the image tag, are meant to be overriden.
+Default compose file with service depencencies, etc. Does not map ports or loads environment files but are commented out so it's easier to remember they are needed. These, and possibly the image tag, are meant to be overriden.
 
 ### compose.dev.yml
 
@@ -23,6 +23,16 @@ The file also includes an `IMAGE_TAG` variable to be able to specify another tag
 ```PowerShell
 $env:IMAGE_TAG="44-missing-static-files"; docker compose -f compose.dev.yml up -d --pull always
 ```
+
+## env files
+
+### example.env
+
+This file includes all the possible environment variables that the app supports and the minimum required for the other components.
+
+### {app,db,pgadmin}.env
+
+`compose.override.dev.yml` uses separated env files for each container.
 
 ## Deploy from scratch
 
