@@ -91,6 +91,8 @@ button:hover {
     text-align: right;
 }
 
+.red { color: red }
+
 /****************/
 /* Cookie notice*/
 /****************/
@@ -235,6 +237,10 @@ button:hover {
 }
 
 .errorlist li {
+}
+
+.form_error {
+    color: red;
 }
 
 .oauth2_page {

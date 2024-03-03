@@ -17,6 +17,7 @@ from comicagg.typings import AuthenticatedHttpRequest
 from comicagg.about.utils import ConsentRequiredMixin, consent_required, consent_show
 
 from .forms import (
+    DeleteAccountForm,
     EmailChangeForm,
     LoginForm,
     PasswordChangeForm,
@@ -216,3 +217,20 @@ class UpdateEmail(ConsentRequiredMixin, LoginRequiredMixin, View):
                 return redirect("accounts:done", kind="email_change")
         context = {"form": form}
         return render(request, "accounts/email_change_form.html", context)
+
+class DeleteAccount(ConsentRequiredMixin, LoginRequiredMixin, View):
+    def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
+        form = DeleteAccountForm()
+        context = {"form": form}
+        return render(request, "accounts/delete_account_form.html", context)
+
+    def post(self, request: AuthenticatedHttpRequest, *args, **kwargs):
+        form = DeleteAccountForm(request.POST)
+        if form.is_valid():
+            confirmation = form.cleaned_data["confirmation"]
+            if confirmation:
+                # TODO Delete the account and send confirmation email
+                return redirect("accounts:done", kind="deleted_account")
+            form.errors["confirmation"] = True
+        context = {"form": form}
+        return render(request, "accounts/delete_account_form.html", context)

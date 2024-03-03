@@ -46,3 +46,6 @@ class RegisterForm(forms.Form):
 
         if password1 != password2:
             raise ValidationError(_("Passwords don't match!"))
+
+class DeleteAccountForm(forms.Form):
+    confirmation = forms.BooleanField(label='Yes, I want to delete my account', required=False)
