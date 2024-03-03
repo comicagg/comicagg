@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Account deleted'%}{% endblock %}
+{% block content %}
+<div class="box">
+  <h3>{% trans 'Your account has been deleted'%}</h3>
+  <p class="info">{% trans 'Thanks for using our service.'%}</p>
+  <a href="{% url 'index' %}">{% trans 'To the welcome page'%}</a>
+</div>
+{% endblock %}

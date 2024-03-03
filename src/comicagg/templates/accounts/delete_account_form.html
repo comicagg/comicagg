@@ -7,7 +7,6 @@
 <div class="box">
   <h3 class="red">{% trans 'Delete account'%}</h3>
   <p class="info">{% trans 'You can delete your account here. You will be able to create a new account with the same email in the future.' %}</p>
-  <p class="info">{% trans 'A confirmation email will be sent when your account has been deleted.' %}</p>
   <form action="{% url 'accounts:delete_account' %}" method="post" class="text_left">{% csrf_token %}
     <table style="margin-left:auto;margin-right:auto">
       <tr {% if form.confirmation.errors %}class="form_error"{% endif %}>
@@ -20,9 +19,11 @@
         <td>{{ form.confirmation }}</td>
       </tr>
     </table>
-    <div class="text_center"><input type="submit" value="{% trans 'Delete my account'%}" /></div>
+    <div class="text_center">
+      <input type="submit" value="{% trans 'Delete my account'%}" class="btn"/>
+    </div>
   </form>
   <br />
-  <a href="{% url 'accounts:profile' %}">{% trans 'Go back.'%}</a>
+  <a href="{% url 'accounts:profile' %}">{% trans 'Go back'%}</a>
 </div>
 {% endblock %}

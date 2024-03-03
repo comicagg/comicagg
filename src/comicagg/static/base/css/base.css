@@ -93,6 +93,10 @@ button:hover {
 
 .red { color: red }
 
+input.btn {
+    padding: 5px 10px;
+}
+
 /****************/
 /* Cookie notice*/
 /****************/

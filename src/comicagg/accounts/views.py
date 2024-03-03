@@ -30,6 +30,7 @@ def done(request: HttpRequest, kind: str):
     try:
         return render(request, f"accounts/{kind}_done.html", {})
     except Exception:
+        print(f"Error rendering {kind}_done.html")
         return redirect("index")
 
 
@@ -218,6 +219,7 @@ class UpdateEmail(ConsentRequiredMixin, LoginRequiredMixin, View):
         context = {"form": form}
         return render(request, "accounts/email_change_form.html", context)
 
+
 class DeleteAccount(ConsentRequiredMixin, LoginRequiredMixin, View):
     def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = DeleteAccountForm()
@@ -229,8 +231,16 @@ class DeleteAccount(ConsentRequiredMixin, LoginRequiredMixin, View):
         if form.is_valid():
             confirmation = form.cleaned_data["confirmation"]
             if confirmation:
-                # TODO Delete the account and send confirmation email
-                return redirect("accounts:done", kind="deleted_account")
+                user = User.objects.get(pk=request.user.pk)
+                if user.is_superuser:
+                    raise CannotDeleteSuperuserError()
+
+                logout(request)
+                user.delete()
+                return redirect("accounts:done", kind="delete_account")
             form.errors["confirmation"] = True
         context = {"form": form}
         return render(request, "accounts/delete_account_form.html", context)
+
+class CannotDeleteSuperuserError(Exception):
+    pass
