@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 19:42+0000\n"
+"POT-Creation-Date: 2024-03-04 17:40+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -48,11 +48,11 @@ msgstr "Algunas letras no valen."
 msgid "That username is not valid, sorry. Please choose another."
 msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 
-#: comicagg/accounts/views.py:81
+#: comicagg/accounts/views.py:84
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: comicagg/accounts/views.py:149
+#: comicagg/accounts/views.py:152
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
@@ -61,24 +61,24 @@ msgstr "Cambio de contraseña en %(site)s"
 msgid "custom function"
 msgstr "función personalizada"
 
-#: comicagg/comics/admin_views/views.py:15
+#: comicagg/comics/admin_views/views.py:14
 msgid "Docs - Custom update"
 msgstr "Docs - Actualización personalizada"
 
-#: comicagg/comics/admin_views/views.py:26
+#: comicagg/comics/admin_views/views.py:25
 #: comicagg/templates/admin/update_comic.html:25
 msgid "Update comic"
 msgstr "Actualizar comic"
 
-#: comicagg/comics/admin_views/views.py:50
+#: comicagg/comics/admin_views/views.py:49
 msgid "Review reported images"
 msgstr "Revisar imágenes rotas"
 
-#: comicagg/comics/views.py:136
+#: comicagg/comics/views.py:139
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
-#: comicagg/templates/about/cookie_notice.html:2
+#: comicagg/templates/about/cookie_notice.html:4
 msgid ""
 "Yes, this is that annoying cookie notice! This site only uses <b>essential "
 "cookies</b> to work correctly. There are no tracking cookies, no advertising "
@@ -91,26 +91,25 @@ msgstr ""
 "redes sociales, no hay cookies de marketing, no hay cookies de terceros, no "
 "hay cookies por el mero hecho de tener cookies."
 
-#: comicagg/templates/about/cookie_notice.html:6
+#: comicagg/templates/about/cookie_notice.html:9
 #, python-format
 msgid ""
-"<p>Here are the links to our <a href=\"%(privacy_url)s\" target=\"_blank\" "
-"rel=\"noopener noreferrer\">privacy policy</a> and our <a "
-"href=\"%(cookies_url)s\" target=\"_blank\" rel=\"noopener "
-"noreferrer\">cookie policy</a>.</p>"
+"<p>Here are the links to our <a href=\"%(privacy_url)s\" rel=\"noopener "
+"noreferrer\">privacy policy</a> and our <a href=\"%(cookies_url)s\" "
+"rel=\"noopener noreferrer\">cookies policy</a>.</p>"
 msgstr ""
-"<p>Aquí están los enlaces para nuestra <a href=\"%(privacy_url)s\" target=\"_blank\" "
-"rel=\"noopener noreferrer\">política de privacidad</a> y nuestra <a "
-"href=\"%(cookies_url)s\" target=\"_blank\" rel=\"noopener "
+"<p>Aquí están los enlaces para nuestra <a href=\"%(privacy_url)s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">política de privacidad</a> y "
+"nuestra <a href=\"%(cookies_url)s\" target=\"_blank\" rel=\"noopener "
 "noreferrer\">política de cookies</a>.</p>"
 
-#: comicagg/templates/about/cookie_notice.html:8
+#: comicagg/templates/about/cookie_notice.html:15
 msgid "Accept"
-msgstr ""
+msgstr "Aceptar"
 
-#: comicagg/templates/about/cookie_notice.html:9
+#: comicagg/templates/about/cookie_notice.html:20
 msgid "Reject"
-msgstr ""
+msgstr "Rechazar"
 
 #: comicagg/templates/about/cookies.html:5
 msgid "The following text is only available in English."
@@ -130,41 +129,40 @@ msgstr ""
 #: comicagg/templates/about/index.html:8
 #, python-format
 msgid ""
-"<p>If you like the comics, PLEASE SUPPORT THE AUTHORS.</p>\n"
-"  <p>The site is free, it doesn't have ads and YOU are not the product. It "
-"is a pet project of mine and allows me to learn about web tecnologies, not "
-"generate revenue.</p>\n"
-"  <p>If you are interested in the code of the site, you can find it here: "
+"<p>If you like the comics, PLEASE SUPPORT THE AUTHORS.</p><p>The site is "
+"free, it doesn't have ads and YOU are not the product. It is a pet project "
+"of mine and allows me to learn about web tecnologies, not generate revenue.</"
+"p><p>If you are interested in the code of the site, you can find it here: "
 "%(repo)s</p>"
 msgstr ""
-"<p>Si te gustan los comics, POR FAVOR APOYA A LOS AUTORES.</p>\n"
-"  <p>El sitio es gratuito, no tiene publicidad y TÚ no eres el producto. Es "
+"<p>Si te gustan los comics, POR FAVOR APOYA A LOS AUTORES.</p>"
+"<p>El sitio es gratuito, no tiene publicidad y TÚ no eres el producto. Es "
 "un projecto de juguete y me permite aprender sobre desarrollo web, no para "
-"generar ingresos.</p>\n"
-"  <p>Si estás interesado en el código del sitio, lo puedes encontrar aquí: "
+"generar ingresos.</p>"
+"<p>Si estás interesado en el código del sitio, lo puedes encontrar aquí: "
 "%(repo)s</p>"
 
-#: comicagg/templates/about/index.html:11
+#: comicagg/templates/about/index.html:9
 msgid "Policies"
 msgstr "Políticas"
 
-#: comicagg/templates/about/index.html:12
+#: comicagg/templates/about/index.html:10
 msgid "These policies explain how your data is handled:"
 msgstr "Estas políticas explican cómo se manejan tus datos:"
 
-#: comicagg/templates/about/index.html:14
+#: comicagg/templates/about/index.html:12
 msgid "Privacy policy"
 msgstr "Política de privacidad"
 
-#: comicagg/templates/about/index.html:15
+#: comicagg/templates/about/index.html:13
 msgid "Cookie policy"
 msgstr "Política de cookies"
 
-#: comicagg/templates/about/index.html:18
+#: comicagg/templates/about/index.html:16
 msgid "Contact"
 msgstr "Contacto"
 
-#: comicagg/templates/about/index.html:19
+#: comicagg/templates/about/index.html:17
 msgid ""
 "For any problem or suggestion reach me on Github. For anything else drop me "
 "an email at&nbsp;"
@@ -198,6 +196,12 @@ msgstr "Cambiar correo electrónico"
 msgid "current:"
 msgstr "actual:"
 
+#: comicagg/templates/accounts/account.html:16
+#: comicagg/templates/accounts/delete_account_form.html:3
+#: comicagg/templates/accounts/delete_account_form.html:8
+msgid "Delete account"
+msgstr "Borrar cuenta"
+
 #: comicagg/templates/accounts/activate.html:3
 msgid "Activate account"
 msgstr "Activar cuenta"
@@ -214,6 +218,43 @@ msgstr ""
 #: comicagg/templates/accounts/activate.html:12
 msgid "Reactivate"
 msgstr "Reactivar"
+
+#: comicagg/templates/accounts/delete_account_done.html:3
+msgid "Account deleted"
+msgstr "Cuenta borrada"
+
+#: comicagg/templates/accounts/delete_account_done.html:6
+msgid "Your account has been deleted"
+msgstr "Tu cuenta ha sido borrada"
+
+#: comicagg/templates/accounts/delete_account_done.html:7
+msgid "Thanks for using our service."
+msgstr "Gracias por usar nuestro servicio"
+
+#: comicagg/templates/accounts/delete_account_done.html:8
+msgid "To the welcome page"
+msgstr "A la página de bienvenida"
+
+#: comicagg/templates/accounts/delete_account_form.html:9
+msgid ""
+"You can delete your account here. You will be able to create a new account "
+"with the same email in the future."
+msgstr ""
+"Aquí puedes borrar tu cuenta. Podrás crear una nueva cuenta con el mismo "
+"correo en el futuro"
+
+#: comicagg/templates/accounts/delete_account_form.html:14
+msgid "Please, confirm that you want to delete your account"
+msgstr "Por favor, confirma que quieres borrar tu cuenta"
+
+#: comicagg/templates/accounts/delete_account_form.html:23
+msgid "Delete my account"
+msgstr "Borrar mi cuenta"
+
+#: comicagg/templates/accounts/delete_account_form.html:27
+#: comicagg/templates/accounts/password_change_form.html:45
+msgid "Go back"
+msgstr "Volver"
 
 #: comicagg/templates/accounts/email_change_done.html:3
 msgid "E-mail updated"
@@ -270,57 +311,67 @@ msgstr "Volver."
 msgid "Login"
 msgstr "Entrar"
 
-#: comicagg/templates/accounts/login_form.html:11
+#: comicagg/templates/accounts/login_form.html:9
+msgid "You need to accept cookies first"
+msgstr "Necesitas aceptar las cookies primero"
+
+#: comicagg/templates/accounts/login_form.html:15
 msgid "Login into your account to authorize an application"
 msgstr "Entrar en tu cuenta para autorizar una aplicación"
 
-#: comicagg/templates/accounts/login_form.html:12
-#: comicagg/templates/accounts/login_form.html:41
+#: comicagg/templates/accounts/login_form.html:17
+#: comicagg/templates/accounts/login_form.html:63
 msgid "Write your username and passwod to get you logged in."
 msgstr "Escribe tu usuario y contraseña para conectarte."
 
-#: comicagg/templates/accounts/login_form.html:21
-#: comicagg/templates/accounts/login_form.html:50
+#: comicagg/templates/accounts/login_form.html:31
+#: comicagg/templates/accounts/login_form.html:77
 msgid "User "
 msgstr "Usuario "
 
-#: comicagg/templates/accounts/login_form.html:25
-#: comicagg/templates/accounts/login_form.html:54
+#: comicagg/templates/accounts/login_form.html:37
+#: comicagg/templates/accounts/login_form.html:83
 msgid "Password "
 msgstr "Contraseña "
 
-#: comicagg/templates/accounts/login_form.html:29
-#: comicagg/templates/accounts/login_form.html:58
+#: comicagg/templates/accounts/login_form.html:43
+#: comicagg/templates/accounts/login_form.html:90
+#: comicagg/templates/accounts/login_form.html:92
 msgid "Log in"
 msgstr "Entrar"
 
-#: comicagg/templates/accounts/login_form.html:34
-#: comicagg/templates/accounts/login_form.html:63
+#: comicagg/templates/accounts/login_form.html:50
 msgid "Don't you have an account?"
 msgstr "¿No tienes una cuenta?"
 
-#: comicagg/templates/accounts/login_form.html:34
-#: comicagg/templates/accounts/login_form.html:63
+#: comicagg/templates/accounts/login_form.html:50
+#: comicagg/templates/accounts/login_form.html:107
+#: comicagg/templates/accounts/login_form.html:109
 msgid "Create one"
 msgstr "Créate una"
 
-#: comicagg/templates/accounts/login_form.html:35
-#: comicagg/templates/accounts/login_form.html:64
+#: comicagg/templates/accounts/login_form.html:53
+#: comicagg/templates/accounts/login_form.html:115
 msgid "Can't remember your password?"
 msgstr "¿No recuerdas tu contraseña?"
 
-#: comicagg/templates/accounts/login_form.html:35
-#: comicagg/templates/accounts/login_form.html:64
+#: comicagg/templates/accounts/login_form.html:53
+#: comicagg/templates/accounts/login_form.html:119
+#: comicagg/templates/accounts/login_form.html:121
 msgid "Send me a new password"
 msgstr "Envíame una nueva contraseña"
 
-#: comicagg/templates/accounts/login_form.html:38
+#: comicagg/templates/accounts/login_form.html:58
 msgid "Welcome to Comic Aggregator!"
 msgstr "¡Bienvenido a Comic Aggregator!"
 
-#: comicagg/templates/accounts/login_form.html:40
+#: comicagg/templates/accounts/login_form.html:61
 msgid "Login into your account"
 msgstr "Entrar en tu cuenta"
+
+#: comicagg/templates/accounts/login_form.html:103
+msgid "Don't have an account?"
+msgstr "¿No tienes una cuenta?"
 
 #: comicagg/templates/accounts/password_change_done.html:3
 msgid "Password changed"
@@ -372,10 +423,6 @@ msgstr ""
 #: comicagg/templates/accounts/password_change_form.html:44
 msgid "here"
 msgstr "aquí"
-
-#: comicagg/templates/accounts/password_change_form.html:45
-msgid "Go back"
-msgstr "Volver"
 
 #: comicagg/templates/accounts/password_reset_done.html:3
 msgid "E-mail sent"
@@ -574,43 +621,43 @@ msgstr "lectores notificados."
 msgid "was not modified."
 msgstr "no fue modificado."
 
-#: comicagg/templates/base.html:55 comicagg/templates/base.html:62
+#: comicagg/templates/base.html:54 comicagg/templates/base.html:61
 msgid "news"
 msgstr "noticias"
 
-#: comicagg/templates/base.html:55
+#: comicagg/templates/base.html:54
 msgid "admin"
 msgstr "admin"
 
-#: comicagg/templates/base.html:55 comicagg/templates/base.html:62
+#: comicagg/templates/base.html:54 comicagg/templates/base.html:61
 msgid "about"
 msgstr "acerca de"
 
-#: comicagg/templates/base.html:55
+#: comicagg/templates/base.html:54
 msgid "logout"
 msgstr "salir"
 
-#: comicagg/templates/base.html:58
+#: comicagg/templates/base.html:57
 msgid "read"
 msgstr "lee"
 
-#: comicagg/templates/base.html:58
+#: comicagg/templates/base.html:57
 msgid "choose"
 msgstr "elige"
 
-#: comicagg/templates/base.html:58
+#: comicagg/templates/base.html:57
 msgid "organize"
 msgstr "organiza"
 
-#: comicagg/templates/base.html:58
+#: comicagg/templates/base.html:57
 msgid "request"
 msgstr "solicita"
 
-#: comicagg/templates/base.html:62
+#: comicagg/templates/base.html:61
 msgid "login"
 msgstr "entrar"
 
-#: comicagg/templates/base.html:82
+#: comicagg/templates/base.html:81
 msgid "Sorry, you need to accept cookies to access this content"
 msgstr "Lo siento, necesitas aceptar las cookies para acceder a este contenido"
 
