@@ -17,6 +17,7 @@ from comicagg.typings import AuthenticatedHttpRequest
 from comicagg.about.utils import ConsentRequiredMixin, consent_required, consent_show
 
 from .forms import (
+    DeleteAccountForm,
     EmailChangeForm,
     LoginForm,
     PasswordChangeForm,
@@ -29,6 +30,7 @@ def done(request: HttpRequest, kind: str):
     try:
         return render(request, f"accounts/{kind}_done.html", {})
     except Exception:
+        print(f"Error rendering {kind}_done.html")
         return redirect("index")
 
 
@@ -216,3 +218,29 @@ class UpdateEmail(ConsentRequiredMixin, LoginRequiredMixin, View):
                 return redirect("accounts:done", kind="email_change")
         context = {"form": form}
         return render(request, "accounts/email_change_form.html", context)
+
+
+class DeleteAccount(ConsentRequiredMixin, LoginRequiredMixin, View):
+    def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
+        form = DeleteAccountForm()
+        context = {"form": form}
+        return render(request, "accounts/delete_account_form.html", context)
+
+    def post(self, request: AuthenticatedHttpRequest, *args, **kwargs):
+        form = DeleteAccountForm(request.POST)
+        if form.is_valid():
+            confirmation = form.cleaned_data["confirmation"]
+            if confirmation:
+                user = User.objects.get(pk=request.user.pk)
+                if user.is_superuser:
+                    raise CannotDeleteSuperuserError()
+
+                logout(request)
+                user.delete()
+                return redirect("accounts:done", kind="delete_account")
+            form.errors["confirmation"] = True
+        context = {"form": form}
+        return render(request, "accounts/delete_account_form.html", context)
+
+class CannotDeleteSuperuserError(Exception):
+    pass

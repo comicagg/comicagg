@@ -5,9 +5,7 @@
   <div>
   <h3 id="about">{% trans "About this site" %}</h3>
   <p>{% trans "Comic Aggregator allows you to read lots and lots of webcomics in the same page." %}</p>
-  {% blocktrans with repo=CODE_REPO|urlize %}<p>If you like the comics, PLEASE SUPPORT THE AUTHORS.</p>
-  <p>The site is free, it doesn't have ads and YOU are not the product. It is a pet project of mine and allows me to learn about web tecnologies, not generate revenue.</p>
-  <p>If you are interested in the code of the site, you can find it here: {{ repo }}</p>{% endblocktrans %}
+  {% blocktrans with repo=CODE_REPO|urlize %}<p>If you like the comics, PLEASE SUPPORT THE AUTHORS.</p><p>The site is free, it doesn't have ads and YOU are not the product. It is a pet project of mine and allows me to learn about web tecnologies, not generate revenue.</p><p>If you are interested in the code of the site, you can find it here: {{ repo }}</p>{% endblocktrans %}
   <h3 id="policies">{% trans 'Policies' %}</h3>
   <p>{% trans 'These policies explain how your data is handled:' %}
     <ul>

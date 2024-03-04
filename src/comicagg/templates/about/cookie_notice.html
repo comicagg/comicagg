@@ -6,11 +6,7 @@
 
   {% url 'about:privacy' as privacy_url %}
   {% url 'about:cookies' as cookies_url %}
-  {% blocktrans %}
-  <p>
-    Here are the links to our <a href="{{ privacy_url }}" rel="noopener noreferrer">privacy policy</a> and our <a href="{{ cookies_url }}" rel="noopener noreferrer">cookies policy</a>.
-  </p>
-  {% endblocktrans %}
+  {% blocktrans %}<p>Here are the links to our <a href="{{ privacy_url }}" rel="noopener noreferrer">privacy policy</a> and our <a href="{{ cookies_url }}" rel="noopener noreferrer">cookies policy</a>.</p>{% endblocktrans %}
 
   <div class="cookie_notice_buttons">
     <form method="post" action="{% url 'about:consent' %}">

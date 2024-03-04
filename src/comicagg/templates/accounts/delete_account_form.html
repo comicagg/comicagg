@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Delete account'%} -{% endblock %}
+{% block extra_head %}{% endblock%}
+{% block onload %}{% endblock %}
+{% block content %}
+<div class="box">
+  <h3 class="red">{% trans 'Delete account'%}</h3>
+  <p class="info">{% trans 'You can delete your account here. You will be able to create a new account with the same email in the future.' %}</p>
+  <form action="{% url 'accounts:delete_account' %}" method="post" class="text_left">{% csrf_token %}
+    <table style="margin-left:auto;margin-right:auto">
+      <tr {% if form.confirmation.errors %}class="form_error"{% endif %}>
+        {% if form.confirmation.errors %}
+        <td colspan="2">{% trans 'Please, confirm that you want to delete your account' %}</td>
+        {% endif %}
+      </tr>
+      <tr {% if form.confirmation.errors %}class="form_error"{% endif %}>
+        <td><label for="{{ form.confirmation.id_for_label }}">{{ form.confirmation.label }}</label></td>
+        <td>{{ form.confirmation }}</td>
+      </tr>
+    </table>
+    <div class="text_center">
+      <input type="submit" value="{% trans 'Delete my account'%}" class="btn"/>
+    </div>
+  </form>
+  <br />
+  <a href="{% url 'accounts:profile' %}">{% trans 'Go back'%}</a>
+</div>
+{% endblock %}
