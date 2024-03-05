@@ -35,6 +35,9 @@ a:visited {
 .bolder {
     font-weight: bolder;
 }
+.b {
+    font-weight: bolder;
+}
 #content {
     margin-top: 40px;
     padding: 0em 2em;
@@ -92,6 +95,8 @@ button:hover {
 }
 
 .red { color: red }
+
+.lrg { font-size: larger }
 
 input.btn {
     padding: 5px 10px;
