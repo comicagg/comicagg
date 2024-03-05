@@ -52,5 +52,5 @@ class Migration(migrations.Migration):
                 verbose_name="Has ended?",
             ),
         ),
-        migrations.RunPython(migrate_status),
+        migrations.RunPython(migrate_status, reverse_code=migrations.RunPython.noop),
     ]
