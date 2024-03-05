@@ -106,7 +106,6 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     # https://docs.djangoproject.com/en/4.2/ref/csrf/
     "django.middleware.csrf.CsrfViewMiddleware",
-
     # ######################
     # #   Authentication   #
     # ######################
@@ -116,7 +115,6 @@ MIDDLEWARE = [
     "comicagg.middleware.UserProxyOverwriteMiddleware",
     # OAuth2 authentication
     # "comicagg.api.middleware.OAuth2Middleware",
-
     # ###########################
     # #   Post-authentication   #
     # ###########################
@@ -176,13 +174,24 @@ CSRF_TRUSTED_ORIGINS = django_env.list("CSRF_TRUSTED_ORIGINS")
 
 # The value of the SameSite flag on the CSRF cookie.
 # This flag prevents the cookie from being sent in cross-site requests.
-CSRF_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_SAMESITE = "Strict"
+
+# Whether to use a secure cookie for the CSRF cookie.
+# If this is set to True, the cookie will be marked as "secure",
+# which means browsers may ensure that the cookie is only sent with an HTTPS connection.
+CSRF_COOKIE_SECURE = True
 
 # ######################
 # #   Authentication   #
 # ######################
 
+# The name of the cookie to use for sessions.
 SESSION_COOKIE_NAME = "session"
+
+# Whether to use a secure cookie for the session cookie.
+# If this is set to True, the cookie will be marked as "secure",
+# which means browsers may ensure that the cookie is only sent under an HTTPS connection.
+SESSION_COOKIE_SECURE = True
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.AllowAllUsersModelBackend"]
 
@@ -325,7 +334,14 @@ LOGGING = {
             "format": "%(asctime)s %(process)d %(name)s %(levelname)s %(message)s"
         },
     },
-    "filters": {},
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse",
+        },
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
     "handlers": {
         "null": {
             "level": "DEBUG",
@@ -337,6 +353,7 @@ LOGGING = {
         },
         "mail_admins": {
             "level": "ERROR",
+            "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler",
         },
         "file": {
@@ -353,7 +370,7 @@ LOGGING = {
     },
     "loggers": {
         "django": {
-            "handlers": ["console"],
+            "handlers": ["console", "mail_admins"],
             "level": "INFO",
             "propagate": True,
         },
@@ -362,7 +379,7 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "comicagg": {"handlers": ["console"], "level": "WARNING"},
+        "comicagg": {"handlers": ["console", "mail_admins"], "level": "WARNING"},
         "provider": {"handlers": ["console"], "level": "WARNING"},
         "mailer": {"level": "INFO", "propagate": True},
     },
