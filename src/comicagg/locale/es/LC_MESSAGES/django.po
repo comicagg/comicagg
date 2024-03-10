@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-04 17:40+0000\n"
+"POT-Creation-Date: 2024-03-10 11:50+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -27,6 +27,10 @@ msgstr ""
 #: comicagg/accounts/forms.py:48
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
+
+#: comicagg/accounts/forms.py:53
+msgid "Yes, I want to delete my account"
+msgstr "Sí, quiero borrar mi cuenta"
 
 #: comicagg/accounts/models.py:38
 msgid "User profile"
@@ -52,7 +56,14 @@ msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: comicagg/accounts/views.py:152
+#: comicagg/accounts/views.py:110
+#: comicagg/templates/accounts/register_done.html:6
+msgid ""
+"Your account has been created. You can now log in using the username you "
+"selected."
+msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
+
+#: comicagg/accounts/views.py:150
 #, python-format
 msgid "Password reset on %(site)s"
 msgstr "Cambio de contraseña en %(site)s"
@@ -77,6 +88,31 @@ msgstr "Revisar imágenes rotas"
 #: comicagg/comics/views.py:139
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
+
+#: comicagg/templates/400.html:5 comicagg/templates/500.html:5
+msgid "Something went wrong :("
+msgstr ""
+
+#: comicagg/templates/400.html:6 comicagg/templates/500.html:6
+msgid "But don't worry, we're on it!"
+msgstr ""
+
+#: comicagg/templates/403.html:5
+msgid "You can't get there"
+msgstr ""
+
+#: comicagg/templates/403.html:6
+msgid "Sorry"
+msgstr ""
+
+#: comicagg/templates/404.html:5
+#, python-format
+msgid "The URL <span class=\"b\">%(request_path)s</span> is invalid"
+msgstr ""
+
+#: comicagg/templates/404.html:6
+msgid "Did you follow an old link?"
+msgstr ""
 
 #: comicagg/templates/about/cookie_notice.html:4
 msgid ""
@@ -135,11 +171,10 @@ msgid ""
 "p><p>If you are interested in the code of the site, you can find it here: "
 "%(repo)s</p>"
 msgstr ""
-"<p>Si te gustan los comics, POR FAVOR APOYA A LOS AUTORES.</p>"
-"<p>El sitio es gratuito, no tiene publicidad y TÚ no eres el producto. Es "
-"un projecto de juguete y me permite aprender sobre desarrollo web, no para "
-"generar ingresos.</p>"
-"<p>Si estás interesado en el código del sitio, lo puedes encontrar aquí: "
+"<p>Si te gustan los comics, POR FAVOR APOYA A LOS AUTORES.</p><p>El sitio es "
+"gratuito, no tiene publicidad y TÚ no eres el producto. Es un projecto de "
+"juguete y me permite aprender sobre desarrollo web, no para generar ingresos."
+"</p><p>Si estás interesado en el código del sitio, lo puedes encontrar aquí: "
 "%(repo)s</p>"
 
 #: comicagg/templates/about/index.html:9
@@ -195,6 +230,10 @@ msgstr "Cambiar correo electrónico"
 #: comicagg/templates/accounts/account.html:12
 msgid "current:"
 msgstr "actual:"
+
+#: comicagg/templates/accounts/account.html:14
+msgid "Danger zone!"
+msgstr "Zona peligrosa!"
 
 #: comicagg/templates/accounts/account.html:16
 #: comicagg/templates/accounts/delete_account_form.html:3
@@ -311,65 +350,65 @@ msgstr "Volver."
 msgid "Login"
 msgstr "Entrar"
 
-#: comicagg/templates/accounts/login_form.html:9
+#: comicagg/templates/accounts/login_form.html:8
 msgid "You need to accept cookies first"
 msgstr "Necesitas aceptar las cookies primero"
 
-#: comicagg/templates/accounts/login_form.html:15
+#: comicagg/templates/accounts/login_form.html:14
 msgid "Login into your account to authorize an application"
 msgstr "Entrar en tu cuenta para autorizar una aplicación"
 
-#: comicagg/templates/accounts/login_form.html:17
-#: comicagg/templates/accounts/login_form.html:63
+#: comicagg/templates/accounts/login_form.html:16
+#: comicagg/templates/accounts/login_form.html:62
 msgid "Write your username and passwod to get you logged in."
 msgstr "Escribe tu usuario y contraseña para conectarte."
 
-#: comicagg/templates/accounts/login_form.html:31
-#: comicagg/templates/accounts/login_form.html:77
+#: comicagg/templates/accounts/login_form.html:30
+#: comicagg/templates/accounts/login_form.html:76
 msgid "User "
 msgstr "Usuario "
 
-#: comicagg/templates/accounts/login_form.html:37
-#: comicagg/templates/accounts/login_form.html:83
+#: comicagg/templates/accounts/login_form.html:36
+#: comicagg/templates/accounts/login_form.html:82
 msgid "Password "
 msgstr "Contraseña "
 
-#: comicagg/templates/accounts/login_form.html:43
-#: comicagg/templates/accounts/login_form.html:90
-#: comicagg/templates/accounts/login_form.html:92
+#: comicagg/templates/accounts/login_form.html:42
+#: comicagg/templates/accounts/login_form.html:89
+#: comicagg/templates/accounts/login_form.html:91
 msgid "Log in"
 msgstr "Entrar"
 
-#: comicagg/templates/accounts/login_form.html:50
+#: comicagg/templates/accounts/login_form.html:49
 msgid "Don't you have an account?"
 msgstr "¿No tienes una cuenta?"
 
-#: comicagg/templates/accounts/login_form.html:50
-#: comicagg/templates/accounts/login_form.html:107
-#: comicagg/templates/accounts/login_form.html:109
+#: comicagg/templates/accounts/login_form.html:49
+#: comicagg/templates/accounts/login_form.html:106
+#: comicagg/templates/accounts/login_form.html:108
 msgid "Create one"
 msgstr "Créate una"
 
-#: comicagg/templates/accounts/login_form.html:53
-#: comicagg/templates/accounts/login_form.html:115
+#: comicagg/templates/accounts/login_form.html:52
+#: comicagg/templates/accounts/login_form.html:114
 msgid "Can't remember your password?"
 msgstr "¿No recuerdas tu contraseña?"
 
-#: comicagg/templates/accounts/login_form.html:53
-#: comicagg/templates/accounts/login_form.html:119
-#: comicagg/templates/accounts/login_form.html:121
+#: comicagg/templates/accounts/login_form.html:52
+#: comicagg/templates/accounts/login_form.html:118
+#: comicagg/templates/accounts/login_form.html:120
 msgid "Send me a new password"
 msgstr "Envíame una nueva contraseña"
 
-#: comicagg/templates/accounts/login_form.html:58
+#: comicagg/templates/accounts/login_form.html:57
 msgid "Welcome to Comic Aggregator!"
 msgstr "¡Bienvenido a Comic Aggregator!"
 
-#: comicagg/templates/accounts/login_form.html:61
+#: comicagg/templates/accounts/login_form.html:60
 msgid "Login into your account"
 msgstr "Entrar en tu cuenta"
 
-#: comicagg/templates/accounts/login_form.html:103
+#: comicagg/templates/accounts/login_form.html:102
 msgid "Don't have an account?"
 msgstr "¿No tienes una cuenta?"
 
@@ -565,12 +604,6 @@ msgstr "Crear cuenta"
 #: comicagg/templates/accounts/register_done.html:3
 msgid "Account created"
 msgstr "Cuenta creada"
-
-#: comicagg/templates/accounts/register_done.html:6
-msgid ""
-"Your account has been created. You can now log in using the username you "
-"selected."
-msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
 
 #: comicagg/templates/accounts/register_done.html:7
 msgid "Back to login"

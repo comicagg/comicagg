@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -12,9 +13,8 @@ from django.template import loader
 from django.utils.translation import gettext as _
 from django.views import View
 
-from comicagg.typings import AuthenticatedHttpRequest
-
 from comicagg.about.utils import ConsentRequiredMixin, consent_required, consent_show
+from comicagg.typings import AuthenticatedHttpRequest
 
 from .forms import (
     DeleteAccountForm,
@@ -99,21 +99,19 @@ class RegisterView(ConsentRequiredMixin, View):
 
     def post(self, request: HttpRequest, *args, **kwargs):
         form = RegisterForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data["username"]
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password1"]
-            User.objects.create_user(username, email, password)
-            return redirect("accounts:done", kind="register")
-        context = {"form": form}
-        return render(request, "accounts/register.html", context)
-
-
-"""
-class LoginView(View):
-    def get(self, request: HttpRequest, *args, **kwargs):
-    def post(self, request: HttpRequest, *args, **kwargs):
-"""
+        if not form.is_valid():
+            context = {"form": form}
+            return render(request, "accounts/register.html", context)
+        username = form.cleaned_data["username"]
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password1"]
+        User.objects.create_user(username, email, password)
+        message_text = _(
+            "Your account has been created. "
+            "You can now log in using the username you selected."
+        )
+        messages.add_message(request, messages.SUCCESS, message_text)
+        return redirect("accounts:login")
 
 
 class PasswordResetView(ConsentRequiredMixin, View):
@@ -241,6 +239,7 @@ class DeleteAccount(ConsentRequiredMixin, LoginRequiredMixin, View):
             form.errors["confirmation"] = True
         context = {"form": form}
         return render(request, "accounts/delete_account_form.html", context)
+
 
 class CannotDeleteSuperuserError(Exception):
     pass

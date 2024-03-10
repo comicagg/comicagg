@@ -11,7 +11,7 @@
         <a href="{% url 'accounts:password_change' %}">{% trans 'Change password'%}</a><br/>
         <a href="{% url 'accounts:email_change' %}">{% trans 'Change e-mail'%}</a> <span id="news">({% trans 'current:'%} {{ user.email }})</span><br/><br/>
     </p>
-    <h4 class="red">Danger zone!</h4>
+    <h4 class="red">{% trans 'Danger zone!' %}</h4>
     <p class="ta-l">
         <a href="{% url 'accounts:delete_account' %}">{% trans 'Delete account' %}</a>
     </p>

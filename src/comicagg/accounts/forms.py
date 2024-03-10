@@ -1,6 +1,6 @@
 from django import forms
-from django.utils.translation import gettext as _
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from .validators import *
 
@@ -47,5 +47,8 @@ class RegisterForm(forms.Form):
         if password1 != password2:
             raise ValidationError(_("Passwords don't match!"))
 
+
 class DeleteAccountForm(forms.Form):
-    confirmation = forms.BooleanField(label='Yes, I want to delete my account', required=False)
+    confirmation = forms.BooleanField(
+        label=_("Yes, I want to delete my account"), required=False
+    )
