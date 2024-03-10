@@ -179,6 +179,23 @@ input.btn {
     padding: 0px 2px;
 }
 
+/************/
+/* Messages */
+/************/
+
+.messages {
+    list-style: none;
+    padding-inline-start: 0;
+}
+
+.messages > .success {
+    font-weight: bolder;
+    padding: 10px 15px;
+    border: 1px gray solid;
+    border-radius: 5px;
+    background-color: rgb(187, 228, 196);
+}
+
 /***************/
 /* Login views */
 /***************/
