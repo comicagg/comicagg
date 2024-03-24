@@ -6,10 +6,17 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.views import (
+    PasswordResetView,
+    PasswordResetDoneView,
+    PasswordResetConfirmView,
+    PasswordResetCompleteView,
+)
 from django.core.mail import send_mail
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.template import loader
+from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views import View
 
@@ -37,6 +44,22 @@ def done(request: HttpRequest, kind: str):
 def logout_view(request: HttpRequest):
     logout(request)
     return redirect("index")
+
+
+@consent_required
+@login_required
+def activate(request: AuthenticatedHttpRequest):
+    if request.method == "POST":
+        request.user.is_active = True
+        request.user.save()
+        return redirect("index")
+    return render(request, "accounts/activate.html", {})
+
+
+@consent_required
+@login_required
+def view_profile(request: AuthenticatedHttpRequest):
+    return render(request, "accounts/account.html", {})
 
 
 class LoginView(View):
@@ -114,64 +137,24 @@ class RegisterView(ConsentRequiredMixin, View):
         return redirect("accounts:login")
 
 
-class PasswordResetView(ConsentRequiredMixin, View):
-    def get(self, request: HttpRequest, *args, **kwargs):
-        form = PasswordResetForm()
-        context = {"form": form}
-        return render(request, "accounts/password_reset_form.html", context)
-
-    def post(self, request: HttpRequest, *args, **kwargs):
-        form = PasswordResetForm(request.POST)
-        if not form.is_valid():
-            context = {"form": form}
-            return render(request, "accounts/password_reset_form.html", context)
-        # TODO: We should send a code or something and then the user can set the password in the site
-        username_or_password = form.cleaned_data["username_or_password"]
-        # Check if there are valid email add
-        users_email = list(User.objects.filter(email__iexact=username_or_password))
-        # Check if there is a username
-        users_username = list(
-            User.objects.filter(username__iexact=username_or_password)
-        )
-        users = users_email + users_username
-        # Create new password and send email
-        for user in users:
-            new_pass = User.objects.make_random_password()
-            user.set_password(new_pass)
-            user.save()
-            email_template = loader.get_template("accounts/password_reset_email.html")
-            email_context = {
-                "new_password": new_pass,
-                "email": user.email,
-                "domain": settings.SITE_DOMAIN,
-                "site_name": settings.SITE_NAME,
-                "user": user,
-            }
-            subject = _("Password reset on %(site)s") % {"site": settings.SITE_NAME}
-            send_mail(
-                subject,
-                email_template.render(email_context),
-                None,
-                [user.email],
-            )
-        return redirect("accounts:done", kind="password_reset")
+class PasswordResetView(ConsentRequiredMixin, PasswordResetView):
+    subject_template_name = "accounts/password_reset_subject.html"
+    email_template_name = "accounts/password_reset_email.html"
+    # html_email_template_name = None
+    template_name = "accounts/password_reset_form.html"
+    form_class = PasswordResetForm
+    success_url = reverse_lazy("accounts:password_reset_done")
 
 
-@consent_required
-@login_required
-def activate(request: AuthenticatedHttpRequest):
-    if request.method == "POST":
-        request.user.is_active = True
-        request.user.save()
-        return redirect("index")
-    return render(request, "accounts/activate.html", {})
+class PasswordResetDoneView(PasswordResetDoneView):
+    template_name = "accounts/password_reset_done.html"
 
+class PasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = "accounts/password_reset_confirm.html"
+    success_url = reverse_lazy("accounts:password_reset_complete")
 
-@consent_required
-@login_required
-def view_profile(request: AuthenticatedHttpRequest):
-    return render(request, "accounts/account.html", {})
-
+class PasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = "accounts/password_reset_complete.html"
 
 class PasswordChangeView(ConsentRequiredMixin, LoginRequiredMixin, View):
     def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):

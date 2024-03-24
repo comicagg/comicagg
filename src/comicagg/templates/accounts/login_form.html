@@ -115,9 +115,9 @@
           </td>
           <td class="ta-l">
             {% if request.consent.show %}
-              <input type="button" value="{% trans 'Send me a new password' %}" popovertarget="popover_consent" popovertargetaction="show" />
+              <input type="button" value="{% trans 'Reset my password' %}" popovertarget="popover_consent" popovertargetaction="show" />
             {% else %}
-              <input type="button" value="{% trans 'Send me a new password' %}" onclick="openurl('{% url 'accounts:password_reset' %}', '_self')" />
+              <input type="button" value="{% trans 'Reset my password' %}" onclick="openurl('{% url 'accounts:password_reset' %}', '_self')" />
             {% endif %}
           </td>
         </tr>
