@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.forms import PasswordResetForm
 
 from .validators import *
 
@@ -23,9 +24,17 @@ class PasswordChangeForm(forms.Form):
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
 
 
-class PasswordResetForm(forms.Form):
-    username_or_password = forms.CharField(widget=forms.TextInput(attrs={"size": "35"}))
+class PasswordResetForm(PasswordResetForm):
+    email = forms.CharField(widget=forms.TextInput(attrs={"size": "35"}))
 
+    def get_users(self, email_or_username):
+        # Check if there are valid email add
+        users_email = list(User.objects.filter(email__iexact=email_or_username))
+        # Check if there is a username
+        users_username = list(
+            User.objects.filter(username__iexact=email_or_username)
+        )
+        return users_email + users_username
 
 class RegisterForm(forms.Form):
     username = forms.CharField(

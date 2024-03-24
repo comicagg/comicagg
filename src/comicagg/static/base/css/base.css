@@ -263,6 +263,7 @@ input.btn {
 }
 
 .errorlist li {
+    list-style: none;
 }
 
 .form_error {

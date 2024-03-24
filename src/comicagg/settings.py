@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.sessions",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     # 3rd party
     "celery",
     "django_celery_beat",

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 11:50+0000\n"
+"POT-Creation-Date: 2024-03-24 14:18+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: comicagg/accounts/forms.py:48
+#: comicagg/accounts/forms.py:57
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: comicagg/accounts/forms.py:53
+#: comicagg/accounts/forms.py:62
 msgid "Yes, I want to delete my account"
 msgstr "Sí, quiero borrar mi cuenta"
 
@@ -52,21 +52,16 @@ msgstr "Algunas letras no valen."
 msgid "That username is not valid, sorry. Please choose another."
 msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 
-#: comicagg/accounts/views.py:84
+#: comicagg/accounts/views.py:107
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: comicagg/accounts/views.py:110
+#: comicagg/accounts/views.py:133
 #: comicagg/templates/accounts/register_done.html:6
 msgid ""
 "Your account has been created. You can now log in using the username you "
 "selected."
 msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
-
-#: comicagg/accounts/views.py:150
-#, python-format
-msgid "Password reset on %(site)s"
-msgstr "Cambio de contraseña en %(site)s"
 
 #: comicagg/comics/admin.py:32
 msgid "custom function"
@@ -91,28 +86,28 @@ msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
 #: comicagg/templates/400.html:5 comicagg/templates/500.html:5
 msgid "Something went wrong :("
-msgstr ""
+msgstr "Algo fue mal :("
 
 #: comicagg/templates/400.html:6 comicagg/templates/500.html:6
 msgid "But don't worry, we're on it!"
-msgstr ""
+msgstr "Pero no te preocupes, ¡estamos en ello!"
 
 #: comicagg/templates/403.html:5
 msgid "You can't get there"
-msgstr ""
+msgstr "No puedes entrar ahí"
 
 #: comicagg/templates/403.html:6
 msgid "Sorry"
-msgstr ""
+msgstr "Lo siento"
 
 #: comicagg/templates/404.html:5
 #, python-format
 msgid "The URL <span class=\"b\">%(request_path)s</span> is invalid"
-msgstr ""
+msgstr "La URL <span class=\"b\">%(request_path)s</span> no es válida"
 
 #: comicagg/templates/404.html:6
 msgid "Did you follow an old link?"
-msgstr ""
+msgstr "¿Has seguido algún enlace antiguo?"
 
 #: comicagg/templates/about/cookie_notice.html:4
 msgid ""
@@ -376,6 +371,7 @@ msgstr "Contraseña "
 #: comicagg/templates/accounts/login_form.html:42
 #: comicagg/templates/accounts/login_form.html:89
 #: comicagg/templates/accounts/login_form.html:91
+#: comicagg/templates/accounts/password_reset_complete.html:8
 msgid "Log in"
 msgstr "Entrar"
 
@@ -395,8 +391,6 @@ msgid "Can't remember your password?"
 msgstr "¿No recuerdas tu contraseña?"
 
 #: comicagg/templates/accounts/login_form.html:52
-#: comicagg/templates/accounts/login_form.html:118
-#: comicagg/templates/accounts/login_form.html:120
 msgid "Send me a new password"
 msgstr "Envíame una nueva contraseña"
 
@@ -411,6 +405,13 @@ msgstr "Entrar en tu cuenta"
 #: comicagg/templates/accounts/login_form.html:102
 msgid "Don't have an account?"
 msgstr "¿No tienes una cuenta?"
+
+#: comicagg/templates/accounts/login_form.html:118
+#: comicagg/templates/accounts/login_form.html:120
+#: comicagg/templates/accounts/password_reset_confirm.html:29
+#: comicagg/templates/accounts/password_reset_form.html:19
+msgid "Reset my password"
+msgstr "Restablecer mi contraseña"
 
 #: comicagg/templates/accounts/password_change_done.html:3
 msgid "Password changed"
@@ -457,68 +458,84 @@ msgstr "Otra vez"
 msgid ""
 "If you can't remember your current password, use the password reset page"
 msgstr ""
-"Si no recuerdas tu contraseña sigue este enlace para cambiar tu contraseña:"
+"Si no recuerdas tu contraseña sigue este enlace para restablecer tu "
+"contraseña:"
 
 #: comicagg/templates/accounts/password_change_form.html:44
 msgid "here"
 msgstr "aquí"
 
-#: comicagg/templates/accounts/password_reset_done.html:3
-msgid "E-mail sent"
-msgstr "Correo enviado"
-
+#: comicagg/templates/accounts/password_reset_complete.html:3
+#: comicagg/templates/accounts/password_reset_complete.html:6
+#: comicagg/templates/accounts/password_reset_confirm.html:3
+#: comicagg/templates/accounts/password_reset_confirm.html:6
 #: comicagg/templates/accounts/password_reset_done.html:6
 #: comicagg/templates/accounts/password_reset_form.html:3
 #: comicagg/templates/accounts/password_reset_form.html:6
 msgid "Password reset"
-msgstr "Reseteo de contraseña"
+msgstr "Restablecer contraseña"
+
+#: comicagg/templates/accounts/password_reset_complete.html:7
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Tu contraseña ha sido cambiada. Ahora puedes iniciar sesión de nuevo."
+
+#: comicagg/templates/accounts/password_reset_confirm.html:9
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Por favor, introduce tu nueva contraseña dos veces para verificar que la has "
+"introducido correctamente"
+
+#: comicagg/templates/accounts/password_reset_confirm.html:15
+msgid "New password:"
+msgstr "Nueva contraseña:"
+
+#: comicagg/templates/accounts/password_reset_confirm.html:22
+msgid "Confirm password:"
+msgstr "Confirmar contraseña:"
+
+#: comicagg/templates/accounts/password_reset_confirm.html:34
+msgid ""
+"The password reset link used is invalid, possibly because it has already "
+"been used. Please request a new password reset."
+msgstr ""
+"En enlace que has usado es inválido, posiblemente porque ya se ha usado "
+"antes. Por favor pide uno nuevo restableciendo tu contraseña."
+
+#: comicagg/templates/accounts/password_reset_done.html:3
+msgid "E-mail sent"
+msgstr "Correo enviado"
 
 #: comicagg/templates/accounts/password_reset_done.html:7
 msgid ""
-"If you provided a correct username or e-mail, an e-mail has been sent to the "
-"associated e-mail address.<br/>You will find your new password in it."
+"If you provided a correct username or e-mail, you should be receving an e-"
+"mail shortly.<br/>You will find a password reset link in it."
 msgstr ""
 "Si has introducido un usuario o una dirección de correo electrónico "
-"correctos, un correo electrónico ha sido enviado a la dirección de correo."
-"<br/>Encontrarás la nueva contraseña en él."
+"correctos, deberías recibir un correo electrónico en breve.<br/>En él "
+"encontrarás un enlace para restablecer tu contraseña."
 
 #: comicagg/templates/accounts/password_reset_done.html:8
 msgid ""
-"If you don't receive any e-mail in the next minutes, try again reseting the "
-"password."
+"If you don't receive any e-mail in the following minutes, you may try again."
 msgstr ""
 "Si no recibes ningún correo en los próximos minutos, prueba de nuevo a "
 "restablecer la contraseña."
 
 #: comicagg/templates/accounts/password_reset_email.html:2
-msgid "You're receiving this e-mail because you requested a password reset"
+msgid ""
+"You are receiving this e-mail because you or someone else requested a "
+"password reset for your user account at"
 msgstr ""
-"Estás recibiendo este correo electrónico porque has solicitado una nueva "
-"contraseña"
+"Estás recibiendo este correo electrónico porque tú u otra persona ha "
+"solicitado una nueva contraseña en"
 
-#: comicagg/templates/accounts/password_reset_email.html:3
-#, python-format
-msgid "for your user account at %(site_name)s"
-msgstr "para tu cuenta de usuario en %(site_name)s"
+#: comicagg/templates/accounts/password_reset_email.html:4
+msgid "Follow this link to reset the password:"
+msgstr "Sigue este enlace para restablecer la contraseña:"
 
-#: comicagg/templates/accounts/password_reset_email.html:5
-#, python-format
-msgid "Your new password is: %(new_password)s"
-msgstr "Tu nueva contraseña es: %(new_password)s"
-
-#: comicagg/templates/accounts/password_reset_email.html:7
-msgid "Feel free to change this password by going to this page:"
-msgstr "Cambia esta contraseña yendo a esta página:"
-
-#: comicagg/templates/accounts/password_reset_email.html:9
-msgid "Your username, in case you've forgotten:"
-msgstr "Tu usuario es, por si lo habías olvidado:"
-
-#: comicagg/templates/accounts/password_reset_email.html:11
-msgid "Thanks for using our site!"
-msgstr "¡Gracias por usar nuestro sitio! =)"
-
-#: comicagg/templates/accounts/password_reset_email.html:13
+#: comicagg/templates/accounts/password_reset_email.html:6
 #, python-format
 msgid "The %(site_name)s team"
 msgstr "El equipo de %(site_name)s"
@@ -536,13 +553,13 @@ msgid "Your username or email"
 msgstr "Tu usuario o correo"
 
 #: comicagg/templates/accounts/password_reset_form.html:19
-msgid "Reset my password"
-msgstr "Borra mi contraseña"
-
-#: comicagg/templates/accounts/password_reset_form.html:19
 #: comicagg/templates/accounts/register.html:47
 msgid "or go back"
 msgstr "o volver atrás"
+
+#: comicagg/templates/accounts/password_reset_subject.html:2
+msgid "Password reset on %(site_name)s"
+msgstr "Restablecer contraseña en %(site_name)s"
 
 #: comicagg/templates/accounts/register.html:3
 msgid "New account"
@@ -1003,6 +1020,23 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: comicagg/templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
+
+#, python-format
+#~ msgid "for your user account at %(site_name)s"
+#~ msgstr "para tu cuenta de usuario en %(site_name)s"
+
+#, python-format
+#~ msgid "Your new password is: %(new_password)s"
+#~ msgstr "Tu nueva contraseña es: %(new_password)s"
+
+#~ msgid "Feel free to change this password by going to this page:"
+#~ msgstr "Cambia esta contraseña yendo a esta página:"
+
+#~ msgid "Your username, in case you've forgotten:"
+#~ msgstr "Tu usuario es, por si lo habías olvidado:"
+
+#~ msgid "Thanks for using our site!"
+#~ msgstr "¡Gracias por usar nuestro sitio! =)"
 
 #~ msgid "If you would like to contact us, write an email to this address:"
 #~ msgstr "Si quieres contactar con nosotros, escribe a este email:"

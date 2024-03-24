@@ -93,6 +93,7 @@ These are the tasks needed to get an environment running and migrate the current
    docker compose exec app python manage.py migrate django_celery_results
    docker compose exec app python manage.py migrate mailer
    docker compose exec app python manage.py migrate sessions
+   docker compose exec app python manage.py migrate sites
    ```
 
    At this point, [migrate old data](/deployment/db_migration.md) into the database. And then apply the rest of migrations:
