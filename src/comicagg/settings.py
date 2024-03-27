@@ -206,6 +206,9 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.SHA1PasswordHasher",
 ]
 
+# The number of seconds a password reset link is valid for.
+PASSWORD_RESET_TIMEOUT = django_env.int("PASSWORD_RESET_TIMEOUT", 30 * 60)
+
 # ######################
 # #                    #
 # #   URLs and paths   #
