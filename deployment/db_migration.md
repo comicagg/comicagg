@@ -29,6 +29,16 @@ sudo -u postgres pg_dump comicagg | gzip > comicagg-20240107.sql.gz
    docker exec -i db psql -U comicagg -d comicagg < comicagg-20240107.sql
    ```
 
+   Alternatively, the file can be copied to the container and then imported:
+
+   ```shell
+   # Upload the backup to the container
+   docker compose -f compose.dev.yml cp .\comicagg-20240107.sql db:/tmp
+   # Run psql in the container
+   psql -U comicagg -d comicagg  /tmp/comicagg-20240107.sql
+   ```
+
+
 4. Run the following SQL to dump data from the old schema to the public schema:
 
    ```SQL

@@ -16,5 +16,12 @@
   "python.analysis.addImport.exactMatchOnly": true,
   "python.analysis.diagnosticMode": "workspace",
   "python.analysis.enablePytestExtra": false,
-  "python.analysis.stubPath": "src"
+  "python.analysis.stubPath": "src",
+  "black-formatter.args": [
+    "--line-length",
+    "110"
+  ],
+  "editor.rulers": [
+    110
+  ]
 }
