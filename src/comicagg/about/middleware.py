@@ -31,15 +31,6 @@ class CookieConsentMiddleware:
             # Cookie consent pending
             request.consent.show = True
             if settings.SESSION_COOKIE_NAME in request.COOKIES:
-                # The user already has a session, but they haven't accepted the cookies yet.
-                # We will redirect to login with consent being displayed.
-                request.COOKIES.pop(settings.SESSION_COOKIE_NAME)
                 request.consent.redirecting = True
 
-        response = self.get_response(request)
-
-        if request.consent.rejected or request.consent.redirecting:
-            response.delete_cookie(settings.SESSION_COOKIE_NAME)
-            # CSRF should not be removed in case the user needs to submit the consent
-            # response.delete_cookie(settings.CSRF_COOKIE_NAME)
-        return response
+        return self.get_response(request)
