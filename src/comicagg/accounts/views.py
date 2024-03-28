@@ -5,17 +5,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib.auth.views import (
-    PasswordResetCompleteView,
-    PasswordResetConfirmView,
-    PasswordResetDoneView,
-    PasswordResetView,
-)
+from django.contrib.auth.views import PasswordChangeDoneView as DjPasswordChangeDoneView
+from django.contrib.auth.views import PasswordChangeView as DjPasswordChangeView
+from django.contrib.auth.views import PasswordResetCompleteView as DjPasswordResetCompleteView
+from django.contrib.auth.views import PasswordResetConfirmView as DjPasswordResetConfirmView
+from django.contrib.auth.views import PasswordResetDoneView as DjPasswordResetDoneView
+from django.contrib.auth.views import PasswordResetView as DjPasswordResetView
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views import View
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 
 from comicagg.about.utils import ConsentRequiredMixin, consent_required, consent_show
 from comicagg.accounts.utils import (
@@ -30,18 +32,9 @@ from .forms import (
     DeleteAccountForm,
     EmailChangeForm,
     LoginForm,
-    PasswordChangeForm,
     PasswordResetForm,
     RegisterForm,
 )
-
-
-def done(request: HttpRequest, kind: str):
-    try:
-        return render(request, f"accounts/{kind}_done.html", {})
-    except Exception:
-        print(f"Error rendering {kind}_done.html")
-        return redirect("index")
 
 
 def logout_view(request: HttpRequest):
@@ -49,20 +42,27 @@ def logout_view(request: HttpRequest):
     return redirect("index")
 
 
-@consent_required
-@login_required
-def activate(request: AuthenticatedHttpRequest):
-    if request.method == "POST":
+# @consent_required
+# @login_required
+# def activate(request: AuthenticatedHttpRequest):
+#     if request.method == "POST":
+#         request.user.is_active = True
+#         request.user.save()
+#         return redirect("index")
+#     return render(request, "accounts/activate.html", {})
+
+
+class ActivateView(ConsentRequiredMixin, LoginRequiredMixin, TemplateView):
+    template_name = "accounts/activate.html"
+
+    def post(self, request, *args, **kwargs):
         request.user.is_active = True
         request.user.save()
         return redirect("index")
-    return render(request, "accounts/activate.html", {})
 
 
-@consent_required
-@login_required
-def view_profile(request: AuthenticatedHttpRequest):
-    return render(request, "accounts/account.html", {})
+class ProfileView(ConsentRequiredMixin, LoginRequiredMixin, TemplateView):
+    template_name = "accounts/account.html"
 
 
 class LoginView(View):
@@ -128,15 +128,13 @@ class RegisterView(ConsentRequiredMixin, View):
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password1"]
         User.objects.create_user(username, email, password)
-        message_text = _(
-            "Your account has been created. " "You can now log in using the username you selected."
-        )
+        message_text = _("Your account has been created. You can now log in using the username you selected.")
         messages.add_message(request, messages.SUCCESS, message_text)
         send_account_created_email(request, email, username)
         return redirect("accounts:login")
 
 
-class PasswordResetView(ConsentRequiredMixin, PasswordResetView):
+class PasswordResetView(ConsentRequiredMixin, DjPasswordResetView):
     subject_template_name = "accounts/password_reset_subject.html"
     email_template_name = "accounts/password_reset_email.html"
     # html_email_template_name = None
@@ -145,11 +143,11 @@ class PasswordResetView(ConsentRequiredMixin, PasswordResetView):
     success_url = reverse_lazy("accounts:password_reset_done")
 
 
-class PasswordResetDoneView(PasswordResetDoneView):
+class PasswordResetDoneView(DjPasswordResetDoneView):
     template_name = "accounts/password_reset_done.html"
 
 
-class PasswordResetConfirmView(PasswordResetConfirmView):
+class PasswordResetConfirmView(DjPasswordResetConfirmView):
     template_name = "accounts/password_reset_confirm.html"
     success_url = reverse_lazy("accounts:password_reset_complete")
 
@@ -160,81 +158,65 @@ class PasswordResetConfirmView(PasswordResetConfirmView):
         return response
 
 
-class PasswordResetCompleteView(PasswordResetCompleteView):
+class PasswordResetCompleteView(DjPasswordResetCompleteView):
     template_name = "accounts/password_reset_complete.html"
 
 
-class PasswordChangeView(ConsentRequiredMixin, LoginRequiredMixin, View):
-    def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
-        form = PasswordChangeForm()
-        context = {"form": form}
-        return render(request, "accounts/password_change_form.html", context)
+class PasswordChangeView(ConsentRequiredMixin, DjPasswordChangeView):
+    template_name = "accounts/password_change_form.html"
+    success_url = reverse_lazy("accounts:password_change_done")
 
-    def post(self, request: AuthenticatedHttpRequest, *args, **kwargs):
-        form = PasswordChangeForm(request.POST)
-        if form.is_valid():
-            old = form.cleaned_data["old_password"]
-            new1 = form.cleaned_data["new_password1"]
-            new2 = form.cleaned_data["new_password2"]
-            if not request.user.check_password(old):
-                form.errors["not_valid"] = True
-            if new1 != new2:
-                form.errors["are_different"] = True
-            if not form.errors:
-                request.user.set_password(new1)
-                request.user.save()
-                send_password_updated_email(request, request.user.email)
-                return redirect("accounts:done", kind="password_change")
-        context = {"form": form}
-        return render(request, "accounts/password_change_form.html", context)
+    def form_valid(self, form):
+        request = cast(AuthenticatedHttpRequest, self.request)
+        response = super().form_valid(form)
+        send_password_updated_email(request, request.user.email)
+        return response
 
 
-class UpdateEmailView(ConsentRequiredMixin, LoginRequiredMixin, View):
-    def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
-        form = EmailChangeForm()
-        context = {"form": form}
-        return render(request, "accounts/email_change_form.html", context)
-
-    def post(self, request: AuthenticatedHttpRequest, *args, **kwargs):
-        form = EmailChangeForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
-            if not request.user.check_password(password):
-                form.errors["incorrect_password"] = True
-            else:
-                old_email = request.user.email
-                request.user.email = email
-                request.user.save()
-                send_email_updated_email(request, email, old_email)
-                return redirect("accounts:done", kind="email_change")
-        context = {"form": form}
-        return render(request, "accounts/email_change_form.html", context)
+class PasswordChangeDoneView(DjPasswordChangeDoneView):
+    template_name = "accounts/password_change_done.html"
+    title = _("Password change successful")
 
 
-class DeleteAccountView(ConsentRequiredMixin, LoginRequiredMixin, View):
-    def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
-        form = DeleteAccountForm()
-        context = {"form": form}
-        return render(request, "accounts/delete_account_form.html", context)
+class UpdateEmailView(ConsentRequiredMixin, LoginRequiredMixin, FormView):
+    template_name = "accounts/email_change_form.html"
+    form_class = EmailChangeForm
+    success_url = reverse_lazy("accounts:email_change_done")
 
-    def post(self, request: AuthenticatedHttpRequest, *args, **kwargs):
-        form = DeleteAccountForm(request.POST)
-        if form.is_valid():
-            confirmation = form.cleaned_data["confirmation"]
-            if confirmation:
-                user = User.objects.get(pk=request.user.pk)
-                if user.is_superuser:
-                    raise CannotDeleteSuperuserError()
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
-                logout(request)
-                user.delete()
-                send_account_deleted_email(request, user.email)
-                return redirect("accounts:done", kind="delete_account")
-            form.errors["confirmation"] = True
-        context = {"form": form}
-        return render(request, "accounts/delete_account_form.html", context)
+    def form_valid(self, form: EmailChangeForm):
+        old_email, new_email = form.save()
+        if old_email != new_email:
+            send_email_updated_email(self.request, new_email, old_email)
+        return super().form_valid(form)
+
+
+class UpdateEmailDoneView(LoginRequiredMixin, TemplateView):
+    template_name = "accounts/email_change_done.html"
+
+
+class DeleteAccountView(ConsentRequiredMixin, LoginRequiredMixin, FormView):
+    template_name = "accounts/delete_account_form.html"
+    form_class = DeleteAccountForm
+    success_url = reverse_lazy("accounts:delete_account_done")
+
+    def form_valid(self, form):
+        user = User.objects.get(pk=self.request.user.pk)
+        if user.is_superuser:
+            raise CannotDeleteSuperuserError()
+        logout(self.request)
+        user.delete()
+        send_account_deleted_email(self.request, user.email)
+        return super().form_valid(form)
 
 
 class CannotDeleteSuperuserError(Exception):
     pass
+
+
+class DeleteAccountDoneView(TemplateView):
+    template_name = "accounts/delete_account_done.html"

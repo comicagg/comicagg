@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-28 13:47+0000\n"
+"POT-Creation-Date: 2024-03-28 17:33+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -24,13 +24,22 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: comicagg/accounts/forms.py:57
+#: comicagg/accounts/forms.py:30
+msgid "Password is invalid!"
+msgstr "¡La contraseña no es válida!"
+
+#: comicagg/accounts/forms.py:65
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: comicagg/accounts/forms.py:62
+#: comicagg/accounts/forms.py:69
 msgid "Yes, I want to delete my account"
 msgstr "Sí, quiero borrar mi cuenta"
+
+#: comicagg/accounts/forms.py:74
+#: comicagg/templates/accounts/delete_account_form.html:14
+msgid "Please, confirm that you want to delete your account"
+msgstr "Por favor, confirma que quieres borrar tu cuenta"
 
 #: comicagg/accounts/models.py:38
 msgid "User profile"
@@ -74,12 +83,16 @@ msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: comicagg/accounts/views.py:132
+#: comicagg/accounts/views.py:131
 #: comicagg/templates/accounts/register_done.html:6
 msgid ""
 "Your account has been created. You can now log in using the username you "
 "selected."
 msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
+
+#: comicagg/accounts/views.py:178
+msgid "Password change successful"
+msgstr "Contraseña actualizada"
 
 #: comicagg/comics/admin.py:32
 msgid "custom function"
@@ -309,10 +322,6 @@ msgstr ""
 "Aquí puedes borrar tu cuenta. Podrás crear una nueva cuenta con el mismo "
 "correo en el futuro"
 
-#: comicagg/templates/accounts/delete_account_form.html:14
-msgid "Please, confirm that you want to delete your account"
-msgstr "Por favor, confirma que quieres borrar tu cuenta"
-
 #: comicagg/templates/accounts/delete_account_form.html:23
 msgid "Delete my account"
 msgstr "Borrar mi cuenta"
@@ -345,8 +354,8 @@ msgid ""
 "You are receiving this notification because the e-mail address for your "
 "account at %(site_name)s has been updated to this address: %(email)s."
 msgstr ""
-"Estás recibiendo esta notificación porque la dirección de e-mail de tu cuenta "
-"en %(site_name)s ha sido actualizada a esta dirección: %(email)s."
+"Estás recibiendo esta notificación porque la dirección de e-mail de tu "
+"cuenta en %(site_name)s ha sido actualizada a esta dirección: %(email)s."
 
 #: comicagg/templates/accounts/email_change_form.html:3
 msgid "E-mail change"
@@ -374,6 +383,7 @@ msgid "New e-mail address"
 msgstr "Nueva dirección"
 
 #: comicagg/templates/accounts/email_change_form.html:34
+#: comicagg/templates/accounts/password_change_form.html:41
 msgid "Save"
 msgstr "Guardar"
 
@@ -467,8 +477,8 @@ msgid ""
 "You are receiving this notification because the password for your account at "
 "%(site_name)s has been updated."
 msgstr ""
-"Estás recibiendo esta notificación porque la contraseña de tu cuenta "
-"en %(site_name)s ha sido actualizada."
+"Estás recibiendo esta notificación porque la contraseña de tu cuenta en "
+"%(site_name)s ha sido actualizada."
 
 #: comicagg/templates/accounts/password_change_form.html:3
 #: comicagg/templates/accounts/password_change_form.html:6
@@ -502,10 +512,6 @@ msgstr "Nueva contraseña"
 #: comicagg/templates/accounts/password_change_form.html:34
 msgid "New password again"
 msgstr "Otra vez"
-
-#: comicagg/templates/accounts/password_change_form.html:41
-msgid "Change it"
-msgstr "Cámbialo"
 
 #: comicagg/templates/accounts/password_change_form.html:44
 msgid ""
@@ -581,8 +587,8 @@ msgid ""
 "You are receiving this notification because you or someone else requested a "
 "password reset for your user account at"
 msgstr ""
-"Estás recibiendo esta notificación porque tú u otra persona ha "
-"solicitado una nueva contraseña en"
+"Estás recibiendo esta notificación porque tú u otra persona ha solicitado "
+"una nueva contraseña en"
 
 #: comicagg/templates/accounts/password_reset_email.html:4
 msgid "Follow this link to reset the password:"
@@ -677,8 +683,8 @@ msgid ""
 "You are receiving this notification because this e-mail address has been "
 "used in a new account at %(site_name)s."
 msgstr ""
-"Estás recibiendo esta notificación porque esta dirección ha sido usada "
-"en una nueva cuenta en %(site_name)s."
+"Estás recibiendo esta notificación porque esta dirección ha sido usada en "
+"una nueva cuenta en %(site_name)s."
 
 #: comicagg/templates/accounts/register_email.html:3
 #, python-format
@@ -1080,6 +1086,9 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: comicagg/templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
+
+#~ msgid "Change it"
+#~ msgstr "Cámbiala"
 
 #, python-format
 #~ msgid "for your user account at %(site_name)s"
