@@ -1,26 +1,28 @@
-from typing import Any
+from typing import Any, cast
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import (
-    PasswordResetView,
-    PasswordResetDoneView,
-    PasswordResetConfirmView,
     PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetView,
 )
-from django.core.mail import send_mail
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.template import loader
 from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.views import View
 
 from comicagg.about.utils import ConsentRequiredMixin, consent_required, consent_show
+from comicagg.accounts.utils import (
+    send_account_created_email,
+    send_account_deleted_email,
+    send_password_updated_email,
+)
 from comicagg.typings import AuthenticatedHttpRequest
 
 from .forms import (
@@ -93,11 +95,7 @@ class LoginView(View):
             login(request, user)
             if user.is_active:
                 # Redirect to the page he was requesting.
-                return (
-                    HttpResponseRedirect(next_url)
-                    if next_url
-                    else redirect("comics:read")
-                )
+                return HttpResponseRedirect(next_url) if next_url else redirect("comics:read")
             # User was inactive, redirect to activate page
             return redirect("accounts:activate")
         # Return an 'invalid login' error message.
@@ -130,10 +128,10 @@ class RegisterView(ConsentRequiredMixin, View):
         password = form.cleaned_data["password1"]
         User.objects.create_user(username, email, password)
         message_text = _(
-            "Your account has been created. "
-            "You can now log in using the username you selected."
+            "Your account has been created. " "You can now log in using the username you selected."
         )
         messages.add_message(request, messages.SUCCESS, message_text)
+        send_account_created_email(request, email, username)
         return redirect("accounts:login")
 
 
@@ -149,12 +147,21 @@ class PasswordResetView(ConsentRequiredMixin, PasswordResetView):
 class PasswordResetDoneView(PasswordResetDoneView):
     template_name = "accounts/password_reset_done.html"
 
+
 class PasswordResetConfirmView(PasswordResetConfirmView):
     template_name = "accounts/password_reset_confirm.html"
     success_url = reverse_lazy("accounts:password_reset_complete")
 
+    def dispatch(self, request, *args, **kwargs):
+        response = super().dispatch(request, *args, **kwargs)
+        if type(response) is HttpResponseRedirect and response.url == self.success_url:
+            send_password_updated_email(request, self.user.email)
+        return response
+
+
 class PasswordResetCompleteView(PasswordResetCompleteView):
     template_name = "accounts/password_reset_complete.html"
+
 
 class PasswordChangeView(ConsentRequiredMixin, LoginRequiredMixin, View):
     def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
@@ -175,12 +182,13 @@ class PasswordChangeView(ConsentRequiredMixin, LoginRequiredMixin, View):
             if not form.errors:
                 request.user.set_password(new1)
                 request.user.save()
+                send_password_updated_email(request, request.user.email)
                 return redirect("accounts:done", kind="password_change")
         context = {"form": form}
         return render(request, "accounts/password_change_form.html", context)
 
 
-class UpdateEmail(ConsentRequiredMixin, LoginRequiredMixin, View):
+class UpdateEmailView(ConsentRequiredMixin, LoginRequiredMixin, View):
     def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = EmailChangeForm()
         context = {"form": form}
@@ -201,7 +209,7 @@ class UpdateEmail(ConsentRequiredMixin, LoginRequiredMixin, View):
         return render(request, "accounts/email_change_form.html", context)
 
 
-class DeleteAccount(ConsentRequiredMixin, LoginRequiredMixin, View):
+class DeleteAccountView(ConsentRequiredMixin, LoginRequiredMixin, View):
     def get(self, request: AuthenticatedHttpRequest, *args, **kwargs):
         form = DeleteAccountForm()
         context = {"form": form}
@@ -218,6 +226,7 @@ class DeleteAccount(ConsentRequiredMixin, LoginRequiredMixin, View):
 
                 logout(request)
                 user.delete()
+                send_account_deleted_email(request, user.email)
                 return redirect("accounts:done", kind="delete_account")
             form.errors["confirmation"] = True
         context = {"form": form}
