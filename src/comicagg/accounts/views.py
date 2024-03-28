@@ -21,6 +21,7 @@ from comicagg.about.utils import ConsentRequiredMixin, consent_required, consent
 from comicagg.accounts.utils import (
     send_account_created_email,
     send_account_deleted_email,
+    send_email_updated_email,
     send_password_updated_email,
 )
 from comicagg.typings import AuthenticatedHttpRequest
@@ -202,8 +203,10 @@ class UpdateEmailView(ConsentRequiredMixin, LoginRequiredMixin, View):
             if not request.user.check_password(password):
                 form.errors["incorrect_password"] = True
             else:
+                old_email = request.user.email
                 request.user.email = email
                 request.user.save()
+                send_email_updated_email(request, email, old_email)
                 return redirect("accounts:done", kind="email_change")
         context = {"form": form}
         return render(request, "accounts/email_change_form.html", context)

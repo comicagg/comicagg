@@ -2,7 +2,9 @@
 {% load i18n %}
 {% block title %}{% trans 'E-mail updated'%}{% endblock %}
 {% block content %}
-<h3>{% trans 'Change e-mail address'%}</h3>
-<p class="info">{% trans 'Your e-mail address has been changed.'%}</p>
-<div class="text_center"><a href="{% url 'accounts:profile_edit' %}">{% trans 'Back to account settings.'%}</a></div>
+<div class="box">
+  <h3>{% trans 'Change e-mail address'%}</h3>
+  <p class="info">{% trans 'Your e-mail address has been changed.'%}</p>
+  <div class="text_center"><a href="{% url 'accounts:profile' %}">{% trans 'Back to account settings.'%}</a></div>
+</div>
 {% endblock %}

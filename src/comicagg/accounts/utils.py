@@ -9,9 +9,16 @@ def get_profile(user):
     return UserProfile.objects.get(user=user)
 
 
+def send_email_updated_email(request: HttpRequest, to_email: str, old_email: str):
+    subject = _("Email updated")
+    context = {"email": to_email}
+    send_email(request, old_email, subject, "accounts/email_change_email.html", context)
+    send_email(request, to_email, subject, "accounts/email_change_email.html", context)
+
+
 def send_password_updated_email(request: HttpRequest, to_email: str):
     subject = _("Password updated")
-    send_email(request, to_email, subject, "accounts/email_change_email.html")
+    send_email(request, to_email, subject, "accounts/password_change_email.html")
 
 
 def send_account_created_email(request: HttpRequest, to_email: str, username: str):
