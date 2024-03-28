@@ -19,14 +19,14 @@ TaskDescription = namedtuple(
 
 TASKS = [
     TaskDescription(
-        task="comicagg.comics.tasks.update_comics.update_comics",
+        task="comics.tasks.update_comics.update_comics",
         name="Update comics",
         description="Update all comics",
         period=HOURS,
         period_every=4,
     ),
     TaskDescription(
-        task="comicagg.accounts.tasks.inactive_users.inactive_users",
+        task="accounts.tasks.inactive_users.inactive_users",
         name="Disable inactive users",
         description="Disable inactive users",
         period=DAYS,
