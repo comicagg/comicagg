@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-24 14:18+0000\n"
+"POT-Creation-Date: 2024-03-28 17:33+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -24,13 +24,22 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: comicagg/accounts/forms.py:57
+#: comicagg/accounts/forms.py:30
+msgid "Password is invalid!"
+msgstr "¡La contraseña no es válida!"
+
+#: comicagg/accounts/forms.py:65
 msgid "Passwords don't match!"
 msgstr "¡Las contraseñas no coinciden!"
 
-#: comicagg/accounts/forms.py:62
+#: comicagg/accounts/forms.py:69
 msgid "Yes, I want to delete my account"
 msgstr "Sí, quiero borrar mi cuenta"
+
+#: comicagg/accounts/forms.py:74
+#: comicagg/templates/accounts/delete_account_form.html:14
+msgid "Please, confirm that you want to delete your account"
+msgstr "Por favor, confirma que quieres borrar tu cuenta"
 
 #: comicagg/accounts/models.py:38
 msgid "User profile"
@@ -39,6 +48,24 @@ msgstr "Perfil de usuario"
 #: comicagg/accounts/models.py:39
 msgid "User profiles"
 msgstr "Perfiles de usuario"
+
+#: comicagg/accounts/utils.py:13
+msgid "Email updated"
+msgstr "Correo electrónico actualizado"
+
+#: comicagg/accounts/utils.py:20
+msgid "Password updated"
+msgstr "Contraseña cambiada"
+
+#: comicagg/accounts/utils.py:25
+#: comicagg/templates/accounts/register_done.html:3
+msgid "Account created"
+msgstr "Cuenta creada"
+
+#: comicagg/accounts/utils.py:31
+#: comicagg/templates/accounts/delete_account_done.html:3
+msgid "Account deleted"
+msgstr "Cuenta borrada"
 
 #: comicagg/accounts/validators.py:9
 msgid "Wrong word!"
@@ -52,16 +79,20 @@ msgstr "Algunas letras no valen."
 msgid "That username is not valid, sorry. Please choose another."
 msgstr "El nombre de usuario no es válido. Por favor, elige otro."
 
-#: comicagg/accounts/views.py:107
+#: comicagg/accounts/views.py:106
 msgid "Username or password not valid!"
 msgstr "Usuario o contraseña no válida"
 
-#: comicagg/accounts/views.py:133
+#: comicagg/accounts/views.py:131
 #: comicagg/templates/accounts/register_done.html:6
 msgid ""
 "Your account has been created. You can now log in using the username you "
 "selected."
 msgstr "Tu cuenta ha sido creada. Ahora puedes conectarte con ese usuario."
+
+#: comicagg/accounts/views.py:178
+msgid "Password change successful"
+msgstr "Contraseña actualizada"
 
 #: comicagg/comics/admin.py:32
 msgid "custom function"
@@ -253,10 +284,6 @@ msgstr ""
 msgid "Reactivate"
 msgstr "Reactivar"
 
-#: comicagg/templates/accounts/delete_account_done.html:3
-msgid "Account deleted"
-msgstr "Cuenta borrada"
-
 #: comicagg/templates/accounts/delete_account_done.html:6
 msgid "Your account has been deleted"
 msgstr "Tu cuenta ha sido borrada"
@@ -269,6 +296,24 @@ msgstr "Gracias por usar nuestro servicio"
 msgid "To the welcome page"
 msgstr "A la página de bienvenida"
 
+#: comicagg/templates/accounts/delete_account_email.html:1
+#, python-format
+msgid ""
+"You are receiving this notification to confirm that your account at "
+"%(site_name)s has been deleted."
+msgstr ""
+"Estás recibiendo esta notificación para confirmar que tu cuenta en "
+"%(site_name)s ha sido eliminada."
+
+#: comicagg/templates/accounts/delete_account_email.html:3
+#: comicagg/templates/accounts/email_change_email.html:3
+#: comicagg/templates/accounts/password_change_email.html:3
+#: comicagg/templates/accounts/password_reset_email.html:6
+#: comicagg/templates/accounts/register_email.html:5
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "El equipo de %(site_name)s"
+
 #: comicagg/templates/accounts/delete_account_form.html:9
 msgid ""
 "You can delete your account here. You will be able to create a new account "
@@ -276,10 +321,6 @@ msgid ""
 msgstr ""
 "Aquí puedes borrar tu cuenta. Podrás crear una nueva cuenta con el mismo "
 "correo en el futuro"
-
-#: comicagg/templates/accounts/delete_account_form.html:14
-msgid "Please, confirm that you want to delete your account"
-msgstr "Por favor, confirma que quieres borrar tu cuenta"
 
 #: comicagg/templates/accounts/delete_account_form.html:23
 msgid "Delete my account"
@@ -294,18 +335,27 @@ msgstr "Volver"
 msgid "E-mail updated"
 msgstr "Correo electrónico actualizado"
 
-#: comicagg/templates/accounts/email_change_done.html:5
+#: comicagg/templates/accounts/email_change_done.html:6
 #: comicagg/templates/accounts/email_change_form.html:8
 msgid "Change e-mail address"
 msgstr "Cambiar correo electrónico"
 
-#: comicagg/templates/accounts/email_change_done.html:6
+#: comicagg/templates/accounts/email_change_done.html:7
 msgid "Your e-mail address has been changed."
 msgstr "Tu dirección de correo electrónico ha sido cambiada."
 
-#: comicagg/templates/accounts/email_change_done.html:7
+#: comicagg/templates/accounts/email_change_done.html:8
 msgid "Back to account settings."
 msgstr "Volver a la configuración de la cuenta."
+
+#: comicagg/templates/accounts/email_change_email.html:1
+#, python-format
+msgid ""
+"You are receiving this notification because the e-mail address for your "
+"account at %(site_name)s has been updated to this address: %(email)s."
+msgstr ""
+"Estás recibiendo esta notificación porque la dirección de e-mail de tu "
+"cuenta en %(site_name)s ha sido actualizada a esta dirección: %(email)s."
 
 #: comicagg/templates/accounts/email_change_form.html:3
 msgid "E-mail change"
@@ -334,8 +384,8 @@ msgstr "Nueva dirección"
 
 #: comicagg/templates/accounts/email_change_form.html:34
 #: comicagg/templates/accounts/password_change_form.html:41
-msgid "Change it"
-msgstr "Cámbialo"
+msgid "Save"
+msgstr "Guardar"
 
 #: comicagg/templates/accounts/email_change_form.html:37
 msgid "Go back."
@@ -420,6 +470,15 @@ msgstr "Contraseña cambiada"
 #: comicagg/templates/accounts/password_change_done.html:7
 msgid "Your password has been changed."
 msgstr "Tu contraseña ha sido cambiada."
+
+#: comicagg/templates/accounts/password_change_email.html:1
+#, python-format
+msgid ""
+"You are receiving this notification because the password for your account at "
+"%(site_name)s has been updated."
+msgstr ""
+"Estás recibiendo esta notificación porque la contraseña de tu cuenta en "
+"%(site_name)s ha sido actualizada."
 
 #: comicagg/templates/accounts/password_change_form.html:3
 #: comicagg/templates/accounts/password_change_form.html:6
@@ -525,20 +584,15 @@ msgstr ""
 
 #: comicagg/templates/accounts/password_reset_email.html:2
 msgid ""
-"You are receiving this e-mail because you or someone else requested a "
+"You are receiving this notification because you or someone else requested a "
 "password reset for your user account at"
 msgstr ""
-"Estás recibiendo este correo electrónico porque tú u otra persona ha "
-"solicitado una nueva contraseña en"
+"Estás recibiendo esta notificación porque tú u otra persona ha solicitado "
+"una nueva contraseña en"
 
 #: comicagg/templates/accounts/password_reset_email.html:4
 msgid "Follow this link to reset the password:"
 msgstr "Sigue este enlace para restablecer la contraseña:"
-
-#: comicagg/templates/accounts/password_reset_email.html:6
-#, python-format
-msgid "The %(site_name)s team"
-msgstr "El equipo de %(site_name)s"
 
 #: comicagg/templates/accounts/password_reset_form.html:7
 msgid ""
@@ -557,7 +611,8 @@ msgstr "Tu usuario o correo"
 msgid "or go back"
 msgstr "o volver atrás"
 
-#: comicagg/templates/accounts/password_reset_subject.html:2
+#: comicagg/templates/accounts/password_reset_subject.html:1
+#, python-format
 msgid "Password reset on %(site_name)s"
 msgstr "Restablecer contraseña en %(site_name)s"
 
@@ -618,13 +673,24 @@ msgstr "Escribe aquí la palabra \"comic\" (sin las comillas)."
 msgid "Create account"
 msgstr "Crear cuenta"
 
-#: comicagg/templates/accounts/register_done.html:3
-msgid "Account created"
-msgstr "Cuenta creada"
-
 #: comicagg/templates/accounts/register_done.html:7
 msgid "Back to login"
 msgstr "Volver al inicio"
+
+#: comicagg/templates/accounts/register_email.html:1
+#, python-format
+msgid ""
+"You are receiving this notification because this e-mail address has been "
+"used in a new account at %(site_name)s."
+msgstr ""
+"Estás recibiendo esta notificación porque esta dirección ha sido usada en "
+"una nueva cuenta en %(site_name)s."
+
+#: comicagg/templates/accounts/register_email.html:3
+#, python-format
+msgid "You can log in now using the username \"%(username)s\": %(site_url)s"
+msgstr ""
+"Ahora puedes iniciar sesión con el usuario \"%(username)s\": %(site_url)s"
 
 #: comicagg/templates/admin/app_list.html:8
 #, python-format
@@ -1020,6 +1086,9 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: comicagg/templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
+
+#~ msgid "Change it"
+#~ msgstr "Cámbiala"
 
 #, python-format
 #~ msgid "for your user account at %(site_name)s"

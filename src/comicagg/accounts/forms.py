@@ -1,7 +1,8 @@
+from typing import Tuple
 from django import forms
+from django.contrib.auth.forms import PasswordResetForm as DjangoPasswordResetForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.forms import PasswordResetForm
 
 from .validators import *
 
@@ -14,27 +15,36 @@ class LoginForm(forms.Form):
 
 
 class EmailChangeForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={"size": "35"}))
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={"size": "25", "autocomplete": "new-password"})
+    )
+    email = forms.EmailField(widget=forms.TextInput(attrs={"size": "35", "autocomplete": "email"}))
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_password(self):
+        password = self.cleaned_data["password"]
+        if password and not self.user.check_password(password):
+            raise ValidationError(_("Password is invalid!"))
+
+    def save(self) -> Tuple[str, str]:
+        new_email = self.cleaned_data["email"]
+        old_email = self.user.email
+        self.user.email = new_email
+        self.user.save()
+        return (old_email, new_email)
 
 
-class PasswordChangeForm(forms.Form):
-    old_password = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
-    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
-    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
-
-
-class PasswordResetForm(PasswordResetForm):
-    email = forms.CharField(widget=forms.TextInput(attrs={"size": "35"}))
-
+class PasswordResetForm(DjangoPasswordResetForm):
     def get_users(self, email_or_username):
         # Check if there are valid email add
         users_email = list(User.objects.filter(email__iexact=email_or_username))
         # Check if there is a username
-        users_username = list(
-            User.objects.filter(username__iexact=email_or_username)
-        )
+        users_username = list(User.objects.filter(username__iexact=email_or_username))
         return users_email + users_username
+
 
 class RegisterForm(forms.Form):
     username = forms.CharField(
@@ -44,9 +54,7 @@ class RegisterForm(forms.Form):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
     email = forms.EmailField(widget=forms.TextInput(attrs={"size": "50"}))
-    captcha = forms.CharField(
-        widget=forms.TextInput(attrs={"size": "10"}), validators=[validate_captcha]
-    )
+    captcha = forms.CharField(widget=forms.TextInput(attrs={"size": "10"}), validators=[validate_captcha])
 
     def clean(self):
         cleaned_data = super().clean()
@@ -58,6 +66,9 @@ class RegisterForm(forms.Form):
 
 
 class DeleteAccountForm(forms.Form):
-    confirmation = forms.BooleanField(
-        label=_("Yes, I want to delete my account"), required=False
-    )
+    confirmation = forms.BooleanField(label=_("Yes, I want to delete my account"), required=False)
+
+    def clean_confirmation(self):
+        confirmation = self.cleaned_data["confirmation"]
+        if not confirmation:
+            raise ValidationError(_("Please, confirm that you want to delete your account"))
