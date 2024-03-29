@@ -73,21 +73,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    # 3rd party
+    # 3rd party apps
     "celery",
     "django_celery_beat",
     "django_celery_results",
     "mailer",
-    # Comicagg
-    "comicagg.management",
-    # Instead of 'django.contrib.admin'
-    "comicagg.apps.ComicaggAdminConfig",
+    # Comicagg apps
+    "comicagg.apps.ComicaggAdminConfig", # Instead of 'django.contrib.admin'
+    "management",
     "about",
     "accounts",
     "blog",
     "comics",
     "ws",
-    # "comicagg.api",
+    # "api",
     # "provider",
     # "provider.oauth2",
 ]
