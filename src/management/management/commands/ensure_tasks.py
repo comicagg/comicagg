@@ -1,6 +1,7 @@
 import logging
 from collections import namedtuple
 from datetime import datetime, timedelta, timezone
+from typing import cast
 
 from django.core.management.base import BaseCommand, no_translations
 from django_celery_beat.models import (
@@ -11,7 +12,7 @@ from django_celery_beat.models import (
     PeriodicTask,
 )
 
-task_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 TaskDescription = namedtuple(
     "TaskDescription", ["task", "name", "description", "period", "period_every"]
@@ -73,10 +74,19 @@ class Command(BaseCommand):
             every=task.period_every, period=task.period
         )
         if created:
-            task_logger.info("Schedule created")
-        try:
-            PeriodicTask.objects.get(name=task.name, task=task.task)
-        except PeriodicTask.DoesNotExist:
+            logger.info("Schedule created")
+
+        if old_tasks := PeriodicTask.objects.filter(name=task.name):
+            # Update the task
+            old_task = old_tasks[0]
+            old_task.task = task.task
+            old_task.interval = period
+            old_task.enabled = True
+            old_task.description = task.description
+            old_task.save()
+            logger.info(f"Task '{task.name}' updated")
+        else:
+            # Create the task
             delta = timedelta(days=1)
             tomorrow = datetime.now(timezone.utc) + delta
             PeriodicTask.objects.create(
@@ -89,13 +99,14 @@ class Command(BaseCommand):
                 enabled=True,
                 description=task.description,
             )
-            task_logger.info(f"Task '{task.name}' created")
+            logger.info(f"Task '{task.name}' created")
 
     def dry_task(self, task: TaskDescription):
         old_period = IntervalSchedule.objects.filter(every=task.period_every, period=task.period).count()
         if not old_period:
-            print(f'Period every {task.period_every} {task.period} would be created')
+            print(f'Period every {task.period_every} {task.period} would be CREATED')
 
-        old_task = PeriodicTask.objects.filter(name=task.name, task=task.task).count()
-        if not old_task:
-            print(f'Task {task.name} would be created')
+        if old_task := PeriodicTask.objects.filter(name=task.name):
+            print(f'Task {task.name} would be UPDATED')
+        else:
+            print(f'Task {task.name} would be CREATED')

@@ -4,8 +4,8 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings
 
-from accounts.models import User
-from accounts.utils import get_profile
+from ..models import User
+from ..utils import get_profile
 
 task_logger = get_task_logger(__name__)
 
