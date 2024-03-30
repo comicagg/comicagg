@@ -7,7 +7,7 @@ class Post(models.Model):
     title = models.CharField("Title", max_length=255)
     text = models.TextField("Text")
     date = models.DateTimeField(auto_now_add=True)
-    html = models.BooleanField("Is the text HTML or plain text?", default=False)
+    html = models.BooleanField("Is the text HTML?", default=False)
 
     # For type errors only
     id: int

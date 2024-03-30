@@ -244,10 +244,16 @@ class User(auth_models.User):
     # #   New blogs   #
     # #################
 
+    # TODO Rename this to post
     @cached_property
     def blogs_new_count(self):
         """Return the list of new blogs for this user."""
         return self.newblog_set.count()
+
+    def posts_forget_all(self) -> None:
+        """Forget all new posts for this user."""
+        # TODO: test
+        self.newblog_set.all().delete()
 
     # ################
     # #   Requests   #
