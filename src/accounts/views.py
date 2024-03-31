@@ -2,13 +2,16 @@ from typing import Any, cast
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeDoneView as DjPasswordChangeDoneView
 from django.contrib.auth.views import PasswordChangeView as DjPasswordChangeView
-from django.contrib.auth.views import PasswordResetCompleteView as DjPasswordResetCompleteView
-from django.contrib.auth.views import PasswordResetConfirmView as DjPasswordResetConfirmView
+from django.contrib.auth.views import (
+    PasswordResetCompleteView as DjPasswordResetCompleteView,
+)
+from django.contrib.auth.views import (
+    PasswordResetConfirmView as DjPasswordResetConfirmView,
+)
 from django.contrib.auth.views import PasswordResetDoneView as DjPasswordResetDoneView
 from django.contrib.auth.views import PasswordResetView as DjPasswordResetView
 from django.http import HttpRequest, HttpResponseRedirect
@@ -20,12 +23,6 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
 from about.utils import ConsentRequiredMixin, consent_required, consent_show
-from accounts.utils import (
-    send_account_created_email,
-    send_account_deleted_email,
-    send_email_updated_email,
-    send_password_updated_email,
-)
 from comicagg.typings import AuthenticatedHttpRequest
 
 from .forms import (
@@ -35,21 +32,17 @@ from .forms import (
     PasswordResetForm,
     RegisterForm,
 )
+from .utils import (
+    send_account_created_email,
+    send_account_deleted_email,
+    send_email_updated_email,
+    send_password_updated_email,
+)
 
 
 def logout_view(request: HttpRequest):
     logout(request)
     return redirect("index")
-
-
-# @consent_required
-# @login_required
-# def activate(request: AuthenticatedHttpRequest):
-#     if request.method == "POST":
-#         request.user.is_active = True
-#         request.user.save()
-#         return redirect("index")
-#     return render(request, "accounts/activate.html", {})
 
 
 class ActivateView(ConsentRequiredMixin, LoginRequiredMixin, TemplateView):

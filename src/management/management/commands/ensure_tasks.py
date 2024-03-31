@@ -1,7 +1,6 @@
 import logging
 from collections import namedtuple
 from datetime import datetime, timedelta, timezone
-from typing import cast
 
 from django.core.management.base import BaseCommand, no_translations
 from django_celery_beat.models import (

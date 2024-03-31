@@ -5,7 +5,7 @@ from pathlib import Path
 
 from django.core.management.commands.runserver import Command as runserver
 
-from comicagg.utils import Env
+from .utils import Env
 
 # Change default Django runserver address and port
 runserver.default_addr = "0.0.0.0"

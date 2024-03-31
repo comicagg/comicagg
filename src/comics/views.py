@@ -21,9 +21,8 @@ from comicagg.typings import AuthenticatedHttpRequest
 
 from .fields import ComicStatus
 from .forms import RequestForm
-from .models import Comic
+from .models import Comic, Strip, Subscription
 from .models import Request as ComicRequest
-from .models import Strip, Subscription
 
 logger = logging.getLogger(__name__)
 
@@ -51,11 +50,7 @@ def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
 @consent_required
 def read_view(request: AuthenticatedHttpRequest):
     comics = request.user.comics_subscribed
-    unread_strips_db = (
-        request.user.unread_strips
-        .select_related("strip")
-        .select_related("strip__comic")
-    )
+    unread_strips_db = request.user.unread_strips.select_related("strip").select_related("strip__comic")
     unread_strips = {comic.id: [] for comic in comics}
     unread_list: set[int] = set()
     for strip in unread_strips_db:
@@ -65,6 +60,7 @@ def read_view(request: AuthenticatedHttpRequest):
     random = _find_random_comic(request)
     context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
     return render(request, "comics/read.html", context)
+
 
 @login_required
 @consent_required
@@ -78,6 +74,7 @@ def random_comic_view(request: AuthenticatedHttpRequest):
 #######################
 # Organize page views #
 #######################
+
 
 @login_required
 @consent_required
@@ -95,6 +92,7 @@ def add_comics(request: AuthenticatedHttpRequest):
         "new_comics": new_comics,
     }
     return render(request, "comics/add.html", context)
+
 
 @login_required
 @consent_required
@@ -121,6 +119,7 @@ def _slugify_comic(comic: Comic) -> str:
 # ############################
 # #   Request page related   #
 # ############################
+
 
 @login_required
 @consent_required

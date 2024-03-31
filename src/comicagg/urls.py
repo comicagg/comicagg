@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic.base import TemplateView
 
-from comicagg.views import welcome
+from .views import welcome
 
 robots_txt = TemplateView.as_view(template_name="robots.txt", content_type="text/plain")
 

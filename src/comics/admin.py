@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.utils.translation import gettext_lazy as _
+from django.http import HttpRequest
 
 from .models import Comic, NewComic, Request, Strip, Subscription, Tag, UnreadStrip
 
@@ -25,13 +26,13 @@ class HasCustomFunction(admin.SimpleListFilter):
     title = _("custom function")
     parameter_name = "custom"
 
-    def lookups(self, request: Any, model_admin: Any) -> list[tuple[Any, str]]:
+    def lookups(self, request: HttpRequest, model_admin: "ComicAdmin") -> list[tuple[str, str]]:
         return [
             ("true", "Custom function"),
             ("false", "Default function"),
         ]
 
-    def queryset(self, request: Any, queryset: QuerySet[Any]) -> QuerySet[Any] | None:
+    def queryset(self, request: HttpRequest, queryset: QuerySet[Comic]) -> QuerySet[Comic] | None:
         if self.value() == "true":
             return queryset.exclude(Q(custom_func__isnull=True) | Q(custom_func=""))
         elif self.value() == "false":

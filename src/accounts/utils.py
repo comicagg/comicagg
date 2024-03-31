@@ -1,8 +1,9 @@
 from django.http import HttpRequest
 from django.utils.translation import gettext as _
 
-from accounts.models import UserProfile
 from comicagg.utils import send_email
+
+from .models import UserProfile
 
 
 def get_profile(user):

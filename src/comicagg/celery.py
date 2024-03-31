@@ -9,5 +9,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "comicagg.settings")
 
 app = Celery("comicagg_tasks")
 app.config_from_object("django.conf:settings", namespace="CELERY")
+# This will discover tasks in the task module of installed apps
 app.autodiscover_tasks()
+# This forces discovery in the comicagg module, because it's not an installed app
 app.autodiscover_tasks(["comicagg"])

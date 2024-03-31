@@ -1,4 +1,5 @@
 from typing import Tuple
+
 from django import forms
 from django.contrib.auth.forms import PasswordResetForm as DjangoPasswordResetForm
 from django.core.exceptions import ValidationError
