@@ -23,5 +23,8 @@
   ],
   "editor.rulers": [
     110
+  ],
+  "python.analysis.extraPaths": [
+    "./src/"
   ]
 }

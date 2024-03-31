@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, re_path
 
-from comicagg.comics.admin_views import views as admin_views
+from comics.admin_views import views as admin_views
 
 
 class ComicaggAdminSite(admin.AdminSite):

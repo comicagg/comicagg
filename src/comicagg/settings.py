@@ -1,17 +1,18 @@
 # Django settings for comicagg project.
 
 import os
+from pathlib import Path
 
 from django.core.management.commands.runserver import Command as runserver
 
-from comicagg.utils import Env
+from .utils import Env
 
 # Change default Django runserver address and port
 runserver.default_addr = "0.0.0.0"
 runserver.default_port = 8001
 
 # Absolute path to the directory that holds the comicagg folder
-ROOT = os.path.dirname(os.path.abspath(__file__)) + "/"
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 django_env = Env()
 
@@ -56,7 +57,7 @@ CONN_HEALTH_CHECKS = True
 
 # List of directories searched for fixture files,
 # in addition to the fixtures directory of each application, in search order.
-FIXTURE_DIRS = (os.path.join(ROOT, "test_fixtures"),)
+FIXTURE_DIRS = (os.path.join(BASE_DIR, "test_fixtures"),)
 
 # ##############
 # #            #
@@ -72,19 +73,20 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    # 3rd party
+    # 3rd party apps
     "celery",
     "django_celery_beat",
     "django_celery_results",
     "mailer",
-    # Comicagg
-    "comicagg.management",
-    # Instead of 'django.contrib.admin'
-    "comicagg.apps.ComicaggAdminConfig",
-    "comicagg.accounts",
-    "comicagg.blog",
-    "comicagg.comics",
-    # "comicagg.api",
+    # Comicagg apps
+    "comicagg.apps.ComicaggAdminConfig", # Instead of 'django.contrib.admin'
+    "management",
+    "about",
+    "accounts",
+    "blog",
+    "comics",
+    "ws",
+    # "api",
     # "provider",
     # "provider.oauth2",
 ]
@@ -98,7 +100,7 @@ MIDDLEWARE = [
     # https://docs.djangoproject.com/en/4.2/ref/middleware/#module-django.middleware.gzip
     "django.middleware.gzip.GZipMiddleware",
     # Cookie consent
-    "comicagg.about.middleware.CookieConsentMiddleware",
+    "about.middleware.CookieConsentMiddleware",
     # https://docs.djangoproject.com/en/4.2/topics/http/sessions/
     "django.contrib.sessions.middleware.SessionMiddleware",
     # https://docs.djangoproject.com/en/4.2/topics/i18n/translation/
@@ -113,7 +115,7 @@ MIDDLEWARE = [
     # Adds the user attribute, representing the currently-logged-in user, to every incoming HttpRequest object.
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     # Overwrite the user object with our own User proxy model
-    "comicagg.middleware.UserProxyOverwriteMiddleware",
+    "middleware.UserProxyOverwriteMiddleware",
     # OAuth2 authentication
     # "comicagg.api.middleware.OAuth2Middleware",
     # ###########################
@@ -124,13 +126,13 @@ MIDDLEWARE = [
     # Clickjacking Protection
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Show detailed error pages to super users.
-    # "comicagg.middleware.UserBasedExceptionMiddleware",
+    # "middleware.UserBasedExceptionMiddleware",
     # Set up the user profile and user operations
-    # "comicagg.middleware.UserProfileMiddleware",
+    # "middleware.UserProfileMiddleware",
     # Check if the user is active
-    "comicagg.middleware.ActiveUserMiddleware",
+    "middleware.ActiveUserMiddleware",
     # Maintenance mode
-    "comicagg.middleware.MaintenanceMiddleware",
+    "middleware.MaintenanceMiddleware",
 ]
 
 ROOT_URLCONF = "comicagg.urls"
@@ -141,7 +143,7 @@ TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            os.path.join(ROOT, "templates"),
+            os.path.join(BASE_DIR, "templates"),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -152,8 +154,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.template.context_processors.static",
                 "django.template.context_processors.i18n",
-                "comicagg.comics.context_processors.comic_counters",
-                "comicagg.common.context_processors.add_settings",
+                "comics.context_processors.comic_counters",
+                "comicagg.context_processors.add_settings",
             ],
         },
     },
@@ -234,7 +236,7 @@ STATIC_URL = django_env.get("STATIC_URL")
 
 # This setting defines the additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled
 # This should be set to a list of strings that contain full paths to your additional files directory(ies)
-STATICFILES_DIRS = (os.path.join(ROOT, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static_files"),)
 
 # #############
 # #   Dates   #
@@ -271,7 +273,7 @@ USE_I18N = True
 USE_L10N = True
 
 # A list of directories where Django looks for translation files.
-LOCALE_PATHS = [os.path.join(ROOT, "locale")]
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 # #############
 # #           #
@@ -334,9 +336,7 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
-        "verbose": {
-            "format": "%(asctime)s %(process)d %(name)s %(levelname)s %(message)s"
-        },
+        "verbose": {"format": "%(asctime)s %(process)d %(name)s %(levelname)s %(message)s"},
     },
     "filters": {
         "require_debug_false": {
