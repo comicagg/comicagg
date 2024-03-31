@@ -1,23 +1,6 @@
+[![ci](https://github.com/comicagg/comicagg/actions/workflows/ci.yml/badge.svg?branch=development)](https://github.com/comicagg/comicagg/actions/workflows/ci.yml)
+
 # comicagg
-This is the Django code for the website at comicagg.com
+This is the Django code for the website at https://www.comicagg.com
 
-Currently it supports Py3 and Django 4.2.
-
-## Building
-
-```shell
-docker build . -t comicagg:latest
-```
-
-## Initializing
-
-```shell
-docker compose exec app python manage.py migrate
-docker compose exec app python manage.py collectstatic
-```
-
-## Taggin for deployment
-
-```shell
-docker tag comicagg:latest nublar.azurecr.io/comicagg/app:stable
-```
+Currently built with Py3 and Django 4.2.
