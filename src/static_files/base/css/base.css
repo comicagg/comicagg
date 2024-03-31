@@ -587,8 +587,10 @@ input.filter {
     text-align: center;
 }
 #comic_image img {
-    margin: 0;
+    margin: auto;
     padding: 0;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 /****************/

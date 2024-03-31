@@ -12,7 +12,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from comicagg.typings import AuthenticatedHttpRequest
@@ -35,6 +35,11 @@ def ok_response(request: AuthenticatedHttpRequest):
         "news": news_count,
     }
     return JsonResponse(response_data)
+
+
+def x_comic(request: AuthenticatedHttpRequest, comic_id:int):
+    comic = get_object_or_404(Comic.objects.available(), pk=comic_id)
+    return render(request, "comics/htmx/comic_info.html", {"comic": comic})
 
 
 @login_required

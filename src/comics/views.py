@@ -75,13 +75,21 @@ def random_comic_view(request: AuthenticatedHttpRequest):
 # Organize page views #
 #######################
 
+def _slugify_comic(comic: Comic) -> str:
+    return slugify(str(comic))
+
+from django.core.cache import cache
 
 @login_required
 @consent_required
 def add_comics(request: AuthenticatedHttpRequest):
     # all of the comics
-    all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
-    all_comics.sort(key=_slugify_comic)
+    all_comics = cache.get("add_comics_all_comics", None)
+    if not all_comics:
+        all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
+        all_comics.sort(key=_slugify_comic)
+        cache.set("add_comics_all_comics", all_comics, 60)
+
 
     # build the available list depending on selected comics
     user_comics = request.user.comics_subscribed
@@ -110,10 +118,6 @@ def organize(request: AuthenticatedHttpRequest):
         visible_comics.append(subscription.comic)
     context = {"user_comics": visible_comics}
     return render(request, "comics/organize.html", context)
-
-
-def _slugify_comic(comic: Comic) -> str:
-    return slugify(str(comic))
 
 
 # ############################

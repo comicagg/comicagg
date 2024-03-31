@@ -1,22 +1,25 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
 /*global $, $$, setTimeout, clearTimeout, Image, Ajax, Element, openurl, startRequest, removeComicId, static_url, url_add, url_forget_new_comic, url_remove, updateCounters, usercomics: true, availablecomics, availablecomics_new: true */
 "use strict";
-var comics;
-var lastevent;
-var timerid;
-var currentid = 0;
+let comics;
+let lastevent;
+let timerid;
+let currentid = 0;
+
 function onclick_url(event) {
     event.stop();
     openurl($("comic_url").href);
 }
+
 function containsComicId(array, comicid) {
     var found = false, i, len, comic;
-    for (i = 0, len = array.length; i < len && !found; i = i + 1) {
+    for (i = 0, len = array.length; i < len && !found; i += 1) {
         comic = array[i];
         found = comic.id === comicid;
     }
     return found ? comic : found;
 }
+
 function onClickComic(event) {
     var elem, id, params, comic;
     elem = event.element();
@@ -25,7 +28,7 @@ function onClickComic(event) {
     elem.removeClassName('error');
     if ((comic = containsComicId(usercomics, id))) {
         // comic is selected, remove it!
-        params = {'id': id};
+        params = { 'id': id };
         startRequest(url_remove, {
             method: 'post',
             parameters: params,
@@ -48,7 +51,7 @@ function onClickComic(event) {
     else {
         // comic is not selected, add it!
         comic = containsComicId(availablecomics, id);
-        params = {'id': id};
+        params = { 'id': id };
         startRequest(url_add, {
             method: 'post',
             parameters: params,
@@ -73,6 +76,12 @@ function onClickComic(event) {
         });
     }
 }
+
+function onerror_last_image() {
+    $('comic_last_image_broken').show();
+    $('comic_last_image').hide();
+}
+
 function mouseOverAction() {
     var elem, id, img, comic, params;
     elem = lastevent.element();
@@ -82,7 +91,7 @@ function mouseOverAction() {
         // es un comic nuevo
         $('comic_new').show();
         // forget as new comic
-        params = {'id': id};
+        params = { 'id': id };
         startRequest(url_forget_new_comic, {
             method: 'post',
             parameters: params,
@@ -173,25 +182,28 @@ function mouseOverAction() {
         img.onerror = function () {
             $('loading').hide();
             $('comic_last').show();
-            $('comic_last').src = static_url + "images/broken32.png";
+            $('comic_last').src = static_url + "img/broken32.png";
             $('comic_last').style.width = "32px";
             $('comic_last').style.height = "32px";
         };
     }
 }
+
 function onMouseOverComic(event) {
     lastevent = event;
     timerid = setTimeout(function () {
         mouseOverAction();
     }, 500);
 }
+
 function onMouseOutComic(event) {
     clearTimeout(timerid);
 }
+
 function initAdd() {
     var i, len, comic, id;
     comics = $('add').select('.comic');
-    for (i = 0, len = comics.length; i < len; i = i + 1) {
+    for (i = 0, len = comics.length; i < len; i += 1) {
         comic = comics[i];
         id = parseInt(comic.id.substring(6), 10);
         if (containsComicId(usercomics, id)) {
@@ -200,34 +212,27 @@ function initAdd() {
             comic.addClassName('new');
         }
         comic.observe('click', onClickComic);
-        comic.observe('mouseover', onMouseOverComic);
-        comic.observe('mouseout', onMouseOutComic);
+        // comic.observe('mouseover', onMouseOverComic);
+        // comic.observe('mouseout', onMouseOutComic);
     }
     $("comic_url").observe("click", onclick_url);
 }
-function switchFilter(back) {
-    if (back && $('filterReal').value.length === 0) {
-        $('filter').show();
-        $('filterReal').hide();
-    } else {
-        $('filter').hide();
-        $('filterReal').show();
-        $('filterReal').focus();
-    }
-}
-var idFilter = -1;
+
+let idFilter = -1;
+
 function filter(v) {
     clearTimeout(idFilter);
     idFilter = setTimeout('applyFilter("' + v + '")', 100);
 }
+
 function applyFilter(v) {
     var l, i, j, len, comic, txt, classes;
     l = v.length;
-    for (i = 0, len = comics.length; i < len; i = i + 1) {
+    for (i = 0, len = comics.length; i < len; i += 1) {
         comic = comics[i];
         txt = comic.innerHTML.toLowerCase();
         classes = comic.className.split(" ");
-        for (j = 0; j < classes.length; j = j + 1) {
+        for (j = 0; j < classes.length; j += 1) {
             if (classes[j].length > 0) {
                 txt += " @" + classes[j];
             }
@@ -239,18 +244,18 @@ function applyFilter(v) {
         }
     }
 }
+
 function filter_allcomics() {
-    $("filterReal").value = "";
-    switchFilter(true);
+    $("filter_text").value = "";
     filter("");
 }
+
 function filter_newcomics() {
-    $("filterReal").value = "@new";
-    switchFilter(false);
+    $("filter_text").value = "@new";
     filter("@new");
 }
+
 function filter_addedcomics() {
-    $("filterReal").value = "@added";
-    switchFilter(false);
+    $("filter_text").value = "@added";
     filter("@added");
 }

@@ -1,6 +1,8 @@
 {% extends 'comics/organize_base.html' %}
 {% load i18n comics_tags static %}
+
 {% block title %}{% trans 'Organize' %} - {% endblock %}
+
 {% block extra_head %}
         <link rel="stylesheet" href="{% static 'base/css/dnd.css' %}" type="text/css"/>
         <script src="//ajax.googleapis.com/ajax/libs/dojo/1.4.4/dojo/dojo.js"></script>
@@ -20,7 +22,9 @@ dojo.require("dojo.dnd.Avatar");
 dojo.addOnLoad(initDND);
         </script>
 {% endblock%}
+
 {% block onload %}{% endblock %}
+
 {% block orgcontent %}
 <div id="organize">
     <div class="comic_list">
