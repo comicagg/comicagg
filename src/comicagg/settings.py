@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     "django_celery_beat",
     "django_celery_results",
     "mailer",
+    "django_htmx",
     # Comicagg apps
     "comicagg.apps.ComicaggAdminConfig", # Instead of 'django.contrib.admin'
     "management",
@@ -133,6 +134,8 @@ MIDDLEWARE = [
     "middleware.ActiveUserMiddleware",
     # Maintenance mode
     "middleware.MaintenanceMiddleware",
+    # https://django-htmx.readthedocs.io/en/latest/middleware.html
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 ROOT_URLCONF = "comicagg.urls"

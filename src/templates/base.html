@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-{% load i18n static %}
-
+{% load i18n static django_htmx %}
 <html xmlns="http://www.w3.org/1999/xhtml" lang="{{ LANGUAGE_CODE }}">
 	<head>
         <!--
@@ -45,6 +44,7 @@
 			{% endif %}
 		</script>
 {% block extra_head %}{% endblock %}
+{% django_htmx_script %}
 	</head>
 	<body onload="{% block onload %}{% endblock %}">
     <div id="head">
