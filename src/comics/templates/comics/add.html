@@ -51,9 +51,9 @@
 	<div id="comic_list_wrap">
     <span>{% trans "Show:" %} <a onclick="filter_allcomics()">{% trans "all" %}</a>, <a onclick="filter_newcomics()">{% trans "new"%}</a>, <a onclick="filter_addedcomics()">{% trans "added"%}</a></span>
 		<input id="filter_text" placeholder="{% trans 'Filter the list' %}" type="text" value="" class="filter" onkeyup="filter(this.value)"/>
-		<ul id="comic_list" hx-sync="#comic_list li">
+		<ul id="comic_list" hx-target="#comic_info" hx-sync="#comic_list li:replace">
 {% for comic in all_comics %}
-			<li id="comic_{{ comic.id }}" class="comic{% if forloop.last %} last{% endif %}{% if comic.no_images %} no_images{% endif %}" {% if comic.no_images %}title="{% trans "You won't see the images of this comic" %}"{% endif %} hx-get="{% url 'comics:ajax:x_comic' comic.id %}" hx-trigger="mouseenter delay:200ms" hx-target="#comic_info">{{ comic.name }}</li>
+			<li id="comic_{{ comic.id }}" class="comic{% if forloop.last %} last{% endif %}{% if comic.no_images %} no_imcd ages{% endif %}" hx-get="{% url 'comics:ajax:x_comic' comic.id %}" hx-trigger="mouseenter delay:200ms">{{ comic.name }}</li>
 {% endfor %}
 		</ul>
 	</div>

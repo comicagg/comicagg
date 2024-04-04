@@ -226,6 +226,11 @@ class Comic(models.Model):
     def last_strip(self):
         return self.strip_set.first()
 
+    def is_ended(self):
+        return self.status == ComicStatus.ENDED
+
+    def is_broken(self):
+        return self.status == ComicStatus.BROKEN
 
 class Subscription(models.Model):
     """A comic followed by a user and its position in the reading list."""

@@ -1,15 +1,26 @@
 {% load i18n static comics_tags %}
 <div id="comic_info_wrap">
-  <h3 id="comic_name">{{ comic.name|escape }}</h3>
-  <h4 id="comic_new">{% trans "New comic!" %}</h4>
-  <h4 id="comic_broken">{% trans "This comic is broken :( We're working on getting it working!" %}</h4>
-  <h4 id="comic_ended">{% trans "This comic has ended!" %}</h4>
-  <p>{% trans "Score" %}: <b><span id="comic_score">{{ comic.get_rating|as_percent:2|to_int }}</span>%</b> (<span id="comic_votes">{{ comic.total_votes }}</span> {% trans "votes" %}, <span id="comic_readers">{{ comic.reader_count }}</span> {% trans "readers" %}).</p>
+  <h2 id="comic_name">{{ comic.name|escape }}</h2>
+  {% if is_new %}<h4 id="comic_new">{% trans "New comic!" %}</h4>{% endif %}
+  {% if comic.is_ended %}<h4 id="comic_ended">{% trans "This comic has ended!" %}</h4>{% endif %}
+  {% with rating=comic.get_rating|as_percent:2|to_int votes=comic.total_votes readers=comic.reader_count last_update=comic.last_update|date:"j F, Y" %}
+  <p>{% trans "Score" %}: <b><span id="comic_score">{{ rating }}</span>%</b> (<span id="comic_votes">{{ votes }}</span> {% trans "votes" %}, <span id="comic_readers">{{ readers }}</span> {% trans "readers" %}).</p>
+  <p>{% trans "Last updated on "%}{{ last_update }}</p>
+  {% endwith %}
   <p><a id="comic_url" href="{{ comic.website }}">{% trans "Link to its website"%}</a></p>
+  {% if comic.is_broken %}<h4 id="comic_broken">{% trans "This comic is broken, but we're working on getting it working!" %}</h4>{% endif %}
+  {% if comic.no_images %}<p id="no_images">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>{% endif %}
+  <div hx-target="#comic_info">
+    {% if is_added %}
+    <input type="button" name="unfollow" value="Unfollow" hx-post="{% url 'comics:ajax:x_remove' comic.id %}"/>
+    {% else %}
+    <input type="button" name="follow" value="Follow" hx-post="{% url 'comics:ajax:x_add' comic.id %}"/>
+    {% endif %}
+  </div>
   <p id="comic_image">
     <img id="loading" src="{% static 'base/img/loading.gif' %}" alt="loading..." style="display:none" />
     <img id="comic_last_image_broken" src="{% static 'base/img/broken32.png' %}" alt="Image broken :(" style="display:none" />
     <img id="comic_last_image" src="{{ comic.last_image_url }}" alt="Last image" title="Last image" onerror="onerror_last_image()"/>
   </p>
-  <p id="no_images" style="display:none">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>
 </div>
+{%if update_header %}{% include 'header.html' %}{% endif %}

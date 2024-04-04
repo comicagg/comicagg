@@ -46,7 +46,7 @@
 {% block extra_head %}{% endblock %}
 {% django_htmx_script %}
 	</head>
-	<body onload="{% block onload %}{% endblock %}">
+	<body onload="{% block onload %}{% endblock %}" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <div id="head">
 			{% if user.is_superuser or not MAINTENANCE %}
 			{% if user.is_authenticated %}

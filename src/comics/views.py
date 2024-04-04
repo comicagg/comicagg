@@ -84,12 +84,11 @@ from django.core.cache import cache
 @consent_required
 def add_comics(request: AuthenticatedHttpRequest):
     # all of the comics
-    all_comics = cache.get("add_comics_all_comics", None)
+    all_comics = cache.get("comics.views.add_comics.all_comics", None)
     if not all_comics:
         all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
         all_comics.sort(key=_slugify_comic)
-        cache.set("add_comics_all_comics", all_comics, 60)
-
+        cache.set("comics.views.add_comics.all_comics", all_comics, 60)
 
     # build the available list depending on selected comics
     user_comics = request.user.comics_subscribed
