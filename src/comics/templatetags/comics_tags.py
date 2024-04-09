@@ -1,7 +1,10 @@
 import contextlib
+from typing import List
 
 from django import template
 from django.utils.translation import gettext as _
+
+from ..models import Comic
 
 register = template.Library()
 
@@ -23,7 +26,16 @@ def to_int(number):
 def unreads(comic, user_id):
     return comic.unreadstrip_set.filter(user=user_id)
 
+
 @register.filter()
 def equals(value, equals_to):
     return str(value) == equals_to
 
+
+@register.filter()
+def is_new(comic: Comic, list: List[Comic]):
+    return " new" if comic in list else ""
+
+@register.filter()
+def is_added(comic: Comic, list: List[Comic]):
+    return " added" if comic in list else ""

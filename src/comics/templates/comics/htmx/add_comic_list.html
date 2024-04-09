@@ -1,0 +1,6 @@
+{% load comics_tags %}
+<ul id="comic_list" hx-target="#comic_info_wrap" hx-sync="#comic_list li:replace" hx-swap-oob="true">
+{% for comic in all_comics %}
+  <li class="comic{{ comic|is_added:user_comics }}{{ comic|is_new:new_comics }}" hx-get="{% url 'comics:ajax:x_comic' comic.id %}">{{ comic.name }}</li>
+{% endfor %}
+</ul>

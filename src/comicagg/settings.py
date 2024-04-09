@@ -158,6 +158,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.i18n",
                 "comics.context_processors.comic_counters",
+                "comics.context_processors.comic_lists",
                 "comicagg.context_processors.add_settings",
             ],
         },
@@ -400,9 +401,13 @@ LOGGING = {
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://redis:6379",
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "unix:/tmp/memcached.sock",
     }
+    # "default": {
+    #     "BACKEND": "django.core.cache.backends.redis.RedisCache",
+    #     "LOCATION": "redis://redis:6379",
+    # }
 }
 
 # ##############

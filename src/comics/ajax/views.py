@@ -43,17 +43,17 @@ def ok_response(request: AuthenticatedHttpRequest):
 @login_required
 def x_comic(request: AuthenticatedHttpRequest, comic_id: int, add=False, remove=False):
     comic = get_object_or_404(Comic.objects.available(), pk=comic_id)
-    update_header = False
+    comics_updated = False
     if add:
-        update_header = True
+        comics_updated = True
         request.user.subscribe(comic)
     elif remove:
-        update_header = True
+        comics_updated = True
         request.user.unsubscribe(comic)
     is_new = request.user.comic_is_new(comic)
     is_added = request.user.is_subscribed(comic)
-    context = {"comic": comic, "is_new": is_new, "is_added": is_added, "update_header": update_header}
-    return render(request, "comics/htmx/comic_info.html", context)
+    context = {"comic": comic, "is_new": is_new, "is_added": is_added, "comics_updated": comics_updated}
+    return render(request, "comics/htmx/add_comic_info.html", context)
 
 
 @login_required

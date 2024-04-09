@@ -9,7 +9,6 @@
   {% endwith %}
   <p><a id="comic_url" href="{{ comic.website }}">{% trans "Link to its website"%}</a></p>
   {% if comic.is_broken %}<h4 id="comic_broken">{% trans "This comic is broken, but we're working on getting it working!" %}</h4>{% endif %}
-  {% if comic.no_images %}<p id="no_images">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>{% endif %}
   <div hx-target="#comic_info">
     {% if is_added %}
     <input type="button" name="unfollow" value="Unfollow" hx-post="{% url 'comics:ajax:x_remove' comic.id %}"/>
@@ -17,10 +16,17 @@
     <input type="button" name="follow" value="Follow" hx-post="{% url 'comics:ajax:x_add' comic.id %}"/>
     {% endif %}
   </div>
+  {% if comic.no_images %}
+  <p id="no_images">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>
+  {% else %}
   <p id="comic_image">
     <img id="loading" src="{% static 'base/img/loading.gif' %}" alt="loading..." style="display:none" />
     <img id="comic_last_image_broken" src="{% static 'base/img/broken32.png' %}" alt="Image broken :(" style="display:none" />
     <img id="comic_last_image" src="{{ comic.last_image_url }}" alt="Last image" title="Last image" onerror="onerror_last_image()"/>
   </p>
+  {% endif %}
 </div>
-{%if update_header %}{% include 'header.html' %}{% endif %}
+{%if comics_updated %}
+{% include 'header.html' %}
+{% include 'comics/htmx/add_comic_list.html' %}
+{% endif %}
