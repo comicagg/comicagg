@@ -4,6 +4,7 @@ Django==4.2.11
 requests==2.31.0
 gunicorn==21.2.0
 django-htmx==1.17.3
+pymemcache==4.0.0
 
 # Scheduled tasks
 redis==5.0.2

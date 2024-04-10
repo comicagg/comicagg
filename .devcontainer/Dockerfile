@@ -15,4 +15,4 @@ RUN cat /requirements-dev.txt >> /requirements.txt \
     # && chmod +x /entrypoint.sh \
 # Install additional OS packages.
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends gettext
+    && apt-get -y install --no-install-recommends gettext memcached

@@ -1,4 +1,4 @@
-{% load i18n static comics_tags %}
+{% load i18n static comics_tags %}{% spaceless %}
 <div id="comic_info_wrap">
   <h2 id="comic_name">{{ comic.name|escape }}</h2>
   {% if is_new %}<h4 id="comic_new">{% trans "New comic!" %}</h4>{% endif %}
@@ -28,5 +28,6 @@
 </div>
 {%if comics_updated %}
 {% include 'header.html' %}
-{% include 'comics/htmx/add_comic_list.html' %}
+{% include 'comics/htmx/add_comic_list_comic.html' %}
 {% endif %}
+{% endspaceless %}
