@@ -1,5 +1,5 @@
 {% load comics_tags %}
-<ul id="comic_list" hx-target="#comic_info_wrap">
+<ul id="comic_list" hx-target="#comic_info_wrap" class="g-fit-height">
 {% for comic in all_comics %}
 {% include 'comics/htmx/add_comic_list_comic.html' %}
 {% endfor %}
