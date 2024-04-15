@@ -220,14 +220,14 @@ function initAdd() {
 
 let idFilter = -1;
 
-function filter(v) {
+function filter(keyword) {
     clearTimeout(idFilter);
-    idFilter = setTimeout('applyFilter("' + v + '")', 100);
+    idFilter = setTimeout('applyFilter("' + keyword + '")', 100);
 }
 
-function applyFilter(v) {
+function applyFilter(keyword) {
     var l, i, j, len, comic, txt, classes;
-    l = v.length;
+    l = keyword.length;
     for (i = 0, len = comics.length; i < len; i += 1) {
         comic = comics[i];
         txt = comic.innerHTML.toLowerCase();
@@ -237,7 +237,7 @@ function applyFilter(v) {
                 txt += " @" + classes[j];
             }
         }
-        if (l > 0 && txt.indexOf(v) < 0) {
+        if (l > 0 && txt.indexOf(keyword) < 0) {
             comic.hide();
         } else {
             comic.show();
@@ -245,17 +245,30 @@ function applyFilter(v) {
     }
 }
 
-function filter_allcomics() {
+function filter_all() {
     $("filter_text").value = "";
     filter("");
 }
 
-function filter_newcomics() {
+function filter_new() {
     $("filter_text").value = "@new";
     filter("@new");
 }
 
-function filter_addedcomics() {
+function filter_running() {
+    $("filter_text").value = "@running";
+    filter("@running");
+}
+
+function filter_added() {
     $("filter_text").value = "@added";
     filter("@added");
+}
+
+function update_comic_image_height() {
+    const info_offset = $('comic_info').cumulativeOffset()['top'];
+    const info_height = $('comic_info').getDimensions().height;
+    const image_offset = $('comic_last_image').cumulativeOffset()['top'];
+    const image_height = info_height + info_offset - image_offset;
+    document.documentElement.style.setProperty('--comic-image-height', image_height + "px");
 }

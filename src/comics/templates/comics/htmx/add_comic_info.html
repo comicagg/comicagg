@@ -19,11 +19,11 @@
   {% if comic.no_images %}
   <p id="no_images">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>
   {% else %}
-  <p id="comic_image">
+  <div id="comic_image">
     <img id="loading" src="{% static 'base/img/loading.gif' %}" alt="loading..." style="display:none" />
     <img id="comic_last_image_broken" src="{% static 'base/img/broken32.png' %}" alt="Image broken :(" style="display:none" />
-    <img id="comic_last_image" src="{{ comic.last_image_url }}" alt="Last image" title="Last image" onerror="onerror_last_image()"/>
-  </p>
+    <img id="comic_last_image" src="{{ comic.last_image_url }}" alt="Last image" title="Last image" onerror="onerror_last_image()" onload="update_comic_image_height()"/>
+  </div>
   {% endif %}
 </div>
 {%if comics_updated %}
