@@ -1,4 +1,4 @@
-{% load i18n static %}
+{% load i18n static %}{% spaceless %}
 <div id="head" hx-swap-oob="true">
 {% if user.is_superuser or not MAINTENANCE %}
   {% if user.is_authenticated %}
@@ -19,3 +19,4 @@
       <a href="/">Comic Aggregator</a>{% if MAINTENANCE and user.is_superuser %}&nbsp;DB: {{ DATABASES_NAME }}{% endif %}
   </div>
 </div>
+{% endspaceless %}

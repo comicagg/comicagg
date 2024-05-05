@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-31 17:15+0000\n"
+"POT-Creation-Date: 2024-05-04 22:50+0000\n"
 "PO-Revision-Date: 2014-05-01 21:21+0100\n"
 "Last-Translator: Jesus Fernandez <jesus@nublar.net>\n"
 "Language-Team: Spanish <contact@comicagg.com>\n"
@@ -674,51 +674,83 @@ msgstr "Actualizar comic"
 msgid "Review reported images"
 msgstr "Revisar imágenes rotas"
 
-#: comics/templates/comics/add.html:3
+#: comics/templates/comics/add.html:4
 msgid "Choose"
 msgstr "Elegir"
 
-#: comics/templates/comics/add.html:26
+#: comics/templates/comics/add.html:35
 msgid "Add comics"
 msgstr "Añadir comics"
 
-#: comics/templates/comics/add.html:27
-msgid "Click on a comic to add or remove it."
-msgstr "Haz click en un comic para añadirlo o quitarlo."
+#: comics/templates/comics/add.html:36
+msgid "Click on a comic to see more details about it."
+msgstr "Haz click en un comic para ver más detalles."
 
-#: comics/templates/comics/add.html:29
-msgid "Hover over a comic to see details."
-msgstr "Pasa por encima de un comic para ver detalles."
+#: comics/templates/comics/add.html:38
+msgid "Quick filters:"
+msgstr "Filtros rápidos:"
 
-#: comics/templates/comics/add.html:33
+#: comics/templates/comics/add.html:39
+msgid "all"
+msgstr "todos"
+
+#: comics/templates/comics/add.html:40
+msgid "new"
+msgstr "nuevos"
+
+#: comics/templates/comics/add.html:41
+msgid "running"
+msgstr "activos"
+
+#: comics/templates/comics/add.html:42
+msgid "added"
+msgstr "añadidos"
+
+#: comics/templates/comics/add.html:45
+msgid "Find by name"
+msgstr "Buscar por nombre"
+
+#: comics/templates/comics/htmx/add_comic_info.html:3
 msgid "New comic!"
 msgstr "¡Nuevo!"
 
-#: comics/templates/comics/add.html:34
-msgid "This comic is broken :( We're working on getting it working!"
-msgstr "Este comic está roto :( ¡Estamos trabajando en hacerlo funcionar!"
-
-#: comics/templates/comics/add.html:35
+#: comics/templates/comics/htmx/add_comic_info.html:4
 msgid "This comic has ended!"
 msgstr "¡Este comic ha terminado!"
 
-#: comics/templates/comics/add.html:36
+#: comics/templates/comics/htmx/add_comic_info.html:5
+msgid "This comic is broken, but we're working on getting it working!"
+msgstr "Este comic está roto, ¡pero estamos trabajando en hacerlo funcionar!"
+
+#: comics/templates/comics/htmx/add_comic_info.html:7
 msgid "Score"
 msgstr "Puntuación"
 
-#: comics/templates/comics/add.html:36
+#: comics/templates/comics/htmx/add_comic_info.html:7
 msgid "votes"
 msgstr "votos"
 
-#: comics/templates/comics/add.html:36
+#: comics/templates/comics/htmx/add_comic_info.html:7
 msgid "readers"
 msgstr "lectores"
 
-#: comics/templates/comics/add.html:37
-msgid "Link to its website"
-msgstr "Enlace a su web"
+#: comics/templates/comics/htmx/add_comic_info.html:8
+msgid "Last updated on "
+msgstr "Última actualización el "
 
-#: comics/templates/comics/add.html:42
+#: comics/templates/comics/htmx/add_comic_info.html:10
+msgid "Visit their website"
+msgstr "Visita su sitio"
+
+#: comics/templates/comics/htmx/add_comic_info.html:14
+msgid "Unfollow"
+msgstr "Dejar de seguir"
+
+#: comics/templates/comics/htmx/add_comic_info.html:18
+msgid "Follow"
+msgstr "Seguir"
+
+#: comics/templates/comics/htmx/add_comic_info.html:24
 msgid ""
 "<b>Warning!</b> Instead of showing the images of this comic, you will see a "
 "link to its website when the comic updates."
@@ -726,43 +758,19 @@ msgstr ""
 "<b>¡Atención!</b> En vez de mostrar las imágenes de este comic, verás un en "
 "lace a su página web cuando se actualice."
 
-#: comics/templates/comics/add.html:47
-msgid "Show:"
-msgstr "Ver:"
-
-#: comics/templates/comics/add.html:47
-msgid "all"
-msgstr "todos"
-
-#: comics/templates/comics/add.html:47
-msgid "new"
-msgstr "nuevos"
-
-#: comics/templates/comics/add.html:47
-msgid "added"
-msgstr "añadidos"
-
-#: comics/templates/comics/add.html:48
-msgid "Filter the list"
-msgstr "Filtrar la lista"
-
-#: comics/templates/comics/add.html:52
-msgid "You won't see the images of this comic"
-msgstr "No verás las imágenes de este comic."
-
-#: comics/templates/comics/organize.html:3
+#: comics/templates/comics/organize.html:4
 msgid "Organize"
 msgstr "Organizar"
 
-#: comics/templates/comics/organize.html:27
+#: comics/templates/comics/organize.html:31
 msgid "Organize your comics"
 msgstr "Organiza tus comics"
 
-#: comics/templates/comics/organize.html:29
+#: comics/templates/comics/organize.html:33
 msgid "Drop comics here<br/>to delete them"
 msgstr "Suelta comics aquí<br/>para borrarlos"
 
-#: comics/templates/comics/organize.html:31
+#: comics/templates/comics/organize.html:35
 msgid ""
 "Here you can sort your comics. Just select one or some of them (holding the "
 "Ctrl/Meta key) and drag them around."
@@ -770,19 +778,19 @@ msgstr ""
 "Aquí puedes organizar tus comics. Selecciona uno o varios (pulsando la tecla "
 "Ctrl/Meta) y múevelos."
 
-#: comics/templates/comics/organize.html:35
+#: comics/templates/comics/organize.html:39
 msgid "retry"
 msgstr "intentar de nuevo"
 
-#: comics/templates/comics/organize.html:39
+#: comics/templates/comics/organize.html:43
 msgid "Alternatively, you can sort them:"
 msgstr "También puedes ordernarlos:"
 
-#: comics/templates/comics/organize.html:40
+#: comics/templates/comics/organize.html:44
 msgid "by name"
 msgstr "por nombre"
 
-#: comics/templates/comics/organize.html:41
+#: comics/templates/comics/organize.html:45
 msgid "by score"
 msgstr "por puntuación"
 
@@ -951,7 +959,7 @@ msgstr "Solicitudes rechazadas"
 msgid "Accepted requests"
 msgstr "Solicitudes aceptadas"
 
-#: comics/views.py:143
+#: comics/views.py:123
 msgid "Your request has been saved. Thanks!"
 msgstr "Tu solicitud ha sido guardada. ¡Gracias!"
 
@@ -1025,45 +1033,45 @@ msgstr "lectores notificados."
 msgid "was not modified."
 msgstr "no fue modificado."
 
-#: templates/base.html:54 templates/base.html:61
+#: templates/base.html:64
+msgid "Sorry, you need to accept cookies to access this content"
+msgstr "Lo siento, necesitas aceptar las cookies para acceder a este contenido"
+
+#: templates/header.html:6 templates/header.html:13
 msgid "news"
 msgstr "noticias"
 
-#: templates/base.html:54
+#: templates/header.html:6
 msgid "admin"
 msgstr "admin"
 
-#: templates/base.html:54 templates/base.html:61
+#: templates/header.html:6 templates/header.html:13
 msgid "about"
 msgstr "acerca de"
 
-#: templates/base.html:54
+#: templates/header.html:6
 msgid "logout"
 msgstr "salir"
 
-#: templates/base.html:57
+#: templates/header.html:9
 msgid "read"
 msgstr "lee"
 
-#: templates/base.html:57
+#: templates/header.html:9
 msgid "choose"
 msgstr "elige"
 
-#: templates/base.html:57
+#: templates/header.html:9
 msgid "organize"
 msgstr "organiza"
 
-#: templates/base.html:57
+#: templates/header.html:9
 msgid "request"
 msgstr "solicita"
 
-#: templates/base.html:61
+#: templates/header.html:13
 msgid "login"
 msgstr "entrar"
-
-#: templates/base.html:81
-msgid "Sorry, you need to accept cookies to access this content"
-msgstr "Lo siento, necesitas aceptar las cookies para acceder a este contenido"
 
 #: templates/maintenance.html:5
 msgid "Site is under maintenance."
@@ -1084,30 +1092,3 @@ msgstr "Exportar suscripciones con comics sin leer"
 #: ws/templates/ws/index.html:19
 msgid "Unread counters"
 msgstr "Contador de comics sin leer"
-
-#~ msgid "Change it"
-#~ msgstr "Cámbiala"
-
-#, python-format
-#~ msgid "for your user account at %(site_name)s"
-#~ msgstr "para tu cuenta de usuario en %(site_name)s"
-
-#, python-format
-#~ msgid "Your new password is: %(new_password)s"
-#~ msgstr "Tu nueva contraseña es: %(new_password)s"
-
-#~ msgid "Feel free to change this password by going to this page:"
-#~ msgstr "Cambia esta contraseña yendo a esta página:"
-
-#~ msgid "Your username, in case you've forgotten:"
-#~ msgstr "Tu usuario es, por si lo habías olvidado:"
-
-#~ msgid "Thanks for using our site!"
-#~ msgstr "¡Gracias por usar nuestro sitio! =)"
-
-#~ msgid "If you would like to contact us, write an email to this address:"
-#~ msgstr "Si quieres contactar con nosotros, escribe a este email:"
-
-#~ msgid ""
-#~ "Problems, suggestions, hate mail, everything is welcome at that address :)"
-#~ msgstr "Problemas, sugerencias, hate mail, todo es bienvenido ahí :)"

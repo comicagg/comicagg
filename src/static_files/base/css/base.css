@@ -574,6 +574,10 @@ input.btn {
 /* Add page */
 /************/
 
+.page_add input[type='button'], .page_add button {
+    padding: 4px 16px;
+}
+
 .g {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -592,6 +596,13 @@ input.btn {
     padding-left: var(--text-indentation);
 }
 
+#search_box {
+    background: white;
+    color: #666;
+    width: 33%;
+    padding: 0.5em 1em;
+}
+
 #comic_list_wrapper {
     border-radius: 8px;
     border: 1px solid gray;
@@ -607,8 +618,7 @@ input.btn {
     background-color: white;
 }
 
-#comic_list .comic {
-    /* 	width:300px; */
+#comic_list li {
     padding: 2px 0px;
     text-align: center;
     border-bottom: 1px solid gray;
@@ -617,29 +627,35 @@ input.btn {
     cursor: pointer;
 }
 
-#comic_list .comic:hover {
+#comic_list li:hover {
     background-color: #ccc;
 }
 
-#comic_list .last {
+#comic_list li:last-child {
     border-bottom: 0;
-}
-
-#comic_list .added {
-    background: #ccddff
-        /*url(../img/ok12.png)*/
-        right center no-repeat;
-    font-weight: bolder;
 }
 
 #comic_list .working {
     background: url(../img/loading12.gif) right center no-repeat;
 }
 
+#comic_list .added {
+    background-color: #ccddff;
+    font-weight: bolder;
+}
+
 #comic_list .new {
     background: #ddffcc
         /*url(../img/flag12.png)*/
         right center no-repeat;
+}
+
+#comic_list .broken {
+    text-decoration: line-through;
+}
+
+#comic_list .ended {
+    text-decoration: line-through;
 }
 
 #comic_list .error {
@@ -690,42 +706,58 @@ input.btn {
     border-radius: 8px;
 }
 
-#comic_info h3 {
-    margin: 5px 0;
-    padding: 0;
-}
-
-#comic_info h4 {
-    margin: 0;
-    padding: 0;
-}
-
-#comic_info p {
-    margin: 2px 5px;
-}
-
-#comic_info_wrap {
-    /* 	margin-left:1em; */
-}
-
-#hover_notice {
+#comic_info .name {
+    margin: 0 2em 1em 2em;
+    font-size: x-large;
+    font-weight: bolder;
     text-align: center;
 }
 
-input.filter {
-    background: white;
-    color: #666;
-    width: 180px;
-    font-size: smaller;
+#comic_info .notice {
+    margin: 1em 0;
+    padding: 0.5em;
+    border: 1px gray dashed;
+    text-align: center;
+    font-size: larger;
+    font-weight: bolder;
 }
 
-#comic_image {
+#comic_info .ended {
+    background-color: lightpink;
+}
+
+#comic_info .new {
+    background-color: #ddffcc;
+}
+
+#comic_info .broken {
+    background-color: yellow;
+}
+
+#comic_info .buttons {
+    padding: 0.5em 0;
+}
+#comic_info .buttons button {
+    padding: 0.5em 2em;
+}
+
+#comic_info .buttons button:disabled {
+    color: lightgray;
+}
+
+#comic_info button.htmx-request {
+    background: url(../img/loading12.gif) calc(100% - 0.5em) center no-repeat;
+}
+
+#comic_info .no_images {}
+
+#comic_info .image_wrapper {
     margin: 0;
     padding: 0;
     text-align: center;
 }
 
-#comic_image img {
+#comic_info .image_wrapper img {
     margin: auto;
     padding: 0;
     max-width: 100%;

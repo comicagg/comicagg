@@ -1,2 +1,2 @@
 {% load comics_tags %}
-<li id="comic_{{ comic.id }}" class="comic{{ comic|is_added:user_comics }}{{ comic|is_new:new_comics }}" hx-get="{% url 'comics:ajax:x_comic' comic.id %}" hx-swap-oob="true">{{ comic.name }}</li>
+<li id="comic_{{ comic.id }}" class="{% comic_list_tags comic user_comics new_comics %}" hx-get="{% url 'comics:ajax:x_comic' comic.id %}" hx-swap-oob="true">{{ comic.name }}</li>

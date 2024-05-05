@@ -1,34 +1,17 @@
-{% extends 'comics/organize_base.html' %}
-{% load i18n cache static comics_tags %}
+{% extends 'base.html' %}
+{% load i18n static %}
 
 {% block title %}{% trans 'Choose' %} - {% endblock %}
 
 {% block extra_head %}
-<script src="//ajax.googleapis.com/ajax/libs/dojo/1.4.4/dojo/dojo.js" type="text/javascript"></script>
-<script src="{% static 'base/js/organize_add.js' %}" type="text/javascript"></script>
+<script src="{% static 'base/js/add.js' %}" defer></script>
 <script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
-<script type="text/javascript">
-  function _calculateComicListHeight() {
-    console.log(`window ${window.innerWidth} x ${window.innerHeight}`);
-    console.log(`viewport ${document.documentElement.clientWidth} x ${document.documentElement.clientHeight}`);
-
-    const scrollbar_width = window.innerWidth - document.documentElement.clientWidth;
-    document.documentElement.style.setProperty('--scrollbar-width', scrollbar_width + "px");
-
-    const comic_list_height = document.documentElement.clientHeight - scrollbar_width - $('comic_list').cumulativeOffset()['top'];
-    document.documentElement.style.setProperty('--comic-list-height', comic_list_height + "px");
-  }
-  // recalculate on resize
-  window.addEventListener('resize', _calculateComicListHeight, false);
-  // recalculate on dom load
-  document.addEventListener('DOMContentLoaded', _calculateComicListHeight, false);
-  // recalculate on load (assets loaded as well)
-  window.addEventListener('load', _calculateComicListHeight);
+<script>
 </script>
 {% endblock%}
 
 {% block body_style %}overflow:hidden{% endblock %}
-{% block content_class %}{% endblock %}
+{% block content_class %}page_add{% endblock %}
 
 {% block content %}
 <div id="add_header" class="">
@@ -42,7 +25,7 @@
     <input type="button" onclick="filter_added()" value="{% trans 'added'%}"/>
   </div>
   <div class="filters">
-    <input id="filter_text" placeholder="{% trans 'Find by name' %}" type="text" value="" class="filter" onkeyup="filter(this.value)"/>
+    <input id="search_box" placeholder="{% trans 'Find by name' %}" type="text" value="" onkeyup="filter(this.value)"/>
   </div>
 </div>
 

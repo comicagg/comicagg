@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     "mailer",
     "django_htmx",
     # Comicagg apps
-    "comicagg.apps.ComicaggAdminConfig", # Instead of 'django.contrib.admin'
+    "comicagg.apps.ComicaggAdminConfig",  # Instead of 'django.contrib.admin'
     "management",
     "about",
     "accounts",
@@ -461,7 +461,7 @@ CELERY_RESULT_EXTENDED = True
 # #   django-debug-toolbar   #
 # ############################
 if DEBUG:
-    INSTALLED_APPS += ["debug_toolbar"]
+    INSTALLED_APPS += ["debug_toolbar", "template_profiler_panel"]
 
     MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
@@ -481,3 +481,19 @@ if DEBUG:
             request.path.startswith(p) for p in hide_toolbar_patterns
         ),
     }
+    DEBUG_TOOLBAR_PANELS = [
+        # "debug_toolbar.panels.history.HistoryPanel",
+        # "debug_toolbar.panels.versions.VersionsPanel",
+        "debug_toolbar.panels.timer.TimerPanel",
+        "debug_toolbar.panels.settings.SettingsPanel",
+        "debug_toolbar.panels.headers.HeadersPanel",
+        "debug_toolbar.panels.request.RequestPanel",
+        "debug_toolbar.panels.sql.SQLPanel",
+        # "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+        "debug_toolbar.panels.templates.TemplatesPanel",
+        "template_profiler_panel.panels.template.TemplateProfilerPanel",
+        "debug_toolbar.panels.cache.CachePanel",
+        # "debug_toolbar.panels.signals.SignalsPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
+        "debug_toolbar.panels.profiling.ProfilingPanel",
+    ]
