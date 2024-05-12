@@ -154,7 +154,7 @@ function updateViewport(loadImages) {
         try {
             cdiv = cdivInView[cdivInViewCount];
             comic = comics[cdiv.id.substring(1)];
-            var el = new Element("a", {'onclick': '$("c'+comic.id+'").scrollToExtra(-40)'}).update(comic.name);
+            var el = new Element("a", { 'onclick': '$("c' + comic.id + '").scrollToExtra(-40)' }).update(comic.name);
             $('next_comic_bar').update(el);
             $('next_comic_bar').show();
         } catch (e) {
@@ -212,8 +212,8 @@ function showUnreadComics() {
     $('showingUnread').show();
     if (unreadCounter === 0 && comicCounter) {
         $('noUnreadCounters').show();
-	$('unreadCounters').hide();
-	$('no_unread_comics').show();
+        $('unreadCounters').hide();
+        $('no_unread_comics').show();
     } else {
         $('noUnreadCounters').hide();
         $('unreadCounters').show();
@@ -262,7 +262,7 @@ function reloadComic(cid) {
 }
 function markread(id, vote) {
     var ret, params;
-    params = {'id': id, 'value': vote};
+    params = { 'id': id, 'value': vote };
     Element.show('working' + id);
     Element.hide('workingerror' + id);
     startRequest(url_mark_as_read, {
@@ -305,7 +305,7 @@ function reportbroken(id) {
             ch_list.push(item.chid);
         });
     }
-    params = {'id': id, 'id_list[]': ch_list};
+    params = { 'id': id, 'id_list[]': ch_list };
     Element.show('working' + id);
     Element.hide('workingerror' + id);
     startRequest(url_report, {
@@ -332,7 +332,7 @@ function reportbroken(id) {
 
 function removecomic(id) {
     var params, cdiv, mover_a;
-    params = {'id': id};
+    params = { 'id': id };
     Element.show('working' + id);
     startRequest(url_remove, {
         method: 'post',
@@ -399,7 +399,7 @@ function mark_all_read() {
             //hide link to mark all read
             $("mark_all_read").hide();
             $("mark_all_read_bottom").hide();
-	    $("no_unread_comics").show();
+            $("no_unread_comics").show();
         },
         onFailure: function () {
             $("mark_all_read_anim").hide();

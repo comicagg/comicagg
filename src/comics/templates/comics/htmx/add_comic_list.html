@@ -1,0 +1,6 @@
+{% load comics_tags %}
+<ul id="comic_list" class="g-fit-height" hx-target="#comic_info_wrap" hx-indicator="#comic_info_loading">
+{% for comic in all_comics %}
+<li id="comic_{{ comic.id }}" class="{% comic_list_tags comic user_comics new_comics %}" hx-get="{% url 'comics:ajax:x_comic' comic.id %}" hx-swap-oob="true">{{ comic.name }}</li>
+{% endfor %}
+</ul>

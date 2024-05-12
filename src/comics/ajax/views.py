@@ -6,13 +6,15 @@ Response status:
 - Bad parameters: 400
 - Not found or no POST: 404
 """
+
 import logging
+from math import e
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from comicagg.typings import AuthenticatedHttpRequest
@@ -35,6 +37,23 @@ def ok_response(request: AuthenticatedHttpRequest):
         "news": news_count,
     }
     return JsonResponse(response_data)
+
+
+@login_required
+def x_comic(request: AuthenticatedHttpRequest, comic_id: int, add=False, remove=False):
+    # FUTURE: if add and remove are false, the response could be cached
+    comic = get_object_or_404(Comic.objects.available(), pk=comic_id)
+    comics_updated = False
+    if add:
+        comics_updated = True
+        request.user.subscribe(comic)
+    elif remove:
+        comics_updated = True
+        request.user.unsubscribe(comic)
+    is_new = request.user.comic_is_new(comic)
+    is_added = request.user.is_subscribed(comic)
+    context = {"comic": comic, "is_new": is_new, "is_added": is_added, "comics_updated": comics_updated}
+    return render(request, "comics/htmx/add_comic_info.html", context)
 
 
 @login_required
@@ -148,20 +167,13 @@ def save_selection(request: AuthenticatedHttpRequest):
 
     # subsc_dict is a dictionary, key=comic.id value=subscription.id
     subsc_dict = dict(
-        [
-            (subscription.comic.id, subscription.id)
-            for subscription in request.user.subscriptions
-        ]
+        [(subscription.comic.id, subscription.id) for subscription in request.user.subscriptions]
     )
     # subscriptions is the list of comic ids already added
     subscriptions = subsc_dict.keys()
 
     # Unsubscribe the removed comics
-    if removed := [
-        subscription
-        for subscription in subscriptions
-        if subscription not in selection_clean
-    ]:
+    if removed := [subscription for subscription in subscriptions if subscription not in selection_clean]:
         request.user.unsubscribe_list(removed)
 
     # Change the position of the selected comics

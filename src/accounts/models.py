@@ -98,6 +98,7 @@ class User(auth_models.User):
         if last_strip := Strip.objects.filter(comic=comic).last():
             UnreadStrip.objects.create(user=self, comic=comic, strip=last_strip)
         # FUTURE: return next_pos so that the following subscription can be used with a known position?
+        self.comics_new_forget(comic)
 
     def subscribe_list(self, comic_id_list: list[int]) -> None:
         """Add the comics from the list. Ignores comics that are already subscribed,

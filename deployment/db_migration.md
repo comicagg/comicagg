@@ -7,6 +7,10 @@
 sudo -u postgres pg_dump comicagg | gzip > comicagg-20240107.sql.gz
 ```
 
+```shell
+docker compose -f compose.dev.yml exec db pg_dump --username=comicagg --dbname=comicagg --schema=public > comicagg-20240504.sql
+```
+
 ## 2. Migrate the database
 
 1. Create a new schema called "old" in the new database:

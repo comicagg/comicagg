@@ -1,12 +1,14 @@
-Django==4.2.11
+Django==4.2.13
 # This one is baked into the image. No need to install it with pip.
 # psycopg[c]==3.1.17
 requests==2.31.0
 gunicorn==22.0.0
+django-htmx==1.17.3
+# pymemcache==4.0.0
 
 # Scheduled tasks
-redis==5.0.2
-celery==5.3.6
+redis==5.0.4
+celery==5.4.0
 django-celery-beat==2.6.0
 django_celery_results==2.5.1
 flower==2.0.1
@@ -15,3 +17,4 @@ django-mailer==2.3.1
 # Debug
 django-debug-toolbar==4.3.0
 tblib==3.0.0
+django-debug-toolbar-template-profiler==2.1.0

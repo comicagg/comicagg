@@ -12,7 +12,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import mail_managers
 from django.http import Http404, HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.defaultfilters import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import cache_page
 
@@ -21,8 +20,9 @@ from comicagg.typings import AuthenticatedHttpRequest
 
 from .fields import ComicStatus
 from .forms import RequestForm
-from .models import Comic, Strip, Subscription
+from .models import Comic
 from .models import Request as ComicRequest
+from .models import Strip, Subscription
 
 logger = logging.getLogger(__name__)
 
@@ -79,19 +79,7 @@ def random_comic_view(request: AuthenticatedHttpRequest):
 @login_required
 @consent_required
 def add_comics(request: AuthenticatedHttpRequest):
-    # all of the comics
-    all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
-    all_comics.sort(key=_slugify_comic)
-
-    # build the available list depending on selected comics
-    user_comics = request.user.comics_subscribed
-    new_comics = request.user.comics_new()
-    context = {
-        "all_comics": all_comics,
-        "user_comics": user_comics,
-        "new_comics": new_comics,
-    }
-    return render(request, "comics/add.html", context)
+    return render(request, "comics/add.html", {})
 
 
 @login_required
@@ -110,10 +98,6 @@ def organize(request: AuthenticatedHttpRequest):
         visible_comics.append(subscription.comic)
     context = {"user_comics": visible_comics}
     return render(request, "comics/organize.html", context)
-
-
-def _slugify_comic(comic: Comic) -> str:
-    return slugify(str(comic))
 
 
 # ############################

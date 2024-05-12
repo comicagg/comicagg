@@ -1,0 +1,34 @@
+{% load i18n static comics_tags %}{% spaceless %}
+<p class="name">{{ comic.name|escape }}</p>
+{% if is_new %}<p class="notice new">{% trans "New comic!" %}</p>{% endif %}
+{% if comic.is_ended %}<p class="notice ended">{% trans "This comic has ended!" %}</p>{% endif %}
+{% if comic.is_broken %}<p class="notice broken">{% trans "This comic is broken, but we're working on getting it working!" %}</p>{% endif %}
+{% with rating=comic|format_rating votes=comic.total_votes readers=comic.reader_count last_update=comic.last_update|date:"j F, Y" %}
+<p>{% trans "Score" %}: <b>{{ rating }}%</b> ({{ votes }} {% trans "votes" %}, {{ readers }} {% trans "readers" %}).</p>
+<p>{% trans "Last updated on "%}{{ last_update }}</p>
+{% endwith %}
+<p><a href="{{ comic.website }}">{% trans "Visit their website"%}</a></p>
+<div class="buttons" hx-target="#comic_info_wrap">
+  {% if is_added %}
+  <button title="unfollow" hx-post="{% url 'comics:ajax:x_remove' comic.id %}" hx-indicator="this" hx-disabled-elt="this">
+    {% trans "Unfollow" %}
+  </button>
+  {% else %}
+  <button title="follow" hx-post="{% url 'comics:ajax:x_add' comic.id %}" hx-indicator="this" hx-disabled-elt="this">
+    {% trans "Follow" %}
+  </button>
+  {% endif %}
+</div>
+<div class="image_wrapper">
+{% if comic.no_images %}
+  <p class="notice no_images">{% trans "<b>Warning!</b> Instead of showing the images of this comic, you will see a link to its website when the comic updates." %}</p>
+{% else %}
+  <img id="last_image_broken" src="{% static 'base/img/broken32.png' %}" alt="Image broken :(" style="display:none" />
+  <img id="last_image" src="{{ comic.last_image_url }}" alt="Last image" onerror="last_image_onerror()" onload="last_image_onload()" />
+{% endif %}
+</div>
+{% endspaceless %}
+{% if comics_updated %}
+{% include 'header.html' %}
+{% include 'comics/htmx/add_comic_list_comic.html' %}
+{% endif %}

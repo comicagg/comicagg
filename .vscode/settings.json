@@ -26,5 +26,6 @@
   ],
   "python.analysis.extraPaths": [
     "./src/"
-  ]
+  ],
+  "coblock.numBlankLines": 1
 }
