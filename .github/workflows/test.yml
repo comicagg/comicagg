@@ -1,0 +1,54 @@
+name: Tests
+
+on:
+  push:
+    branches: ["development"]
+    tags: ["2*"]
+  pull_request:
+    branches: [ "development" ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: nublar.azurecr.io
+  PYTHON_IMAGE_NAME: comicagg/python
+  APP_IMAGE_NAME: comicagg/app
+  PROXY_IMAGE_NAME: comicagg/proxy
+  PYTHON_VERSION: 3.12
+
+  NGINX_BUILD_DIR: /tmp/nginx/
+
+  DJANGO_DEBUG: 1
+  DJANGO_STATIC_ROOT: /tmp/nginx/static/
+  DJANGO_SECRET_KEY: this-is-just-for-building
+  DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432/tmp/comicagg.db
+  DJANGO_MEDIA_ROOT: /web/media/
+  DJANGO_MEDIA_URL: /.media/
+  DJANGO_STATIC_URL: /.static/
+  DJANGO_ADMINS: Admin <admin@comicagg.com>
+  DJANGO_MANAGERS: Admin <admin@comicagg.com>
+  DJANGO_EMAIL_HOST: //comicagg:comicagg@smtp
+  DJANGO_DEFAULT_FROM_EMAIL: robot@comicagg.com
+  DJANGO_SERVER_EMAIL: robot@comicagg.com
+  DJANGO_LOGS_DIR: /tmp/log/comicagg
+  DJANGO_SITE_DOMAIN: https://www.comicagg.com
+  CELERY_BROKER_URL: redis://redis:6379
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        name: Set up Python ${{ env.PYTHON_VERSION }}
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Tests
+        run: |
+          python -Wa manage.py test --noinput --failfast comics

@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 on:
   push:
@@ -147,8 +147,8 @@ jobs:
           tags: ${{ steps.app-metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          # build-args: |
-          #   TAG=${{ env.TAG }}
+          build-args: |
+            TAG=${{ env.TAG }}
 
   build-proxy:
     runs-on: ubuntu-latest
