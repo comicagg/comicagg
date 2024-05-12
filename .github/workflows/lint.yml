@@ -10,13 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      name: Set up Python ${{ env.PYTHON_VERSION }}
+    - uses: psf/black@stable
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
-    - name: Install dependencies
-      run: pip install black lintly
-    - name: Lint with black
-      run: black . --check 2>&1 >/dev/null | lintly --format=black
-      env:
-        LINTLY_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+        options: "--check --verbose"
+        src: "./src"
