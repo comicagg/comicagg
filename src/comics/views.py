@@ -8,7 +8,8 @@ from urllib.request import Request, urlopen
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import AbstractUser
 from django.core.mail import mail_managers
 from django.http import Http404, HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -155,13 +156,17 @@ def request_index(request: AuthenticatedHttpRequest):
 # ##############
 
 
+def user_is_staff(user: AbstractUser):
+    return user.is_staff
+
+
+@user_passes_test(user_is_staff)
 @cache_page(24 * 3600)
-@consent_required
 def stats(request: HttpRequest):
     """
-    Genera una página de estadísticas para cada comic ordenada según la puntuación de cada comic
+    Show comic statistics to staff members
     """
-    comics = sorted(Comic.objects.all())
+    comics = sorted(Comic.objects.all().prefetch_related('subscription_set', 'strip_set'))
     return render(request, "stats.html", {"comics": comics})
 
 
