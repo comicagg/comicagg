@@ -99,6 +99,8 @@ jobs:
           tags: ${{ steps.py-metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            PY_VERSION=${{ env.PYTHON_VERSION }}
 
   build-app:
     runs-on: ubuntu-latest
