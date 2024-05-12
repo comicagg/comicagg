@@ -132,14 +132,14 @@ jobs:
       - uses: docker/build-push-action@v5
         id: build-and-push-app
         name: Build and push APP
-        env:
-          TAG: ${{ env.DOCKER_METADATA_OUTPUT_VERSION }}
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.app-metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            TAG=${{ env.DOCKER_METADATA_OUTPUT_VERSION }}
       - name: Collect static files and prepare PROXY image
         run: |
           mkdir -p $DJANGO_STATIC_ROOT
