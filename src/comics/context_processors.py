@@ -1,4 +1,4 @@
-from django.core.cache import cache
+# from django.core.cache import cache
 from django.template.defaultfilters import slugify
 
 from comicagg.typings import AuthenticatedHttpRequest
