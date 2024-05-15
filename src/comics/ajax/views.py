@@ -135,7 +135,8 @@ def report_comic(request: AuthenticatedHttpRequest):
     try:
         mail_managers(f"Imagen rota: {comic.name}", message)
     except Exception:
-        logger.error(f"Failure sending email: Broken image: {" - ".join(id_list)}")
+        id_str = " - ".join(id_list)
+        logger.error(f"Failure sending email: Broken image: {id_str}")
     return ok_response(request)
 
 
