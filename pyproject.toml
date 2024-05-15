@@ -2,4 +2,9 @@
 profile = "black"
 
 [tool.black]
-line-length = 100
+force-exclude = '''
+(
+lib
+| migrations
+)
+'''
