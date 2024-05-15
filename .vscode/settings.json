@@ -22,7 +22,7 @@
     "110"
   ],
   "editor.rulers": [
-    110
+    88
   ],
   "python.analysis.extraPaths": [
     "./src/"

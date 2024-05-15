@@ -24,7 +24,8 @@ class NoMatchException(Exception):
 
 class InvalidParameterException(Exception):
     def __init__(self, parameters: list[str]):
-        message = f"Invalid parameters: {", ".join(parameters)}"
+        param_str = ", ".join(parameters)
+        message = f"Invalid parameters: {param_str}"
         super(Exception, self).__init__(message)
         self.message = message
 
