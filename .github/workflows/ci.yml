@@ -152,12 +152,10 @@ jobs:
         name: Set up Python ${{ env.PYTHON_VERSION }}
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install Dependencies
+      - name: Install Py Dependencies, collect static files and prepare PROXY image
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Collect static files and prepare PROXY image
-        run: |
           mkdir -p $DJANGO_STATIC_ROOT
           python manage.py collectstatic --noinput
           cp ../deployment/nginx/* ${{ env.NGINX_BUILD_DIR }}
@@ -171,8 +169,8 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - uses: docker/metadata-action@v5
-        name: Extract metadata for PROXY image
         id: proxy-metadata
+        name: Extract metadata for PROXY image
         with:
           images: ${{ env.REGISTRY }}/${{ env.PROXY_IMAGE_NAME }}
           tags: |
