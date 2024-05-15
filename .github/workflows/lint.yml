@@ -12,5 +12,6 @@ jobs:
     - uses: actions/checkout@v4
     - uses: psf/black@stable
       with:
-        options: "--exclude migrations --check"
+        # Options: https://github.com/psf/black/blob/stable/docs/usage_and_configuration/the_basics.md
+        options: "--force-exclude migrations --check"
         src: "./src"
