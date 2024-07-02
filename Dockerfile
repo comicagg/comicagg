@@ -17,6 +17,7 @@ RUN mkdir /app && \
 
 COPY --chown=app:app src lib /app/
 COPY --chown=app:app --chmod=744 ./entrypoint.sh /entrypoint.sh
+COPY --chown=app:app --chmod=744 ./gunicorn.conf.py /gunicorn.conf.py
 
 WORKDIR /app
 

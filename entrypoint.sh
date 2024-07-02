@@ -15,8 +15,8 @@ export PYTHONPATH=/app:$PYTHONPATH
 
 case $1 in
     app)
-        # Start the service
-        gunicorn comicagg.wsgi:application --reload --bind 0.0.0.0:8000 --workers 4 --threads 2
+        # Hand over to gunicorn
+        exec gunicorn --config /gunicorn.conf.py
     ;;
     tasks)
         # Start Celery worker
