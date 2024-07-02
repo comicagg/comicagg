@@ -23,6 +23,9 @@ WORKDIR /app
 
 USER app
 
+# Django
 EXPOSE 8000
+# Celery Flower dashboard
+EXPOSE 8001
 
 ENTRYPOINT [ "/entrypoint.sh" ]

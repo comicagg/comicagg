@@ -8,6 +8,8 @@ services:
     image: nublar.azurecr.io/comicagg/app:${IMAGE_TAG:-development}
     env_file:
       - app.env
+    ports:
+      - 4002:8001
   proxy:
     image: nublar.azurecr.io/comicagg/proxy:${IMAGE_TAG:-development}
     ports:

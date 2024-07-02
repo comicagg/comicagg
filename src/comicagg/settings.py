@@ -443,8 +443,8 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 # ####################
 
 celery_env = Env("CELERY")
-CELERY_BROKER_URL = celery_env.get("BROKER_URL")  # "redis://redis:6379"
-CELERY_RESULT_BACKEND = "django-db"  # "redis://redis:6379"
+CELERY_BROKER_URL = celery_env.get("BROKER_URL")
+CELERY_RESULT_BACKEND = "django-db"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"

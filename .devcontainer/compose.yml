@@ -1,5 +1,5 @@
 version: '3.8'
-name: comicagg-dev
+name: comicagg-devc
 services:
   app:
     build:
