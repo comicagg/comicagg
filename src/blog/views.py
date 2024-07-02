@@ -17,7 +17,12 @@ def index(request: HttpRequest, all=False):
         "archive": all,
         "posts": posts if all else posts[:10],
         # These are the new news items the logged in user has
-        "new_posts": (NewBlog.objects.filter(user=request.user) if request.user.is_authenticated else False),
+        # TODO Is this necessary?
+        "new_posts": (
+            NewBlog.objects.filter(user=request.user)
+            if request.user.is_authenticated
+            else False
+        ),
     }
     return render(request, "blog/index.html", context)
 

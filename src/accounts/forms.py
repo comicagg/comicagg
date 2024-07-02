@@ -19,7 +19,9 @@ class EmailChangeForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={"size": "25", "autocomplete": "new-password"})
     )
-    email = forms.EmailField(widget=forms.TextInput(attrs={"size": "35", "autocomplete": "email"}))
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={"size": "35", "autocomplete": "email"})
+    )
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
@@ -55,7 +57,9 @@ class RegisterForm(forms.Form):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={"size": "25"}))
     email = forms.EmailField(widget=forms.TextInput(attrs={"size": "50"}))
-    captcha = forms.CharField(widget=forms.TextInput(attrs={"size": "10"}), validators=[validate_captcha])
+    captcha = forms.CharField(
+        widget=forms.TextInput(attrs={"size": "10"}), validators=[validate_captcha]
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -67,9 +71,13 @@ class RegisterForm(forms.Form):
 
 
 class DeleteAccountForm(forms.Form):
-    confirmation = forms.BooleanField(label=_("Yes, I want to delete my account"), required=False)
+    confirmation = forms.BooleanField(
+        label=_("Yes, I want to delete my account"), required=False
+    )
 
     def clean_confirmation(self):
         confirmation = self.cleaned_data["confirmation"]
         if not confirmation:
-            raise ValidationError(_("Please, confirm that you want to delete your account"))
+            raise ValidationError(
+                _("Please, confirm that you want to delete your account")
+            )

@@ -89,7 +89,11 @@ class LoginView(View):
             login(request, user)
             if user.is_active:
                 # Redirect to the page he was requesting.
-                return HttpResponseRedirect(next_url) if next_url else redirect("comics:read")
+                return (
+                    HttpResponseRedirect(next_url)
+                    if next_url
+                    else redirect("comics:read")
+                )
             # User was inactive, redirect to activate page
             return redirect("accounts:activate")
         # Return an 'invalid login' error message.
@@ -121,7 +125,9 @@ class RegisterView(ConsentRequiredMixin, View):
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password1"]
         User.objects.create_user(username, email, password)
-        message_text = _("Your account has been created. You can now log in using the username you selected.")
+        message_text = _(
+            "Your account has been created. You can now log in using the username you selected."
+        )
         messages.add_message(request, messages.SUCCESS, message_text)
         send_account_created_email(request, email, username)
         return redirect("accounts:login")

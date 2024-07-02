@@ -94,9 +94,7 @@ class OAuth2Middleware:
 
         if access_token:
             td = access_token.expires - datetime.now(timezone.utc)
-            tds = (
-                td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6
-            ) / 10**6
+            tds = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
             if tds < 0:
                 logger.warning(
                     logmsg(logtags.API_TOKEN_EXPIRED, "The access token has expired")

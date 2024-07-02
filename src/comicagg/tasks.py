@@ -12,6 +12,7 @@ def send_pending_emails():
     send_all()
     return True
 
+
 @shared_task
 def retry_deferred():
     cast(MessageManager, Message.objects).retry_deferred()

@@ -16,6 +16,7 @@ def comic_counters(request: AuthenticatedHttpRequest):
     if request.user.is_authenticated:
         add_context["unread_count"] = request.user.comics_unread_count
         add_context["newcomic_count"] = request.user.comics_new_count
+        # TODO: news_count should be in its own context processor in the blog app
         add_context["news_count"] = request.user.blogs_new_count
         add_context["comic_count"] = request.user.subscription_count
     return add_context
@@ -30,11 +31,13 @@ def comic_lists(request: AuthenticatedHttpRequest):
         #     all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
         #     all_comics.sort(key=_slugify_comic)
         #     cache.set("comics.views.add_comics.all_comics", all_comics, 600)
-        all_comics = list(Comic.objects.available().prefetch_related("subscription_set"))
+        all_comics = list(
+            Comic.objects.available().prefetch_related("subscription_set")
+        )
         all_comics.sort(key=_slugify_comic)
         add_context["all_comics"] = all_comics
-        add_context["user_comics"]= request.user.comics_subscribed
-        add_context["new_comics"]= request.user.comics_new()
+        add_context["user_comics"] = request.user.comics_subscribed
+        add_context["new_comics"] = request.user.comics_new()
     return add_context
 
 

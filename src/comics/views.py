@@ -51,7 +51,9 @@ def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
 @consent_required
 def read_view(request: AuthenticatedHttpRequest):
     comics = request.user.comics_subscribed
-    unread_strips_db = request.user.unread_strips.select_related("strip").select_related("strip__comic")
+    unread_strips_db = request.user.unread_strips.select_related(
+        "strip"
+    ).select_related("strip__comic")
     unread_strips = {comic.id: [] for comic in comics}
     unread_list: set[int] = set()
     for strip in unread_strips_db:
@@ -150,7 +152,9 @@ def stats(request: HttpRequest):
     """
     Show comic statistics to staff members
     """
-    comics = sorted(Comic.objects.all().prefetch_related('subscription_set', 'strip_set'))
+    comics = sorted(
+        Comic.objects.all().prefetch_related("subscription_set", "strip_set")
+    )
     return render(request, "stats.html", {"comics": comics})
 
 

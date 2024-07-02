@@ -52,7 +52,12 @@ def x_comic(request: AuthenticatedHttpRequest, comic_id: int, add=False, remove=
         request.user.unsubscribe(comic)
     is_new = request.user.comic_is_new(comic)
     is_added = request.user.is_subscribed(comic)
-    context = {"comic": comic, "is_new": is_new, "is_added": is_added, "comics_updated": comics_updated}
+    context = {
+        "comic": comic,
+        "is_new": is_new,
+        "is_added": is_added,
+        "comics_updated": comics_updated,
+    }
     return render(request, "comics/htmx/add_comic_info.html", context)
 
 
@@ -168,13 +173,20 @@ def save_selection(request: AuthenticatedHttpRequest):
 
     # subsc_dict is a dictionary, key=comic.id value=subscription.id
     subsc_dict = dict(
-        [(subscription.comic.id, subscription.id) for subscription in request.user.subscriptions]
+        [
+            (subscription.comic.id, subscription.id)
+            for subscription in request.user.subscriptions
+        ]
     )
     # subscriptions is the list of comic ids already added
     subscriptions = subsc_dict.keys()
 
     # Unsubscribe the removed comics
-    if removed := [subscription for subscription in subscriptions if subscription not in selection_clean]:
+    if removed := [
+        subscription
+        for subscription in subscriptions
+        if subscription not in selection_clean
+    ]:
         request.user.unsubscribe_list(removed)
 
     # Change the position of the selected comics

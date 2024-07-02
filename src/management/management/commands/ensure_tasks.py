@@ -61,7 +61,7 @@ class Command(BaseCommand):
 
     @no_translations
     def handle(self, *args, **options):
-        self.dry = options['dry']
+        self.dry = options["dry"]
         for task in TASKS:
             if self.dry:
                 self.dry_task(task)
@@ -101,11 +101,13 @@ class Command(BaseCommand):
             logger.info(f"Task '{task.name}' created")
 
     def dry_task(self, task: TaskDescription):
-        old_period = IntervalSchedule.objects.filter(every=task.period_every, period=task.period).count()
+        old_period = IntervalSchedule.objects.filter(
+            every=task.period_every, period=task.period
+        ).count()
         if not old_period:
-            print(f'Period every {task.period_every} {task.period} would be CREATED')
+            print(f"Period every {task.period_every} {task.period} would be CREATED")
 
         if old_task := PeriodicTask.objects.filter(name=task.name):
-            print(f'Task {task.name} would be UPDATED')
+            print(f"Task {task.name} would be UPDATED")
         else:
-            print(f'Task {task.name} would be CREATED')
+            print(f"Task {task.name} would be CREATED")

@@ -7,7 +7,11 @@ from .env import Env
 
 
 def send_email(
-    request: HttpRequest, to_email: str, subject: str, email_template: str, context: dict | None = None
+    request: HttpRequest,
+    to_email: str,
+    subject: str,
+    email_template: str,
+    context: dict | None = None,
 ):
     if context is None:
         context = {}
