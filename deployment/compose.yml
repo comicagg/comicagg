@@ -3,7 +3,7 @@ services:
   app:
     image: nublar.azurecr.io/comicagg/app
     # env_file:
-    #   - .env
+    #   - app.env
     volumes:
       - app_media:/web/media
     restart: unless-stopped
@@ -14,7 +14,7 @@ services:
   tasks:
     image: nublar.azurecr.io/comicagg/app
     # env_file:
-    #   - .env
+    #   - app.env
     restart: unless-stopped
     command: [ "tasks" ]
     depends_on:
@@ -37,14 +37,14 @@ services:
   db:
     image: postgres:16-alpine
     # env_file:
-    #   - .env
+    #   - db.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
   pgadmin:
     image: dpage/pgadmin4:latest
     # env_file:
-    #   - .env
+    #   - pgadmin.env
     # ports:
     #   - 8080:8080
     restart: unless-stopped

@@ -13,7 +13,7 @@
   "forwardPorts": [
     8000,
     5432,
-    5555,
+    8001,
     8080
   ],
   "customizations": {

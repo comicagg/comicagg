@@ -17,11 +17,15 @@ RUN mkdir /app && \
 
 COPY --chown=app:app src lib /app/
 COPY --chown=app:app --chmod=744 ./entrypoint.sh /entrypoint.sh
+COPY --chown=app:app --chmod=744 ./gunicorn.conf.py /gunicorn.conf.py
 
 WORKDIR /app
 
 USER app
 
+# Django
 EXPOSE 8000
+# Celery Flower dashboard
+EXPOSE 8001
 
 ENTRYPOINT [ "/entrypoint.sh" ]

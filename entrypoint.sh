@@ -1,34 +1,22 @@
 #!/bin/sh
 
-# Wait for servers to be up. Otherwise, the app will fail to start.
-echo "Waiting for PostgreSQL..."
-while ! nc -z db 5432; do
-    sleep 0.5
-done
-
-echo "Waiting for Redis..."
-while ! nc -z redis 6379; do
-    sleep 0.5
-done
-
 export PYTHONPATH=/app:$PYTHONPATH
 
 case $1 in
     app)
-        # Start the service
-        gunicorn comicagg.wsgi:application --reload --bind 0.0.0.0:8000 --workers 4 --threads 2
+        # Hand over to gunicorn
+        exec gunicorn --config /gunicorn.conf.py
     ;;
     tasks)
-        # Start Celery worker
-        celery -A comicagg worker -E -l INFO &
-        # Start Celery scheduler
-        celery -A comicagg beat -l INFO &
+        # Start Celery Beat scheduler
+        # Config: https://docs.celeryq.dev/en/stable/reference/cli.html#celery-beat
+        celery beat --detach --loglevel $CELERY_LOG_LEVEL
         # Start Celery dashboard
-        celery -A comicagg flower &
-        # Wait for any process to exit
-        wait
-        # Exit with status of process that exited first
-        exit $?
+        # Config: https://flower.readthedocs.io/en/latest/config.html
+        celery flower &
+        # Hand over to the Celery worker
+        # Config: https://docs.celeryq.dev/en/stable/reference/cli.html
+        exec celery worker --events --loglevel $CELERY_LOG_LEVEL
     ;;
   *)
     echo Custom command
