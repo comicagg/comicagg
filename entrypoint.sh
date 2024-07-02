@@ -1,16 +1,5 @@
 #!/bin/sh
 
-# Wait for servers to be up. Otherwise, the app will fail to start.
-echo "Waiting for PostgreSQL..."
-while ! nc -z db 5432; do
-    sleep 0.5
-done
-
-echo "Waiting for Redis..."
-while ! nc -z redis 6379; do
-    sleep 0.5
-done
-
 export PYTHONPATH=/app:$PYTHONPATH
 
 case $1 in
