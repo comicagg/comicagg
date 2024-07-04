@@ -10,9 +10,5 @@ COPY src/requirements.txt /
 COPY .devcontainer/requirements.txt /requirements-dev.txt
 RUN cat /requirements-dev.txt >> /requirements.txt \
     && pip3 --disable-pip-version-check --no-cache-dir install -r /requirements.txt \
-# Update entrypoint
-    # && sed -i 's/\r$//g' /entrypoint.sh \
-    # && chmod +x /entrypoint.sh \
-# Install additional OS packages.
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends gettext memcached
+    && apt-get -y install --no-install-recommends gettext gnupg2
