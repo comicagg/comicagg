@@ -26,13 +26,17 @@ class HasCustomFunction(admin.SimpleListFilter):
     title = _("custom function")
     parameter_name = "custom"
 
-    def lookups(self, request: HttpRequest, model_admin: "ComicAdmin") -> list[tuple[str, str]]:
+    def lookups(
+        self, request: HttpRequest, model_admin: "ComicAdmin"
+    ) -> list[tuple[str, str]]:
         return [
             ("true", "Custom function"),
             ("false", "Default function"),
         ]
 
-    def queryset(self, request: HttpRequest, queryset: QuerySet[Comic]) -> QuerySet[Comic] | None:
+    def queryset(
+        self, request: HttpRequest, queryset: QuerySet[Comic]
+    ) -> QuerySet[Comic] | None:
         if self.value() == "true":
             return queryset.exclude(Q(custom_func__isnull=True) | Q(custom_func=""))
         elif self.value() == "false":

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
+
 def validate_captcha(value: str):
     if value != "comic":
         raise ValidationError(_("Wrong word!"))

@@ -23,9 +23,7 @@ def unread_user(request: HttpRequest, user: User):
     unread_list = list(
         # This returns a query set like
         # <QuerySet [{'comic': 8, 'unread_strips': 4}, {'comic': 532, 'unread_strips': 29}]>
-        user.unread_strips
-        .values("comic")
-        .annotate(unread_strips=Count("comic"))
+        user.unread_strips.values("comic").annotate(unread_strips=Count("comic"))
     )
     unread_counts = {comic["comic"]: comic["unread_strips"] for comic in unread_list}
     unreads = [(comic, unread_counts[comic.id]) for comic in user.comics_unread()]

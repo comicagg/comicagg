@@ -340,7 +340,9 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
-        "verbose": {"format": "%(asctime)s %(process)d %(name)s %(levelname)s %(message)s"},
+        "verbose": {
+            "format": "%(asctime)s %(process)d %(name)s %(levelname)s %(message)s"
+        },
     },
     "filters": {
         "require_debug_false": {

@@ -72,5 +72,5 @@ class Env:
             "PASSWORD": result.password,
             "TEST": {
                 "TEMPLATE": "template0",
-            }
+            },
         }
