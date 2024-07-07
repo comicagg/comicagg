@@ -47,13 +47,15 @@ env:
   CELERY_BROKER_URL: redis://redis:6379
 
 jobs:
-  requirements-changed:
+  build-check:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./src
     outputs:
-      requirements: ${{ steps.requirements.outputs.changed }}
+      python: |
+        ${{ steps.requirements.outputs.changed
+          || steps.build-for-tag.outputs.build }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -62,14 +64,14 @@ jobs:
           filters: |
             changed:
               - 'src/requirements.txt'
+      - id: build-for-tag
+        if: startsWith(github.ref, 'refs/tags/2')
+        run: echo "build=true" >> "$GITHUB_OUTPUT"
 
   build-python:
     runs-on: ubuntu-latest
-    needs: requirements-changed
-    if: |
-      ${{ needs.requirements-changed.outputs.requirements == 'true'
-        || startsWith(github.ref, 'refs/tags/2')
-        }}
+    needs: build-check
+    if: needs.build-check.outputs.python == 'true'
     defaults:
       run:
         working-directory: ./src
@@ -79,7 +81,7 @@ jobs:
         name: Set up Docker Buildx
       - uses: docker/login-action@v3
         name: Log into registry ${{ env.REGISTRY }}
-        if: ${{ env.push-image }}
+        if: env.push-image == 'true'
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
@@ -100,7 +102,7 @@ jobs:
         with:
           context: .
           file: python.Dockerfile
-          push: ${{ env.push-image }}
+          push: ${{ env.push-image == 'true' }}
           tags: ${{ steps.py-metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -111,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build-python
-      - requirements-changed
+      - build-check
     if: ${{ always() }}
     defaults:
       run:
@@ -124,7 +126,7 @@ jobs:
         name: Set up Docker Buildx
       - uses: docker/login-action@v3
         name: Log into registry ${{ env.REGISTRY }}
-        if: env.push-image
+        if: env.push-image == 'true'
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
@@ -140,14 +142,11 @@ jobs:
             type=ref,event=pr
             type=match,pattern=\d{6}\.\d+
       - name: Use Python image from this run
-        if: |
-          ${{ needs.requirements-changed.outputs.requirements == 'true'
-            || startsWith(github.ref, 'refs/tags/2')
-            }}
+        if: needs.build-check.outputs.python == 'true'
         run: |
           echo "TAG=${{ env.DOCKER_METADATA_OUTPUT_VERSION }}" >> $GITHUB_ENV
       # - name: Use latest built Python image (development)
-      #   if: needs.requirements-changed.outputs.requirements == 'false'
+      #   if: needs.build-check.outputs.requirements == 'false'
       #   run: |
       #     echo "TAG=development" >> $GITHUB_ENV
       - uses: docker/build-push-action@v5
@@ -155,7 +154,7 @@ jobs:
         name: Build and push APP
         with:
           context: .
-          push: ${{ env.push-image }}
+          push: ${{ env.push-image == 'true' }}
           tags: ${{ steps.app-metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -184,7 +183,7 @@ jobs:
         name: Set up Docker Buildx
       - uses: docker/login-action@v3
         name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
+        if: env.push-image == 'true'
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
@@ -204,7 +203,7 @@ jobs:
         name: Build and push PROXY image
         with:
           context: ${{ env.NGINX_BUILD_DIR }}
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ env.push-image == 'true' }}
           tags: ${{ steps.proxy-metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
