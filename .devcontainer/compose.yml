@@ -44,6 +44,8 @@ services:
       - dev.env
     ports:
       - 8081:8081
+    volumes:
+      - ./pgadmin4/servers.json:/pgadmin4/servers.json
 
   mail:
     image: axllent/mailpit:latest
