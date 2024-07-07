@@ -4,8 +4,9 @@ ARG TAG
 FROM nublar.azurecr.io/comicagg/python:${TAG:-development}
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
 
 # Install distribution dependencies
 RUN mkdir /app && \

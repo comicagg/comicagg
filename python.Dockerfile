@@ -5,13 +5,13 @@ ARG PY_VERSION="3.12"
 ###########
 
 # Pull official base image
-FROM python:${PY_VERSION}-alpine as builder
+FROM python:${PY_VERSION}-alpine AS builder
 
 WORKDIR /tmp
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Install deps
 RUN apk update && \
@@ -31,11 +31,11 @@ RUN pip install --upgrade pip && \
 ARG PY_VERSION
 
 # Pull official base image
-FROM python:${PY_VERSION}-alpine as final
+FROM python:${PY_VERSION}-alpine AS final
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 COPY --from=builder /usr/src/app/wheels /wheels
 

@@ -1,7 +1,5 @@
 #!/bin/sh
 
-export PYTHONPATH=/app:$PYTHONPATH
-
 case $1 in
     app)
         # Hand over to gunicorn
