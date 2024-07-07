@@ -8,7 +8,7 @@ sudo -u postgres pg_dump comicagg | gzip > comicagg-20240107.sql.gz
 ```
 
 ```shell
-docker compose -f compose.dev.yml exec db pg_dump --username=comicagg --dbname=comicagg --schema=public > comicagg-20240504.sql
+docker compose -f compose.dev.yml exec db pg_dump --username=comicagg --dbname=comicagg --schema=public > comicagg-20240504.dev.sql
 ```
 
 ## 2. Migrate the database
@@ -22,8 +22,9 @@ docker compose -f compose.dev.yml exec db pg_dump --username=comicagg --dbname=c
 2. Update the contents of the backup:
 
    ```shell
-   sed -i -e 's/SET search_path = public, pg_catalog;/SET search_path = old, pg_catalog;/' comicagg-20240107.sql
-   sed -i -e 's/TABLE public./TABLE old./g' comicagg-20240107.sql
+   export name=comicagg-20240706
+   sed -i -e 's/SET search_path = public, pg_catalog;/SET search_path = old, pg_catalog;/' $name.sql
+   sed -i -e 's/TABLE public./TABLE old./g' $name.sql
    ```
 
 3. Upload the backup to the new database:
