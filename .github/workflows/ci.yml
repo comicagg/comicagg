@@ -20,7 +20,10 @@ on:
         default: false
 
 env:
-  push-image: ${{ github.event_name != 'pull_request' || inputs.push-image == 'true' }}
+  push-image: |
+    ${{ inputs.push-image
+      || github.ref == 'refs/heads/development'
+      || startsWith(github.ref, 'refs/tags/2') }}
 
   REGISTRY: nublar.azurecr.io
   PYTHON_IMAGE_NAME: comicagg/python

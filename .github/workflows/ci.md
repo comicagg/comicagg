@@ -7,6 +7,7 @@
    - Tag with development
    - If changes to requirements
       - Build python, else use last development.
+   - Push images to repository
 
 ## Tag push
 
@@ -14,7 +15,7 @@
 
    - Always build Python image
    - Tag both with tag and latest
-   - Always push to repository
+   - Push images to repository
 
 ## PR push
 
