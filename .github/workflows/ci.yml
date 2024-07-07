@@ -125,10 +125,10 @@ jobs:
         if: needs.check-changes.outputs.requirements == 'true'
         run: |
           echo "TAG=${{ env.DOCKER_METADATA_OUTPUT_VERSION }}" >> $GITHUB_ENV
-      - name: Use latest built Python image
+      - name: Use latest built Python image (development)
         if: needs.check-changes.outputs.requirements == 'false'
         run: |
-          echo "TAG=latest" >> $GITHUB_ENV
+          echo "TAG=development" >> $GITHUB_ENV
       - uses: docker/build-push-action@v5
         id: build-and-push-app
         name: Build and push APP
