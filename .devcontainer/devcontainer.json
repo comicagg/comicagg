@@ -11,10 +11,10 @@
   // This can be used to network with other containers or the host.
   ,
   "forwardPorts": [
-    8000,
-    5432,
-    8001,
-    8080
+    8000, // Django runserver
+    8001, // Flower dashboard (Celery)
+    8002, // PgAdmin4
+    8003  // Mailpit UI
   ],
   "customizations": {
     "vscode": {
@@ -43,6 +43,9 @@
   },
   // Use 'postCreateCommand' to run commands after the container is created.
   // "postCreateCommand": "pip install --user -r requirements.txt",
+  "containerEnv": {
+    "PYTHONPATH":"${containerWorkspaceFolder}/src:$PYTHONPATH"
+  },
   // Configure tool-specific properties.
   // "customizations": {},
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.

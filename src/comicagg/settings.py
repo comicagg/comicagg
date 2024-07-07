@@ -9,7 +9,7 @@ from .utils import Env
 
 # Change default Django runserver address and port
 runserver.default_addr = "0.0.0.0"
-runserver.default_port = 8001
+runserver.default_port = 8000
 
 # Absolute path to the directory that holds the comicagg folder
 BASE_DIR = Path(__file__).resolve().parent.parent
