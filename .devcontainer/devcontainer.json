@@ -11,10 +11,10 @@
   // This can be used to network with other containers or the host.
   ,
   "forwardPorts": [
-    8000,
-    5432,
-    8001,
-    8080
+    // 8001, // Django runserver
+    // 5555, // Flower dashboard (Celery)
+    // 8081, // PgAdmin4
+    // 8025  // Mailpit UI
   ],
   "customizations": {
     "vscode": {
