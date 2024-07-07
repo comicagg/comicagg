@@ -84,7 +84,6 @@ jobs:
         name: Set up Docker Buildx
       - uses: docker/login-action@v3
         name: Log into registry ${{ env.REGISTRY }}
-        if: env.push-image == 'true'
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
@@ -129,7 +128,6 @@ jobs:
         name: Set up Docker Buildx
       - uses: docker/login-action@v3
         name: Log into registry ${{ env.REGISTRY }}
-        if: env.push-image == 'true'
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
@@ -186,7 +184,6 @@ jobs:
         name: Set up Docker Buildx
       - uses: docker/login-action@v3
         name: Log into registry ${{ env.REGISTRY }}
-        if: env.push-image == 'true'
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
