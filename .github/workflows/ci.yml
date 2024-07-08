@@ -75,7 +75,7 @@ jobs:
         run: echo "build=true" >> "$GITHUB_OUTPUT"
       - id: print-output
         name: Print outputs
-        run: echo $GITHUB_OUTPUT
+        run: cat $GITHUB_OUTPUT
 
   build-python:
     runs-on: ubuntu-latest
