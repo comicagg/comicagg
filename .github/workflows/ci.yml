@@ -80,7 +80,7 @@ jobs:
   build-python:
     runs-on: ubuntu-latest
     needs: build-check
-    if: needs.build-check.outputs.python == 'true'
+    if: needs.build-check.outputs.python || needs.build-check.outputs.python == 'true'
     defaults:
       run:
         working-directory: ./src
