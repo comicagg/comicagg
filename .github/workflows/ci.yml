@@ -57,8 +57,8 @@ jobs:
         working-directory: ./src
     outputs:
       python: |
-        ${{ steps.requirements.outputs.changed
-          || steps.build-for-tag.outputs.build }}
+        ${{ steps.requirements.outputs.changed == 'true'
+          || steps.build-for-tag.outputs.build == 'true' }}
     steps:
       - uses: actions/checkout@v4
         name: Checkout source ${{ github.ref }}
@@ -73,6 +73,9 @@ jobs:
         name: Check if this run comes from a tag push
         if: startsWith(github.ref, 'refs/tags/2')
         run: echo "build=true" >> "$GITHUB_OUTPUT"
+      - id: print-output
+        name: Print outputs
+        run: cat $GITHUB_OUTPUT
 
   build-python:
     runs-on: ubuntu-latest
@@ -151,10 +154,6 @@ jobs:
         if: needs.build-check.outputs.python == 'true'
         run: |
           echo "TAG=${{ env.DOCKER_METADATA_OUTPUT_VERSION }}" >> $GITHUB_ENV
-      # - name: Use latest built Python image (development)
-      #   if: needs.build-check.outputs.requirements == 'false'
-      #   run: |
-      #     echo "TAG=development" >> $GITHUB_ENV
       - uses: docker/build-push-action@v5
         id: build-and-push-app
         name: Build and push APP
