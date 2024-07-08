@@ -73,6 +73,9 @@ jobs:
         name: Check if this run comes from a tag push
         if: startsWith(github.ref, 'refs/tags/2')
         run: echo "build=true" >> "$GITHUB_OUTPUT"
+      - id: print-output
+        name: Print outputs
+        run: echo $GITHUB_OUTPUT
 
   build-python:
     runs-on: ubuntu-latest
