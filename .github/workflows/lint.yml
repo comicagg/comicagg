@@ -1,6 +1,9 @@
 name: Lint
 
-on: [pull_request]
+on:
+  pull_request:
+    branches:
+      - development
 
 env:
   PYTHON_VERSION: 3.12
@@ -10,7 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      name: Check out source
     - uses: psf/black@stable
+      name: Run black
       with:
         # Options: https://github.com/psf/black/blob/stable/docs/usage_and_configuration/the_basics.md
         options: "--force-exclude migrations --check"

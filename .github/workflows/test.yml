@@ -1,11 +1,12 @@
 name: Tests
 
 on:
-  push:
-    branches: ["development"]
-    tags: ["2*"]
+  # push:
+  #   branches: ["development"]
+  #   tags: ["2*"]
   pull_request:
-    branches: [ "development" ]
+    branches:
+      - development
   workflow_dispatch:
 
 env:
@@ -41,6 +42,7 @@ jobs:
         working-directory: ./src
     steps:
       - uses: actions/checkout@v4
+        name: Check out source
       - uses: actions/setup-python@v5
         name: Set up Python ${{ env.PYTHON_VERSION }}
         with:

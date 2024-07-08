@@ -57,8 +57,8 @@ jobs:
         working-directory: ./src
     outputs:
       python: |
-        ${{ steps.requirements.outputs.changed
-          || steps.build-for-tag.outputs.build }}
+        ${{ steps.requirements.outputs.changed == 'true'
+          || steps.build-for-tag.outputs.build == 'true' }}
     steps:
       - uses: actions/checkout@v4
         name: Checkout source ${{ github.ref }}
@@ -151,10 +151,6 @@ jobs:
         if: needs.build-check.outputs.python == 'true'
         run: |
           echo "TAG=${{ env.DOCKER_METADATA_OUTPUT_VERSION }}" >> $GITHUB_ENV
-      # - name: Use latest built Python image (development)
-      #   if: needs.build-check.outputs.requirements == 'false'
-      #   run: |
-      #     echo "TAG=development" >> $GITHUB_ENV
       - uses: docker/build-push-action@v5
         id: build-and-push-app
         name: Build and push APP
