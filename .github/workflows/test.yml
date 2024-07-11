@@ -18,7 +18,7 @@ env:
 
   NGINX_BUILD_DIR: /tmp/nginx/
 
-  DJANGO_DEBUG: 1
+  DJANGO_DEBUG: 0
   DJANGO_STATIC_ROOT: /tmp/nginx/static/
   DJANGO_SECRET_KEY: this-is-just-for-building
   DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432/tmp/comicagg.db
