@@ -12,32 +12,35 @@
   ,
   "forwardPorts": [
     8000, // Django runserver
-    8001, // Flower dashboard (Celery)
-    8002, // PgAdmin4
-    8003  // Mailpit UI
+    8001 // Flower dashboard (Celery)
+    // 8002, // PgAdmin4
+    // 8003  // Mailpit UI
   ],
   "customizations": {
     "vscode": {
       "extensions": [
-        "tal7aouy.indent-colorizer",
+        "ahmadalli.vscode-nginx-conf",
+        "batisteo.vscode-django",
+        "DavidAnson.vscode-markdownlint",
+        "EditorConfig.EditorConfig",
+        "junstyle.vscode-django-support",
+        "mrorz.language-gettext",
+        "ms-azuretools.vscode-docker",
         "ms-python.black-formatter",
-        "jgclark.vscode-todo-highlight",
-        "Gruntfuggly.todo-tree",
-        "tushortz.python-extended-snippets",
-        "ms-python.python",
         "ms-python.debugpy",
         "ms-python.isort",
-        "twixes.pypi-assistant",
-        "batisteo.vscode-django",
-        "junstyle.vscode-django-support",
-        "ahmadalli.vscode-nginx-conf",
-        "ms-azuretools.vscode-docker",
-        "DavidAnson.vscode-markdownlint",
-        "vict0rsch.coblock",
-        "sourcery.sourcery",
+        "ms-python.python",
+        "njqdev.vscode-python-typehint",
+        "shamanu4.django-intellisense",
         "thebarkman.vscode-djaneiro",
-        "mrorz.language-gettext",
-        "EditorConfig.EditorConfig"
+        "tushortz.python-extended-snippets",
+        "twixes.pypi-assistant",
+
+        "tal7aouy.indent-colorizer",
+        "jgclark.vscode-todo-highlight",
+        "Gruntfuggly.todo-tree",
+        "vict0rsch.coblock",
+        "sourcery.sourcery"
       ]
     }
   },

@@ -15,7 +15,6 @@ ENV PYTHONUNBUFFERED=1
 
 # Install deps
 RUN apk update && \
-    apk add curl gettext && \
     apk add gcc libpq-dev postgresql-dev python3-dev musl-dev
 
 # Install dependencies
@@ -41,7 +40,7 @@ COPY --from=builder /usr/src/app/wheels /wheels
 
 # Install distribution dependencies
 RUN apk update && \
-    apk add libpq && \
+    apk add libpq curl gettext envsubst && \
     # Install Python dependencies
     pip install --upgrade pip && \
     pip install --no-cache /wheels/*
