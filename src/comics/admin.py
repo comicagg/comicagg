@@ -6,6 +6,8 @@ from django.db.models.query import QuerySet
 from django.utils.translation import gettext_lazy as _
 from django.http import HttpRequest
 
+from comics.tasks.update_comics import update_comic_task
+
 from .models import Comic, NewComic, Request, Strip, Subscription, Tag, UnreadStrip
 
 # ##############
@@ -43,7 +45,16 @@ class HasCustomFunction(admin.SimpleListFilter):
             return queryset.filter(Q(custom_func__isnull=True) | Q(custom_func=""))
 
 
+@admin.action(description=_("Start update task"))
+def update_comic_via_task(modeladmin, request, queryset):
+    for comic in queryset:
+        update_comic_task.apply_async(
+            (comic.id,), periodic_task_name=f"Update comic {comic.id}"
+        )
+
+
 class ComicAdmin(admin.ModelAdmin):
+    actions = [update_comic_via_task]
     list_display = (
         "name",
         "status",
