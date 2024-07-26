@@ -2,10 +2,9 @@ import logging
 import os
 import random
 from hashlib import md5
-from urllib.error import HTTPError
 from urllib.parse import urljoin
-from urllib.request import Request, urlopen
 
+import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -200,18 +199,17 @@ def _image_url(url: str, referrer: str):
 def _download_image(url: str, referrer: str, file_path):
     headers = {"referer": referrer, "user-agent": settings.USER_AGENT}
     try:
-        request = Request(url, None, headers)
-        response = urlopen(request)
-        content_type = response.info()["Content-Type"]
+        response = requests.get(url, headers=headers)
+        content_type = response.headers["Content-Type"]
         if content_type.startswith("image/"):
             # we got an image, that's good
             extension = content_type.replace("image/", "")
             file_path += f".{extension}"
             with open(file_path, "w+b") as file:
-                file.writelines(response.readlines())
+                file.write(response.content)
         else:
             # no image mime? not cool
             file_path = None
-    except HTTPError:
+    except (requests.ConnectionError, requests.HTTPError):
         file_path = None
     return file_path
