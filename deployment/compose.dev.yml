@@ -1,6 +1,0 @@
-name: comicagg-dev
-
-include:
-  - path:
-    - compose.yml
-    - compose.override.dev.yml

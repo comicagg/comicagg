@@ -1,7 +1,7 @@
 FROM python:3.12-bookworm
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 # Add entrypoint
 COPY --chmod=744 .devcontainer/entrypoint.sh /entrypoint.sh
