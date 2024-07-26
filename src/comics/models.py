@@ -118,7 +118,9 @@ class Comic(models.Model):
         null=True,
         help_text="Status of the last update run.",
     )
-    last_image = models.URLField("Last image URL", blank=True)
+    last_image = models.URLField(
+        "Last image URL", blank=True, null=True, max_length=300
+    )
     last_image_alt_text = AltTextField("Last image alt text", blank=True, null=True)
 
     # Ratings
