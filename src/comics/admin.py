@@ -55,11 +55,7 @@ def update_comic_via_task(modeladmin, request, queryset):
 
 class ComicAdmin(admin.ModelAdmin):
     actions = [update_comic_via_task]
-    list_display = (
-        "name",
-        "status",
-        "last_update",
-    )
+    list_display = ("name", "status", "last_update", "last_update_status")
     search_fields = ["name"]
     save_on_top = True
     inlines = [
