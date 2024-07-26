@@ -22,6 +22,17 @@ class NoMatchException(Exception):
         return repr(self.message)
 
 
+class UpdateException(Exception):
+    """To be thrown when updating a comic fails, either by a failing HTTP status or connection error."""
+
+    def __init__(self, message: str):
+        super(Exception, self).__init__(message)
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)
+
+
 class InvalidParameterException(Exception):
     def __init__(self, parameters: list[str]):
         param_str = ", ".join(parameters)

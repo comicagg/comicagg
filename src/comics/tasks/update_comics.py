@@ -4,7 +4,7 @@ from celery import shared_task
 from celery.utils.log import get_task_logger
 
 from ..models import Comic
-from ..update import NoMatchException, update_comic
+from ..update import NoMatchException, UpdateException, update_comic
 
 task_logger = get_task_logger(__name__)
 
@@ -33,7 +33,10 @@ def update_comic_task(comic_id: int) -> dict[str, bool | str]:
         comic.last_update_status = "No match during update"
     except Exception:
         comic.last_update_status = f"Error: {sys.exc_info()[1]}"
+        error = sys.exc_info()[1]
     finally:
         comic.save()
 
-    return {"updated": updated, "status": comic.last_update_status if error else ""}
+    if error:
+        raise UpdateException(f"Error updating comic: ${error}")
+    return {"updated": updated, "status": comic.last_update_status}
