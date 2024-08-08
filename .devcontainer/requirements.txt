@@ -1,5 +1,5 @@
 # Development only
 psycopg[binary]==3.2.1
 pylint-django==2.5.5
-pre-commit==3.7.1
-black==24.4.2
+pre-commit==3.8.0
+black==24.8.0
