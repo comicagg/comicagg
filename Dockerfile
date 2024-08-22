@@ -14,6 +14,7 @@ RUN mkdir /app && \
     mkdir -p /web/static && \
     addgroup -S app && \
     adduser -s /bin/ash -S app -G app && \
+    chown -R app:app /app && \
     chown -R app:app /web
 
 COPY --chown=app:app src lib /app/
