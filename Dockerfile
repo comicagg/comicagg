@@ -25,7 +25,7 @@ WORKDIR /app
 USER app
 
 # Django
-EXPOSE 8000
+EXPOSE 80
 # Celery Flower dashboard
 EXPOSE 8001
 
