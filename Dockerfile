@@ -14,6 +14,7 @@ RUN mkdir /app && \
     mkdir -p /web/static && \
     addgroup -S app && \
     adduser -s /bin/ash -S app -G app && \
+    chown -R app:app /app && \
     chown -R app:app /web
 
 COPY --chown=app:app src lib /app/
@@ -25,8 +26,11 @@ WORKDIR /app
 USER app
 
 # Django
-EXPOSE 8000
+EXPOSE 80
 # Celery Flower dashboard
 EXPOSE 8001
 
 ENTRYPOINT [ "/entrypoint.sh" ]
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f -A "healthcheck/1" -H "Host:${DJANGO_SITE_DOMAIN}" http://localhost || exit 1
