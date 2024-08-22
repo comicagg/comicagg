@@ -17,10 +17,7 @@
   "python.analysis.diagnosticMode": "workspace",
   "python.analysis.enablePytestExtra": false,
   "python.analysis.stubPath": "src",
-  "black-formatter.args": [
-    "--line-length",
-    "110"
-  ],
+  "black-formatter.args": [],
   "editor.rulers": [
     88
   ],

@@ -416,11 +416,6 @@ LOGGING = {
 # #            #
 # ##############
 
-SITE_NAME = "Comic Aggregator"
-
-# Without trailing slash, used in the password reset email and ws index page
-SITE_DOMAIN = django_env.get("SITE_DOMAIN")
-
 CODE_REPO = "https://github.com/comicagg/"
 
 # Mark users as inactive if they haven't logged in in this amount of days
