@@ -12,6 +12,7 @@ from math import e
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import mail_managers
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
@@ -135,8 +136,10 @@ def report_comic(request: AuthenticatedHttpRequest):
         "El usuario %s dice que hay una imagen rota en el comic %s en alguna de las siguientes actualizaciones:\n"
         % (request.user, comic.name)
     )
-    url = reverse("admin:reported", kwargs={"id_list": "-".join(id_list)})
-    message += f"{settings.SITE_DOMAIN}{url}"
+    protocol = "https://" if request.is_secure else "http://"
+    domain = get_current_site(request).domain
+    path = reverse("admin:reported", kwargs={"id_list": "-".join(id_list)})
+    message += f"{protocol}{domain}{path}"
     try:
         mail_managers(f"Imagen rota: {comic.name}", message)
     except Exception:
