@@ -31,3 +31,6 @@ EXPOSE 80
 EXPOSE 8001
 
 ENTRYPOINT [ "/entrypoint.sh" ]
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD curl -f -A "healthcheck/1" -H "Host:${DJANGO_SITE_DOMAIN}" http://localhost || exit 1
