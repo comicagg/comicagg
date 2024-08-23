@@ -56,7 +56,7 @@ jobs:
           python -Wa manage.py test --noinput --failfast comics
       - name: Load fixtures
         run: |
-          python manage.py migrate && \
+          python manage.py migrate
           python manage.py loaddata comics.Comic.json
         env:
           DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432/${{ runner.temp }}/comicagg.db
