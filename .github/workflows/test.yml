@@ -55,3 +55,6 @@ jobs:
       - name: Run Tests
         run: |
           python -Wa manage.py test --noinput --failfast comics
+      - name: Load fixtures
+        run: |
+          python -Wa manage.py loaddata comics.Comic.json
