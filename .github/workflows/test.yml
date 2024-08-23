@@ -21,6 +21,7 @@ env:
   DJANGO_DEBUG: 0
   DJANGO_STATIC_ROOT: /tmp/nginx/static/
   DJANGO_SECRET_KEY: this-is-just-for-building
+  DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432/tmp/comicagg.db
   DJANGO_MEDIA_ROOT: /web/media/
   DJANGO_MEDIA_URL: /.media/
   DJANGO_STATIC_URL: /.static/
@@ -36,8 +37,6 @@ env:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432${{ runner.temp }}/comicagg.db
     defaults:
       run:
         working-directory: ./src
@@ -59,3 +58,5 @@ jobs:
       - name: Load fixtures
         run: |
           python -Wa manage.py loaddata comics.Comic.json
+        env:
+          DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432${{ runner.temp }}/comicagg.db
