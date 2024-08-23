@@ -58,4 +58,4 @@ jobs:
         run: |
           python -Wa manage.py loaddata -v 3 comics.Comic.json
         env:
-          DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432${{ runner.temp }}/comicagg.db
+          DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432/${{ runner.temp }}/comicagg.db
