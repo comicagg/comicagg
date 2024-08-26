@@ -7,7 +7,6 @@ def add_settings(request: HttpRequest):
     """Add additional properties to the context."""
     return {
         "MAINTENANCE": settings.MAINTENANCE,
-        "DATABASE_NAME": settings.DATABASES["default"]["NAME"],
         "INACTIVE_DAYS": settings.INACTIVE_DAYS,
         "CODE_REPO": settings.CODE_REPO,
         "SITE_DOMAIN": get_current_site(request).domain,

@@ -3,6 +3,7 @@ import sys
 from datetime import datetime, timezone
 
 from django.conf import settings
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -45,6 +46,8 @@ class MaintenanceMiddleware:
             and not request.user.is_superuser
         ):
             return render(request, "maintenance.html", {})
+
+        messages.add_message(request, messages.WARNING, "Site is in maintenance mode")
         return self.get_response(request)
 
 

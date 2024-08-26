@@ -108,6 +108,10 @@ button:hover {
     width: 90%;
 }
 
+.w95 {
+    width: 95%;
+}
+
 .br {
     border: 1px gray solid;
     border-radius: 15px;
@@ -117,7 +121,9 @@ button:hover {
 }
 
 .mc {
-    margin: 0 auto 0 auto;
+    /* margin: 0 auto 0 auto; */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .mb15px {
@@ -251,6 +257,10 @@ input.btn {
     border: 1px gray solid;
     border-radius: 5px;
     background-color: rgb(187, 228, 196);
+}
+
+.messages:has(.warning) {
+    background-color: rgb(255, 228, 120);
 }
 
 /***************/

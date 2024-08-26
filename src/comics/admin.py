@@ -6,11 +6,9 @@ from django.db.models.query import QuerySet
 from django.utils.translation import gettext_lazy as _
 from django.http import HttpRequest
 
-from comics.tasks.update_comics import update_comic_task
-
-from comics.fields import ComicStatus
-
+from .fields import ComicStatus
 from .models import Comic, NewComic, Request, Strip, Subscription, Tag, UnreadStrip
+from .tasks.update_comics import update_comic_task
 
 # ##############
 # #   Comics   #
