@@ -51,7 +51,7 @@
     {% include 'header.html' %}
 		<div id="content" class="{% block content_class %}{% endblock %}">
       {% if messages %}
-      <ul class="messages">
+      <ul class="messages br center mc w95">
           {% for message in messages %}
           <li class="{{ message.tags }}">{{ message }}</li>
           {% endfor %}
