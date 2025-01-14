@@ -1,4 +1,4 @@
-Django==4.2.15
+Django==4.2.17
 # This one is baked into the image. No need to install it with pip.
 # psycopg[c]==3.1.17
 requests==2.32.3
