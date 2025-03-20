@@ -1,11 +1,15 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from . import ConsentHttpRequest
 
 
 def set_consent(request: ConsentHttpRequest) -> HttpResponse:
-    response = HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+    referer = request.META.get("HTTP_REFERER", "/")
+    if not url_has_allowed_host_and_scheme(referer, allowed_hosts=None):
+        referer = "/"
+    response = HttpResponseRedirect(referer)
     if request.method == "POST":
         accepted = request.POST.get(settings.COOKIE_CONSENT_COOKIE_NAME) == "1"
         if accepted:
