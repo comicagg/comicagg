@@ -40,11 +40,13 @@ class MaintenanceMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: AuthenticatedHttpRequest):
-        if (
-            settings.MAINTENANCE
-            and request.user.is_authenticated
-            and not request.user.is_superuser
-        ):
+        if not settings.MAINTENANCE or not request.user.is_authenticated:
+            return self.get_response(request)
+
+        if request.get_full_path().startswith("/accounts/log"):
+            return self.get_response(request)
+
+        if not request.user.is_superuser:
             return render(request, "maintenance.html", {})
 
         messages.add_message(request, messages.WARNING, "Site is in maintenance mode")
