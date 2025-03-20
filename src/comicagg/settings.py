@@ -128,8 +128,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Show detailed error pages to super users.
     # "middleware.UserBasedExceptionMiddleware",
-    # Set up the user profile and user operations
-    # "middleware.UserProfileMiddleware",
     # Check if the user is active
     "middleware.ActiveUserMiddleware",
     # Maintenance mode
