@@ -3,8 +3,8 @@ from typing import Any
 from django.contrib import admin
 from django.db.models import Q
 from django.db.models.query import QuerySet
-from django.utils.translation import gettext_lazy as _
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 from .fields import ComicStatus
 from .models import Comic, NewComic, Request, Strip, Subscription, Tag, UnreadStrip
@@ -41,7 +41,7 @@ class HasCustomFunctionFilter(admin.SimpleListFilter):
     ) -> QuerySet[Comic] | None:
         if self.value() == "true":
             return queryset.exclude(Q(custom_func__isnull=True) | Q(custom_func=""))
-        elif self.value() == "false":
+        if self.value() == "false":
             return queryset.filter(Q(custom_func__isnull=True) | Q(custom_func=""))
 
 
@@ -61,9 +61,9 @@ class LastUpdateFilter(admin.SimpleListFilter):
     ) -> QuerySet[Comic] | None:
         if self.value() == "success":
             return queryset.filter(Q(last_update_status="Success"))
-        elif self.value() == "nomatch":
+        if self.value() == "nomatch":
             return queryset.filter(Q(last_update_status="No match during update"))
-        else:
+        if self.value() == "error":
             return queryset.filter(Q(last_update_status__startswith="Error:"))
 
 
