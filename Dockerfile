@@ -1,7 +1,6 @@
 ARG TAG
 
-# Pull official base image
-FROM nublar.azurecr.io/comicagg/python:${TAG:-development}
+FROM cr.nublar.net/comicagg/python:${TAG:-development}
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1

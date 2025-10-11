@@ -10,7 +10,6 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY: nublar.azurecr.io
   PYTHON_IMAGE_NAME: comicagg/python
   APP_IMAGE_NAME: comicagg/app
   PROXY_IMAGE_NAME: comicagg/proxy
