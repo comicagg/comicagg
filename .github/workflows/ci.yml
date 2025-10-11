@@ -13,6 +13,11 @@ on:
       - assigned
   workflow_dispatch:
     inputs:
+      build-all:
+        description: 'Build all images'
+        required: false
+        type: boolean
+        default: false
       push-image:
         description: 'Push image to repository'
         required: false
@@ -47,7 +52,7 @@ jobs:
       run:
         working-directory: ./src
     outputs:
-      python: ${{ steps.requirements.outputs.changed == 'true' || steps.build-for-tag.outputs.build == 'true' }}
+      python: ${{ inputs.build-all == 'true' || steps.requirements.outputs.changed == 'true' || steps.build-for-tag.outputs.build == 'true' }}
     steps:
       - uses: actions/checkout@v4
         name: Checkout source ${{ github.ref }}
