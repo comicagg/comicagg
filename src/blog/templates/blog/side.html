@@ -4,9 +4,9 @@
   <ul>
 {% for item in posts %}
 {% if new_posts %}
-    <li {% if item|new:user %}class="bolder"{% endif %}><a onclick="Element.scrollToExtra('p{{ item.id }}', -40)">{{ item.title }}</a></li>
+    <li {% if item|new:user %}class="bolder"{% endif %}><a onclick="scrollToExtra('p{{ item.id }}', -40)">{{ item.title }}</a></li>
 {% else %}
-    <li ><a onclick="Element.scrollToExtra('p{{ item.id }}', -40)">{{ item.title }}</a></li>
+    <li ><a onclick="scrollToExtra('p{{ item.id }}', -40)">{{ item.title }}</a></li>
 {% endif %}
 {% endfor %}
   </ul>

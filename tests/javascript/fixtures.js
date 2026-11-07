@@ -42,11 +42,7 @@ const test = base.extend({
         await page.context().addCookies([
           { name: "csrftoken", value: "test%2Dtoken", url: origin },
         ]);
-        // These are the real vendored libraries, not mocks of their DOM or AJAX APIs.
-        await page.addScriptTag({ path: path.join(staticRoot, "libs/prototype.js") });
-        await page.addScriptTag({ path: path.join(staticRoot, "libs/jquery-1.6.1.min.js") });
         await page.evaluate(() => {
-          window.$j = window.jQuery.noConflict();
           Object.assign(window, {
             titlebase: " Comic Aggregator",
             static_url: "/static/",

@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global window, document, setTimeout, $, $$, Date, Image, Ajax, Element, static_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, comicCounter, unreadCounter, updateCounters, unreadComics, comics */
+/*global window, document, setTimeout, Date, Image, byId, showElement, hideElement, isVisible, documentOffset, scrollToExtra, static_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, comicCounter, unreadCounter, updateCounters, unreadComics, comics */
 "use strict";
 // comic list. Array of divs
 var clist = [];
@@ -39,7 +39,7 @@ function loadImage(url, elem, comic) {
         elem.alt = "ERROR";
         elem.src = static_url + 'images/error.png';
         comics[elem.cid].error = true;
-        $('reload' + elem.cid).show();
+        showElement(byId('reload' + elem.cid));
     };
     img.src = url;
 }
@@ -47,18 +47,18 @@ function loadImage(url, elem, comic) {
 // if seed is true, it will add a seed in the image url
 function loadComic(comic, seed) {
     var s, i, unread, image, url;
-    maxwidth = $('c' + comic.id).select('.comicextra')[0].getDimensions().width;
+    maxwidth = byId('c' + comic.id).querySelectorAll('.comicextra')[0].offsetWidth;
     if (!comic.loaded) {
         s = 'reload' + comic.id;
-        $(s).hide();
+        hideElement(byId(s));
         for (i = 0; i < comic.list.length; i = i + 1) {
             unread = comic.list[i];
-            image = $('imgu' + unread.unreadid);
+            image = byId('imgu' + unread.unreadid);
             url = seed ? addSeed(unread.url) : unread.url;
             loadImage(url, image, comic);
         }
         if (comic.list.length === 0) {
-            image = $('imgl' + comic.id);
+            image = byId('imgl' + comic.id);
             url = seed ? addSeed(comic.last_url) : comic.last_url;
             loadImage(url, image, comic);
         }
@@ -70,8 +70,8 @@ function loadComic(comic, seed) {
 function inViewport(cdiv, vmin, vmax) {
     var emin, h, emax, c1, c2, c3;
     //top of the element
-    emin = cdiv.cumulativeOffset().top;
-    h = cdiv.getHeight();
+    emin = documentOffset(cdiv).top;
+    h = cdiv.offsetHeight;
     //bottom of the element
     emax = emin + h;
     //all the element occupies the viewport. top and bottom are beyond the viewport
@@ -107,9 +107,9 @@ function updateViewport(loadImages) {
     // viewp == 2: passed the viewport
     viewp = 0;
     //vertical position of the viewport: top + top bar
-    vmin = document.viewport.getScrollOffsets().top + 40;
+    vmin = window.scrollY + 40;
     //vertical position of the viewport: bottom
-    vmax = vmin + document.viewport.getHeight();
+    vmax = vmin + document.documentElement.clientHeight;
     //<div> in the viewport
     cdivInView = [];
     cdivInViewCount = 0;
@@ -119,7 +119,7 @@ function updateViewport(loadImages) {
     for (i = 0, len = divlist.length; i < len && (viewp < 2 || extras > 0); i = i + 1) {
         cdiv = divlist[i];
         //we don't like hidden items
-        if (cdiv.visible()) {
+        if (isVisible(cdiv)) {
             //check that the item is inside the viewport
             if (inViewport(cdiv, vmin, vmax)) {
                 //it is!
@@ -154,14 +154,18 @@ function updateViewport(loadImages) {
         try {
             cdiv = cdivInView[cdivInViewCount];
             comic = comics[cdiv.id.substring(1)];
-            var el = new Element("a", { 'onclick': '$("c' + comic.id + '").scrollToExtra(-40)' }).update(comic.name);
-            $('next_comic_bar').update(el);
-            $('next_comic_bar').show();
+            var el = document.createElement("a");
+            el.addEventListener("click", function () {
+                scrollToExtra("c" + comic.id, -40);
+            });
+            el.innerHTML = comic.name;
+            byId('next_comic_bar').replaceChildren(el);
+            showElement(byId('next_comic_bar'));
         } catch (e) {
-            $('next_comic_bar').hide();
+            hideElement(byId('next_comic_bar'));
         }
     } else {
-        $('next_comic_bar').hide();
+        hideElement(byId('next_comic_bar'));
     }
     //free the semaphore
     alreadyUpdating = false;
@@ -190,11 +194,11 @@ function initLoadImages() {
 function showAllComics() {
     var i;
     for (i = 0; i < clist.length; i = i + 1) {
-        clist[i].show();
+        showElement(clist[i]);
     }
-    $('showingAll').show();
-    $('showingUnread').hide();
-    $('no_unread_comics').hide();
+    showElement(byId('showingAll'));
+    hideElement(byId('showingUnread'));
+    hideElement(byId('no_unread_comics'));
     updateViewport(true);
 }
 // shows only unread comics divs
@@ -203,20 +207,20 @@ function showUnreadComics() {
     for (i = 0; i < clist.length; i = i + 1) {
         cid = parseInt(clist[i].id.substring(1), 10);
         if (!unreadComics[cid]) {
-            clist[i].hide();
+            hideElement(clist[i]);
         } else {
-            clist[i].show();
+            showElement(clist[i]);
         }
     }
-    $('showingAll').hide();
-    $('showingUnread').show();
+    hideElement(byId('showingAll'));
+    showElement(byId('showingUnread'));
     if (unreadCounter === 0 && comicCounter) {
-        $('noUnreadCounters').show();
-        $('unreadCounters').hide();
-        $('no_unread_comics').show();
+        showElement(byId('noUnreadCounters'));
+        hideElement(byId('unreadCounters'));
+        showElement(byId('no_unread_comics'));
     } else {
-        $('noUnreadCounters').hide();
-        $('unreadCounters').show();
+        hideElement(byId('noUnreadCounters'));
+        showElement(byId('unreadCounters'));
     }
     updateViewport(true);
 }
@@ -233,11 +237,11 @@ function onScrollHandler(e) {
 function initScrolling() {
     window.onscroll = onScrollHandler;
     //Sets the list of divs to control to all the comic divs
-    divlist = $$('.comic');
+    divlist = Array.from(document.querySelectorAll('.comic'));
 }
 // function exed when loading of html ends
 function onReadLoad() {
-    clist = $$('.comic');
+    clist = Array.from(document.querySelectorAll('.comic'));
     updateCounters();
     showUnreadComics();
     initScrolling();
@@ -246,11 +250,11 @@ function onReadLoad() {
             initLoadImages();
         } else {
             //TODO: mostrar comic aleatorio
-            $("no_unread_comics").show();
+            showElement(byId("no_unread_comics"));
             return 0;
         }
     } else {
-        $('noComicsSelected').show();
+        showElement(byId('noComicsSelected'));
     }
 }
 // reloads all the images from a comic that had previously failed loading adding a seed in the url
@@ -261,39 +265,37 @@ function reloadComic(cid) {
     loadComic(comic, true);
 }
 function markread(id, vote) {
-    var ret, params;
+    var params;
     params = { 'id': id, 'value': vote };
-    Element.show('working' + id);
-    Element.hide('workingerror' + id);
+    showElement(byId('working' + id));
+    hideElement(byId('workingerror' + id));
     startRequest(url_mark_as_read, {
         method: 'post',
         parameters: params,
         dataType: "json",
         onSuccess: function (counters) {
-            Element.hide('working' + id);
-            Element.hide('workingerror' + id);
-            Element.hide('reading' + id);
-            Element.hide('newnotice' + id);
-            Element.show('ok' + id);
-            setTimeout("Element.hide('ok" + id + "')", 5000);
+            hideElement(byId('working' + id));
+            hideElement(byId('workingerror' + id));
+            hideElement(byId('reading' + id));
+            hideElement(byId('newnotice' + id));
+            showElement(byId('ok' + id));
+            setTimeout(function () { hideElement(byId('ok' + id)); }, 5000);
             unreadComics[id] = false;
             updateCounters(counters);
         },
-        onFailure: function (response) {
-            //Error
-            Element.hide('working' + id);
-            Element.show('workingerror' + id);
-        },
-        onException: function (req, exc) {
-            //Error
-            Element.hide('working' + id);
-            Element.show('workingerror' + id);
+        onFailure: function () {
+            requestFailed(id);
         }
     });
 }
 
+function requestFailed(id) {
+    hideElement(byId('working' + id));
+    showElement(byId('workingerror' + id));
+}
+
 function reportbroken(id) {
-    var list, ch_list, params, ret;
+    var list, ch_list, params;
     ch_list = [];
     list = comics[id].list;
     if (list.length === 0) {
@@ -301,39 +303,40 @@ function reportbroken(id) {
         ch_list.push(comics[id].last_ch);
     } else {
         //for an unread comic
-        list.each(function (item) {
+        list.forEach(function (item) {
             ch_list.push(item.chid);
         });
     }
     params = { 'id': id, 'id_list[]': ch_list };
-    Element.show('working' + id);
-    Element.hide('workingerror' + id);
+    showElement(byId('working' + id));
+    hideElement(byId('workingerror' + id));
     startRequest(url_report, {
         method: 'post',
         parameters: params,
-        onSuccess: function (response) {
-            Element.hide('working' + id);
-            Element.hide('workingerror' + id);
-            Element.show('ok' + id);
-            setTimeout("Element.hide('ok" + id + "')", 5000);
+        onSuccess: function () {
+            hideElement(byId('working' + id));
+            hideElement(byId('workingerror' + id));
+            showElement(byId('ok' + id));
+            setTimeout(function () { hideElement(byId('ok' + id)); }, 5000);
         },
-        onFailure: function (response) {
-            //Error
-            Element.hide('working' + id);
-            Element.show('workingerror' + id);
-        },
-        onException: function (req, exc) {
-            //Error
-            Element.hide('working' + id);
-            Element.show('workingerror' + id);
+        onFailure: function () {
+            requestFailed(id);
         }
     });
+}
+
+function visibleSibling(element, property) {
+    var sibling = element[property];
+    while (sibling && !isVisible(sibling)) {
+        sibling = sibling[property];
+    }
+    return sibling;
 }
 
 function removecomic(id) {
     var params, cdiv, mover_a;
     params = { 'id': id };
-    Element.show('working' + id);
+    showElement(byId('working' + id));
     startRequest(url_remove, {
         method: 'post',
         parameters: params,
@@ -342,53 +345,34 @@ function removecomic(id) {
             //update counters
             updateCounters(counters);
             //quitar el comic de la principal
-            cdiv = $('c' + id);
-            //siguiente div hermano
-            mover_a = cdiv.next();
-            //buscamos uno que sea visible ahora mismo
-            while (mover_a !== null && mover_a !== undefined && !mover_a.visible()) {
-                mover_a = mover_a.next();
-            }
-            if (mover_a === null || mover_a === undefined) {
-                //no hay siguiente, pues anterior
-                mover_a = cdiv.previous();
-                //buscamos uno que sea visible ahora mismo
-                while (mover_a !== null && mover_a !== undefined && !mover_a.visible()) {
-                    mover_a = mover_a.previous();
-                }
-            }
+            cdiv = byId('c' + id);
+            //siguiente div hermano visible, si no hay, el anterior
+            mover_a = visibleSibling(cdiv, 'nextElementSibling') || visibleSibling(cdiv, 'previousElementSibling');
             //ocultar el div y quitarlo del dom
-            cdiv.hide();
+            hideElement(cdiv);
             cdiv.remove();
             //quitarlo de las listas
             comics[id] = null;
             unreadComics[id] = null;
             //no quedan comics en la lista, mostrar aviso
-            if ($('comics').childElements().length === 0) {
-                $('noComicsSelected').show();
-            } else if (mover_a !== null && mover_a !== undefined) {
-                mover_a.scrollToExtra(-40);
+            if (byId('comics').children.length === 0) {
+                showElement(byId('noComicsSelected'));
+            } else if (mover_a) {
+                scrollToExtra(mover_a, -40);
             }
         },
-        onFailure: function (response) {
-            //Error
-            Element.hide('working' + id);
-            Element.show('workingerror' + id);
-        },
-        onException: function (req, exc) {
-            //Error
-            Element.hide('working' + id);
-            Element.show('workingerror' + id);
+        onFailure: function () {
+            requestFailed(id);
         }
     });
 }
 function mark_all_read() {
     var i;
-    $("mark_all_read_anim").show();
+    showElement(byId("mark_all_read_anim"));
     startRequest(url_mark_all_read, {
         dataType: "json",
         onSuccess: function (counters) {
-            $("mark_all_read_anim").hide();
+            hideElement(byId("mark_all_read_anim"));
             //update counters and arrays
             updateCounters(counters);
             for (i = 0; i < unreadComics.length; i = i + 1) {
@@ -397,12 +381,12 @@ function mark_all_read() {
             //now we hide every comic
             showUnreadComics();
             //hide link to mark all read
-            $("mark_all_read").hide();
-            $("mark_all_read_bottom").hide();
-            $("no_unread_comics").show();
+            hideElement(byId("mark_all_read"));
+            hideElement(byId("mark_all_read_bottom"));
+            showElement(byId("no_unread_comics"));
         },
         onFailure: function () {
-            $("mark_all_read_anim").hide();
+            hideElement(byId("mark_all_read_anim"));
         }
     });
 }

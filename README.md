@@ -18,11 +18,10 @@ npx playwright install --with-deps chromium
 npm run test:js
 ```
 
-The Playwright suite in `tests/javascript/` loads the real bundled Prototype and
-jQuery libraries and the unchanged application scripts in Chromium. It checks DOM
-visibility, filtering, layout and scrolling, image loading/retry, counters, cookie
-consent, blog navigation, request confirmations, and request methods, form encoding,
-CSRF headers, and success/failure UI.
+The Playwright suite in `tests/javascript/` loads the application scripts in
+Chromium. It checks DOM visibility, filtering, layout and scrolling, image
+loading/retry, counters, cookie consent, blog navigation, request confirmations,
+and request methods, form encoding, CSRF headers, and success/failure UI.
 Responses and images are intercepted locally; no Django server, database, CDN, or
 external website is needed. Unexpected requests and uncaught browser errors fail
 tests. The suite also runs in the Tests workflow; failure traces are uploaded.
@@ -31,11 +30,11 @@ These are characterization tests for the JavaScript migration, not full Django
 end-to-end tests. Fixture markup represents the current page hooks, but does not
 render Django templates or exercise htmx swaps. Organization tests substitute only
 the independent Dojo container/event boundary: actual drag gestures and Dojo itself
-are not covered. When removing Prototype/jQuery, update the centralized script
-loading in `fixtures.js` and page hooks as necessary, retaining the observable
-behavior and HTTP assertions.
+are not covered. The application scripts use only native browser APIs (no Prototype
+or jQuery); update the centralized script loading in `fixtures.js` and page hooks as
+necessary, retaining the observable behavior and HTTP assertions.
 
 Named `fixme` cases document existing defects without requiring their preservation:
-quoted search input, omitted consent-request callbacks, saving an empty list, and
+omitted consent-request callbacks, saving an empty list, and
 multi-comic trash removal. They are skipped, not passing coverage; enable and refine
 their regression tests when fixing those defects.
