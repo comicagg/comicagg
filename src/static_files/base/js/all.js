@@ -1,61 +1,56 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global document, window, $, $$, url_forget_new_blogs, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true, Ajax, Element, dojo, $j, jQuery*/
+/*global document, window, fetch, URL, URLSearchParams, url_forget_new_blogs, url_set_cookie_consent, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true*/
 "use strict";
 
-var newMethods = {
-  scrollToExtra: function (element, n) {
-    element = $(element);
-    var pos = Element.cumulativeOffset(element);
-    window.scrollTo(pos[0], pos[1] + n);
-    return element;
-  },
-};
+function byId(id) {
+  return document.getElementById(id);
+}
 
-Element.addMethods(newMethods);
+function showElement(element) {
+  element.style.display = "";
+}
 
-$j(document).ajaxSend(function (event, xhr, settings) {
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != "") {
-      var cookies = document.cookie.split(";");
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) == name + "=") {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
+function hideElement(element) {
+  element.style.display = "none";
+}
+
+function isVisible(element) {
+  return element.style.display !== "none";
+}
+
+// Position relative to the document, independent of the current scroll
+function documentOffset(element) {
+  const rect = element.getBoundingClientRect();
+  return { top: rect.top + window.scrollY, left: rect.left + window.scrollX };
+}
+
+// Scrolls to the element (or element id) plus an extra offset
+function scrollToExtra(element, n) {
+  if (typeof element === "string") {
+    element = byId(element);
+  }
+  const pos = documentOffset(element);
+  window.scrollTo(pos.left, pos.top + n);
+  return element;
+}
+
+function getCookie(name) {
+  const prefix = name + "=";
+  for (const cookie of document.cookie.split(";")) {
+    const trimmed = cookie.trim();
+    if (trimmed.startsWith(prefix)) {
+      return decodeURIComponent(trimmed.substring(prefix.length));
     }
-    return cookieValue;
   }
-  function sameOrigin(url) {
-    // url could be relative or scheme relative or absolute
-    var host = document.location.host; // host + port
-    var protocol = document.location.protocol;
-    var sr_origin = "//" + host;
-    var origin = protocol + sr_origin;
-    // Allow absolute or scheme relative URLs to same origin
-    return (
-      url == origin ||
-      url.slice(0, origin.length + 1) == origin + "/" ||
-      url == sr_origin ||
-      url.slice(0, sr_origin.length + 1) == sr_origin + "/" ||
-      // or any other URL that isn't scheme relative or absolute i.e relative.
-      !/^(\/\/|http:|https:).*/.test(url)
-    );
-  }
-  function safeMethod(method) {
-    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-  }
+  return null;
+}
 
-  if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
-    xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-  }
-});
+function isSameOrigin(url) {
+  return new URL(url, document.location.href).origin === document.location.origin;
+}
 
 function focusOnLogin() {
-  $("id_username").focus();
+  byId("id_username").focus();
 }
 
 function openurl(url, target = "_blank") {
@@ -63,21 +58,50 @@ function openurl(url, target = "_blank") {
   return false;
 }
 
-function startRequest(url, options) {
+// Sends the parameters (key-value, arrays allowed) as a query string for GET
+// or as a form-encoded body otherwise. Same-origin unsafe requests get the CSRF token.
+async function startRequest(url, options) {
   // set as default data type "json"
   const dataType = options.dataType || "json";
-  return jQuery.ajax(url, {
-    type: options.method,
-    data: options.parameters, //array, key-value
-    dataType: dataType,
-    success: function (data, textStatus, jqXHR) {
-      options.onSuccess(data);
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      options.onFailure(jqXHR);
-    },
-  });
-  //return new Ajax.Request(url, options);
+  const method = (options.method || "get").toUpperCase();
+  const sameOrigin = isSameOrigin(url);
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(options.parameters || {})) {
+    for (const item of Array.isArray(value) ? value : [value]) {
+      params.append(key, item ?? "");
+    }
+  }
+
+  const headers = {};
+  const init = { method: method, headers: headers };
+  if (sameOrigin) {
+    headers["X-Requested-With"] = "XMLHttpRequest";
+  }
+  if (method === "GET" || method === "HEAD") {
+    const query = params.toString();
+    if (query) {
+      url += (url.includes("?") ? "&" : "?") + query;
+    }
+  } else {
+    init.body = params;
+    const token = getCookie("csrftoken");
+    if (sameOrigin && token !== null) {
+      headers["X-CSRFToken"] = token;
+    }
+  }
+
+  let data;
+  try {
+    const response = await fetch(url, init);
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    data = dataType === "json" ? await response.json() : await response.text();
+  } catch (error) {
+    options.onFailure(error);
+    return;
+  }
+  options.onSuccess(data);
 }
 
 function removeComicId(array, comicid) {
@@ -107,36 +131,36 @@ function updateCounters(counters) {
   }
   //first update the counters in the menu
   if (counters.unreads > 0) {
-    $("menuUnreadCounter").innerHTML = " (" + counters.unreads + ")";
+    byId("menuUnreadCounter").textContent = " (" + counters.unreads + ")";
   } else {
-    $("menuUnreadCounter").hide();
-    if ($("mark_all_read")) {
-      $("mark_all_read").hide();
+    hideElement(byId("menuUnreadCounter"));
+    if (byId("mark_all_read")) {
+      hideElement(byId("mark_all_read"));
     }
   }
   if (counters.new_comics > 0) {
-    $("menuNewComicCounter").innerHTML = " (" + counters.new_comics + ")";
+    byId("menuNewComicCounter").textContent = " (" + counters.new_comics + ")";
   } else {
-    $("menuNewComicCounter").hide();
+    hideElement(byId("menuNewComicCounter"));
   }
   if (counters.news > 0) {
-    $("menuNewsCounter").innerHTML = " (" + counters.news + ")";
+    byId("menuNewsCounter").textContent = " (" + counters.news + ")";
   } else {
-    $("menuNewsCounter").hide();
+    hideElement(byId("menuNewsCounter"));
   }
   //if we're in the read page
   if (typeof titlei18n === "string") {
     if (counters.unreads > 0) {
       document.title = titlei18n + " (" + counters.unreads + ") - " + titlebase;
-      $("noUnreadCounters").hide();
-      $("unreadCounters").show();
-      $("unreadCountersUnread").innerHTML = counters.unreads;
-      $("unreadCountersTotal").innerHTML = counters.comics;
+      hideElement(byId("noUnreadCounters"));
+      showElement(byId("unreadCounters"));
+      byId("unreadCountersUnread").textContent = counters.unreads;
+      byId("unreadCountersTotal").textContent = counters.comics;
     } else {
       document.title = titlei18n + " - " + titlebase;
-      $("noUnreadCounters").show();
-      $("unreadCounters").hide();
-      $("noUnreadCountersTotal").innerHTML = counters.comics;
+      showElement(byId("noUnreadCounters"));
+      hideElement(byId("unreadCounters"));
+      byId("noUnreadCountersTotal").textContent = counters.comics;
     }
   }
   return 0;
@@ -164,14 +188,14 @@ function set_cookie_consent(value) {
   const d = new Date();
   d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000);
   let expires = "expires=" + d.toUTCString();
-  $("cookie_notice").hide();
-  if ($("cookie_consent_required")) {
-    $("cookie_consent_required").hide();
+  hideElement(byId("cookie_notice"));
+  if (byId("cookie_consent_required")) {
+    hideElement(byId("cookie_consent_required"));
   }
   document.cookie = "cookie_consent=" + value + "; path=/; " + expires + ";";
 
   if (value) {
-    const login_button = $("login_button");
+    const login_button = byId("login_button");
     if (value && login_button) {
       login_button.type = "submit";
     }

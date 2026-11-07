@@ -1,34 +1,33 @@
 /*jslint white: true, onevar: true, undef: true, nomen: false, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global $, $$, startRequest, removeComicId, url_save_selection, url_remove_list, usercomics: true, Ajax, Element, dojo, setTimeout, updateCounters */
+/*global startRequest, removeComicId, url_save_selection, url_remove_list, usercomics: true, dojo, setTimeout, updateCounters, byId, showElement, hideElement */
 "use strict";
 function save() {
     var params, items, ids, i, len;
-    items = $('user_comics').select('.dojoDndItem');
+    items = byId('user_comics').querySelectorAll('.dojoDndItem');
     ids = items[0].getAttribute('comicid');
     for (i = 1, len = items.length; i < len; i = i + 1) {
         ids += "," + items[i].getAttribute('comicid');
     }
-    $('saving_text').show();
-    $('save_error').hide();
-    $('saved').hide();
+    showElement(byId('saving_text'));
+    hideElement(byId('save_error'));
+    hideElement(byId('saved'));
     params = {'selected': ids};
     startRequest(url_save_selection, {
         method: 'post',
         parameters: params,
         onSuccess: function (counters) {
-            var i;
-            $('saved').show();
-            $('saving_text').hide();
-            i = setTimeout(
+            showElement(byId('saved'));
+            hideElement(byId('saving_text'));
+            setTimeout(
                 function () {
-                    $('saved').hide();
+                    hideElement(byId('saved'));
                 }, 6000);
             updateCounters(counters);
         },
-        onFailure: function (response) {
-            $('saved').hide();
-            $('save_error').show();
-            $('saving_text').hide();
+        onFailure: function () {
+            hideElement(byId('saved'));
+            showElement(byId('save_error'));
+            hideElement(byId('saving_text'));
         }
     });
 }
@@ -38,7 +37,8 @@ function convertNodes() {
     nodes = [];
     for (i = 0, len = usercomics.length; i < len; i = i + 1) {
         c = usercomics[i];
-        e = new Element('span', { 'comicid': c.id });
+        e = document.createElement('span');
+        e.setAttribute('comicid', c.id);
         e.innerHTML = c.name;
         nodes[i] = e;
     }
@@ -61,9 +61,9 @@ function initDND() {
     //do something when comics are dropped in the trash
     dojo.connect(trash, "onDropExternal", function (source, nodes, copy) {
         var ids, i, params;
-        $('saving_text').show();
-        $('save_error').hide();
-        $('saved').hide();
+        showElement(byId('saving_text'));
+        hideElement(byId('save_error'));
+        hideElement(byId('saved'));
         trash.selectAll();
         trash.deleteSelectedNodes();
         trash.clearItems();
@@ -77,11 +77,11 @@ function initDND() {
             parameters: params,
             onSuccess: function (counters) {
                 var i, id, removed;
-                $('saved').show();
-                $('saving_text').hide();
-                i = setTimeout(
+                showElement(byId('saved'));
+                hideElement(byId('saving_text'));
+                setTimeout(
                     function () {
-                        $('saved').hide();
+                        hideElement(byId('saved'));
                     }, 6000);
                 removed = false;
                 for (i = 0; i < nodes.length; i = i + 1) {
@@ -89,14 +89,16 @@ function initDND() {
                     removed = removed || removeComicId(usercomics, id);
                 }
                 if (removed) {
-                    usercomics = usercomics.compact();
+                    usercomics = usercomics.filter(function (c) {
+                        return c !== null && c !== undefined;
+                    });
                 }
                 updateCounters(counters);
             },
-            onFailure: function (response) {
-                $('saved').hide();
-                $('save_error').show();
-                $('saving_text').hide();
+            onFailure: function () {
+                hideElement(byId('saved'));
+                showElement(byId('save_error'));
+                hideElement(byId('saving_text'));
             }
         });
     });
@@ -120,8 +122,8 @@ function etoString(e) {
     return s.toLowerCase();
 }
 function sort_az(a, b) {
-    a = etoString($(a));
-    b = etoString($(b));
+    a = etoString(a);
+    b = etoString(b);
     if (a > b) {
         return 1;
     }

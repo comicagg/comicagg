@@ -20,7 +20,7 @@ test.beforeEach(async ({ page, app }) => {
       { id: 4, name: "Delta", score: "90", total_votes: 7 },
     ];
     // Only the unrelated Dojo boundary is substituted. Application callbacks,
-    // Prototype elements/arrays and jQuery HTTP requests execute unchanged.
+    // DOM helpers and HTTP requests execute unchanged.
     class Container {
       constructor(id) {
         this.element = document.getElementById(id);

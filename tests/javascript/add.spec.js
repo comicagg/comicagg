@@ -78,7 +78,7 @@ test("resize recalculates list height using viewport and list offset", async ({ 
   expect(await page.evaluate(() => document.documentElement.style.getPropertyValue("--scrollbar-width"))).toBe("0px");
 });
 
-test.fixme("search accepts quotes as ordinary text", async ({ page }) => {
+test("search accepts quotes as ordinary text", async ({ page }) => {
   // Existing filter interpolates input into a string-based setTimeout and raises SyntaxError.
   await page.locator("#search_box").fill('"alpha"');
   await page.locator("#search_box").press("End");

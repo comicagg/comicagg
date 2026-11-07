@@ -25,7 +25,7 @@
         {% for message in messages %}
         <div id="thanks">{{ message }}</div>
         {% endfor %}
-        <script type="text/javascript">setTimeout('Element.hide("thanks")', 10000);</script>
+        <script type="text/javascript">setTimeout(function () { hideElement(byId("thanks")); }, 10000);</script>
         {% endif %}
     </div>
     <br/>
