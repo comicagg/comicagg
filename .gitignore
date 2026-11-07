@@ -167,6 +167,8 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
+playwright-report/
+test-results/
 bower_components/
 
 # RIA/Silverlight projects

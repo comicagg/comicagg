@@ -1,0 +1,10 @@
+{
+  "name": "comicagg-browser-tests",
+  "private": true,
+  "scripts": {
+    "test:js": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0"
+  }
+}
