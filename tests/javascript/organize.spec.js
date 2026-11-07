@@ -138,8 +138,7 @@ test("trash drop failure shows an error and preserves the client array", async (
   expect(await page.evaluate(() => usercomics.map((comic) => comic.id))).toEqual([1, 2, 3, 4]);
 });
 
-test.fixme("saving an empty list sends an empty selection rather than throwing", async ({ page }) => {
-  // Existing save dereferences items[0] when there are no comics.
+test("saving an empty list sends an empty selection", async ({ page }) => {
   await page.locator("#user_comics").evaluate((list) => list.replaceChildren());
   const response = await api(page, "save");
   await page.getByRole("button", { name: "Save", exact: true }).click();
@@ -148,8 +147,7 @@ test.fixme("saving an empty list sends an empty selection rather than throwing",
   await expect(page.locator("#saved")).toBeVisible();
 });
 
-test.fixme("a multi-comic trash drop removes every ID from the client array", async ({ page }) => {
-  // Existing `removed || removeComicId(...)` skips subsequent removals after the first success.
+test("a multi-comic trash drop removes every ID from the client array", async ({ page }) => {
   const response = await api(page, "remove-list");
   await page.evaluate(() => {
     const nodes = [2, 3].map((id) => document.querySelector(`[comicid="${id}"]`));

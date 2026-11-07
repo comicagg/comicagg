@@ -57,7 +57,6 @@ const test = base.extend({
             url_save_selection: "/api/save",
             url_remove_list: "/api/remove-list",
             url_forget_new_blogs: "/api/forget-news",
-            url_set_cookie_consent: "/api/consent",
           });
         });
         await page.addScriptTag({ path: path.join(staticRoot, "base/js/all.js") });
