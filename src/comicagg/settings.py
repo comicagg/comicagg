@@ -270,10 +270,6 @@ LANGUAGE_CODE = "en"
 # to load the internationalization machinery.
 USE_I18N = True
 
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
-USE_L10N = True
-
 # A list of directories where Django looks for translation files.
 LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 

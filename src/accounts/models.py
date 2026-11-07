@@ -104,8 +104,10 @@ class User(auth_models.User):
         """Add the comics from the list. Ignores comics that are already subscribed,
         ended or inactive."""
         comics = Comic.objects.available().in_bulk(comic_id_list)
-        for comic in comics.values():
-            self.subscribe(comic)
+        for comic_id in comic_id_list:
+            comic = comics.get(comic_id)
+            if comic is not None:
+                self.subscribe(comic)
 
     def unsubscribe(self, comic: Comic) -> None:
         """Remove the comic from the list of subscriptions."""
