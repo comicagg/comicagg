@@ -6,7 +6,6 @@ from accounts.models import User
 from comics.models import Comic, Strip
 from comics.update import InvalidParameterException
 
-
 # ########################
 # #   Helper functions   #
 # ########################

@@ -96,7 +96,7 @@ def _default_update(comic: Comic) -> Strip | None:
     next_url = _get_redirected_url(comic) if comic.re2_url else comic.re1_url
 
     # Here next_url should be the URL where the comic strip is
-    (last_image, alt_text) = _get_one_image(comic, next_url)
+    last_image, alt_text = _get_one_image(comic, next_url)
 
     # At this point, last_image should be completely clean,
     # meaning that it should be URL encoded if needed
@@ -121,13 +121,13 @@ def _get_several_images(comic: Comic, strips: list[Strip]):
     ):
         return
     lines = _download_url(comic.re1_url)
-    (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
+    match, lines = _find_match(lines, comic.re1_re, comic.re1_backwards)
     while match:
         image_url = comic.re1_base % _url_from_match(match)
         alt_text = _alt_from_match(match)
         strip = Strip(comic=comic, url=image_url, alt_text=alt_text)
         strips.append(strip)
-        (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
+        match, lines = _find_match(lines, comic.re1_re, comic.re1_backwards)
 
 
 # Auxiliary functions needed during update operations
@@ -164,7 +164,7 @@ def _get_one_image(comic: Comic, url) -> tuple[str, str]:
         raise InvalidParameterException(["re1_base", "re1_re"])
     lines = _download_url(url)
     # We use this field to be able to debug the NoMatchException in case it fails
-    (match, lines) = _find_match(lines, comic.re1_re, comic.re1_backwards)
+    match, lines = _find_match(lines, comic.re1_re, comic.re1_backwards)
     if not match:
         raise NoMatchException(comic.name)
     image_url = comic.re1_base % _url_from_match(match)
@@ -178,7 +178,7 @@ def _get_redirected_url(comic: Comic) -> str:
         raise InvalidParameterException(["re1_base", "re1_re"])
     lines = _download_url(comic.re2_url)
     # We use this field to be able to debug the NoMatchException in case it fails
-    (match, lines) = _find_match(lines, comic.re2_re, comic.re2_backwards)
+    match, lines = _find_match(lines, comic.re2_re, comic.re2_backwards)
     if not match:
         raise NoMatchException(comic.name)
     return comic.re2_base % _url_from_match(match)
