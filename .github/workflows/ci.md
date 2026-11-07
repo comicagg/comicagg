@@ -10,7 +10,7 @@ additionally grants `security-events: write` for SARIF uploads and
    >Push to dev branch, so the PR was accepted.
 
    - Tag with development
-   - If changes to requirements
+   - If changes to Python dependencies or the lockfile
       - Build python, else use last development.
    - Push images to repository
 
@@ -28,5 +28,5 @@ additionally grants `security-events: write` for SARIF uploads and
 
    - Tag with the PR name
    - Push to repository if workflow input
-   - If changes to requirements.txt
+   - If changes to Python dependencies or the lockfile
       - Build python, else use last development

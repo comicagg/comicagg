@@ -2,7 +2,6 @@ from django.http import HttpRequest
 
 
 class CookieConsent:
-
     def __init__(self, *args, **kwargs):
         self.accepted = False
         self.rejected = False

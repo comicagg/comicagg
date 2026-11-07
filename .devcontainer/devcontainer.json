@@ -18,6 +18,9 @@
   ],
   "customizations": {
     "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/comicagg/.venv/bin/python"
+      },
       "extensions": [
         "ahmadalli.vscode-nginx-conf",
         "batisteo.vscode-django",
@@ -26,15 +29,14 @@
         "junstyle.vscode-django-support",
         "mrorz.language-gettext",
         "ms-azuretools.vscode-docker",
-        "ms-python.black-formatter",
         "ms-python.debugpy",
-        "ms-python.isort",
         "ms-python.python",
         "njqdev.vscode-python-typehint",
         "shamanu4.django-intellisense",
         "thebarkman.vscode-djaneiro",
         "tushortz.python-extended-snippets",
         "twixes.pypi-assistant",
+        "charliermarsh.ruff",
 
         "tal7aouy.indent-colorizer",
         "jgclark.vscode-todo-highlight",
@@ -44,8 +46,6 @@
       ]
     }
   },
-  // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "pip install --user -r requirements.txt",
   "containerEnv": {
     "PYTHONPATH":"${containerWorkspaceFolder}/src:$PYTHONPATH"
   },

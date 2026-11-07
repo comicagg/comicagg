@@ -32,7 +32,7 @@ env:
   PYTHON_IMAGE_NAME: comicagg/python
   APP_IMAGE_NAME: comicagg/app
   PROXY_IMAGE_NAME: comicagg/proxy
-  PYTHON_VERSION: 3.12
+  PYTHON_VERSION: "3.14"
   NGINX_BUILD_DIR: /tmp/nginx/
   DJANGO_DEBUG: 1
   DJANGO_STATIC_ROOT: /tmp/nginx/static/
@@ -69,7 +69,8 @@ jobs:
         with:
           filters: |
             changed:
-              - 'src/requirements.txt'
+              - 'pyproject.toml'
+              - 'uv.lock'
       - id: build-for-tag
         name: Check if this run comes from a tag push
         if: startsWith(github.ref, 'refs/tags/2')
@@ -169,16 +170,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         name: Checkout source ${{ github.ref }}
-      - uses: actions/setup-python@v5
-        name: Set up Python ${{ env.PYTHON_VERSION }}
+      - uses: astral-sh/setup-uv@v6
+        name: Set up uv and Python ${{ env.PYTHON_VERSION }}
         with:
+          version: "0.12.12"
           python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
       - name: Install Py Dependencies, collect static files and prepare PROXY image
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          uv sync --locked --no-install-project --no-default-groups --group debug
           mkdir -p $DJANGO_STATIC_ROOT
-          python manage.py collectstatic --noinput
+          uv run --no-sync python manage.py collectstatic --noinput
           cp ../deployment/nginx/* ${{ env.NGINX_BUILD_DIR }}
       - uses: docker/setup-buildx-action@v3
         name: Set up Docker Buildx

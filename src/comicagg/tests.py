@@ -11,6 +11,7 @@ from django.test import SimpleTestCase, TestCase, override_settings
 from django.test.client import RequestFactory
 
 from middleware import MAINTENANCE_MESSAGE, MaintenanceMiddleware
+
 from .hashers import LegacySHA1PasswordHasher
 from .settings import PASSWORD_HASHERS
 

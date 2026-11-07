@@ -6,7 +6,24 @@
 
 This is the Django code for the website at https://www.comicagg.com
 
-Currently built with Py3 and Django 4.2.
+Currently built with Python 3.14 and Django 5.2.
+
+## Python development
+
+Use Python 3.14 and uv 0.12.12. From the repository root, install the runtime
+dependencies and development tools with:
+
+```sh
+uv sync
+```
+
+To include the optional Django Debug Toolbar dependencies, use the `debug` group:
+`uv sync --group debug`. Ruff lint and formatting checks are:
+
+```sh
+uv run ruff check src
+uv run ruff format --check src
+```
 
 ## JavaScript behavior tests
 

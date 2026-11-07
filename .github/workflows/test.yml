@@ -16,7 +16,7 @@ env:
   PYTHON_IMAGE_NAME: comicagg/python
   APP_IMAGE_NAME: comicagg/app
   PROXY_IMAGE_NAME: comicagg/proxy
-  PYTHON_VERSION: 3.12
+  PYTHON_VERSION: "3.14"
 
   NGINX_BUILD_DIR: /tmp/nginx/
 
@@ -69,17 +69,16 @@ jobs:
         name: Set up Python ${{ env.PYTHON_VERSION }}
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install uv
+        run: python -m pip install --disable-pip-version-check uv==0.12.12
       - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          sed -i -s 's/django-debug-toolbar.*//' requirements.txt
-          pip install -r requirements.txt
+        run: uv sync --locked --no-install-project --no-default-groups
       - name: Run Tests
         run: |
-          python -Wa manage.py test --noinput --failfast comics comicagg
+          uv run --no-sync python -Wa manage.py test --noinput --failfast comics comicagg
       - name: Load fixtures
         run: |
-          python manage.py migrate
-          python manage.py loaddata comics.Comic.json
+          uv run --no-sync python manage.py migrate
+          uv run --no-sync python manage.py loaddata comics.Comic.json
         env:
           DJANGO_DATABASE: sqlite3://comicagg:comicagg@db:5432/${{ runner.temp }}/comicagg.db

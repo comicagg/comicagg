@@ -1,6 +1,6 @@
-from django.http import HttpRequest
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpRequest
 
 
 def add_settings(request: HttpRequest):

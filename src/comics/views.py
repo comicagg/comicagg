@@ -20,9 +20,8 @@ from comicagg.typings import AuthenticatedHttpRequest
 
 from .fields import ComicStatus
 from .forms import RequestForm
-from .models import Comic
+from .models import Comic, Strip, Subscription
 from .models import Request as ComicRequest
-from .models import Strip, Subscription
 
 logger = logging.getLogger(__name__)
 
@@ -210,6 +209,6 @@ def _download_image(url: str, referrer: str, file_path):
         else:
             # no image mime? not cool
             file_path = None
-    except (requests.ConnectionError, requests.HTTPError):
+    except requests.ConnectionError, requests.HTTPError:
         file_path = None
     return file_path
