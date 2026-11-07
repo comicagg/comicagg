@@ -33,6 +33,27 @@ env:
   CELERY_BROKER_URL: redis://redis:6379
 
 jobs:
+  javascript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install browser test dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run JavaScript behavior tests
+        run: npm run test:js
+      - name: Upload failure traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: javascript-test-results
+          path: test-results/
+          retention-days: 7
   test:
     runs-on: ubuntu-latest
     defaults:
