@@ -14,6 +14,8 @@ from comicagg.typings import AuthenticatedHttpRequest
 
 logger = logging.getLogger(__name__)
 
+MAINTENANCE_MESSAGE = "Site is in maintenance mode"
+
 
 class UserBasedExceptionMiddleware:
     """If there's a 500 error, show a detailed error page if the user is a super user."""
@@ -49,7 +51,15 @@ class MaintenanceMiddleware:
         if not request.user.is_superuser:
             return render(request, "maintenance.html", {})
 
-        messages.add_message(request, messages.WARNING, "Site is in maintenance mode")
+        message_storage = messages.get_messages(request)
+        if not any(
+            message.level == messages.WARNING
+            and message.message == MAINTENANCE_MESSAGE
+            for message in (
+                message_storage._loaded_messages + message_storage._queued_messages
+            )
+        ):
+            messages.add_message(request, messages.WARNING, MAINTENANCE_MESSAGE)
         return self.get_response(request)
 
 
