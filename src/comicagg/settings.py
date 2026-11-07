@@ -206,8 +206,8 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.ScryptPasswordHasher",
-    # SHA1 was deprecated but it's needed for password auto-migration
-    "django.contrib.auth.hashers.SHA1PasswordHasher",
+    # Django removed SHA1PasswordHasher; retain legacy password auto-migration.
+    "comicagg.hashers.LegacySHA1PasswordHasher",
 ]
 
 # The number of seconds a password reset link is valid for.
