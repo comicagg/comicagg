@@ -18,11 +18,10 @@ npx playwright install --with-deps chromium
 npm run test:js
 ```
 
-The Playwright suite in `tests/javascript/` loads the application scripts in Chromium.
-It checks DOM
-visibility, filtering, layout and scrolling, image loading/retry, counters, cookie
-consent, blog navigation, request confirmations, and request methods, form encoding,
-CSRF headers, and success/failure UI.
+The Playwright suite in `tests/javascript/` loads the application scripts in
+Chromium. It checks DOM visibility, filtering, layout and scrolling, image
+loading/retry, counters, cookie consent, blog navigation, request confirmations,
+and request methods, form encoding, CSRF headers, and success/failure UI.
 Responses and images are intercepted locally; no Django server, database, CDN, or
 external website is needed. Unexpected requests and uncaught browser errors fail
 tests. The suite also runs in the Tests workflow; failure traces are uploaded.
