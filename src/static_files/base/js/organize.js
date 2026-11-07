@@ -4,7 +4,7 @@
 function save() {
     var params, items, ids, i, len;
     items = byId('user_comics').querySelectorAll('.dojoDndItem');
-    ids = items[0].getAttribute('comicid');
+    ids = items.length > 0 ? items[0].getAttribute('comicid') : "";
     for (i = 1, len = items.length; i < len; i = i + 1) {
         ids += "," + items[i].getAttribute('comicid');
     }
@@ -86,7 +86,9 @@ function initDND() {
                 removed = false;
                 for (i = 0; i < nodes.length; i = i + 1) {
                     id = parseInt(nodes[i].getAttribute('comicid'), 10);
-                    removed = removed || removeComicId(usercomics, id);
+                    if (removeComicId(usercomics, id)) {
+                        removed = true;
+                    }
                 }
                 if (removed) {
                     usercomics = usercomics.filter(function (c) {
@@ -158,4 +160,3 @@ function sort_items(az) {
     setNewList(convertNodes());
     save();
 }
-

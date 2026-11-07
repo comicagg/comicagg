@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global document, window, fetch, URL, URLSearchParams, url_forget_new_blogs, url_set_cookie_consent, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true*/
+/*global document, window, fetch, URL, URLSearchParams, url_forget_new_blogs, titlei18n, titlebase, unreadCounter: true, comicCounter: true, newComicCounter: true, newsCounter: true*/
 "use strict";
 
 function byId(id) {
@@ -98,10 +98,14 @@ async function startRequest(url, options) {
     }
     data = dataType === "json" ? await response.json() : await response.text();
   } catch (error) {
-    options.onFailure(error);
+    if (typeof options.onFailure === "function") {
+      options.onFailure(error);
+    }
     return;
   }
-  options.onSuccess(data);
+  if (typeof options.onSuccess === "function") {
+    options.onSuccess(data);
+  }
 }
 
 function removeComicId(array, comicid) {
@@ -111,7 +115,7 @@ function removeComicId(array, comicid) {
     comic;
   for (i = 0, len = array.length; i < len && !found; i += 1) {
     comic = array[i];
-    found = comic.id === comicid;
+    found = comic !== undefined && comic !== null && comic.id === comicid;
     if (found) {
       array[i] = undefined;
     }
@@ -178,31 +182,4 @@ function forget_news() {
     },
     onFailure: function (response) {},
   });
-}
-
-/****************/
-/* Cookie notice*/
-/****************/
-
-function set_cookie_consent(value) {
-  const d = new Date();
-  d.setTime(d.getTime() + 365 * 24 * 60 * 60 * 1000);
-  let expires = "expires=" + d.toUTCString();
-  hideElement(byId("cookie_notice"));
-  if (byId("cookie_consent_required")) {
-    hideElement(byId("cookie_consent_required"));
-  }
-  document.cookie = "cookie_consent=" + value + "; path=/; " + expires + ";";
-
-  if (value) {
-    const login_button = byId("login_button");
-    if (value && login_button) {
-      login_button.type = "submit";
-    }
-  } else {
-    startRequest(url_set_cookie_consent, {
-      method: "post",
-      parameters: { cookie_consent: value },
-    });
-  }
 }

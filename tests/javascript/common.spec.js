@@ -39,6 +39,20 @@ for (const failure of [
   });
 }
 
+for (const failure of [
+  { label: "success", status: 200 },
+  { label: "failure", status: 500 },
+]) {
+  test(`requests tolerate omitted callbacks on ${failure.label}`, async ({ page, app }) => {
+    await app.load();
+    const response = await api(page, "no-callback", { status: failure.status });
+    const request = page.evaluate(() => startRequest("/api/no-callback", { method: "post" }));
+    expectPost(await response.request, []);
+    response.release();
+    await request;
+  });
+}
+
 for (const url of ["/api/get", `${origin}/api/get`, "//comicagg.test/api/get"]) {
   test(`GET requests omit CSRF and serialize parameters in the URL: ${url}`, async ({ page, app }) => {
     await app.load();
@@ -158,23 +172,6 @@ test("counter updates also work outside the reader and without mark-all controls
   await expect(page).toHaveTitle("Comic Aggregator");
 });
 
-test("accepting cookies hides notices, enables login and persists consent", async ({ page, app }) => {
-  await app.load(null, `
-    <div id="cookie_notice">Cookies</div><div id="cookie_consent_required">Required</div>
-    <button id="login_button" type="button">Login</button>
-    <button onclick="set_cookie_consent(true)">Accept</button>
-  `);
-  await page.getByRole("button", { name: "Accept", exact: true }).click();
-  await expect(page.locator("#cookie_notice")).toBeHidden();
-  await expect(page.locator("#cookie_consent_required")).toBeHidden();
-  await expect(page.locator("#login_button")).toHaveAttribute("type", "submit");
-  const consent = (await page.context().cookies()).find((cookie) => cookie.name === "cookie_consent");
-  expect(consent.value).toBe("true");
-  expect(consent.path).toBe("/");
-  expect(consent.expires - Date.now() / 1000).toBeGreaterThan(364 * 86400);
-  expect(consent.expires - Date.now() / 1000).toBeLessThan(366 * 86400);
-});
-
 test("forgetting news posts and clears the news counter", async ({ page, app }) => {
   await app.load(null, counterHtml + '<button onclick="forget_news()">Forget news</button>');
   const response = await api(page, "forget-news", { body: { ...counters, news: 0 } });
@@ -194,17 +191,4 @@ test("login focus and external links retain their targets", async ({ page, app }
   const popup = await popupPromise;
   await popup.waitForLoadState();
   expect(popup.url()).toBe("http://external.test/comic");
-});
-
-test.fixme("declining cookies completes without throwing when callbacks are omitted", async ({ page, app }) => {
-  // Existing startRequest calls undefined onSuccess/onFailure in set_cookie_consent(false).
-  await app.load(null, '<div id="cookie_notice">Cookies</div><button onclick="set_cookie_consent(false)">Decline</button>');
-  const response = await api(page, "consent");
-  await page.getByRole("button", { name: "Decline", exact: true }).click();
-  expectPost(await response.request, [["cookie_consent", "false"]]);
-  const completed = page.waitForResponse(`${origin}/api/consent`);
-  response.release();
-  await completed;
-  await expect(page.locator("#cookie_notice")).toBeHidden();
-  expect((await page.context().cookies()).find((cookie) => cookie.name === "cookie_consent").value).toBe("false");
 });

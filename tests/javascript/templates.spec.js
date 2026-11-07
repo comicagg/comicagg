@@ -1,6 +1,6 @@
 const { readFileSync } = require("node:fs");
 const path = require("node:path");
-const { test, expect, freezeClock } = require("./fixtures");
+const { test, expect, api, freezeClock } = require("./fixtures");
 
 function template(relativePath) {
   return readFileSync(path.resolve(__dirname, "../../src", relativePath), "utf8");
@@ -31,3 +31,26 @@ test("the request template's confirmation hides after ten seconds", async ({ pag
   await page.clock.runFor(1);
   await expect(page.locator("#thanks")).toBeHidden();
 });
+
+for (const [id, value] of [
+  ["accept_cookies", "1"],
+  ["reject_cookies", "0"],
+]) {
+  test(`the cookie notice submits ${value === "1" ? "acceptance" : "rejection"} to the server`, async ({ page, app }) => {
+    const source = template("about/templates/about/cookie_notice.html");
+    const markup = source
+      .replace("{% load i18n %}", "")
+      .replaceAll("{% url 'about:consent' %}", "/api/consent")
+      .replaceAll("{% csrf_token %}", '<input type="hidden" name="csrfmiddlewaretoken" value="test-token">');
+    await app.load(null, markup);
+    const response = await api(page, "consent");
+    const submission = page.locator(`#${id}`).click();
+    const request = await response.request;
+    expect(request.method()).toBe("POST");
+    const parameters = new URLSearchParams(request.postData() || "");
+    expect(parameters.get("cookie_consent")).toBe(value);
+    expect(parameters.get("csrfmiddlewaretoken")).toBe("test-token");
+    response.release();
+    await submission;
+  });
+}
