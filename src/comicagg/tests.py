@@ -14,7 +14,6 @@ from middleware import MAINTENANCE_MESSAGE, MaintenanceMiddleware
 from .hashers import LegacySHA1PasswordHasher
 from .settings import PASSWORD_HASHERS
 
-
 LEGACY_PASSWORD = "sha1$salt$59b3e8d637cf97edbe2384cf59cb7453dfe30789"
 
 

@@ -53,8 +53,7 @@ class MaintenanceMiddleware:
 
         message_storage = messages.get_messages(request)
         if not any(
-            message.level == messages.WARNING
-            and message.message == MAINTENANCE_MESSAGE
+            message.level == messages.WARNING and message.message == MAINTENANCE_MESSAGE
             for message in (
                 message_storage._loaded_messages + message_storage._queued_messages
             )
