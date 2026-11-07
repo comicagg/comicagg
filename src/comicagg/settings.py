@@ -466,8 +466,8 @@ if DEBUG:
     RESULTS_CACHE_SIZE = 1000
     hide_toolbar_patterns = ["/media/", "/static/", "/comics/strip/"]
     DEBUG_TOOLBAR_CONFIG = {
-        "SHOW_TOOLBAR_CALLBACK": lambda request: not any(
-            request.path.startswith(p) for p in hide_toolbar_patterns
+        "SHOW_TOOLBAR_CALLBACK": lambda request: (
+            not any(request.path.startswith(p) for p in hide_toolbar_patterns)
         ),
     }
     DEBUG_TOOLBAR_PANELS = [

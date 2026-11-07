@@ -2,7 +2,9 @@
 import time
 from email.utils import formatdate
 from xml.sax.saxutils import escape
+
 from django import template
+
 from comics.models import Comic
 
 register = template.Library()

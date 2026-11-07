@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from .views import welcome, robots
+from .views import robots, welcome
 
 urlpatterns = [
     path("", welcome, name="index"),

@@ -1,5 +1,4 @@
 from django.http import HttpRequest, HttpResponse
-
 from provider.oauth2.models import AccessToken
 
 from accounts.models import User

@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 env:
-  PYTHON_VERSION: 3.12
+  PYTHON_VERSION: "3.14"
 
 jobs:
   lint:
@@ -17,9 +17,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       name: Check out source
-    - uses: psf/black@stable
-      name: Run black
+    - uses: astral-sh/setup-uv@v6
+      name: Set up uv and Python
       with:
-        # Options: https://github.com/psf/black/blob/stable/docs/usage_and_configuration/the_basics.md
-        options: "--force-exclude migrations --check"
-        src: "./src"
+        version: "0.12.12"
+        python-version: ${{ env.PYTHON_VERSION }}
+        enable-cache: true
+        cache-dependency-glob: uv.lock
+    - name: Install lint tools
+      run: uv sync --locked --no-install-project
+    - name: Run Ruff
+      run: |
+        uv run --no-sync ruff check src
+        uv run --no-sync ruff format --check src

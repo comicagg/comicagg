@@ -1,4 +1,4 @@
-ARG PY_VERSION="3.12"
+ARG PY_VERSION="3.14"
 
 ###########
 # BUILDER #
@@ -6,6 +6,7 @@ ARG PY_VERSION="3.12"
 
 # Pull official base image
 FROM python:${PY_VERSION}-alpine AS builder
+COPY --from=ghcr.io/astral-sh/uv:0.12.12 /uv /uvx /bin/
 
 WORKDIR /tmp
 
@@ -17,11 +18,11 @@ ENV PYTHONUNBUFFERED=1
 RUN apk update && \
     apk add gcc libpq-dev postgresql-dev python3-dev musl-dev
 
-# Install dependencies
-COPY ./src/requirements.txt .
-RUN pip install --upgrade pip && \
-    pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt && \
-    pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels psycopg[c]
+# Export the locked runtime and debug dependencies, then build wheels.
+COPY ./pyproject.toml ./uv.lock ./
+RUN uv export --locked --no-dev --no-default-groups --group debug --group postgres \
+    --no-emit-project --format requirements-txt --output-file requirements.txt && \
+    pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 #########
 # Final #

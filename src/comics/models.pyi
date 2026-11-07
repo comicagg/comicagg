@@ -4,6 +4,7 @@ from typing import Any
 from django.db import models
 
 from accounts.models import User
+
 from .managers import (
     ComicManager,
     SubscriptionManager,

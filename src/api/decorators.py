@@ -7,8 +7,8 @@ In the decorator parameters we can find:
 """
 
 from urllib.parse import parse_qs
-from django.http import HttpResponseForbidden
 
+from django.http import HttpResponseForbidden
 from provider import constants
 
 
