@@ -61,9 +61,9 @@ jobs:
     outputs:
       python: ${{ inputs.build-all == 'true' || steps.requirements.outputs.changed == 'true' || steps.build-for-tag.outputs.build == 'true' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         name: Checkout source ${{ github.ref }}
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         name: Check if requirements file has been modified
         id: requirements
         with:
@@ -83,17 +83,17 @@ jobs:
       run:
         working-directory: ./src
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         name: Checkout source ${{ github.ref }}
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
         name: Set up Docker Buildx
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         name: Log into registry ${{ vars.REGISTRY }}
         with:
           registry: ${{ vars.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - uses: docker/metadata-action@v5
+      - uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         id: image-metadata
         name: Extract metadata for Python image
         with:
@@ -103,7 +103,7 @@ jobs:
             type=ref,event=tag
             type=ref,event=pr
             type=match,pattern=\d{6}\.\d+
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         id: build-and-push-python
         name: Build and push Python
         with:
@@ -127,17 +127,17 @@ jobs:
     env:
       TAG: development
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         name: Checkout source ${{ github.ref }}
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
         name: Set up Docker Buildx
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         name: Log into registry ${{ vars.REGISTRY }}
         with:
           registry: ${{ vars.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - uses: docker/metadata-action@v5
+      - uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         id: image-metadata
         name: Extract metadata for APP image
         with:
@@ -151,7 +151,7 @@ jobs:
         if: needs.build-check.outputs.python == 'true'
         run: |
           echo "TAG=${{ env.DOCKER_METADATA_OUTPUT_VERSION }}" >> $GITHUB_ENV
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         id: build-and-push-app
         name: Build and push APP
         with:
@@ -168,9 +168,9 @@ jobs:
       run:
         working-directory: ./src
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         name: Checkout source ${{ github.ref }}
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         name: Set up uv and Python ${{ env.PYTHON_VERSION }}
         with:
           version: "0.12.12"
@@ -183,15 +183,15 @@ jobs:
           mkdir -p $DJANGO_STATIC_ROOT
           uv run --no-sync python manage.py collectstatic --noinput
           cp ../deployment/nginx/* ${{ env.NGINX_BUILD_DIR }}
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
         name: Set up Docker Buildx
-      - uses: docker/login-action@v3
+      - uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
         name: Log into registry ${{ vars.REGISTRY }}
         with:
           registry: ${{ vars.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - uses: docker/metadata-action@v5
+      - uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         id: proxy-metadata
         name: Extract metadata for PROXY image
         with:
@@ -201,7 +201,7 @@ jobs:
             type=ref,event=tag
             type=ref,event=pr
             type=match,pattern=\d{6}\.\d+
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         id: build-and-push-nginx
         name: Build and push PROXY image
         with:
