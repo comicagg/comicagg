@@ -76,7 +76,7 @@ jobs:
           pip install -r requirements.txt
       - name: Run Tests
         run: |
-          python -Wa manage.py test --noinput --failfast comics
+          python -Wa manage.py test --noinput --failfast comics comicagg
       - name: Load fixtures
         run: |
           python manage.py migrate
