@@ -1,11 +1,18 @@
+from types import SimpleNamespace
+
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password, get_hashers, identify_hasher
 from django.contrib.auth.models import User
+from django.contrib.messages import WARNING, get_messages
+from django.contrib.messages.storage.base import Message
+from django.contrib.messages.storage.fallback import FallbackStorage
+from django.http import HttpResponse
 from django.test import SimpleTestCase, TestCase, override_settings
+from django.test.client import RequestFactory
 
+from middleware import MAINTENANCE_MESSAGE, MaintenanceMiddleware
 from .hashers import LegacySHA1PasswordHasher
 from .settings import PASSWORD_HASHERS
-
 
 LEGACY_PASSWORD = "sha1$salt$59b3e8d637cf97edbe2384cf59cb7453dfe30789"
 
@@ -66,3 +73,27 @@ class PasswordAuthenticationTests(TestCase):
 
         user.refresh_from_db()
         self.assertEqual(user.password, original_password)
+
+
+@override_settings(MAINTENANCE=1)
+class MaintenanceMiddlewareTests(SimpleTestCase):
+    def setUp(self):
+        self.request = RequestFactory().get("/")
+        self.request.user = SimpleNamespace(is_authenticated=True, is_superuser=True)
+        self.request.session = {}
+        self.request._messages = FallbackStorage(self.request)
+        self.middleware = MaintenanceMiddleware(lambda request: HttpResponse())
+
+    def test_notice_is_not_added_when_already_queued(self):
+        self.request._messages.add(WARNING, MAINTENANCE_MESSAGE)
+
+        self.middleware(self.request)
+
+        self.assertEqual(len(list(get_messages(self.request))), 1)
+
+    def test_notice_is_not_added_when_already_loaded(self):
+        self.request._messages._loaded_data = [Message(WARNING, MAINTENANCE_MESSAGE)]
+
+        self.middleware(self.request)
+
+        self.assertEqual(len(list(get_messages(self.request))), 1)
