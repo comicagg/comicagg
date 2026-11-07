@@ -1,5 +1,10 @@
 # CI Workflow for Docker images
 
+The workflows grant `contents: read` for checkout. The CI build-check job also
+grants `pull-requests: read` to detect changed files in pull requests. Scorecard
+additionally grants `security-events: write` for SARIF uploads and
+`id-token: write` for publishing results.
+
 ## Development push
 
    >Push to dev branch, so the PR was accepted.

@@ -9,6 +9,9 @@ on:
       - development
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   PYTHON_IMAGE_NAME: comicagg/python
   APP_IMAGE_NAME: comicagg/app
