@@ -38,6 +38,9 @@
   <div id="other_actions">
     <h1>{% trans "Other actions" %}</h1>
     <a href="{% url 'admin:update_comics' %}">{% trans 'Update a comic' %}</a><br/>
+    {% if request.user.is_superuser %}
+      <a href="{% url 'admin:database_statistics' %}">{% trans 'Database statistics' %}</a><br/>
+    {% endif %}
   </div>
   {% else %}
   <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>

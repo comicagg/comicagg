@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate "Home" %}</a>
+    &rsaquo; {{ title }}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <p>{% translate "Exact row counts for installed model tables, including many-to-many tables. Proxy models are excluded. Counts are refreshed on each visit and may take time on large tables." %}</p>
+    <div class="module">
+      <table>
+        <caption>{% translate "Model table row counts" %}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{% translate "Model" %}</th>
+            <th scope="col">{% translate "Database table" %}</th>
+            <th scope="col">{% translate "Rows" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for statistic in statistics %}
+            <tr>
+              <th scope="row">{{ statistic.model }}</th>
+              <td>{{ statistic.table }}</td>
+              <td>{{ statistic.count }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="3">{% translate "No model tables found." %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
