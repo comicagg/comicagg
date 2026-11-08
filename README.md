@@ -25,6 +25,14 @@ uv run ruff check src
 uv run ruff format --check src
 ```
 
+## Admin database statistics
+
+Superusers can open **Database statistics** under **Other actions** in the admin,
+or visit `/admin/database-statistics/`. The view shows exact row counts for all
+installed, managed model tables, including automatically created many-to-many
+tables. Proxy models are excluded because they share an existing table.
+Counts are queried on every visit and can be expensive for large tables.
+
 ## JavaScript behavior tests
 
 From the repository root, with Node.js 22 or newer:
