@@ -8,7 +8,7 @@ from html import unescape
 import requests
 from django.conf import settings
 
-from .models import Comic, Strip, UnreadStrip
+from .models import Comic, Strip
 
 
 class NoMatchException(Exception):
@@ -50,8 +50,7 @@ def update_comic(comic: Comic) -> bool:
     # We may need to use a custom update function
     if comic.custom_func:
         has_changed = _custom_update(comic)
-    elif comic_strip := _default_update(comic):
-        _notify_subscribers(comic_strip)
+    elif _default_update(comic):
         has_changed = True
     return has_changed
 
@@ -80,7 +79,6 @@ def _custom_update(comic: Comic) -> bool:
         # Persist the Strip objects in the database
         for strip in strip_set:
             strip.save()
-            _notify_subscribers(strip)
         return True
     raise NoMatchException(comic.name)
 
@@ -201,13 +199,3 @@ def _alt_from_match(match: re.Match) -> str:
     with contextlib.suppress(IndexError):
         alt = match["alt"]
     return alt
-
-
-def _notify_subscribers(strip: Strip):
-    """Create one UnreadStrip for each subscribed user."""
-    subscribers = strip.comic.subscription_set.all()
-    for subscriber in subscribers:
-        if subscriber.user.is_active:
-            UnreadStrip.objects.get_or_create(
-                user=subscriber.user, strip=strip, comic=subscriber.comic
-            )

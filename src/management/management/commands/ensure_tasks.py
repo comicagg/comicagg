@@ -26,6 +26,13 @@ TASKS = [
         period_every=4,
     ),
     TaskDescription(
+        task="comics.tasks.distribute_strips.distribute_pending_strips",
+        name="Distribute pending strips",
+        description="Distribute pending strips to active subscribers",
+        period=MINUTES,
+        period_every=15,
+    ),
+    TaskDescription(
         task="accounts.tasks.inactive_users.inactive_users",
         name="Disable inactive users",
         description="Disable inactive users",
