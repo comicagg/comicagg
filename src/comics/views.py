@@ -22,6 +22,7 @@ from .fields import ComicStatus
 from .forms import RequestForm
 from .models import Comic, Strip, Subscription
 from .models import Request as ComicRequest
+from .read_state import make_snapshot
 
 logger = logging.getLogger(__name__)
 
@@ -48,18 +49,30 @@ def _find_random_comic(request: AuthenticatedHttpRequest, xhtml=False):
 @login_required
 @consent_required
 def read_view(request: AuthenticatedHttpRequest):
-    comics = request.user.comics_subscribed
-    unread_strips_db = request.user.unread_strips.select_related(
-        "strip"
-    ).select_related("strip__comic")
+    subscriptions = list(request.user.subscriptions)
+    comics = [subscription.comic for subscription in subscriptions]
+    unread_strips_db = list(
+        request.user.unread_strips.select_related("strip").select_related(
+            "strip__comic"
+        )
+    )
     unread_strips = {comic.id: [] for comic in comics}
     unread_list: set[int] = set()
     for strip in unread_strips_db:
+        if strip.comic_id not in unread_strips:
+            continue
         unread_strips[strip.comic_id].append(strip)
         unread_list.add(strip.comic_id)
     comic_list = [(comic, unread_strips[comic.id]) for comic in comics]
     random = _find_random_comic(request)
-    context = {"comic_list": comic_list, "unread_list": unread_list, "random": random}
+    context = {
+        "comic_list": comic_list,
+        "unread_list": unread_list,
+        "random": random,
+        "read_snapshot": make_snapshot(
+            request.user.pk, subscriptions, unread_strips_db
+        ),
+    }
     return render(request, "comics/read.html", context)
 
 

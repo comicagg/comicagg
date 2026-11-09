@@ -3,6 +3,7 @@ from django.test import TestCase
 from accounts.models import User
 
 from ..models import Comic
+from ..read_state import make_snapshot
 
 
 class UnreadStripTestCase(TestCase):
@@ -37,6 +38,19 @@ class UnreadStripTestCase(TestCase):
         self.user.unreadstrip_set.create(
             comic=self.comic_broken, strip=self.strip_broken
         )
+
+    def snapshot(self):
+        return make_snapshot(
+            self.user.pk,
+            list(self.user.subscriptions.all()),
+            list(self.user.unread_strips.all()),
+        )
+
+    def mark_read(self, comic, vote=0):
+        self.user.mark_read(comic, vote, snapshot=self.snapshot())
+
+    def mark_read_all(self):
+        self.user.mark_read_all(snapshot=self.snapshot())
 
     # ########################
     # #   Test User.strips   #
@@ -193,7 +207,7 @@ class UnreadStripTestCase(TestCase):
 
     def test_mark_read_empty(self):
         """Should not change anything since the user is not subscribed."""
-        self.user.mark_read(self.comic_active)
+        self.mark_read(self.comic_active)
 
         strip_count = self.user.unreadstrip_set.count()
 
@@ -204,7 +218,7 @@ class UnreadStripTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.mark_read(self.comic_active2)
+        self.mark_read(self.comic_active2)
 
         strip_count = self.user.unreadstrip_set.count()
 
@@ -215,9 +229,9 @@ class UnreadStripTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.mark_read(self.comic_active)
+        self.mark_read(self.comic_active)
 
-        strip_count = self.user.unreadstrip_set.count()
+        strip_count = self.user.unreadstrip_set.active().count()
 
         self.assertEqual(strip_count, 3)
 
@@ -226,9 +240,9 @@ class UnreadStripTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.mark_read(self.comic_ended)
+        self.mark_read(self.comic_ended)
 
-        strip_count = self.user.unreadstrip_set.count()
+        strip_count = self.user.unreadstrip_set.active().count()
 
         self.assertEqual(strip_count, 3)
 
@@ -237,9 +251,9 @@ class UnreadStripTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.mark_read(self.comic_broken)
+        self.mark_read(self.comic_broken)
 
-        strip_count = self.user.unreadstrip_set.count()
+        strip_count = self.user.unreadstrip_set.active().count()
 
         self.assertEqual(strip_count, 3)
 
@@ -248,7 +262,7 @@ class UnreadStripTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.mark_read(self.comic_inactive)
+        self.mark_read(self.comic_inactive)
 
         strip_count = self.user.unreadstrip_set.count()
 
@@ -258,7 +272,7 @@ class UnreadStripTestCase(TestCase):
         """Should not change anything since the comic is already read."""
         self.add_subscriptions()
 
-        self.user.mark_read(self.comic_active)
+        self.mark_read(self.comic_active)
 
         strip_count = self.user.unreadstrip_set.count()
 
@@ -270,7 +284,7 @@ class UnreadStripTestCase(TestCase):
         self.add_unread_strips()
         old_comic = Comic.objects.get(pk=self.comic_active.id)
 
-        self.user.mark_read(self.comic_active, 1)
+        self.mark_read(self.comic_active, 1)
 
         updated_comic = Comic.objects.get(pk=self.comic_active.id)
 
@@ -283,7 +297,7 @@ class UnreadStripTestCase(TestCase):
         self.add_unread_strips()
         old_comic = Comic.objects.get(pk=self.comic_active.id)
 
-        self.user.mark_read(self.comic_active, -1)
+        self.mark_read(self.comic_active, -1)
 
         updated_comic = Comic.objects.get(pk=self.comic_active.id)
 
@@ -296,7 +310,7 @@ class UnreadStripTestCase(TestCase):
         self.add_unread_strips()
         old_comic = Comic.objects.get(pk=self.comic_active.id)
 
-        self.user.mark_read(self.comic_active, 0)
+        self.mark_read(self.comic_active, 0)
 
         updated_comic = Comic.objects.get(pk=self.comic_active.id)
 
@@ -309,7 +323,7 @@ class UnreadStripTestCase(TestCase):
 
     def test_mark_read_all_empty(self):
         """Should not change anything since the user is not subscribed."""
-        self.user.mark_read_all()
+        self.mark_read_all()
 
         strip_count = self.user.unreadstrip_set.count()
 
@@ -320,9 +334,9 @@ class UnreadStripTestCase(TestCase):
         self.add_subscriptions()
         self.add_unread_strips()
 
-        self.user.mark_read_all()
+        self.mark_read_all()
 
-        strip_count = self.user.unreadstrip_set.count()
+        strip_count = self.user.unread_strips.count()
 
         self.assertEqual(strip_count, 0)
 
@@ -330,7 +344,7 @@ class UnreadStripTestCase(TestCase):
         """Should not change anything since all comics are already read."""
         self.add_subscriptions()
 
-        self.user.mark_read_all()
+        self.mark_read_all()
 
         strip_count = self.user.unreadstrip_set.count()
 
@@ -340,10 +354,10 @@ class UnreadStripTestCase(TestCase):
         """Should mark all comics as read."""
         self.add_subscriptions()
         self.add_unread_strips()
-        self.user.mark_read(self.comic_active)
+        self.mark_read(self.comic_active)
 
-        self.user.mark_read_all()
+        self.mark_read_all()
 
-        strip_count = self.user.unreadstrip_set.count()
+        strip_count = self.user.unread_strips.count()
 
         self.assertEqual(strip_count, 0)
