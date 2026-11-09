@@ -33,6 +33,28 @@ installed, managed model tables, including automatically created many-to-many
 tables. Proxy models are excluded because they share an existing table.
 Counts are queried on every visit and can be expensive for large tables.
 
+## Strip distribution
+
+New strips are stored with `unreads_distributed=False`. Every 15 minutes, the
+`comics.tasks.distribute_strips.distribute_pending_strips` Celery task queues one
+`distribute_comic_strips` task per comic with pending strips. Each worker creates
+unread rows for that comic's active subscribers in batches of at most 1,000,
+then marks the selected strips distributed in the same transaction. Subscriptions
+are evaluated when the worker runs. Duplicate tasks serialize on a comic row lock;
+failures roll back and pending strips are retried on the next scheduled run.
+Completed distribution is tracked independently of unread rows, so repeat tasks
+do not make already-read strips unread again.
+
+Deploy with comic-update and distribution workers paused, run
+`uv run python src/manage.py migrate` and
+`uv run python src/manage.py ensure_tasks`, then restart Celery workers and beat.
+The migration marks historical strips distributed and consolidates duplicate
+unread rows before adding uniqueness for `(user, strip)`. New strips may take up
+to the next 15-minute dispatch plus queue time to appear; the existing four-hour
+comic scraping schedule is unchanged. Schedule registration follows the existing
+`ensure_tasks` behavior: newly registered schedules start at midnight UTC the
+following day.
+
 ## JavaScript behavior tests
 
 From the repository root, with Node.js 22 or newer:

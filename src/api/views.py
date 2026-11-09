@@ -179,7 +179,7 @@ class StripsView(APIView):
             return self.response_not_found("The strip does not exist")
         if not request.user.is_subscribed(strip.comic):
             return self.response_error("You are not subscribed to this comic")
-        request.user.unreadstrip_set.create(
+        request.user.unreadstrip_set.get_or_create(
             user=request.user, comic=strip.comic, strip=strip
         )
         return self.response_no_content()

@@ -274,6 +274,7 @@ class Strip(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     url = models.CharField(max_length=255)
     alt_text = AltTextField("Alternative text", blank=True, null=True)
+    unreads_distributed = models.BooleanField(default=False, db_index=True)
     # FUTURE: Add a field so that Strips can be grouped
 
     # For type errors only
@@ -304,6 +305,11 @@ class UnreadStrip(models.Model):
 
     class Meta:
         ordering = ["user", "-strip"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "strip"], name="unique_user_unread_strip"
+            )
+        ]
 
     def __str__(self):
         return f"{self.user} {self.strip}"

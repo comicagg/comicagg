@@ -96,7 +96,7 @@ class User(auth_models.User):
         next_pos = max_position + 1
         self.subscription_set.create(comic=comic, position=next_pos)
         if last_strip := Strip.objects.filter(comic=comic).last():
-            UnreadStrip.objects.create(user=self, comic=comic, strip=last_strip)
+            UnreadStrip.objects.get_or_create(user=self, comic=comic, strip=last_strip)
         # FUTURE: return next_pos so that the following subscription can be used with a known position?
         self.comics_new_forget(comic)
 
@@ -185,7 +185,10 @@ class User(auth_models.User):
         if self.unread_strips_for(comic).count():
             return False
         if strip := comic.last_strip:
-            self.unreadstrip_set.create(user=self, comic=comic, strip=strip)
+            _, created = self.unreadstrip_set.get_or_create(
+                user=self, comic=comic, strip=strip
+            )
+            return created
         return True
 
     def mark_read(self, comic: Comic, vote=0) -> None:
