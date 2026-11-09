@@ -2,7 +2,7 @@ from math import atan, sqrt
 from typing import Any
 
 from django.contrib.auth.models import User
-from django.db import models
+from django.db import models, router, transaction
 from django.urls import reverse
 from django.utils.functional import cached_property
 
@@ -11,6 +11,7 @@ from .managers import ComicManager, SubscriptionManager, UnreadStripManager
 
 
 class Comic(models.Model):
+    unread_sequence = models.PositiveBigIntegerField(default=0, editable=False)
     name = ComicNameField("Name", max_length=255)
     website = models.URLField("Website")
     status = models.IntegerField(
@@ -146,6 +147,13 @@ class Comic(models.Model):
         return self.get_rating() < other.get_rating()
 
     def save(self, *args, **kwargs):
+        # Counter changes are made under the comic lock, never from a stale instance.
+        if not self._state.adding and kwargs.get("update_fields") is None:
+            kwargs["update_fields"] = [
+                field.name
+                for field in self._meta.local_concrete_fields
+                if not field.primary_key and field.name != "unread_sequence"
+            ]
         # If the user saved this with the notify field to true
         should_notify = self.notify
         self.notify = False
@@ -239,19 +247,36 @@ class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
     position = models.PositiveIntegerField(blank=True, default=0)
+    read_through = models.PositiveBigIntegerField(default=0, editable=False)
 
     objects = SubscriptionManager()
 
     class Meta:
         ordering = ["user", "position"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "comic"], name="unique_user_comic_subscription"
+            )
+        ]
 
     def __str__(self):
         return f"{self.user} - {self.comic}"
 
     def delete(self, *args, **kwargs):
-        # Delete the related unread comics
-        UnreadStrip.objects.filter(user=self.user, comic=self.comic).delete()
-        super().delete(*args, **kwargs)
+        with transaction.atomic():
+            Comic.objects.select_for_update().get(pk=self.comic_id)
+            if Subscription.objects.filter(
+                pk=self.pk, user_id=self.user_id, comic_id=self.comic_id
+            ).exists():
+                UnreadStrip.objects.filter(
+                    user_id=self.user_id, comic_id=self.comic_id
+                ).delete()
+            return super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding and kwargs.get("update_fields") is None:
+            kwargs["update_fields"] = ["user", "comic", "position"]
+        return super().save(*args, **kwargs)
 
 
 class Request(models.Model):
@@ -300,11 +325,18 @@ class UnreadStrip(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     strip = models.ForeignKey(Strip, on_delete=models.CASCADE)
     comic = models.ForeignKey(Comic, on_delete=models.CASCADE)
+    read_sequence = models.PositiveBigIntegerField(default=0, editable=False)
 
     objects = UnreadStripManager()
 
     class Meta:
         ordering = ["user", "-strip"]
+        indexes = [
+            models.Index(
+                fields=["user", "comic", "read_sequence"],
+                name="unread_user_comic_sequence",
+            )
+        ]
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "strip"], name="unique_user_unread_strip"
@@ -313,6 +345,22 @@ class UnreadStrip(models.Model):
 
     def __str__(self):
         return f"{self.user} {self.strip}"
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            using = kwargs.get("using") or router.db_for_write(
+                type(self), instance=self
+            )
+            with transaction.atomic(using=using):
+                comic = (
+                    Comic.objects.using(using).select_for_update().get(pk=self.comic_id)
+                )
+                self.read_sequence = comic.unread_sequence + 1
+                Comic.objects.using(using).filter(pk=comic.pk).update(
+                    unread_sequence=self.read_sequence
+                )
+                return super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class Tag(models.Model):

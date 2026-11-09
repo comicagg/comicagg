@@ -6,7 +6,9 @@
 {% endblock%}
 {% block onload %}onReadLoad();{% endblock %}
 {% block content %}
+{{ read_snapshot|json_script:"read-snapshot" }}
 <script language="javascript">
+    var readSnapshot = JSON.parse(document.getElementById("read-snapshot").textContent);
 	var titlei18n = "{% trans 'Read' %}";
 	var unreadComics = [];{% for comic in unread_list %}
 	unreadComics[{{ comic }}] = true;{% endfor %}
@@ -20,6 +22,7 @@
 {% endfor %}
 </script>
 <div id="read">
+    <div id="mark_all_read_error" role="alert" style="display:none">{% trans "Could not mark comics as read. Reload the page and try again." %}</div>
     <div id="next_comic_bar"></div>
 	<div class="top_info">
 		<div id="mark_all_read">
@@ -92,6 +95,9 @@
     {% endif %}
     <div id="no_unread_comics" class="top_info text_center" style="display:none">
         <p>{% trans "You don't have any new unread comics" %}</p>
+    </div>
+    <div id="new_unread_comics" class="top_info text_center" style="display:none">
+        <p>{% trans "New unread strips are available. Reload the page to read them." %}</p>
     </div>
 </div>
 {% endblock %}

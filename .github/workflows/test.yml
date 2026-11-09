@@ -59,6 +59,20 @@ jobs:
           retention-days: 7
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: comicagg
+          POSTGRES_PASSWORD: local-test-only
+          POSTGRES_DB: comicagg
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U comicagg -d comicagg"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     defaults:
       run:
         working-directory: ./src
@@ -72,10 +86,14 @@ jobs:
       - name: Install uv
         run: python -m pip install --disable-pip-version-check uv==0.12.12
       - name: Install Dependencies
-        run: uv sync --locked --no-install-project --no-default-groups
+        run: uv sync --locked --no-install-project --no-default-groups --group dev
       - name: Run Tests
         run: |
           uv run --no-sync python -Wa manage.py test --noinput --failfast comics comicagg
+      - name: Run PostgreSQL tests including concurrency
+        run: uv run --no-sync python -Wa manage.py test --noinput --failfast comics comicagg
+        env:
+          DJANGO_DATABASE: postgresql://comicagg:local-test-only@127.0.0.1:5432/comicagg
       - name: Load fixtures
         run: |
           uv run --no-sync python manage.py migrate

@@ -14,17 +14,19 @@ def max_unreads_per_user():
     for user in users:
         user_subscriptions = user.subscription_set.all().select_related("comic")
         for subscription in user_subscriptions:
-            unreads = user.unreadstrip_set.filter(
-                comic__exact=subscription.comic
-            ).order_by("-id")
+            unreads = (
+                user.unreadstrip_set.active()
+                .filter(comic__exact=subscription.comic)
+                .order_by("-read_sequence")
+            )
             if unreads.count() > settings.MAX_UNREADS_PER_USER:
                 task_logger.info(f"{user} {subscription.comic} {unreads.count()}")
-                sid = unreads[20].id
+                boundary = unreads[settings.MAX_UNREADS_PER_USER].read_sequence
                 deletes = (
-                    user.unreadstrip_set.filter(comic__exact=subscription.comic)
-                    .order_by("-id")
-                    .filter(id__lte=sid)
+                    user.unreadstrip_set.active()
+                    .filter(comic__exact=subscription.comic)
+                    .filter(read_sequence__lte=boundary)
                 )
                 deletes.delete()
 
-        return "Ok"
+    return "Ok"

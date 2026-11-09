@@ -27,7 +27,7 @@ def distribute_comic_strips(comic_id: int) -> dict[str, int]:
     """Distribute a comic's pending strips atomically in bounded batches."""
     with transaction.atomic():
         # Serialize tasks for a comic before taking the pending-strip snapshot.
-        Comic.objects.select_for_update().get(pk=comic_id)
+        comic = Comic.objects.select_for_update().get(pk=comic_id)
         strip_ids = list(
             Strip.objects.select_for_update()
             .filter(comic_id=comic_id, unreads_distributed=False)
@@ -37,6 +37,7 @@ def distribute_comic_strips(comic_id: int) -> dict[str, int]:
         batch: list[UnreadStrip] = []
         created = 0
         for strip_id in strip_ids:
+            comic.unread_sequence += 1
             existing_users = UnreadStrip.objects.filter(strip_id=strip_id).values_list(
                 "user_id", flat=True
             )
@@ -49,7 +50,12 @@ def distribute_comic_strips(comic_id: int) -> dict[str, int]:
             )
             for user_id in subscriber_ids.iterator(chunk_size=BATCH_SIZE):
                 batch.append(
-                    UnreadStrip(user_id=user_id, strip_id=strip_id, comic_id=comic_id)
+                    UnreadStrip(
+                        user_id=user_id,
+                        strip_id=strip_id,
+                        comic_id=comic_id,
+                        read_sequence=comic.unread_sequence,
+                    )
                 )
                 if len(batch) == BATCH_SIZE:
                     UnreadStrip.objects.bulk_create(batch, batch_size=BATCH_SIZE)
@@ -59,4 +65,5 @@ def distribute_comic_strips(comic_id: int) -> dict[str, int]:
             UnreadStrip.objects.bulk_create(batch, batch_size=BATCH_SIZE)
             created += len(batch)
         Strip.objects.filter(pk__in=strip_ids).update(unreads_distributed=True)
+        Comic.objects.filter(pk=comic_id).update(unread_sequence=comic.unread_sequence)
     return {"strips": len(strip_ids), "unreads": created}

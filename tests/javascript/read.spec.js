@@ -4,6 +4,8 @@ const html = counterHtml + `
   <button id="showingUnread" onclick="showAllComics()">Show all</button>
   <button id="showingAll" style="display:none" onclick="showUnreadComics()">Show unread</button>
   <div id="no_unread_comics" style="display:none">Nothing unread</div>
+  <div id="new_unread_comics" style="display:none">Reload for new strips</div>
+  <div id="mark_all_read_error" role="alert" style="display:none">Reload and try again</div>
   <div id="noComicsSelected" style="display:none">No subscriptions</div>
   <div id="next_comic_bar" style="display:none"></div>
   <div id="comics">
@@ -46,6 +48,7 @@ async function loadReader(page, app, { empty = false, allRead = false, failFirst
     window.titlei18n = "Read";
     window.comics = [];
     window.unreadComics = [];
+    window.readSnapshot = "signed-page-snapshot";
     if (!empty) {
       for (let id = 1; id <= 4; id++) {
         comics[id] = {
@@ -109,7 +112,7 @@ for (const [label, vote] of [["Mark 1 read", "0"], ["Vote 1 up", "1"], ["Vote 1 
     await freezeClock(page);
     const response = await api(page, "mark-read", { body: { ...counters, unreads: 1 } });
     await page.getByRole("button", { name: label, exact: true }).click();
-    expectPost(await response.request, [["id", "1"], ["value", vote]]);
+    expectPost(await response.request, [["id", "1"], ["value", vote], ["snapshot", "signed-page-snapshot"]]);
     await expect(page.locator("#working1")).toBeVisible();
     await expect(page.locator("#reading1")).toBeVisible();
     response.release();
@@ -199,13 +202,12 @@ for (const failure of [false, true]) {
     });
     await page.locator("#mark_all_read").click();
     const request = await response.request;
-    // Current endpoint intentionally takes no parameters and the legacy client defaults to GET.
-    expect(request.method()).toBe("GET");
-    expect(request.headers()["x-csrftoken"]).toBeUndefined();
+    expectPost(request, [["snapshot", "signed-page-snapshot"]]);
     await expect(page.locator("#mark_all_read_anim")).toBeVisible();
     response.release();
     await expect(page.locator("#mark_all_read_anim")).toBeHidden();
     if (failure) {
+      await expect(page.locator("#mark_all_read_error")).toBeVisible();
       await expect(page.locator("#c1")).toBeVisible();
       expect(await page.evaluate(() => unreadComics[1])).toBe(true);
     } else {
@@ -217,6 +219,20 @@ for (const failure of [false, true]) {
     }
   });
 }
+
+test("mark-all preserves the server's new-arrival count and prompts a reload", async ({ page, app }) => {
+  await loadReader(page, app);
+  const response = await api(page, "mark-all", {
+    body: { ...counters, unreads: 1 },
+  });
+  await page.locator("#mark_all_read").click();
+  await response.request;
+  response.release();
+  await expect(page.locator("#new_unread_comics")).toBeVisible();
+  await expect(page.locator("#no_unread_comics")).toBeHidden();
+  await expect(page.locator("#menuUnreadCounter")).toHaveText(" (1)");
+  await expect(page.locator("#c1")).toBeHidden();
+});
 
 for (const [label, options, notice] of [
   ["no subscriptions", { empty: true }, "noComicsSelected"],

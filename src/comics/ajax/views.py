@@ -17,10 +17,12 @@ from django.core.mail import mail_managers
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from comicagg.typings import AuthenticatedHttpRequest
 
 from ..models import Comic, Subscription
+from ..read_state import InvalidReadSnapshot
 
 logger = logging.getLogger(__name__)
 
@@ -85,20 +87,31 @@ def forget_new_comic(request: AuthenticatedHttpRequest):
 
 
 @login_required
+@require_POST
 def mark_read(request: AuthenticatedHttpRequest):
     try:
-        comic_id = request.POST["id"]
+        comic_id = int(request.POST["id"])
         value = int(request.POST["value"])
-    except Exception:
+        snapshot = request.POST["snapshot"]
+    except KeyError, ValueError:
         return HttpResponseBadRequest("Check the parameters")
     comic = get_object_or_404(Comic.objects.available(), pk=comic_id)
-    request.user.mark_read(comic, value)
+    try:
+        request.user.mark_read(comic, value, snapshot=snapshot)
+    except InvalidReadSnapshot as exc:
+        return HttpResponseBadRequest(str(exc))
     return ok_response(request)
 
 
 @login_required
+@require_POST
 def mark_all_read(request: AuthenticatedHttpRequest):
-    request.user.mark_read_all()
+    try:
+        request.user.mark_read_all(snapshot=request.POST["snapshot"])
+    except KeyError:
+        return HttpResponseBadRequest("Missing read snapshot; reload the reader.")
+    except InvalidReadSnapshot as exc:
+        return HttpResponseBadRequest(str(exc))
     return ok_response(request)
 
 
