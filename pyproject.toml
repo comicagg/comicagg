@@ -5,7 +5,7 @@ requires-python = ">=3.14,<3.15"
 dependencies = [
     "Django==5.2.*",
     "requests==2.34.2",
-    "gunicorn==26.2.0",
+    "gunicorn==27.0.1",
     "django-htmx==1.29.0",
     "redis==8.1.0",
     "celery==5.7.0",
@@ -22,12 +22,12 @@ debug = [
     "django-debug-toolbar-template-profiler==2.1.0",
 ]
 dev = [
-    "psycopg[binary]==3.3.8",
+    "psycopg[binary]==3.3.9",
     "pylint-django==2.8.0",
     "pre-commit==4.7.0",
     "ruff",
 ]
-postgres = ["psycopg[c]==3.3.8"]
+postgres = ["psycopg[c]==3.3.9"]
 
 [tool.ruff]
 target-version = "py314"
@@ -40,5 +40,4 @@ select = ["E4", "E9", "F821", "F823", "I"]
 
 [tool.uv]
 package = false
-required-version = "==0.12.12"
 default-groups = ["dev"]

@@ -6,7 +6,7 @@ ARG PY_VERSION="3.14"
 
 # Pull official base image
 FROM python:${PY_VERSION}-alpine AS builder
-COPY --from=ghcr.io/astral-sh/uv:0.12.12 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.13.8 /uv /uvx /bin/
 
 WORKDIR /tmp
 
