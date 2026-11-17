@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.git
+.github
+.venv/
+.devcontainer/
+.vscode/
+deployment/
+docs/

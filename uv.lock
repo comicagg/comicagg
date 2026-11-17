@@ -199,7 +199,7 @@ wheels = [
 
 [[package]]
 name = "comicagg"
-version = "0.0.0"
+version = "5.2.0"
 source = { virtual = "." }
 dependencies = [
     { name = "celery" },
@@ -210,6 +210,8 @@ dependencies = [
     { name = "django-mailer" },
     { name = "flower" },
     { name = "gunicorn" },
+    { name = "packaging" },
+    { name = "psycopg", extra = ["binary"] },
     { name = "redis" },
     { name = "requests" },
 ]
@@ -222,7 +224,6 @@ debug = [
 ]
 dev = [
     { name = "pre-commit" },
-    { name = "psycopg", extra = ["binary"] },
     { name = "pylint-django" },
     { name = "ruff" },
 ]
@@ -240,6 +241,8 @@ requires-dist = [
     { name = "django-mailer", specifier = "==2.3.2" },
     { name = "flower", specifier = "==2.2.0" },
     { name = "gunicorn", specifier = "==27.0.1" },
+    { name = "packaging" },
+    { name = "psycopg", extras = ["binary"], specifier = "==3.3.9" },
     { name = "redis", specifier = "==8.1.0" },
     { name = "requests", specifier = "==2.34.2" },
 ]
@@ -252,7 +255,6 @@ debug = [
 ]
 dev = [
     { name = "pre-commit", specifier = "==4.7.0" },
-    { name = "psycopg", extras = ["binary"], specifier = "==3.3.9" },
     { name = "pylint-django", specifier = "==2.8.0" },
     { name = "ruff" },
 ]

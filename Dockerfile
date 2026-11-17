@@ -1,26 +1,59 @@
 ARG TAG
 
-FROM cr.nublar.net/comicagg/python:${TAG:-development}
+# ==========================================
+# Stage 1: Builder Stage
+# ==========================================
+FROM python:3.14-slim AS builder
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Install distribution dependencies
-RUN mkdir /app && \
-    mkdir -p /web/media && \
+# Suppress progress bars in build logs
+ENV UV_NO_PROGRESS=1
+# Compile Python bytecode for faster startup
+ENV UV_COMPILE_BYTECODE=1
+# Recommended when using cache mounts
+ENV UV_LINK_MODE=copy
+
+WORKDIR /app
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    uv sync --frozen --no-install-project --no-dev
+
+COPY src/ ./src/
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    uv sync --frozen --no-dev
+
+# ==========================================
+# Stage 2: Runtime Stage
+# ==========================================
+FROM python:3.14-slim AS app
+
+WORKDIR /app
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH="/app/src"
+
+RUN groupadd --system --gid 999 app \
+    && useradd --system --gid 999 --uid 999 --create-home app
+
+COPY --from=builder /app/.venv /app/.venv
+COPY --from=builder /app/src /app/src
+
+RUN mkdir -p /web/media && \
     mkdir -p /web/static && \
-    addgroup -S app && \
-    adduser -s /bin/ash -S app -G app && \
     chown -R app:app /app && \
     chown -R app:app /web
 
-COPY --chown=app:app src lib /app/
+# COPY --chown=app:app src lib /app/
 COPY --chown=app:app --chmod=744 ./entrypoint.sh /entrypoint.sh
 COPY --chown=app:app --chmod=744 ./gunicorn.conf.py /gunicorn.conf.py
-
-WORKDIR /app
 
 USER app
 

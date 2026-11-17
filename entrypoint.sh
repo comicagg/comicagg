@@ -20,6 +20,7 @@ case $1 in
     echo Custom command
     # Search for env vars in the cmd to execute
     # exec "$@"
-    exec $(echo "$@" | envsubst)
+    # exec $(echo "$@" | envsubst)
+    exec $(echo "$@")
     ;;
 esac
