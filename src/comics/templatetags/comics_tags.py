@@ -31,7 +31,7 @@ def format_rating(comic: Comic):
 
 @register.filter()
 def unreads(comic: Comic, user_id):
-    return comic.unreadstrip_set.filter(user=user_id)
+    return comic.unreadstrip_set.available().filter(user=user_id)
 
 
 @register.filter()

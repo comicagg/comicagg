@@ -45,15 +45,80 @@ failures roll back and pending strips are retried on the next scheduled run.
 Completed distribution is tracked independently of unread rows, so repeat tasks
 do not make already-read strips unread again.
 
-Deploy with comic-update and distribution workers paused, run
+## Read snapshots and deferred cleanup
+
+The reader signs a snapshot containing a boundary for each displayed subscription.
+Marking a comic read (including voting) advances only that subscription's
+`read_through` marker. Marking all read advances the markers included in the page
+in one transaction. Neither action deletes unread rows during the request.
+Entries delivered after the page snapshot remain unread on the next visit.
+Comics not included in the page, including inactive comics, are not cleared.
+Stale tabs cannot move markers backwards or affect a replacement subscription.
+
+Ordering uses `Comic.unread_sequence` and `UnreadStrip.read_sequence`, not primary
+key allocation or timestamps. Distribution allocates a sequence per strip while
+holding the comic row lock until commit; ordinary unread creation acquires that
+same lock in `UnreadStrip.save()`. Bulk writers must hold the comic lock, allocate
+sequences, and persist the updated counter in the same transaction, as the
+distributor does. Do not write counters or read markers from stale model instances;
+their normal `save()` methods deliberately exclude those fields from updates.
+
+Subscribing creates no unread entries. Distribution concurrent with subscription
+may include or omit the new subscriber. Unsubscribing waits for distribution and
+removes the subscription, marker, and all its unread entries. Mark-unread makes
+only the latest strip unread (leaving any existing older unreads unchanged);
+if that strip was logically read, it receives a fresh sequence. Operations that
+both lock a comic and its subscriptions must acquire the comic lock first.
+Multi-comic operations lock comics and then subscriptions in primary-key order.
+
+The `comics.tasks.cleanup_read_strips.cleanup_read_strips` task runs every
+15 minutes, deleting up to 100 batches of 1,000 logically read rows, with a
+separate transaction per batch. Pending strips retain their rows until distribution
+completes, because those rows suppress duplicate delivery. Task results report
+the number deleted; monitor cleanup throughput and retained-row growth and tune
+the task's batch limits or schedule if cleanup cannot keep up. `active()` and
+`available()` on the unread manager exclude logically read rows; unfiltered
+`objects`/related-manager queries intentionally include them for maintenance.
+
+### Deployment
+
+Stop web writes (maintenance mode) and pause comic-update, distribution, and
+cleanup workers before deploying this change. Do not overlap old and new workers.
+Run
 `uv run python src/manage.py migrate` and
-`uv run python src/manage.py ensure_tasks`, then restart Celery workers and beat.
-The migration marks historical strips distributed and consolidates duplicate
-unread rows before adding uniqueness for `(user, strip)`. New strips may take up
+`uv run python src/manage.py ensure_tasks`, then restart web processes, Celery
+workers, and beat and restore access. Migration `0016` backfills sequences from
+existing unread IDs, initializes comic counters and zero read markers, consolidates
+duplicate subscriptions (keeping the earliest position), and adds a relationship
+constraint and unread lookup index. It updates the unread table and creates an
+index, so allow maintenance time proportional to its size.
+Before rolling back to code without markers, physically delete all logically read
+rows while writers are stopped; simply dropping the markers would resurrect them.
+
+Both reader mutations now require POST, CSRF, and a valid signed snapshot.
+Already-open pages using the old JavaScript must be reloaded; missing or invalid
+snapshots return HTTP 400 without clearing newer entries. The disabled legacy
+`src/api` app is not part of this change.
+
+New strips may take up
 to the next 15-minute dispatch plus queue time to appear; the existing four-hour
 comic scraping schedule is unchanged. Schedule registration follows the existing
 `ensure_tasks` behavior: newly registered schedules start at midnight UTC the
 following day.
+
+Regression tests cover model and AJAX behavior, signed reader snapshots,
+migrations, deferred cleanup, and concurrent PostgreSQL distribution. Run with
+the normal Django environment configured, pointing `DJANGO_DATABASE` at a
+dedicated PostgreSQL database whose role can create test databases:
+
+```sh
+uv run python src/manage.py test comics comicagg --noinput
+npm run test:js
+```
+
+PostgreSQL is required to exercise row-lock tests; SQLite skips those tests.
+The test workflow also runs the Django suites against a PostgreSQL service so
+these concurrency regressions are exercised in CI.
 
 ## JavaScript behavior tests
 

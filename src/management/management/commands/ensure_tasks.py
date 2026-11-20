@@ -19,6 +19,13 @@ TaskDescription = namedtuple(
 
 TASKS = [
     TaskDescription(
+        task="comics.tasks.cleanup_read_strips.cleanup_read_strips",
+        name="Clean up read strips",
+        description="Delete logically read strips in bounded batches",
+        period=MINUTES,
+        period_every=15,
+    ),
+    TaskDescription(
         task="comics.tasks.update_comics.update_comics",
         name="Update comics",
         description="Update all comics",

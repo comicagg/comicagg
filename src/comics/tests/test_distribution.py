@@ -11,8 +11,8 @@ from django_celery_beat.models import MINUTES, PeriodicTask
 from accounts.models import User
 
 from ..fields import ComicStatus
-from ..managers import SubscriptionManager
 from ..models import Comic, Strip, Subscription, UnreadStrip
+from ..read_state import make_snapshot
 from ..update import update_comic
 
 
@@ -114,11 +114,18 @@ class DistributionTests(TestCase):
     def test_repeated_distribution_does_not_restore_read_strips(self):
         strip = self.create_strip()
         self.distribute()
-        self.user.mark_read(self.comic)
+        self.user.mark_read(
+            self.comic,
+            snapshot=make_snapshot(
+                self.user.pk,
+                list(self.user.subscriptions),
+                list(self.user.unread_strips),
+            ),
+        )
 
         self.distribute()
 
-        self.assertFalse(UnreadStrip.objects.filter(user=self.user).exists())
+        self.assertFalse(UnreadStrip.objects.active().filter(user=self.user).exists())
         self.assertEqual(
             UnreadStrip.objects.filter(user=self.other_user, strip=strip).count(), 1
         )
@@ -134,22 +141,11 @@ class DistributionTests(TestCase):
         self.assertTrue(UnreadStrip.objects.filter(pk=existing.pk).exists())
         self.assertEqual(UnreadStrip.objects.count(), 2)
 
-    def test_subscribe_handles_distribution_before_initial_unread_creation(self):
+    def test_subscribe_creates_no_unread_until_distribution(self):
         self.create_strip()
-        original_create = SubscriptionManager.create
-
-        def create_and_distribute(manager, **kwargs):
-            subscription = original_create(manager, **kwargs)
-            self.distribute()
-            return subscription
-
-        with patch.object(
-            SubscriptionManager,
-            "create",
-            autospec=True,
-            side_effect=create_and_distribute,
-        ):
-            self.non_subscriber.subscribe(self.comic)
+        self.non_subscriber.subscribe(self.comic)
+        self.assertFalse(UnreadStrip.objects.filter(user=self.non_subscriber).exists())
+        self.distribute()
 
         self.assertEqual(
             UnreadStrip.objects.filter(
@@ -307,6 +303,12 @@ class DistributionTests(TestCase):
         self.assertTrue(task.enabled)
         self.assertEqual(task.interval.period, MINUTES)
         self.assertEqual(task.interval.every, 15)
+        cleanup = PeriodicTask.objects.get(
+            task="comics.tasks.cleanup_read_strips.cleanup_read_strips"
+        )
+        self.assertTrue(cleanup.enabled)
+        self.assertEqual(cleanup.interval.period, MINUTES)
+        self.assertEqual(cleanup.interval.every, 15)
 
     def test_schedule_dry_run_does_not_create_tasks(self):
         output = StringIO()

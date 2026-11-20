@@ -1,5 +1,5 @@
 /*jslint white: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global window, document, setTimeout, Date, Image, byId, showElement, hideElement, isVisible, documentOffset, scrollToExtra, static_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, comicCounter, unreadCounter, updateCounters, unreadComics, comics */
+/*global window, document, setTimeout, Date, Image, byId, showElement, hideElement, isVisible, documentOffset, scrollToExtra, static_url, url_mark_all_read, url_mark_as_read, url_remove, url_report, openurl, startRequest, comicCounter, unreadCounter, updateCounters, unreadComics, comics, readSnapshot */
 "use strict";
 // comic list. Array of divs
 var clist = [];
@@ -266,7 +266,7 @@ function reloadComic(cid) {
 }
 function markread(id, vote) {
     var params;
-    params = { 'id': id, 'value': vote };
+    params = { 'id': id, 'value': vote, 'snapshot': readSnapshot };
     showElement(byId('working' + id));
     hideElement(byId('workingerror' + id));
     startRequest(url_mark_as_read, {
@@ -368,8 +368,11 @@ function removecomic(id) {
 }
 function mark_all_read() {
     var i;
+    hideElement(byId("mark_all_read_error"));
     showElement(byId("mark_all_read_anim"));
     startRequest(url_mark_all_read, {
+        method: 'post',
+        parameters: { 'snapshot': readSnapshot },
         dataType: "json",
         onSuccess: function (counters) {
             hideElement(byId("mark_all_read_anim"));
@@ -383,10 +386,17 @@ function mark_all_read() {
             //hide link to mark all read
             hideElement(byId("mark_all_read"));
             hideElement(byId("mark_all_read_bottom"));
-            showElement(byId("no_unread_comics"));
+            if (counters.unreads > 0) {
+                hideElement(byId("no_unread_comics"));
+                showElement(byId("new_unread_comics"));
+            } else {
+                showElement(byId("no_unread_comics"));
+                hideElement(byId("new_unread_comics"));
+            }
         },
         onFailure: function () {
             hideElement(byId("mark_all_read_anim"));
+            showElement(byId("mark_all_read_error"));
         }
     });
 }

@@ -2,14 +2,15 @@ import logging
 from typing import Any
 
 from django.contrib.auth import models as auth_models
-from django.db import models
-from django.db.models import Count, Max
+from django.db import models, transaction
+from django.db.models import Case, Count, F, Max, Value, When
+from django.db.models.functions import Greatest
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from comics.fields import ComicStatus
 from comics.managers import SubscriptionManager, UnreadStripManager
-from comics.models import Comic, Strip, UnreadStrip
+from comics.models import Comic, Strip, Subscription, UnreadStrip
 
 logger = logging.getLogger(__name__)
 
@@ -94,11 +95,12 @@ class User(auth_models.User):
         # max_position can be None if there are no comics
         max_position = self.subscriptions.aggregate(pos=Max("position"))["pos"] or 0
         next_pos = max_position + 1
-        self.subscription_set.create(comic=comic, position=next_pos)
-        if last_strip := Strip.objects.filter(comic=comic).last():
-            UnreadStrip.objects.get_or_create(user=self, comic=comic, strip=last_strip)
+        self.subscription_set.get_or_create(
+            comic=comic, defaults={"position": next_pos}
+        )
         # FUTURE: return next_pos so that the following subscription can be used with a known position?
         self.comics_new_forget(comic)
+        self._invalidate_comic_cache()
 
     def subscribe_list(self, comic_id_list: list[int]) -> None:
         """Add the comics from the list. Ignores comics that are already subscribed,
@@ -111,20 +113,31 @@ class User(auth_models.User):
 
     def unsubscribe(self, comic: Comic) -> None:
         """Remove the comic from the list of subscriptions."""
-        self.unreadstrip_set.filter(comic=comic).delete()
-        self.subscription_set.filter(comic=comic).delete()
-        self.subscriptions_recalculate_positions()
+        self.unsubscribe_list([comic.pk])
 
     def unsubscribe_list(self, comic_id_list: list[int]) -> None:
         """Remove the comic from the list of subscriptions."""
-        self.unreadstrip_set.filter(comic__id__in=comic_id_list).delete()
-        self.subscription_set.filter(comic__id__in=comic_id_list).delete()
-        self.subscriptions_recalculate_positions()
+        with transaction.atomic():
+            list(
+                Comic.objects.filter(pk__in=comic_id_list)
+                .order_by("pk")
+                .select_for_update()
+            )
+            list(
+                self.subscription_set.order_by("pk")
+                .select_for_update()
+                .values_list("pk", flat=True)
+            )
+            self.unreadstrip_set.filter(comic_id__in=comic_id_list).delete()
+            self.subscription_set.filter(comic_id__in=comic_id_list).delete()
+            self.subscriptions_recalculate_positions()
+        self._invalidate_comic_cache()
 
     def unsubscribe_all(self) -> None:
         """Remove all of the user's subscriptions."""
-        self.unreadstrip_set.all().delete()
-        self.subscription_set.all().delete()
+        self.unsubscribe_list(
+            list(self.subscription_set.values_list("comic_id", flat=True))
+        )
 
     def subscriptions_reorder(self, comic_id_list: list[int]) -> None:
         """Reorder the subscriptions according to the list of comic ids."""
@@ -139,14 +152,25 @@ class User(auth_models.User):
 
         for subscription in subscriptions:
             subscription.position = comic_id_list.index(subscription.comic.id) + 1
-            subscription.save()
+            subscription.save(update_fields=["position"])
 
     def subscriptions_recalculate_positions(self) -> None:
         """Recalculate the position of each subscription."""
         subscriptions = self.subscription_set.all()
         for i, subscription in enumerate(subscriptions):
             subscription.position = i
-            subscription.save()
+            subscription.save(update_fields=["position"])
+
+    def _invalidate_comic_cache(self) -> None:
+        for name in (
+            "subscriptions",
+            "subscription_count",
+            "comics_subscribed",
+            "unread_strips",
+            "comics_unread_count",
+            "comics_new_count",
+        ):
+            self.__dict__.pop(name, None)
 
     # #####################
     # #   Unread strips   #
@@ -180,38 +204,90 @@ class User(auth_models.User):
 
     def mark_unread(self, comic: Comic) -> bool:
         """Sets a comic as unread adding the last strip as unread for this user."""
-        if not self.is_subscribed(comic):
-            return False
-        if self.unread_strips_for(comic).count():
-            return False
-        if strip := comic.last_strip:
-            _, created = self.unreadstrip_set.get_or_create(
-                user=self, comic=comic, strip=strip
+        with transaction.atomic():
+            Comic.objects.select_for_update().get(pk=comic.pk)
+            subscription = (
+                self.subscriptions.select_for_update().filter(comic=comic).first()
             )
-            return created
+            if subscription is None:
+                return False
+            strip = Strip.objects.filter(comic=comic).first()
+            if strip is None:
+                return True
+            existing = self.unreadstrip_set.filter(strip=strip).first()
+            if (
+                existing is not None
+                and existing.read_sequence > subscription.read_through
+            ):
+                return False
+            if existing is not None:
+                existing.delete()
+            self.unreadstrip_set.create(comic=comic, strip=strip)
+        self._invalidate_comic_cache()
         return True
 
-    def mark_read(self, comic: Comic, vote=0) -> None:
-        """Mark the comic as read, removing the unread strips and updating the votes."""
-        if not self.is_subscribed(comic):
-            return
-        votes = 0
-        value = 0
-        if vote < 0:
-            votes = 1
-            value = 0
-        elif vote > 0:
-            votes = 1
-            value = 1
-        comic.total_votes += votes
-        comic.positive_votes += value
-        # FUTURE: this will block the comic row. Maybe votes can be stored in their own table?
-        comic.save()
-        self.unreadstrip_set.filter(comic=comic).delete()
+    def mark_read(self, comic: Comic, vote=0, *, snapshot: str) -> None:
+        """Mark the displayed prefix as read and optionally vote."""
+        from comics.read_state import load_snapshot
 
-    def mark_read_all(self) -> None:
-        """Mark all comics as read."""
-        self.unreadstrip_set.all().delete()
+        boundaries = [
+            row for row in load_snapshot(snapshot, self.pk) if row[1] == comic.pk
+        ]
+        with transaction.atomic():
+            if vote:
+                Comic.objects.select_for_update().get(pk=comic.pk)
+            if not self._advance_read_markers(boundaries):
+                return
+            if vote:
+                Comic.objects.filter(pk=comic.pk).update(
+                    total_votes=F("total_votes") + 1,
+                    positive_votes=F("positive_votes") + int(vote > 0),
+                )
+        self._invalidate_comic_cache()
+
+    def mark_read_all(self, *, snapshot: str) -> None:
+        """Mark only the prefixes included in the reader snapshot as read."""
+        from comics.read_state import load_snapshot
+
+        with transaction.atomic():
+            self._advance_read_markers(load_snapshot(snapshot, self.pk))
+        self._invalidate_comic_cache()
+
+    def _advance_read_markers(self, boundaries: list[list[int]]) -> int:
+        if not boundaries:
+            return 0
+        subscriptions = Subscription.objects.filter(
+            user=self,
+            pk__in=[row[0] for row in boundaries],
+            comic__status__in=[
+                ComicStatus.ACTIVE,
+                ComicStatus.ENDED,
+                ComicStatus.BROKEN,
+            ],
+        )
+        # Lock subscription rows in a stable order across overlapping snapshots.
+        ids = list(
+            subscriptions.order_by("pk")
+            .select_for_update(of=("self",))
+            .values_list("pk", flat=True)
+        )
+        if not ids:
+            return 0
+        return Subscription.objects.filter(pk__in=ids).update(
+            read_through=Greatest(
+                F("read_through"),
+                Case(
+                    *[
+                        When(
+                            pk=subscription_id, comic_id=comic_id, then=Value(boundary)
+                        )
+                        for subscription_id, comic_id, boundary in boundaries
+                    ],
+                    default=F("read_through"),
+                    output_field=models.PositiveBigIntegerField(),
+                ),
+            )
+        )
 
     # ##################
     # #   New comics   #
