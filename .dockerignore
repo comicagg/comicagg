@@ -3,10 +3,10 @@ __pycache__/
 *.pyo
 *.pyd
 
+.devcontainer/
 .git
 .github
 .venv/
-.devcontainer/
 .vscode/
 deployment/
 docs/
