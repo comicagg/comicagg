@@ -1,5 +1,5 @@
 FROM python:3.14-bookworm
-COPY --from=ghcr.io/astral-sh/uv:0.12.12 /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
